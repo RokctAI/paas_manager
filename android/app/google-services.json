@@ -1,0 +1,154 @@
+{
+  "project_info": {
+    "project_number": "728921419683",
+    "project_id": "juvofood",
+    "storage_bucket": "juvofood.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:728921419683:android:6b462e1e84c8a43b0db416",
+        "android_client_info": {
+          "package_name": "app.juvo.driver"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "728921419683-qih00tcn49f414s35789vtue5bdlkonp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyACbWuYUg7UmWtuPODxAsuox5kOP0Ev1Tk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "728921419683-qih00tcn49f414s35789vtue5bdlkonp.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "728921419683-dnt2u3lul15ov07msi7kkbjuap64s2lr.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "app.juvo.vendor"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:728921419683:android:6264a3b1b97017f50db416",
+        "android_client_info": {
+          "package_name": "app.juvo.food"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "728921419683-qih00tcn49f414s35789vtue5bdlkonp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyACbWuYUg7UmWtuPODxAsuox5kOP0Ev1Tk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "728921419683-qih00tcn49f414s35789vtue5bdlkonp.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "728921419683-dnt2u3lul15ov07msi7kkbjuap64s2lr.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "app.juvo.vendor"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:728921419683:android:657fecede2bc9cf10db416",
+        "android_client_info": {
+          "package_name": "app.juvo.pos"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "728921419683-qih00tcn49f414s35789vtue5bdlkonp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyACbWuYUg7UmWtuPODxAsuox5kOP0Ev1Tk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "728921419683-qih00tcn49f414s35789vtue5bdlkonp.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "728921419683-dnt2u3lul15ov07msi7kkbjuap64s2lr.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "app.juvo.vendor"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:728921419683:android:4fd3b60d449fb63f0db416",
+        "android_client_info": {
+          "package_name": "app.juvo.vendor"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "728921419683-qih00tcn49f414s35789vtue5bdlkonp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyACbWuYUg7UmWtuPODxAsuox5kOP0Ev1Tk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "728921419683-qih00tcn49f414s35789vtue5bdlkonp.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "728921419683-dnt2u3lul15ov07msi7kkbjuap64s2lr.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "app.juvo.vendor"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
