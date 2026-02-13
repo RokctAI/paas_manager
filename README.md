@@ -40,27 +40,27 @@ base64 -i .env/production.env | pbcopy
 
 **Windows (PowerShell):**
 ```powershell
-# For Android
+# For Android (Auto-Clip)
 [Convert]::ToBase64String([IO.File]::ReadAllBytes("android/app/google-services.json")) | clip
 
-# For iOS
+# For iOS (Auto-Clip)
 [Convert]::ToBase64String([IO.File]::ReadAllBytes("ios/Runner/GoogleService-Info.plist")) | clip
 
-# For Production Environment
+# For Production Environment (Auto-Clip)
 [Convert]::ToBase64String([IO.File]::ReadAllBytes(".env/production.env")) | clip
 ```
 
 Paste the resulting string into the corresponding GitHub Secret value.
 
 ### 🏗️ Multi-Tenant Build Support (build_* branches)
-You can trigger dynamic builds for specific clients by creating a branch following the `build_<client>-*` pattern (e.g., `build_wrapzo-v1.0`).
+You can trigger dynamic builds for specific clients by creating a branch following the `build_<client>-*` pattern (e.g., `build_clientname-v1.0`).
 
 The workflow will automatically look for client-specific secrets:
 *   `GOOGLE_SERVICES_JSON_<CLIENT>`
 *   `IOS_GOOGLE_SERVICE_INFO_PLIST_<CLIENT>`
 *   `PRODUCTION_ENV_<CLIENT>`
 
-If found, these will take precedence over the default secrets. The release candidate will also be tagged with the client suffix (e.g., `v1.0.0-wrapzo`).
+If found, these will take precedence over the default secrets. The release candidate will also be tagged with the client suffix (e.g., `v1.0.0-clientname`).
 
 ### 📦 Change App Package
 Firstly, find out the existing package name. You can find it out from top of `/app/src/main/AndroidManifest.xml` file. Then right click on project folder from android studio and click on **Replace in Path**. You will see a popup window with two input boxes. In first box you have to put existing package name that you saw in `AndroidManifest.xml` file previously and then write down your preferred package name in second box and then click on **Replace All** button.
