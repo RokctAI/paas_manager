@@ -1,4 +1,4 @@
-package app.juvo.vendor
+package org.foodyman.manager
 
 import io.flutter.embedding.android.FlutterActivity
 
