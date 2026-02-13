@@ -6,7 +6,7 @@ concurrency:
 
 on:
   push:
-    branches: [main, develop]
+    branches: [main, develop, "build_*"]
   schedule:
     - cron: '0 23 * * 5'
   workflow_dispatch:
@@ -44,6 +44,7 @@ jobs:
     uses: RokctAI/shared-workflows/.github/workflows/universal-pipeline.yml@main
     with:
       project_type: 'flutter'
+      app-type: 'manager'
       # Dogfooding: Use the new Weekly Strategy
       release_strategy: 'weekly'
 
@@ -67,6 +68,7 @@ jobs:
       postgres-version: ${{ inputs.postgres-version || '15' }}
       db-type: ${{ inputs.db-type || 'mariadb' }}
       flutter-channel: ${{ inputs.flutter-channel || 'stable' }}
+      flutter-version: '3.24.0'
       java-version: ${{ inputs.java-version || '17' }}
       version_format: ${{ inputs.version_format || '##.##.##' }}
     secrets: inherit
