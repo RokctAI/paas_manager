@@ -13,7 +13,8 @@ import '../../../../../component/components.dart';
 @RoutePage()
 class SelectTablePage extends ConsumerStatefulWidget {
   final int? sectionId;
-  const SelectTablePage( {super.key,required this.sectionId,});
+
+  const SelectTablePage({super.key, required this.sectionId});
 
   @override
   ConsumerState<SelectTablePage> createState() => _SelectTablePageState();
@@ -27,9 +28,10 @@ class _SelectTablePageState extends ConsumerState<SelectTablePage> {
     super.initState();
     _refreshController = RefreshController();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-        ref.read(tableProvider.notifier).initialFetchTables(sectionId: widget.sectionId);
-      },
-    );
+      ref
+          .read(tableProvider.notifier)
+          .initialFetchTables(sectionId: widget.sectionId);
+    });
   }
 
   @override
@@ -42,7 +44,7 @@ class _SelectTablePageState extends ConsumerState<SelectTablePage> {
   Widget build(BuildContext context) {
     return KeyboardDisable(
       child: Scaffold(
-        backgroundColor: Style.greyColor,
+        backgroundColor: AppStyle.greyColor,
         body: Consumer(
           builder: (context, ref, child) {
             final state = ref.watch(tableProvider);

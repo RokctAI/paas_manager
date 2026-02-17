@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:venderfoodyman/domain/di/dependency_manager.dart';
 import 'package:venderfoodyman/domain/handlers/handlers.dart';
 import 'package:venderfoodyman/domain/interface/interfaces.dart';
-import 'package:venderfoodyman/infrastructure/models/data/address_data.dart';
+import 'package:venderfoodyman/infrastructure/models/models.dart';
 import 'package:venderfoodyman/infrastructure/services/services.dart';
 
 class ShopsRepository implements ShopsInterface {
@@ -26,6 +26,7 @@ class ShopsRepository implements ShopsInterface {
     final data = {
       "price_per_km": perKm,
       'tax': tax,
+      'documents': documents,
       //'categories[0]': category,
       'delivery_time_type': deliveryType,
       'location': address.location?.toJson(),
@@ -37,23 +38,20 @@ class ShopsRepository implements ShopsInterface {
       'price': startPrice,
       'address': {
         LocalStorage.getLanguage()?.locale ?? "":
-            "${address.title}, ${address.address}"
+            "${address.title}, ${address.address}",
       },
-      if (logoImage != null) 'images[0]': logoImage,
-      if (backgroundImage != null) "images[1]": backgroundImage,
+      if (logoImage != null) 'images': [logoImage, backgroundImage],
     };
     try {
       final client = dioHttp.client(requireAuth: true);
-      await client.post(
-        '/api/v1/dashboard/user/shops',
-        queryParameters: data,
-      );
+      await client.post('/api/v1/dashboard/user/shops', data: data);
       return const ApiResult.success(data: null);
     } catch (e) {
       debugPrint('==> create shop failure: $e');
       return ApiResult.failure(
-          error: AppHelpers.errorHandler(e),
-          statusCode: NetworkExceptions.getDioStatus(e));
+        error: AppHelpers.errorHandler(e),
+        statusCode: NetworkExceptions.getDioStatus(e),
+      );
     }
   }
 }

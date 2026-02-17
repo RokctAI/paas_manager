@@ -11,10 +11,7 @@ import 'package:venderfoodyman/domain/interface/interfaces.dart';
 class CatalogRepository implements CatalogInterface {
   @override
   Future<ApiResult<UnitsPaginateResponse>> getUnits() async {
-    final data = {
-      'lang': LocalStorage.getLanguage()?.locale,
-      'perPage': 100,
-    };
+    final data = {'lang': LocalStorage.getLanguage()?.locale, 'perPage': 100};
     try {
       final client = dioHttp.client(requireAuth: true);
       final response = await client.get(
@@ -27,17 +24,15 @@ class CatalogRepository implements CatalogInterface {
     } catch (e) {
       debugPrint('==> get units paginate failure: $e');
       return ApiResult.failure(
-          error: AppHelpers.errorHandler(e),
-          statusCode: NetworkExceptions.getDioStatus(e));
+        error: AppHelpers.errorHandler(e),
+        statusCode: NetworkExceptions.getDioStatus(e),
+      );
     }
   }
 
   @override
   Future<ApiResult<KitchensPaginateResponse>> getKitchens() async {
-    final data = {
-      'lang': LocalStorage.getLanguage()?.locale,
-      'perPage': 100,
-    };
+    final data = {'lang': LocalStorage.getLanguage()?.locale, 'perPage': 100};
     try {
       final client = dioHttp.client(requireAuth: true);
       final response = await client.get(
@@ -50,8 +45,9 @@ class CatalogRepository implements CatalogInterface {
     } catch (e) {
       debugPrint('==> get kitchens paginate failure: $e');
       return ApiResult.failure(
-          error: AppHelpers.errorHandler(e),
-          statusCode: NetworkExceptions.getDioStatus(e));
+        error: AppHelpers.errorHandler(e),
+        statusCode: NetworkExceptions.getDioStatus(e),
+      );
     }
   }
 
@@ -69,16 +65,14 @@ class CatalogRepository implements CatalogInterface {
     debugPrint('===> create category request ${jsonEncode(data)}');
     try {
       final client = dioHttp.client(requireAuth: true);
-      await client.post(
-        '/api/v1/dashboard/seller/categories',
-        data: data,
-      );
+      await client.post('/api/v1/dashboard/seller/categories', data: data);
       return const ApiResult.success(data: null);
     } catch (e) {
       debugPrint('==> create category failure: $e');
       return ApiResult.failure(
-          error: AppHelpers.errorHandler(e),
-          statusCode: NetworkExceptions.getDioStatus(e));
+        error: AppHelpers.errorHandler(e),
+        statusCode: NetworkExceptions.getDioStatus(e),
+      );
     }
   }
 
@@ -86,13 +80,20 @@ class CatalogRepository implements CatalogInterface {
   Future<ApiResult<CategoriesPaginateResponse>> getCategories({
     int? page,
     String? query,
+    String? type,
+    bool hasProducts = false,
   }) async {
+    final shopId = LocalStorage.getUser()?.shop?.id ?? 0;
     final data = {
       if (page != null) 'page': page,
       if (query != null) 'search': query,
       'perPage': 100,
       'lang': LocalStorage.getLanguage()?.locale,
-      'type': 'main',
+      if (type != null) 'type': type,
+      if (type == null) 'type': 'main',
+      if (hasProducts) 'has_products': 1,
+      if (hasProducts)
+        if (type == 'combo') 'c_shop_id': shopId else 'p_shop_id': shopId,
       'active': '1',
     };
     try {
@@ -107,8 +108,9 @@ class CatalogRepository implements CatalogInterface {
     } catch (e) {
       debugPrint('==> get categories paginate failure: $e');
       return ApiResult.failure(
-          error: AppHelpers.errorHandler(e),
-          statusCode: NetworkExceptions.getDioStatus(e));
+        error: AppHelpers.errorHandler(e),
+        statusCode: NetworkExceptions.getDioStatus(e),
+      );
     }
   }
 
@@ -124,7 +126,7 @@ class CatalogRepository implements CatalogInterface {
       'lang': LocalStorage.getLanguage()?.locale,
       'type': 'main',
       "has_products": 1,
-      "p_shop_id": LocalStorage.getUser()?.shop?.id ?? 0
+      "p_shop_id": LocalStorage.getUser()?.shop?.id ?? 0,
     };
     try {
       final client = dioHttp.client(requireAuth: true);
@@ -138,8 +140,9 @@ class CatalogRepository implements CatalogInterface {
     } catch (e) {
       debugPrint('==> get categories paginate failure: $e');
       return ApiResult.failure(
-          error: AppHelpers.errorHandler(e),
-          statusCode: NetworkExceptions.getDioStatus(e));
+        error: AppHelpers.errorHandler(e),
+        statusCode: NetworkExceptions.getDioStatus(e),
+      );
     }
   }
 
@@ -168,8 +171,9 @@ class CatalogRepository implements CatalogInterface {
     } catch (e) {
       debugPrint('==> get categories paginate failure: $e');
       return ApiResult.failure(
-          error: AppHelpers.errorHandler(e),
-          statusCode: NetworkExceptions.getDioStatus(e));
+        error: AppHelpers.errorHandler(e),
+        statusCode: NetworkExceptions.getDioStatus(e),
+      );
     }
   }
 
@@ -186,8 +190,9 @@ class CatalogRepository implements CatalogInterface {
     } catch (e) {
       debugPrint('==> delete categories failure: $e');
       return ApiResult.failure(
-          error: AppHelpers.errorHandler(e),
-          statusCode: NetworkExceptions.getDioStatus(e));
+        error: AppHelpers.errorHandler(e),
+        statusCode: NetworkExceptions.getDioStatus(e),
+      );
     }
   }
 }

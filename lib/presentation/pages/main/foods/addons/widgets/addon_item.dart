@@ -17,7 +17,7 @@ class AddonItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final bool isOutOfStock = addon.stock == null;
     return Container(
-      color: addon.status == 'pending' ? Style.pending : Style.white,
+      color: addon.status == 'pending' ? AppStyle.pending : AppStyle.white,
       margin: REdgeInsets.only(bottom: 10),
       padding: REdgeInsets.symmetric(vertical: 18, horizontal: 16),
       child: Column(
@@ -25,9 +25,9 @@ class AddonItem extends StatelessWidget {
         children: [
           Text(
             '${addon.translation?.title}',
-            style: Style.interNormal(
-              size: 14.sp,
-              color: Style.blackColor,
+            style: AppStyle.interNormal(
+              size: 14,
+              color: AppStyle.blackColor,
               letterSpacing: -0.3,
             ),
           ),
@@ -36,9 +36,9 @@ class AddonItem extends StatelessWidget {
             '${addon.translation?.description}',
             maxLines: 4,
             overflow: TextOverflow.ellipsis,
-            style: Style.interNormal(
-              size: 12.sp,
-              color: Style.textColor,
+            style: AppStyle.interNormal(
+              size: 12,
+              color: AppStyle.textColor,
               letterSpacing: -0.3,
             ),
           ),
@@ -47,9 +47,9 @@ class AddonItem extends StatelessWidget {
             isOutOfStock
                 ? AppHelpers.getTranslation(TrKeys.outOfStock)
                 : AppHelpers.numberFormat(addon.stock?.price ?? 0),
-            style: Style.interSemi(
-              size: 14.sp,
-              color: isOutOfStock ? Style.red : Style.blackColor,
+            style: AppStyle.interSemi(
+              size: 14,
+              color: isOutOfStock ? AppStyle.red : AppStyle.blackColor,
               letterSpacing: -0.3,
             ),
           ),
@@ -57,7 +57,7 @@ class AddonItem extends StatelessWidget {
           Divider(
             thickness: 1.r,
             height: 1.r,
-            color: Style.tabBarBorderColor,
+            color: AppStyle.tabBarBorderColor,
           ),
           14.verticalSpace,
           Row(
@@ -70,13 +70,13 @@ class AddonItem extends StatelessWidget {
                     children: [
                       Text(
                         AppHelpers.getTranslation(TrKeys.parameters),
-                        style: Style.interNormal(size: 13.sp),
+                        style: AppStyle.interNormal(size: 13),
                       ),
                       6.horizontalSpace,
                       Icon(
                         FlutterRemix.arrow_down_s_line,
                         size: 18.r,
-                        color: Style.blackColor,
+                        color: AppStyle.blackColor,
                       ),
                     ],
                   ),
@@ -89,8 +89,8 @@ class AddonItem extends StatelessWidget {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10.r),
                   color: addon.status == 'pending'
-                      ? Style.pendingDark
-                      : Style.primary,
+                      ? AppStyle.pendingDark
+                      : AppStyle.primary,
                 ),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
@@ -100,16 +100,16 @@ class AddonItem extends StatelessWidget {
                           ? FlutterRemix.time_fill
                           : FlutterRemix.check_double_line,
                       size: 20.r,
-                      color: Style.white,
+                      color: AppStyle.white,
                     ),
                     6.horizontalSpace,
                     Text(
                       addon.status == 'pending'
                           ? AppHelpers.getTranslation(TrKeys.pending)
                           : AppHelpers.getTranslation(TrKeys.published),
-                      style: Style.interNormal(
-                        size: 14.sp,
-                        color: Style.white,
+                      style: AppStyle.interNormal(
+                        size: 14,
+                        color: AppStyle.white,
                         letterSpacing: -0.3,
                       ),
                     ),

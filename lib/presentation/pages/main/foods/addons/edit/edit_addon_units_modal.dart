@@ -9,7 +9,7 @@ import '../../../../../component/components.dart';
 import 'package:venderfoodyman/presentation/styles/style.dart';
 
 class EditAddonUnitsModal extends ConsumerStatefulWidget {
-  const EditAddonUnitsModal({super.key}) ;
+  const EditAddonUnitsModal({super.key});
 
   @override
   ConsumerState<EditAddonUnitsModal> createState() =>
@@ -34,7 +34,10 @@ class _EditAddonUnitsModalState extends ConsumerState<EditAddonUnitsModal> {
           mainAxisSize: MainAxisSize.min,
           children: [
             const ModalDrag(),
-            TitleAndIcon(title: AppHelpers.getTranslation(TrKeys.units), titleSize: 16),
+            TitleAndIcon(
+              title: AppHelpers.getTranslation(TrKeys.units),
+              titleSize: 16,
+            ),
             24.verticalSpace,
             Consumer(
               builder: (context, ref, child) {
@@ -44,7 +47,7 @@ class _EditAddonUnitsModalState extends ConsumerState<EditAddonUnitsModal> {
                     ? Center(
                         child: CircularProgressIndicator(
                           strokeWidth: 3.r,
-                          color: Style.primary,
+                          color: AppStyle.primary,
                         ),
                       )
                     : Expanded(

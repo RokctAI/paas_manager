@@ -4,7 +4,6 @@ import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:venderfoodyman/infrastructure/models/models.dart';
-import 'package:venderfoodyman/infrastructure/services/extension.dart';
 import 'package:venderfoodyman/infrastructure/services/services.dart';
 import 'package:venderfoodyman/presentation/component/components.dart';
 import 'package:venderfoodyman/presentation/styles/style.dart';
@@ -35,19 +34,19 @@ class SalesChart extends StatelessWidget {
           SizedBox(
             width: times.length > 7
                 ? times.length * 40
-                :  MediaQuery.sizeOf(context).width - 80,
+                : MediaQuery.sizeOf(context).width - 80,
             child: Padding(
               padding: REdgeInsets.only(top: 24),
               child: isLoading
                   ? const Loading()
                   : chart.isNotEmpty
-                      ? LineChart(mainData())
-                      : Center(
-                          child: Text(
-                            AppHelpers.getTranslation(TrKeys.needOrder),
-                            style: Style.interSemi(size: 22),
-                          ),
-                        ),
+                  ? LineChart(mainData())
+                  : Center(
+                      child: Text(
+                        AppHelpers.getTranslation(TrKeys.needOrder),
+                        style: AppStyle.interSemi(size: 22),
+                      ),
+                    ),
             ),
           ),
         ],
@@ -56,23 +55,25 @@ class SalesChart extends StatelessWidget {
   }
 
   Widget bottomTitleWidgets(double value, TitleMeta meta) {
-    final style = Style.interRegular(size: 10);
+    final style = AppStyle.interRegular(size: 10);
     return SideTitleWidget(
-      axisSide: meta.axisSide,
+      meta: meta,
       child: Padding(
         padding: REdgeInsets.only(top: 4),
         child: Text(
-            DateFormat(isDay ? "HH:00" : "MMM d").format(times[value.ceil()]),
-            style: style),
+          DateFormat(isDay ? "HH:00" : "MMM d").format(times[value.ceil()]),
+          style: style,
+        ),
       ),
     );
   }
 
   Widget leftTitleWidgets(double value, TitleMeta meta) {
-    final style = Style.interRegular(size: 12);
+    final style = AppStyle.interRegular(size: 12);
     return AutoSizeText(
       AppHelpers.numberFormat(
-          value.toInt() == 0 ? 0 : price[value.toInt() - 1]),
+        value.toInt() == 0 ? 0 : price[value.toInt() - 1],
+      ),
       style: style,
       textAlign: TextAlign.left,
       maxLines: 1,
@@ -88,7 +89,7 @@ class SalesChart extends StatelessWidget {
         verticalInterval: 1,
         getDrawingHorizontalLine: (value) {
           return const FlLine(
-            color: Style.iconButtonBack,
+            color: AppStyle.iconButtonBack,
             strokeWidth: 1,
             dashArray: [10],
           );
@@ -99,9 +100,7 @@ class SalesChart extends StatelessWidget {
         rightTitles: const AxisTitles(
           sideTitles: SideTitles(showTitles: false),
         ),
-        topTitles: const AxisTitles(
-          sideTitles: SideTitles(showTitles: false),
-        ),
+        topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
         bottomTitles: AxisTitles(
           sideTitles: SideTitles(
             showTitles: true,
@@ -127,26 +126,26 @@ class SalesChart extends StatelessWidget {
       lineBarsData: [
         LineChartBarData(
           spots: [
-            ...times.mapIndexed((e, i) => FlSpot(
-                  i.toDouble(),
-                  price.findPriceIndex(
-                    isDay ? chart.findPriceWithHour(e) : chart.findPrice(e),
-                  ),
-                )),
+            ...times.mapIndexed(
+              (e, i) => FlSpot(
+                i.toDouble(),
+                price.findPriceIndex(
+                  isDay ? chart.findPriceWithHour(e) : chart.findPrice(e),
+                ),
+              ),
+            ),
           ],
           isCurved: true,
-          color: Style.primary,
+          color: AppStyle.primary,
           barWidth: 5,
           isStrokeCapRound: true,
-          dotData: const FlDotData(
-            show: false,
-          ),
+          dotData: const FlDotData(show: false),
           belowBarData: BarAreaData(
             show: true,
             gradient: LinearGradient(
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
-              colors: Style.primaryGradient,
+              colors: AppStyle.primaryGradient,
             ),
           ),
         ),

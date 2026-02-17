@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:venderfoodyman/presentation/app_assets.dart';
 
 import '../components.dart';
 import 'package:venderfoodyman/infrastructure/models/models.dart';
@@ -44,26 +45,27 @@ class CategoriesTabBar extends StatelessWidget {
                 ? Padding(
                     padding: EdgeInsetsDirectional.only(start: 8.r, end: 8.r),
                     child: SvgPicture.asset(
-                      AppAssets.svgMenu,
+                      Assets.svgMenu,
                       width: 22.r,
                       height: 22.r,
                     ),
                   )
                 : (index == 1
-                    ? CategoryTabBarItem(
-                        title: AppHelpers.getTranslation(TrKeys.popular),
-                        isActive: activeIndex == 1,
-                        onTap: () {
-                          onChangeTab(1);
-                        },
-                      )
-                    : CategoryTabBarItem(
-                        title: categories[index - 2].translation?.title ?? '--',
-                        isActive: activeIndex == index,
-                        onTap: () {
-                          onChangeTab(index);
-                        },
-                      ));
+                      ? CategoryTabBarItem(
+                          title: AppHelpers.getTranslation(TrKeys.popular),
+                          isActive: activeIndex == 1,
+                          onTap: () {
+                            onChangeTab(1);
+                          },
+                        )
+                      : CategoryTabBarItem(
+                          title:
+                              categories[index - 2].translation?.title ?? '--',
+                          isActive: activeIndex == index,
+                          onTap: () {
+                            onChangeTab(index);
+                          },
+                        ));
           },
         ),
       ),

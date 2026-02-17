@@ -55,10 +55,7 @@ class OutlinedBorderTextField extends StatelessWidget {
             children: [
               Text(
                 label!,
-                style: Style.interNormal(
-                  size: 9,
-                  color: Style.black,
-                ),
+                style: AppStyle.interNormal(size: 9, color: AppStyle.black),
               ),
             ],
           ),
@@ -71,12 +68,9 @@ class OutlinedBorderTextField extends StatelessWidget {
           obscuringCharacter: '*',
           controller: textController,
           validator: validation,
-          style: Style.interNormal(
-            size: 15.sp,
-            color: Style.black,
-          ),
+          style: AppStyle.interNormal(size: 15, color: AppStyle.black),
           cursorWidth: 1,
-          cursorColor: Style.black,
+          cursorColor: AppStyle.black,
           keyboardType: inputType,
           initialValue: initialText,
           readOnly: readOnly,
@@ -84,33 +78,26 @@ class OutlinedBorderTextField extends StatelessWidget {
               textCapitalization ?? TextCapitalization.sentences,
           textInputAction: textInputAction,
           decoration: InputDecoration(
-            suffixIconConstraints:
-                BoxConstraints(maxHeight: 30.h, maxWidth: 30.h),
+            suffixIconConstraints: BoxConstraints(
+              maxHeight: 30.h,
+              maxWidth: 30.h,
+            ),
             suffixIcon: suffixIcon,
             hintText: hint ?? AppHelpers.getTranslation(TrKeys.typeSomething),
-            hintStyle: Style.interNormal(
+            hintStyle: AppStyle.interNormal(
               size: 13,
-              color: Style.black.withOpacity(.5),
+              color: AppStyle.black.withOpacity(.5),
             ),
             contentPadding: REdgeInsets.symmetric(horizontal: 0, vertical: 8),
             floatingLabelBehavior: FloatingLabelBehavior.always,
-            fillColor: Style.pendingDark,
+            fillColor: AppStyle.pendingDark,
             filled: false,
-            enabledBorder: UnderlineInputBorder(
-                borderSide: BorderSide.merge(
-                    BorderSide(color: Style.black.withOpacity(.5)),
-                    BorderSide(color: Style.black.withOpacity(.5)))),
-            errorBorder: UnderlineInputBorder(
-                borderSide: BorderSide.merge(
-                    const BorderSide(color: Style.borderColor),
-                    const BorderSide(color: Style.borderColor))),
-            border: const UnderlineInputBorder(),
-            focusedErrorBorder: const UnderlineInputBorder(),
-            disabledBorder: UnderlineInputBorder(
-                borderSide: BorderSide.merge(
-                    const BorderSide(color: Style.borderColor),
-                    const BorderSide(color: Style.borderColor))),
-            focusedBorder: const UnderlineInputBorder(),
+            enabledBorder: _border(AppStyle.black.withOpacity(.2)),
+            errorBorder: _border(AppStyle.red.withOpacity(.2)),
+            border: _border(AppStyle.black.withOpacity(.2)),
+            focusedErrorBorder: _border(AppStyle.black.withOpacity(.2)),
+            disabledBorder: _border(AppStyle.black.withOpacity(.2)),
+            focusedBorder: _border(AppStyle.primary.withOpacity(.9)),
           ),
         ),
         if (descriptionText != null)
@@ -121,19 +108,28 @@ class OutlinedBorderTextField extends StatelessWidget {
               4.verticalSpace,
               Text(
                 descriptionText!,
-                style: Style.interRegular(
+                style: AppStyle.interRegular(
                   letterSpacing: -0.3,
                   size: 12,
                   color: isError
-                      ? Style.red
+                      ? AppStyle.red
                       : isSuccess
-                          ? Style.greyColor
-                          : Style.pendingDark,
+                      ? AppStyle.greyColor
+                      : AppStyle.pendingDark,
                 ),
               ),
             ],
-          )
+          ),
       ],
+    );
+  }
+
+  UnderlineInputBorder _border(Color color) {
+    return UnderlineInputBorder(
+      borderSide: BorderSide.merge(
+        BorderSide(color: color, width: 0.6),
+        BorderSide(color: color, width: 0.6),
+      ),
     );
   }
 }

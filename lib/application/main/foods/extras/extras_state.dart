@@ -5,7 +5,7 @@ import 'package:venderfoodyman/infrastructure/models/models.dart';
 part 'extras_state.freezed.dart';
 
 @freezed
-class ExtrasState with _$ExtrasState {
+abstract class ExtrasState with _$ExtrasState {
   const factory ExtrasState({
     @Default(false) bool isLoading,
     @Default(false) bool isSaving,

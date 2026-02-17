@@ -22,7 +22,7 @@ class SearchTextField extends StatelessWidget {
     this.suffixIcon,
     this.textEditingController,
     this.onChanged,
-    this.bgColor = Style.transparent,
+    this.bgColor = AppStyle.transparent,
     this.isBorder = false,
     this.isRead = false,
     this.isSearchIcon = true,
@@ -35,19 +35,16 @@ class SearchTextField extends StatelessWidget {
       readOnly: isRead,
       autofocus: false,
       autocorrect: true,
-      style: Style.interRegular(
-        size: 16.sp,
-        color: Style.blackColor,
-      ),
+      style: AppStyle.interRegular(size: 16, color: AppStyle.blackColor),
       onTap: onTap,
       onChanged: onChanged,
       controller: textEditingController,
-      cursorColor: Style.blackColor,
+      cursorColor: AppStyle.blackColor,
       cursorWidth: 1,
       decoration: InputDecoration(
-        hintStyle: Style.interRegular(
-          size: 16.sp,
-          color: Style.textColor,
+        hintStyle: AppStyle.interRegular(
+          size: 16,
+          color: AppStyle.textColor,
         ),
         hintText: hintText ?? AppHelpers.getTranslation(TrKeys.search),
         contentPadding: REdgeInsets.symmetric(horizontal: 15, vertical: 17),
@@ -55,7 +52,7 @@ class SearchTextField extends StatelessWidget {
             ? Icon(
                 FlutterRemix.search_2_line,
                 size: 20.r,
-                color: Style.blackColor,
+                color: AppStyle.blackColor,
               )
             : null,
         suffixIcon: suffixIcon,

@@ -2,14 +2,12 @@ import 'package:venderfoodyman/domain/handlers/api_result.dart';
 import 'package:venderfoodyman/infrastructure/models/models.dart';
 
 abstract class TableInterface {
-
-  Future<ApiResult<ShopSection>> createNewSection(
-      {required String name, required num area});
-
-  Future<ApiResult<ShopSectionResponse>> getSection({
-    int? page,
-    String? query,
+  Future<ApiResult<ShopSection>> createNewSection({
+    required String name,
+    required num area,
   });
+
+  Future<ApiResult<ShopSectionResponse>> getSection({int? page, String? query});
 
   Future<ApiResult<dynamic>> createNewTable({required TableModel tableModel});
 
@@ -54,8 +52,10 @@ abstract class TableInterface {
 
   Future<ApiResult<CloseDayResponse>> getCloseDay();
 
-  Future<ApiResult<dynamic>> changeOrderStatus(
-      {required String status, required int id});
+  Future<ApiResult<dynamic>> changeOrderStatus({
+    required String status,
+    required int id,
+  });
 
   Future<ApiResult<TableStatisticResponse>> getStatistic({
     DateTime? from,

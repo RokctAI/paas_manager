@@ -5,7 +5,7 @@ import 'package:venderfoodyman/infrastructure/models/models.dart';
 part 'languages_state.freezed.dart';
 
 @freezed
-class LanguagesState with _$LanguagesState {
+abstract class LanguagesState with _$LanguagesState {
   const factory LanguagesState({
     @Default([]) List<LanguageData> languages,
     @Default(0) int index,

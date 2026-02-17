@@ -1,4 +1,3 @@
-
 import 'package:venderfoodyman/domain/handlers/handlers.dart';
 import 'package:venderfoodyman/infrastructure/models/models.dart';
 import 'package:venderfoodyman/infrastructure/services/services.dart';
@@ -10,9 +9,9 @@ abstract class SettingsInterface {
   );
 
   Future<ApiResult<MultiGalleryUploadResponse>> uploadMultiImage(
-      List<String?> filePaths,
-      UploadType uploadType,
-      );
+    List<String?> filePaths,
+    UploadType uploadType,
+  );
 
   Future<ApiResult<CurrenciesResponse>> getCurrencies();
 
@@ -22,5 +21,7 @@ abstract class SettingsInterface {
 
   Future<ApiResult<LanguagesResponse>> getLanguages();
 
-  Future<ApiResult<GenerateImageModel>> getGenerateImage(String name);
+  Future<ApiResult<AiTranslationResponse>> getAiTranslation({
+    required AiTranslationRequest model,
+  });
 }

@@ -47,7 +47,6 @@ class ShopData {
     _id = id;
     _uuid = uuid;
     _orderPayment = orderPayment;
-    _discountsCount = discountsCount;
     _userId = userId;
     _price = price;
     _pricePerKm = pricePerKm;
@@ -86,7 +85,6 @@ class ShopData {
     _id = json['id'];
     _orderPayment = json['order_payment'];
     _uuid = json['uuid'];
-    _discountsCount = json['discounts_count'];
     _userId = json['user_id'];
     _price = json['price'];
     _pricePerKm = json['price_per_km'];
@@ -160,7 +158,6 @@ class ShopData {
   int? _id;
   String? _uuid;
   String? _orderPayment;
-  int? _discountsCount;
   int? _userId;
   num? _price;
   num? _pricePerKm;
@@ -236,7 +233,6 @@ class ShopData {
         id: id ?? _id,
         uuid: uuid ?? _uuid,
         orderPayment: orderPayment ?? _orderPayment,
-        discountsCount: discountsCount ?? _discountsCount,
         userId: userId ?? _userId,
         price: price ?? _price,
         pricePerKm: pricePerKm ?? _pricePerKm,
@@ -277,7 +273,6 @@ class ShopData {
 
   String? get orderPayment => _orderPayment;
 
-  int? get discountsCount => _discountsCount;
 
   int? get userId => _userId;
 
@@ -347,7 +342,6 @@ class ShopData {
     final map = <String, dynamic>{};
     map['id'] = _id;
     map['uuid'] = _uuid;
-    map['discounts_count'] = _discountsCount;
     map['user_id'] = _userId;
     map['price'] = _price;
     map['price_per_km'] = _pricePerKm;

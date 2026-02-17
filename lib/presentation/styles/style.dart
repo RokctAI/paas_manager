@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-abstract class Style {
-  Style._();
+import '../../infrastructure/models/models.dart';
+import '../../infrastructure/services/services.dart';
+
+abstract class AppStyle {
+  AppStyle._();
 
   /// colors
-  static const primary = Color(0xFF83EA00);
   static const white = Color(0xFFFFFFFF);
   static const hintColor = Color(0xFFA7A7A7);
   static const black = Color(0xFF232B2F);
@@ -38,72 +41,91 @@ abstract class Style {
   static const pending = Color(0xFFFEFAF2);
   static const pendingDark = Color(0xFFF19204);
   static const iconButtonBack = Color(0xFFE9E9E6);
+  static const deepPurple = Color(0xFF673AB7);
+
+  static Color get primary =>
+      _getColorFromSettings('primary_color', const Color(0xFF83EA00));
+
+  static Color get buttonFontColor =>
+      _getColorFromSettings('primary_button_font_color', black);
+
+  static Color _getColorFromSettings(String key, Color defaultColor) {
+    final settings = LocalStorage.getSettingsList();
+    final setting = settings.firstWhere(
+      (s) => s.key == key,
+      orElse: () => SettingsData(),
+    );
+
+    if (setting.value == null) return defaultColor;
+
+    try {
+      return Color(int.parse('0xFF${setting.value!.substring(1, 7)}'));
+    } catch (e) {
+      return defaultColor;
+    }
+  }
 
   static List<Color> primaryGradient = [
-    Style.primary.withOpacity(0.5),
-    Style.transparent,
+    AppStyle.primary.withOpacity(0.5),
+    AppStyle.transparent,
   ];
 
   /// ################# Fonts #######################
 
-  static interBold({
+  static TextStyle interBold({
     double size = 18,
-    Color color = Style.blackColor,
+    Color color = AppStyle.blackColor,
     double letterSpacing = 0,
-  }) =>
-      GoogleFonts.inter(
-        fontSize: size,
-        fontWeight: FontWeight.bold,
-        color: color,
-        decoration: TextDecoration.none,
-        letterSpacing: letterSpacing,
-      );
+  }) => GoogleFonts.inter(
+    fontSize: size.sp,
+    fontWeight: FontWeight.bold,
+    color: color,
+    decoration: TextDecoration.none,
+    letterSpacing: letterSpacing,
+  );
 
-  static interSemi({
+  static TextStyle interSemi({
     double size = 18,
-    Color color = Style.blackColor,
+    Color color = AppStyle.blackColor,
     TextDecoration decoration = TextDecoration.none,
     double letterSpacing = 0,
     FontStyle? fontStyle,
-  }) =>
-      GoogleFonts.inter(
-        fontSize: size,
-        fontWeight: FontWeight.w700,
-        color: color,
-        letterSpacing: letterSpacing,
-        decoration: decoration,
-        fontStyle: fontStyle,
-      );
+  }) => GoogleFonts.inter(
+    fontSize: size.sp,
+    fontWeight: FontWeight.w700,
+    color: color,
+    letterSpacing: letterSpacing,
+    decoration: decoration,
+    fontStyle: fontStyle,
+  );
 
-  static interNormal({
+  static TextStyle interNormal({
     double size = 16,
-    Color color = Style.blackColor,
+    Color color = AppStyle.blackColor,
     double letterSpacing = 0,
     TextDecoration textDecoration = TextDecoration.none,
     FontStyle? fontStyle,
-  }) =>
-      GoogleFonts.inter(
-        fontSize: size,
-        fontWeight: FontWeight.w500,
-        color: color,
-        letterSpacing: letterSpacing,
-        decoration: textDecoration,
-        fontStyle: fontStyle,
-      );
+  }) => GoogleFonts.inter(
+    fontSize: size.sp,
+    fontWeight: FontWeight.w500,
+    color: color,
+    letterSpacing: letterSpacing,
+    decoration: textDecoration,
+    fontStyle: fontStyle,
+  );
 
-  static interRegular({
+  static TextStyle interRegular({
     double size = 16,
-    Color color = Style.blackColor,
+    Color color = AppStyle.blackColor,
     double letterSpacing = 0,
     TextDecoration textDecoration = TextDecoration.none,
     FontStyle? fontStyle,
-  }) =>
-      GoogleFonts.inter(
-        fontSize: size,
-        fontWeight: FontWeight.w400,
-        color: color,
-        letterSpacing: letterSpacing,
-        decoration: textDecoration,
-        fontStyle: fontStyle,
-      );
+  }) => GoogleFonts.inter(
+    fontSize: size.sp,
+    fontWeight: FontWeight.w400,
+    color: color,
+    letterSpacing: letterSpacing,
+    decoration: textDecoration,
+    fontStyle: fontStyle,
+  );
 }

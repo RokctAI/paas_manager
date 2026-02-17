@@ -11,7 +11,7 @@ import 'package:venderfoodyman/infrastructure/services/services.dart';
 
 @RoutePage()
 class DeliveryZonePage extends ConsumerStatefulWidget {
-  const DeliveryZonePage({super.key}) ;
+  const DeliveryZonePage({super.key});
 
   @override
   ConsumerState<DeliveryZonePage> createState() => _DeliveryZonePageState();
@@ -29,7 +29,7 @@ class _DeliveryZonePageState extends ConsumerState<DeliveryZonePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Style.greyColor,
+      backgroundColor: AppStyle.greyColor,
       resizeToAvoidBottomInset: false,
       body: Consumer(
         builder: (context, ref, child) {
@@ -41,7 +41,7 @@ class _DeliveryZonePageState extends ConsumerState<DeliveryZonePage> {
                   ? Container(
                       width: double.infinity,
                       height: double.infinity,
-                      color: Style.white,
+                      color: AppStyle.white,
                     )
                   : GoogleMap(
                       tiltGesturesEnabled: false,
@@ -55,11 +55,11 @@ class _DeliveryZonePageState extends ConsumerState<DeliveryZonePage> {
                           state.polygon.isNotEmpty
                               ? state.polygon.first.points.first.latitude
                               : AppHelpers.getInitialLatitude() ??
-                                  AppConstants.demoLatitude,
+                                    AppConstants.demoLatitude,
                           state.polygon.isNotEmpty
                               ? state.polygon.first.points.first.longitude
                               : AppHelpers.getInitialLongitude() ??
-                                  AppConstants.demoLongitude,
+                                    AppConstants.demoLongitude,
                         ),
                         tilt: 0,
                         zoom: 11,

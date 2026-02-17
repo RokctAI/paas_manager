@@ -11,7 +11,7 @@ class TableModel {
     required this.shopSectionId,
   });
 
-  toJson() => {
+  Map<String, Object> toJson() => {
         "name": name,
         "chair_count": chairCount,
         "tax": tax,

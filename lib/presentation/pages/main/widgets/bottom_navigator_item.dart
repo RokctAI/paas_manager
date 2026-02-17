@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
 import 'package:venderfoodyman/presentation/styles/style.dart';
 
 class BottomNavigatorItem extends StatelessWidget {
@@ -19,7 +18,7 @@ class BottomNavigatorItem extends StatelessWidget {
     required this.unSelectIcon,
     required this.currentIndex,
     required this.isScrolling,
-  }) ;
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +26,7 @@ class BottomNavigatorItem extends StatelessWidget {
       onTap: selectItem,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 700),
-        color: Style.transparent,
+        color: AppStyle.transparent,
         height: isScrolling ? 0.h : 30.h,
         width: isScrolling ? 0.w : 56.w,
         child: Column(
@@ -38,12 +37,12 @@ class BottomNavigatorItem extends StatelessWidget {
                   ? Icon(
                       selectIcon,
                       size: isScrolling ? 0.r : 24.r,
-                      color: Style.white,
+                      color: AppStyle.white,
                     )
                   : Icon(
                       unSelectIcon,
                       size: isScrolling ? 0.r : 24.r,
-                      color: Style.white,
+                      color: AppStyle.white,
                     ),
             ),
             AnimatedContainer(
@@ -51,15 +50,15 @@ class BottomNavigatorItem extends StatelessWidget {
               width: isScrolling ? 0.w : 24.w,
               decoration: BoxDecoration(
                 color: index == currentIndex
-                    ? Style.primary
-                    : Style.transparent,
+                    ? AppStyle.primary
+                    : AppStyle.transparent,
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(100.r),
                   topRight: Radius.circular(100.r),
                 ),
               ),
               duration: const Duration(milliseconds: 400),
-            )
+            ),
           ],
         ),
       ),

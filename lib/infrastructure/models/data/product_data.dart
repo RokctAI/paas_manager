@@ -16,6 +16,7 @@ class ProductData {
     num? interval,
     String? barCode,
     String? status,
+    String? type,
     bool? active,
     bool? addon,
     String? img,
@@ -46,6 +47,7 @@ class ProductData {
     _interval = interval;
     _barCode = barCode;
     _status = status;
+    _type = type;
     _active = active;
     _addon = addon;
     _img = img;
@@ -72,6 +74,7 @@ class ProductData {
     _interval = json['interval'];
     _barCode = json['bar_code'];
     _status = json['status'];
+    _type = json['type'];
     _active = json['active'];
     _addon = json['addon'];
     _img = json['img'];
@@ -125,6 +128,7 @@ class ProductData {
   num? _interval;
   String? _barCode;
   String? _status;
+  String? _type;
   bool? _active;
   bool? _addon;
   String? _img;
@@ -153,6 +157,7 @@ class ProductData {
     num? interval,
     String? barCode,
     String? status,
+    String? type,
     bool? active,
     bool? addon,
     String? img,
@@ -180,6 +185,7 @@ class ProductData {
         interval: interval ?? _interval,
         barCode: barCode ?? _barCode,
         status: status ?? _status,
+        type: type ?? _type,
         active: active ?? _active,
         addon: addon ?? _addon,
         translations: translations ?? _translations,
@@ -218,6 +224,8 @@ class ProductData {
   String? get barCode => _barCode;
 
   String? get status => _status;
+
+  String? get type => _type;
 
   bool? get active => _active;
 
@@ -258,6 +266,7 @@ class ProductData {
     map['tax'] = _tax;
     map['bar_code'] = _barCode;
     map['status'] = _status;
+    map['type'] = _type;
     map['active'] = _active;
     map['img'] = _img;
     map['min_qty'] = _minQty;

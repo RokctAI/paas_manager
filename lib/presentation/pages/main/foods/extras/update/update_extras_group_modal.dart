@@ -11,8 +11,7 @@ import 'package:venderfoodyman/infrastructure/services/services.dart';
 class UpdateExtrasGroupModal extends ConsumerStatefulWidget {
   final Group group;
 
-  const UpdateExtrasGroupModal({super.key, required this.group})
-      ;
+  const UpdateExtrasGroupModal({super.key, required this.group});
 
   @override
   ConsumerState<UpdateExtrasGroupModal> createState() =>

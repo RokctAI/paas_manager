@@ -157,7 +157,7 @@ class UserModel {
     return map;
   }
 
-  Map<String, dynamic> toJsonForSignUp({typeFirebase = false}) => {
+  Map<String, dynamic> toJsonForSignUp({bool typeFirebase = false}) => {
     "firstname": _firstname,
     if (_lastname?.isNotEmpty ?? false) "lastname": _lastname,
     if (_phone?.isNotEmpty ?? false) "phone": _phone?.replaceAll('+', ""),

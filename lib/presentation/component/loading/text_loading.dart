@@ -22,7 +22,7 @@ class TextLoading extends StatelessWidget {
       width: width.r,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(radius.r),
-        color: Style.borderColor,
+        color: AppStyle.borderColor,
       ),
     );
   }

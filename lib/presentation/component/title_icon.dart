@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-
 import 'package:venderfoodyman/presentation/styles/style.dart';
 import 'package:venderfoodyman/infrastructure/services/services.dart';
 
@@ -17,7 +15,7 @@ class TitleAndIcon extends StatelessWidget {
     this.isIcon = false,
     required this.title,
     this.rightTitle,
-    this.rightTitleColor = Style.blackColor,
+    this.rightTitleColor = AppStyle.blackColor,
     this.onRightTap,
     this.titleSize = 20,
   });
@@ -33,7 +31,10 @@ class TitleAndIcon extends StatelessWidget {
           Expanded(
             child: Text(
               title,
-              style: Style.interSemi(size: 18.sp, color: Style.blackColor),
+              style: AppStyle.interSemi(
+                size: 18,
+                color: AppStyle.blackColor,
+              ),
             ),
           ),
           GestureDetector(
@@ -42,8 +43,8 @@ class TitleAndIcon extends StatelessWidget {
               children: [
                 Text(
                   rightTitle ?? '',
-                  style: Style.interRegular(
-                    size: 14.sp,
+                  style: AppStyle.interRegular(
+                    size: 14,
                     color: rightTitleColor,
                   ),
                 ),
@@ -53,7 +54,7 @@ class TitleAndIcon extends StatelessWidget {
                             ? Icons.keyboard_arrow_right
                             : Icons.keyboard_arrow_left,
                       )
-                    : const SizedBox.shrink()
+                    : const SizedBox.shrink(),
               ],
             ),
           ),

@@ -102,7 +102,7 @@ class StatisticsNotifier extends StateNotifier<StatisticsState> {
     );
   }
 
-  addListInfo() {
+  void addListInfo() {
     // List<OrdinalSales> day = [];
     //
     // state.countData?.chart?.forEach((element) {
@@ -124,7 +124,7 @@ class StatisticsNotifier extends StateNotifier<StatisticsState> {
     // state = state.copyWith(list: newList);
   }
 
-  addChartInfo({
+  void addChartInfo({
     required List<Chart> chart,
     required DateTime endTime,
     required DateTime startTime,

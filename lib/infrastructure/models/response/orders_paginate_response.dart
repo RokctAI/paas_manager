@@ -84,6 +84,7 @@ class OrdersStatistic {
     int? acceptedOrdersCount,
     int? readyOrdersCount,
     int? onAWayOrdersCount,
+    int? cookingOrdersCount,
     int? ordersCount,
     num? totalPrice,
     int? todayCount,
@@ -93,6 +94,7 @@ class OrdersStatistic {
     _cancelOrdersCount = cancelOrdersCount;
     _newOrdersCount = newOrdersCount;
     _acceptedOrdersCount = acceptedOrdersCount;
+    _cookingOrdersCount = cookingOrdersCount;
     _readyOrdersCount = readyOrdersCount;
     _onAWayOrdersCount = onAWayOrdersCount;
     _ordersCount = ordersCount;
@@ -106,6 +108,7 @@ class OrdersStatistic {
     _cancelOrdersCount = json['cancel_orders_count'];
     _newOrdersCount = json['new_orders_count'];
     _acceptedOrdersCount = json['accepted_orders_count'];
+    _cookingOrdersCount = json['cooking_orders_count'];
     _readyOrdersCount = json['ready_orders_count'];
     _onAWayOrdersCount = json['on_a_way_orders_count'];
     _ordersCount = json['orders_count'];
@@ -118,6 +121,7 @@ class OrdersStatistic {
   int? _cancelOrdersCount;
   int? _newOrdersCount;
   int? _acceptedOrdersCount;
+  int? _cookingOrdersCount;
   int? _readyOrdersCount;
   int? _onAWayOrdersCount;
   int? _ordersCount;
@@ -130,6 +134,7 @@ class OrdersStatistic {
     int? cancelOrdersCount,
     int? newOrdersCount,
     int? acceptedOrdersCount,
+    int? cookingOrdersCount,
     int? readyOrdersCount,
     int? onAWayOrdersCount,
     int? ordersCount,
@@ -142,6 +147,7 @@ class OrdersStatistic {
         cancelOrdersCount: cancelOrdersCount ?? _cancelOrdersCount,
         newOrdersCount: newOrdersCount ?? _newOrdersCount,
         acceptedOrdersCount: acceptedOrdersCount ?? _acceptedOrdersCount,
+        cookingOrdersCount: cookingOrdersCount ?? _cookingOrdersCount,
         readyOrdersCount: readyOrdersCount ?? _readyOrdersCount,
         onAWayOrdersCount: onAWayOrdersCount ?? _onAWayOrdersCount,
         ordersCount: ordersCount ?? _ordersCount,
@@ -158,6 +164,8 @@ class OrdersStatistic {
   int? get newOrdersCount => _newOrdersCount;
 
   int? get acceptedOrdersCount => _acceptedOrdersCount;
+
+  int? get cookingOrdersCount => _cookingOrdersCount;
 
   int? get readyOrdersCount => _readyOrdersCount;
 
@@ -176,6 +184,7 @@ class OrdersStatistic {
     map['cancel_orders_count'] = _cancelOrdersCount;
     map['new_orders_count'] = _newOrdersCount;
     map['accepted_orders_count'] = _acceptedOrdersCount;
+    map['cooking_orders_count'] = _cookingOrdersCount;
     map['ready_orders_count'] = _readyOrdersCount;
     map['on_a_way_orders_count'] = _onAWayOrdersCount;
     map['orders_count'] = _ordersCount;

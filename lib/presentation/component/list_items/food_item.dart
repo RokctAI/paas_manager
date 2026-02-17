@@ -25,7 +25,7 @@ class FoodItem extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       child: Container(
-        color: product.status == 'pending' ? Style.pending : Style.white,
+        color: product.status == 'pending' ? AppStyle.pending : AppStyle.white,
         margin: EdgeInsets.only(bottom: spacing.r),
         padding: REdgeInsets.symmetric(vertical: 12),
         child: Column(
@@ -40,9 +40,9 @@ class FoodItem extends StatelessWidget {
                     children: [
                       Text(
                         '${product.translation?.title}',
-                        style: Style.interNormal(
-                          size: 14.sp,
-                          color: Style.blackColor,
+                        style: AppStyle.interNormal(
+                          size: 14,
+                          color: AppStyle.blackColor,
                           letterSpacing: -0.3,
                         ),
                       ),
@@ -51,9 +51,9 @@ class FoodItem extends StatelessWidget {
                         '${product.translation?.description}',
                         maxLines: 4,
                         overflow: TextOverflow.ellipsis,
-                        style: Style.interNormal(
-                          size: 12.sp,
-                          color: Style.textColor,
+                        style: AppStyle.interNormal(
+                          size: 12,
+                          color: AppStyle.textColor,
                           letterSpacing: -0.3,
                         ),
                       ),
@@ -62,11 +62,13 @@ class FoodItem extends StatelessWidget {
                         isOutOfStock
                             ? AppHelpers.getTranslation(TrKeys.outOfStock)
                             : AppHelpers.numberFormat(
-                                product.stocks?.first.price ?? 0),
-                        style: Style.interSemi(
-                          size: 14.sp,
-                          color:
-                              isOutOfStock ? Style.red : Style.blackColor,
+                                product.stocks?.first.price ?? 0,
+                              ),
+                        style: AppStyle.interSemi(
+                          size: 14,
+                          color: isOutOfStock
+                              ? AppStyle.red
+                              : AppStyle.blackColor,
                           letterSpacing: -0.3,
                         ),
                       ),
@@ -91,7 +93,7 @@ class FoodItem extends StatelessWidget {
               child: Divider(
                 thickness: 1.r,
                 height: 1.r,
-                color: Style.tabBarBorderColor,
+                color: AppStyle.tabBarBorderColor,
               ),
             ),
             14.verticalSpace,
@@ -105,13 +107,13 @@ class FoodItem extends StatelessWidget {
                       children: [
                         Text(
                           AppHelpers.getTranslation(TrKeys.parameters),
-                          style: Style.interNormal(size: 13.sp),
+                          style: AppStyle.interNormal(size: 13),
                         ),
                         6.horizontalSpace,
                         Icon(
                           FlutterRemix.arrow_down_s_line,
                           size: 18.r,
-                          color: Style.blackColor,
+                          color: AppStyle.blackColor,
                         ),
                       ],
                     ),
@@ -123,8 +125,8 @@ class FoodItem extends StatelessWidget {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10.r),
                       color: product.status == 'pending'
-                          ? Style.pendingDark
-                          : Style.primary,
+                          ? AppStyle.pendingDark
+                          : AppStyle.primary,
                     ),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
@@ -134,16 +136,16 @@ class FoodItem extends StatelessWidget {
                               ? FlutterRemix.time_fill
                               : FlutterRemix.check_double_line,
                           size: 20.r,
-                          color: Style.white,
+                          color: AppStyle.white,
                         ),
                         6.horizontalSpace,
                         Text(
                           product.status == 'pending'
                               ? AppHelpers.getTranslation(TrKeys.pending)
                               : AppHelpers.getTranslation(TrKeys.published),
-                          style: Style.interNormal(
-                            size: 14.sp,
-                            color: Style.white,
+                          style: AppStyle.interNormal(
+                            size: 14,
+                            color: AppStyle.white,
                             letterSpacing: -0.3,
                           ),
                         ),

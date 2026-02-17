@@ -9,7 +9,7 @@ import 'package:venderfoodyman/application/providers.dart';
 import 'package:venderfoodyman/infrastructure/services/services.dart';
 
 class CreateFoodStocksBody extends ConsumerStatefulWidget {
-  const CreateFoodStocksBody({super.key}) ;
+  const CreateFoodStocksBody({super.key});
 
   @override
   ConsumerState<CreateFoodStocksBody> createState() =>
@@ -35,7 +35,7 @@ class _CreateFoodStocksBodyState extends ConsumerState<CreateFoodStocksBody> {
           final state = ref.watch(createFoodStocksProvider);
           final event = ref.read(createFoodStocksProvider.notifier);
           final foodsEvent = ref.read(foodsProvider.notifier);
-          final categoriesState = ref.watch(foodCategoriesProvider);
+          final categoriesState = ref.watch(categoriesProvider);
           final detailsState = ref.watch(createFoodDetailsProvider);
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -69,8 +69,10 @@ class _CreateFoodStocksBodyState extends ConsumerState<CreateFoodStocksBody> {
                   child: ListView.builder(
                     itemCount: state.stocks.length,
                     shrinkWrap: true,
-                    padding:
-                        REdgeInsets.symmetric(vertical: 10, horizontal: 16),
+                    padding: REdgeInsets.symmetric(
+                      vertical: 10,
+                      horizontal: 16,
+                    ),
                     physics: const BouncingScrollPhysics(),
                     itemBuilder: (context, index) {
                       return EditableFoodStockItem(
@@ -84,16 +86,17 @@ class _CreateFoodStocksBodyState extends ConsumerState<CreateFoodStocksBody> {
                             event.setQuantity(value: value, index: index),
                         onAddonTap: (context) =>
                             AppHelpers.showCustomModalBottomSheet(
-                          paddingTop: MediaQuery.paddingOf(context).top + 150,
-                          context: context,
-                          radius: 12,
-                          modal: CreateFoodAddonsModal(
-                            stock: state.stocks[index],
-                            onSave: (addons) =>
-                                event.setStockAddons(addons, index),
-                          ),
-                          isDarkMode: true,
-                        ),
+                              paddingTop:
+                                  MediaQuery.paddingOf(context).top + 150,
+                              context: context,
+                              radius: 12,
+                              modal: CreateFoodAddonsModal(
+                                stock: state.stocks[index],
+                                onSave: (addons) =>
+                                    event.setStockAddons(addons, index),
+                              ),
+                              isDarkMode: true,
+                            ),
                         onSkuChange: (value) {
                           event.setSku(value: value, index: index);
                         },
@@ -118,13 +121,16 @@ class _CreateFoodStocksBodyState extends ConsumerState<CreateFoodStocksBody> {
                             categoryId: categoriesState.activeIndex == 1
                                 ? null
                                 : categoriesState
-                                    .categories[categoriesState.activeIndex - 2]
-                                    .id,
+                                      .categories[categoriesState.activeIndex -
+                                          2]
+                                      .id,
                           );
                           AppHelpers.showCheckTopSnackBar(
                             context,
                             type: SnackBarType.success,
-                            text: AppHelpers.getTranslation(TrKeys.successfullyUpdated),
+                            text: AppHelpers.getTranslation(
+                              TrKeys.successfullyUpdated,
+                            ),
                           );
                           context.maybePop();
                         },

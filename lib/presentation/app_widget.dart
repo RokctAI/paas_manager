@@ -26,12 +26,12 @@ class AppWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return FutureBuilder(
-        future: Future.wait([
-          setUpDependencies(),
-          LocalStorage.init(),
-          if (LocalStorage.getTranslations().isEmpty) fetchSetting()
-        ]),
-        builder: (context, AsyncSnapshot<List<dynamic>> snap) {
+      future: Future.wait([
+        setUpDependencies(),
+        LocalStorage.init(),
+        if (LocalStorage.getTranslations().isEmpty) fetchSetting(),
+      ]),
+      builder: (context, AsyncSnapshot<List<dynamic>> snap) {
         return ScreenUtilInit(
           useInheritedMediaQuery: true,
           designSize: const Size(375, 812),
@@ -46,25 +46,25 @@ class AppWidget extends ConsumerWidget {
               loadStyle: LoadStyle.ShowWhenLoading,
             ),
             headerBuilder: () => const WaterDropMaterialHeader(
-              backgroundColor: Style.white,
+              backgroundColor: AppStyle.white,
               distance: 30,
-              color: Style.blackColor,
+              color: AppStyle.blackColor,
             ),
             child: MaterialApp.router(
-              theme: ThemeData(
-                useMaterial3: false
-              ),
+              theme: ThemeData(useMaterial3: false),
               debugShowCheckedModeBanner: false,
               routerDelegate: appRouter.delegate(),
               routeInformationParser: appRouter.defaultRouteParser(),
               locale: Locale(LocalStorage.getLanguage()?.locale ?? 'en'),
               themeMode: ThemeMode.light,
-              builder: (context, child) =>
-                  ScrollConfiguration(behavior: CustomBehavior(), child: child!),
+              builder: (context, child) => ScrollConfiguration(
+                behavior: CustomBehavior(),
+                child: child!,
+              ),
             ),
           ),
         );
-      }
+      },
     );
   }
 }

@@ -3,9 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:venderfoodyman/domain/interface/interfaces.dart';
-import 'package:venderfoodyman/infrastructure/models/data/user_data.dart';
-
-import 'package:venderfoodyman/infrastructure/models/data/address_data.dart';
+import 'package:venderfoodyman/infrastructure/models/models.dart';
 import 'package:venderfoodyman/infrastructure/services/services.dart';
 import 'package:venderfoodyman/presentation/routes/app_router.dart';
 import 'profile_state.dart';
@@ -20,24 +18,24 @@ class ProfileNotifier extends StateNotifier<ProfileState> {
       : super(const ProfileState());
   int page = 1;
 
-  resetShopData() {
+  void resetShopData() {
     state = state.copyWith(
         bgImage: "", logoImage: "", addressModel: null, isSaveLoading: false);
   }
 
-  setBgImage(String bgImage) {
+  void setBgImage(String bgImage) {
     state = state.copyWith(bgImage: bgImage);
   }
 
-  setLogoImage(String logoImage) {
+  void setLogoImage(String logoImage) {
     state = state.copyWith(logoImage: logoImage);
   }
 
-  setAddress(AddressData? data) {
+  void setAddress(AddressData? data) {
     state = state.copyWith(addressModel: data);
   }
 
-  setPhone(String? data) {
+  void setPhone(String? data) {
     state = state.copyWith(userData: UserData(phone: data));
   }
 
@@ -81,7 +79,7 @@ class ProfileNotifier extends StateNotifier<ProfileState> {
             }
             if (status == 401) {
               context.router.popUntilRoot();
-              context.replaceRoute(const LoginRoute());
+              context.replaceRoute(const AuthRoute());
             }
             AppHelpers.showCheckTopSnackBar(
               context,
@@ -97,7 +95,7 @@ class ProfileNotifier extends StateNotifier<ProfileState> {
     }
   }
 
-  changeIndex(int index) {
+  void changeIndex(int index) {
     state = state.copyWith(typeIndex: index);
   }
 
@@ -223,7 +221,7 @@ class ProfileNotifier extends StateNotifier<ProfileState> {
         success: (data) async {
           LocalStorage.logout();
           context.router.popUntilRoot();
-          context.replaceRoute(const LoginRoute());
+          context.replaceRoute(const AuthRoute());
         },
         failure: (fail, status) {
           state = state.copyWith(isLoading: false);

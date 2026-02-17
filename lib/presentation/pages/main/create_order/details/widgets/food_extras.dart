@@ -9,7 +9,7 @@ import 'package:venderfoodyman/infrastructure/models/models.dart';
 import 'package:venderfoodyman/infrastructure/services/services.dart';
 
 class FoodExtras extends ConsumerWidget {
-  const FoodExtras({super.key}) ;
+  const FoodExtras({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -19,7 +19,9 @@ class FoodExtras extends ConsumerWidget {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        color: state.typedExtras.isEmpty ? Style.transparent : Style.white,
+        color: state.typedExtras.isEmpty
+            ? AppStyle.transparent
+            : AppStyle.white,
         borderRadius: BorderRadius.circular(10.r),
       ),
       padding: REdgeInsets.symmetric(horizontal: 16, vertical: 26),
@@ -37,9 +39,9 @@ class FoodExtras extends ConsumerWidget {
               if (index != 0) 36.verticalSpace,
               Text(
                 typedExtra.title,
-                style: Style.interSemi(
+                style: AppStyle.interSemi(
                   size: 16,
-                  color: Style.blackColor,
+                  color: AppStyle.blackColor,
                   letterSpacing: -0.5,
                 ),
               ),
@@ -55,27 +57,26 @@ class FoodExtras extends ConsumerWidget {
                       ),
                     )
                   : typedExtra.type == ExtrasType.color
-                      ? ColorExtras(
-                          uiExtras: typedExtra.uiExtras,
-                          groupIndex: typedExtra.groupIndex,
-                          onUpdate: (uiExtra) => event.updateSelectedIndexes(
-                            typedExtra.groupIndex,
-                            uiExtra.index,
-                            cartStocks: cartState.stocks,
-                          ),
-                        )
-                      : typedExtra.type == ExtrasType.image
-                          ? ImageExtras(
-                              uiExtras: typedExtra.uiExtras,
-                              groupIndex: typedExtra.groupIndex,
-                              onUpdate: (uiExtra) =>
-                                  event.updateSelectedIndexes(
-                                typedExtra.groupIndex,
-                                uiExtra.index,
-                                cartStocks: cartState.stocks,
-                              ),
-                            )
-                          : const SizedBox.shrink(),
+                  ? ColorExtras(
+                      uiExtras: typedExtra.uiExtras,
+                      groupIndex: typedExtra.groupIndex,
+                      onUpdate: (uiExtra) => event.updateSelectedIndexes(
+                        typedExtra.groupIndex,
+                        uiExtra.index,
+                        cartStocks: cartState.stocks,
+                      ),
+                    )
+                  : typedExtra.type == ExtrasType.image
+                  ? ImageExtras(
+                      uiExtras: typedExtra.uiExtras,
+                      groupIndex: typedExtra.groupIndex,
+                      onUpdate: (uiExtra) => event.updateSelectedIndexes(
+                        typedExtra.groupIndex,
+                        uiExtra.index,
+                        cartStocks: cartState.stocks,
+                      ),
+                    )
+                  : const SizedBox.shrink(),
             ],
           );
         },

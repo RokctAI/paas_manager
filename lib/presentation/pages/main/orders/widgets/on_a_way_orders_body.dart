@@ -12,7 +12,7 @@ import 'package:venderfoodyman/infrastructure/services/services.dart';
 class OnAWayOrdersBody extends StatefulWidget {
   final ScrollController? scrollController;
 
-  const OnAWayOrdersBody({super.key, this.scrollController}) ;
+  const OnAWayOrdersBody({super.key, this.scrollController});
 
   @override
   State<OnAWayOrdersBody> createState() => _OnAWayOrdersBodyState();
@@ -51,35 +51,36 @@ class _OnAWayOrdersBodyState extends State<OnAWayOrdersBody> {
             isRefresh: true,
           ),
           child: state.isLoading
-              ? const LoadingList(
-                  horizontalPadding: 16,
-                  verticalPadding: 16,
-                )
+              ? const LoadingList(horizontalPadding: 16, verticalPadding: 16)
               : state.orders.isNotEmpty
-                  ? ListView.builder(
-                      padding: REdgeInsets.only(
-                          right: 16, left: 16, top: 16, bottom: 100),
-                      shrinkWrap: true,
-                      itemCount: state.orders.length,
-                      controller: widget.scrollController,
-                      physics: const BouncingScrollPhysics(),
-                      itemBuilder: (context, index) {
-                        return OrderItem(
+              ? ListView.builder(
+                  padding: REdgeInsets.only(
+                    right: 16,
+                    left: 16,
+                    top: 16,
+                    bottom: 100,
+                  ),
+                  shrinkWrap: true,
+                  itemCount: state.orders.length,
+                  controller: widget.scrollController,
+                  physics: const BouncingScrollPhysics(),
+                  itemBuilder: (context, index) {
+                    return OrderItem(
+                      order: state.orders[index],
+                      onTap: () => AppHelpers.showCustomModalBottomSheet(
+                        paddingTop: MediaQuery.paddingOf(context).top + 60,
+                        context: context,
+                        radius: 12,
+                        modal: OrderDetailsModal(
                           order: state.orders[index],
-                          onTap: () => AppHelpers.showCustomModalBottomSheet(
-                            paddingTop: MediaQuery.paddingOf(context).top + 60,
-                            context: context,
-                            radius: 12,
-                            modal: OrderDetailsModal(
-                              order: state.orders[index],
-                              onAWayOrdersController: _refreshController,
-                            ),
-                            isDarkMode: true,
-                          ),
-                        );
-                      },
-                    )
-                  : const NoOrders(),
+                          onAWayOrdersController: _refreshController,
+                        ),
+                        isDarkMode: true,
+                      ),
+                    );
+                  },
+                )
+              : const NoOrders(),
         );
       },
     );

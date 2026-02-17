@@ -8,7 +8,7 @@ import 'package:venderfoodyman/presentation/styles/style.dart';
 import '../../../../../../../infrastructure/models/models.dart';
 
 class PaymentItem extends StatelessWidget {
-  final Payment payment;
+  final PaymentData payment;
   final bool isSelected;
   final bool isLast;
   final Function() onTap;
@@ -19,7 +19,7 @@ class PaymentItem extends StatelessWidget {
     required this.isSelected,
     required this.onTap,
     this.isLast = false,
-  }) ;
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -35,12 +35,12 @@ class PaymentItem extends StatelessWidget {
                       ? FlutterRemix.checkbox_circle_fill
                       : FlutterRemix.checkbox_circle_line,
                   size: 24.r,
-                  color: isSelected ? Style.primary : Style.blackColor,
+                  color: isSelected ? AppStyle.primary : AppStyle.blackColor,
                 ),
                 14.horizontalSpace,
                 Text(
-                  '${toBeginningOfSentenceCase(payment.payment?.tag)}',
-                  style: Style.interSemi(size: 14.sp, letterSpacing: -0.3),
+                  '${toBeginningOfSentenceCase(payment.tag)}',
+                  style: AppStyle.interSemi(size: 14, letterSpacing: -0.3),
                 ),
               ],
             ),
@@ -51,7 +51,7 @@ class PaymentItem extends StatelessWidget {
                   Divider(
                     thickness: 1.r,
                     height: 1.r,
-                    color: Style.greyColor,
+                    color: AppStyle.greyColor,
                   ),
                   14.verticalSpace,
                 ],

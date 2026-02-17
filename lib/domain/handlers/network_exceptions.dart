@@ -43,68 +43,7 @@ class NetworkExceptions with _$NetworkExceptions {
 
   const factory NetworkExceptions.unexpectedError() = UnexpectedError;
 
-  static NetworkExceptions getDioException(error) {
-    if (error is Exception) {
-      try {
-        if (error is DioException) {
-          switch (error.type) {
-            case DioExceptionType.cancel:
-              break;
-            case DioExceptionType.connectionTimeout:
-              break;
-            case DioExceptionType.unknown:
-              break;
-            case DioExceptionType.receiveTimeout:
-              break;
-            case DioExceptionType.badResponse:
-              switch (error.response!.statusCode) {
-                case 400:
-                  break;
-                case 401:
-                  break;
-                case 403:
-                  break;
-                case 404:
-                  break;
-                case 409:
-                  break;
-                case 408:
-                  break;
-                case 500:
-                  break;
-                case 503:
-                  break;
-                default:
-              }
-              break;
-            case DioExceptionType.sendTimeout:
-              break;
-            case DioExceptionType.badCertificate:
-              // TODO: Handle this case.
-              break;
-            case DioExceptionType.connectionError:
-              // TODO: Handle this case.
-              break;
-          }
-        } else if (error is SocketException) {
-        } else {
-        }
-        return const NetworkExceptions.noInternetConnection();
-      } on FormatException catch (_) {
-        return const NetworkExceptions.formatException();
-      } catch (_) {
-        return const NetworkExceptions.unexpectedError();
-      }
-    } else {
-      if (error.toString().contains("is not a subtype of")) {
-        return const NetworkExceptions.unableToProcess();
-      } else {
-        return const NetworkExceptions.unexpectedError();
-      }
-    }
-  }
-
-  static int getDioStatus(error) {
+  static int getDioStatus(dynamic error) {
     if (error is Exception) {
       try {
         int? status;

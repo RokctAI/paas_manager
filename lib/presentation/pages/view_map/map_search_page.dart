@@ -6,9 +6,10 @@ import 'package:google_place/google_place.dart';
 import 'package:venderfoodyman/domain/di/dependency_manager.dart';
 import '../../component/text_fields/search_text_field.dart';
 import 'package:venderfoodyman/presentation/styles/style.dart';
+
 @RoutePage()
 class MapSearchPage extends StatefulWidget {
-  const MapSearchPage({super.key}) ;
+  const MapSearchPage({super.key});
 
   @override
   State<MapSearchPage> createState() => _MapSearchPageState();
@@ -37,41 +38,40 @@ class _MapSearchPageState extends State<MapSearchPage> {
               ),
               Expanded(
                 child: ListView.builder(
-                    itemCount: searchResult.length,
-                    padding: EdgeInsets.only(bottom: 22.h),
-                    itemBuilder: (context, index) {
-                      return InkWell(
-                        onTap: () {
-                          context.maybePop(searchResult[index].placeId);
-                        },
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            22.verticalSpace,
-                            Text(
-                              searchResult[index]
-                                      .structuredFormatting
-                                      ?.mainText ??
-                                  "",
-                              style: Style.interNormal(size: 14),
-                            ),
-                            Text(
-                              searchResult[index]
-                                      .structuredFormatting
-                                      ?.secondaryText ??
-                                  "",
-                              style: Style.interNormal(size: 14),
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                            const Divider(
-                              color: Style.borderColor,
-                            ),
-                          ],
-                        ),
-                      );
-                    }),
-              )
+                  itemCount: searchResult.length,
+                  padding: EdgeInsets.only(bottom: 22.h),
+                  itemBuilder: (context, index) {
+                    return InkWell(
+                      onTap: () {
+                        context.maybePop(searchResult[index].placeId);
+                      },
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          22.verticalSpace,
+                          Text(
+                            searchResult[index]
+                                    .structuredFormatting
+                                    ?.mainText ??
+                                "",
+                            style: AppStyle.interNormal(size: 14),
+                          ),
+                          Text(
+                            searchResult[index]
+                                    .structuredFormatting
+                                    ?.secondaryText ??
+                                "",
+                            style: AppStyle.interNormal(size: 14),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          const Divider(color: AppStyle.borderColor),
+                        ],
+                      ),
+                    );
+                  },
+                ),
+              ),
             ],
           ),
         ),

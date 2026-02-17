@@ -23,21 +23,20 @@ class ImageDialog extends StatelessWidget {
             Expanded(
               child: Text(
                 AppHelpers.getTranslation(TrKeys.thisImageWasUploadDriver),
-                style: Style.interNormal(),
+                style: AppStyle.interNormal(),
               ),
             ),
             GestureDetector(
-                onTap: () => Navigator.pop(context),
-                child: Padding(
-                  padding: REdgeInsets.all(4),
-                  child: const Icon(FlutterRemix.close_circle_line),
-                )),
+              onTap: () => Navigator.pop(context),
+              child: Padding(
+                padding: REdgeInsets.all(4),
+                child: const Icon(FlutterRemix.close_circle_line),
+              ),
+            ),
           ],
         ),
         12.verticalSpace,
-        CommonImage(
-          url: img,
-        ),
+        CommonImage(url: img),
       ],
     );
   }

@@ -3,16 +3,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:venderfoodyman/infrastructure/models/data/shop_data.dart';
-
+import 'package:venderfoodyman/infrastructure/models/models.dart';
 import 'package:venderfoodyman/presentation/styles/style.dart';
 import '../../../component/components.dart';
 import 'package:venderfoodyman/application/providers.dart';
-import 'package:venderfoodyman/infrastructure/models/models.dart';
 import 'package:venderfoodyman/infrastructure/services/services.dart';
 
 class WorkingTimeModal extends ConsumerStatefulWidget {
-  const WorkingTimeModal({super.key}) ;
+  const WorkingTimeModal({super.key});
 
   @override
   ConsumerState<WorkingTimeModal> createState() => _WorkingTimeModalState();
@@ -27,43 +25,43 @@ class _WorkingTimeModalState extends ConsumerState<WorkingTimeModal> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback(
-      (_) {
-        _workingDays = ref.read(restaurantProvider).shop?.shopWorkingDays ?? [];
-        if (_workingDays.isNotEmpty) {
-          for (int i = 0; i < _workingDays.length; i++) {
-            temp.add(_workingDays[i].day);
-          }
-          for (int i = 0; i < WeekDays.values.length; i++) {
-            if (temp.contains(WeekDays.values[i].name)) {
-              continue;
-            } else {
-              _workingDays.add(ShopWorkingDays(
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _workingDays = ref.read(restaurantProvider).shop?.shopWorkingDays ?? [];
+      if (_workingDays.isNotEmpty) {
+        for (int i = 0; i < _workingDays.length; i++) {
+          temp.add(_workingDays[i].day);
+        }
+        for (int i = 0; i < WeekDays.values.length; i++) {
+          if (temp.contains(WeekDays.values[i].name)) {
+            continue;
+          } else {
+            _workingDays.add(
+              ShopWorkingDays(
                 id: i,
                 day: WeekDays.values[i].name,
                 from: "00:00",
                 to: "00:00",
                 disabled: false,
-              ));
-            }
+              ),
+            );
           }
-        } else {
-          for (int i = 0; i < WeekDays.values.length; i++) {
-            _workingDays.add(ShopWorkingDays(
+        }
+      } else {
+        for (int i = 0; i < WeekDays.values.length; i++) {
+          _workingDays.add(
+            ShopWorkingDays(
               id: i,
               day: WeekDays.values[i].name,
               from: "00:00",
               to: "00:00",
               disabled: false,
-            ));
-          }
+            ),
+          );
         }
-        _savingWorkingDays = _workingDays;
-        ref
-            .read(workingDaysProvider.notifier)
-            .setShopWorkingDays(_workingDays);
-      },
-    );
+      }
+      _savingWorkingDays = _workingDays;
+      ref.read(workingDaysProvider.notifier).setShopWorkingDays(_workingDays);
+    });
   }
 
   @override
@@ -81,7 +79,7 @@ class _WorkingTimeModalState extends ConsumerState<WorkingTimeModal> {
                 ? Center(
                     child: CircularProgressIndicator(
                       strokeWidth: 3.r,
-                      color: Style.primary,
+                      color: AppStyle.primary,
                     ),
                   )
                 : Column(
@@ -94,9 +92,9 @@ class _WorkingTimeModalState extends ConsumerState<WorkingTimeModal> {
                       ),
                       Text(
                         AppHelpers.getTranslation(TrKeys.enterOpeningHours),
-                        style: Style.interNormal(
-                          size: 14.sp,
-                          color: Style.blackColor,
+                        style: AppStyle.interNormal(
+                          size: 14,
+                          color: AppStyle.blackColor,
                         ),
                       ),
                       24.verticalSpace,
@@ -113,7 +111,8 @@ class _WorkingTimeModalState extends ConsumerState<WorkingTimeModal> {
                                   _savingWorkingDays = _workingDays;
                                 },
                                 child: SmallWeekdayItem(
-                                  isSelected: state.currentIndex ==
+                                  isSelected:
+                                      state.currentIndex ==
                                       _workingDays.indexOf(day),
                                   day: day,
                                 ),
@@ -128,8 +127,8 @@ class _WorkingTimeModalState extends ConsumerState<WorkingTimeModal> {
                         children: [
                           Text(
                             AppHelpers.getTranslation(TrKeys.setBusinessDay),
-                            style: Style.interNormal(
-                              size: 16.sp,
+                            style: AppStyle.interNormal(
+                              size: 16,
                               letterSpacing: -0.3,
                             ),
                           ),
@@ -164,15 +163,15 @@ class _WorkingTimeModalState extends ConsumerState<WorkingTimeModal> {
                                   1,
                                   1,
                                   int.parse(
-                                      _savingWorkingDays[state.currentIndex]
-                                              .from
-                                              ?.substring(0, 2) ??
-                                          ''),
+                                    _savingWorkingDays[state.currentIndex].from
+                                            ?.substring(0, 2) ??
+                                        '',
+                                  ),
                                   int.parse(
-                                      _savingWorkingDays[state.currentIndex]
-                                              .from
-                                              ?.substring(3, 5) ??
-                                          ''),
+                                    _savingWorkingDays[state.currentIndex].from
+                                            ?.substring(3, 5) ??
+                                        '',
+                                  ),
                                 ),
                                 onDateTimeChanged: (DateTime newDateTime) {
                                   _setTimeToDay(
@@ -199,15 +198,15 @@ class _WorkingTimeModalState extends ConsumerState<WorkingTimeModal> {
                                   1,
                                   1,
                                   int.parse(
-                                      _savingWorkingDays[state.currentIndex]
-                                              .to
-                                              ?.substring(0, 2) ??
-                                          ''),
+                                    _savingWorkingDays[state.currentIndex].to
+                                            ?.substring(0, 2) ??
+                                        '',
+                                  ),
                                   int.parse(
-                                      _savingWorkingDays[state.currentIndex]
-                                              .to
-                                              ?.substring(3, 5) ??
-                                          ''),
+                                    _savingWorkingDays[state.currentIndex].to
+                                            ?.substring(3, 5) ??
+                                        '',
+                                  ),
                                 ),
                                 onDateTimeChanged: (DateTime newDateTime) {
                                   _setTimeToDay(
@@ -248,13 +247,11 @@ class _WorkingTimeModalState extends ConsumerState<WorkingTimeModal> {
     );
   }
 
-  void _setDisabledDay({
-    bool? disabled,
-    required int currentIndex,
-  }) {
+  void _setDisabledDay({bool? disabled, required int currentIndex}) {
     _shouldUpdate = true;
-    _workingDays[currentIndex] =
-        _workingDays[currentIndex].copyWith(disabled: !(disabled ?? false));
+    _workingDays[currentIndex] = _workingDays[currentIndex].copyWith(
+      disabled: !(disabled ?? false),
+    );
   }
 
   void _setTimeToDay({

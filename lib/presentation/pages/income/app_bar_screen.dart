@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_remix/flutter_remix.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:venderfoodyman/application/restaurant/income/statistics/statistics_notifier.dart';
-
 import 'package:venderfoodyman/presentation/styles/style.dart';
 import '../../component/components.dart';
 import 'package:venderfoodyman/infrastructure/services/services.dart';
@@ -10,7 +9,7 @@ import 'package:venderfoodyman/infrastructure/services/services.dart';
 class AppbarScreen extends StatelessWidget {
   final StatisticsNotifier event;
 
-  const AppbarScreen({super.key, required this.event}) ;
+  const AppbarScreen({super.key, required this.event});
 
   @override
   Widget build(BuildContext context) {
@@ -28,11 +27,14 @@ class AppbarScreen extends StatelessWidget {
               children: [
                 Text(
                   AppHelpers.getTranslation(TrKeys.income),
-                  style: Style.interSemi(size: 18.sp),
+                  style: AppStyle.interSemi(size: 18),
                 ),
                 Text(
                   AppHelpers.getTranslation(TrKeys.earningsRestaurant),
-                  style: Style.interRegular(size: 12.sp, letterSpacing: -0.3),
+                  style: AppStyle.interRegular(
+                    size: 12,
+                    letterSpacing: -0.3,
+                  ),
                 ),
               ],
             ),
@@ -46,8 +48,9 @@ class AppbarScreen extends StatelessWidget {
                     isTabBar: false,
                     onChangeDay: (rangeDatePicker) {
                       event.fetchStatistics(
-                          startTime: rangeDatePicker.last ?? DateTime.now(),
-                          endTime: rangeDatePicker.first ?? DateTime.now());
+                        startTime: rangeDatePicker.last ?? DateTime.now(),
+                        endTime: rangeDatePicker.first ?? DateTime.now(),
+                      );
                     },
                   ),
                   isDarkMode: true,
@@ -56,15 +59,15 @@ class AppbarScreen extends StatelessWidget {
               child: Container(
                 padding: EdgeInsets.all(10.r),
                 decoration: const BoxDecoration(
-                  color: Style.greyColor,
+                  color: AppStyle.greyColor,
                   shape: BoxShape.circle,
                 ),
                 child: const Icon(
                   FlutterRemix.calendar_event_fill,
-                  color: Style.blackColor,
+                  color: AppStyle.blackColor,
                 ),
               ),
-            )
+            ),
           ],
         ),
       ),

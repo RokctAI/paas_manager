@@ -1,5 +1,5 @@
-// coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// coverage:ignore-file
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
@@ -9,221 +9,278 @@ part of 'create_addon_units_state.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// dart format off
 T _$identity<T>(T value) => value;
-
-final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
-
 /// @nodoc
 mixin _$CreateAddonUnitsState {
-  bool get isLoading => throw _privateConstructorUsedError;
-  List<UnitData> get units => throw _privateConstructorUsedError;
-  int get activeIndex => throw _privateConstructorUsedError;
-  TextEditingController? get unitController =>
-      throw _privateConstructorUsedError;
 
-  /// Create a copy of CreateAddonUnitsState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  $CreateAddonUnitsStateCopyWith<CreateAddonUnitsState> get copyWith =>
-      throw _privateConstructorUsedError;
+ bool get isLoading; List<UnitData> get units; int get activeIndex; TextEditingController? get unitController;
+/// Create a copy of CreateAddonUnitsState
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$CreateAddonUnitsStateCopyWith<CreateAddonUnitsState> get copyWith => _$CreateAddonUnitsStateCopyWithImpl<CreateAddonUnitsState>(this as CreateAddonUnitsState, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is CreateAddonUnitsState&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&const DeepCollectionEquality().equals(other.units, units)&&(identical(other.activeIndex, activeIndex) || other.activeIndex == activeIndex)&&(identical(other.unitController, unitController) || other.unitController == unitController));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,isLoading,const DeepCollectionEquality().hash(units),activeIndex,unitController);
+
+@override
+String toString() {
+  return 'CreateAddonUnitsState(isLoading: $isLoading, units: $units, activeIndex: $activeIndex, unitController: $unitController)';
+}
+
+
 }
 
 /// @nodoc
-abstract class $CreateAddonUnitsStateCopyWith<$Res> {
-  factory $CreateAddonUnitsStateCopyWith(CreateAddonUnitsState value,
-          $Res Function(CreateAddonUnitsState) then) =
-      _$CreateAddonUnitsStateCopyWithImpl<$Res, CreateAddonUnitsState>;
-  @useResult
-  $Res call(
-      {bool isLoading,
-      List<UnitData> units,
-      int activeIndex,
-      TextEditingController? unitController});
-}
+abstract mixin class $CreateAddonUnitsStateCopyWith<$Res>  {
+  factory $CreateAddonUnitsStateCopyWith(CreateAddonUnitsState value, $Res Function(CreateAddonUnitsState) _then) = _$CreateAddonUnitsStateCopyWithImpl;
+@useResult
+$Res call({
+ bool isLoading, List<UnitData> units, int activeIndex, TextEditingController? unitController
+});
 
+
+
+
+}
 /// @nodoc
-class _$CreateAddonUnitsStateCopyWithImpl<$Res,
-        $Val extends CreateAddonUnitsState>
+class _$CreateAddonUnitsStateCopyWithImpl<$Res>
     implements $CreateAddonUnitsStateCopyWith<$Res> {
-  _$CreateAddonUnitsStateCopyWithImpl(this._value, this._then);
+  _$CreateAddonUnitsStateCopyWithImpl(this._self, this._then);
 
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
+  final CreateAddonUnitsState _self;
+  final $Res Function(CreateAddonUnitsState) _then;
 
-  /// Create a copy of CreateAddonUnitsState
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? isLoading = null,
-    Object? units = null,
-    Object? activeIndex = null,
-    Object? unitController = freezed,
-  }) {
-    return _then(_value.copyWith(
-      isLoading: null == isLoading
-          ? _value.isLoading
-          : isLoading // ignore: cast_nullable_to_non_nullable
-              as bool,
-      units: null == units
-          ? _value.units
-          : units // ignore: cast_nullable_to_non_nullable
-              as List<UnitData>,
-      activeIndex: null == activeIndex
-          ? _value.activeIndex
-          : activeIndex // ignore: cast_nullable_to_non_nullable
-              as int,
-      unitController: freezed == unitController
-          ? _value.unitController
-          : unitController // ignore: cast_nullable_to_non_nullable
-              as TextEditingController?,
-    ) as $Val);
-  }
+/// Create a copy of CreateAddonUnitsState
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? isLoading = null,Object? units = null,Object? activeIndex = null,Object? unitController = freezed,}) {
+  return _then(_self.copyWith(
+isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
+as bool,units: null == units ? _self.units : units // ignore: cast_nullable_to_non_nullable
+as List<UnitData>,activeIndex: null == activeIndex ? _self.activeIndex : activeIndex // ignore: cast_nullable_to_non_nullable
+as int,unitController: freezed == unitController ? _self.unitController : unitController // ignore: cast_nullable_to_non_nullable
+as TextEditingController?,
+  ));
+}
+
+}
+
+
+/// Adds pattern-matching-related methods to [CreateAddonUnitsState].
+extension CreateAddonUnitsStatePatterns on CreateAddonUnitsState {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _CreateAddonUnitsState value)?  $default,{required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _CreateAddonUnitsState() when $default != null:
+return $default(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _CreateAddonUnitsState value)  $default,){
+final _that = this;
+switch (_that) {
+case _CreateAddonUnitsState():
+return $default(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _CreateAddonUnitsState value)?  $default,){
+final _that = this;
+switch (_that) {
+case _CreateAddonUnitsState() when $default != null:
+return $default(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( bool isLoading,  List<UnitData> units,  int activeIndex,  TextEditingController? unitController)?  $default,{required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _CreateAddonUnitsState() when $default != null:
+return $default(_that.isLoading,_that.units,_that.activeIndex,_that.unitController);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( bool isLoading,  List<UnitData> units,  int activeIndex,  TextEditingController? unitController)  $default,) {final _that = this;
+switch (_that) {
+case _CreateAddonUnitsState():
+return $default(_that.isLoading,_that.units,_that.activeIndex,_that.unitController);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( bool isLoading,  List<UnitData> units,  int activeIndex,  TextEditingController? unitController)?  $default,) {final _that = this;
+switch (_that) {
+case _CreateAddonUnitsState() when $default != null:
+return $default(_that.isLoading,_that.units,_that.activeIndex,_that.unitController);case _:
+  return null;
+
+}
+}
+
 }
 
 /// @nodoc
-abstract class _$$CreateAddonUnitsStateImplCopyWith<$Res>
-    implements $CreateAddonUnitsStateCopyWith<$Res> {
-  factory _$$CreateAddonUnitsStateImplCopyWith(
-          _$CreateAddonUnitsStateImpl value,
-          $Res Function(_$CreateAddonUnitsStateImpl) then) =
-      __$$CreateAddonUnitsStateImplCopyWithImpl<$Res>;
-  @override
-  @useResult
-  $Res call(
-      {bool isLoading,
-      List<UnitData> units,
-      int activeIndex,
-      TextEditingController? unitController});
+
+
+class _CreateAddonUnitsState extends CreateAddonUnitsState {
+  const _CreateAddonUnitsState({this.isLoading = false, final  List<UnitData> units = const [], this.activeIndex = 0, this.unitController}): _units = units,super._();
+  
+
+@override@JsonKey() final  bool isLoading;
+ final  List<UnitData> _units;
+@override@JsonKey() List<UnitData> get units {
+  if (_units is EqualUnmodifiableListView) return _units;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_units);
+}
+
+@override@JsonKey() final  int activeIndex;
+@override final  TextEditingController? unitController;
+
+/// Create a copy of CreateAddonUnitsState
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$CreateAddonUnitsStateCopyWith<_CreateAddonUnitsState> get copyWith => __$CreateAddonUnitsStateCopyWithImpl<_CreateAddonUnitsState>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _CreateAddonUnitsState&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&const DeepCollectionEquality().equals(other._units, _units)&&(identical(other.activeIndex, activeIndex) || other.activeIndex == activeIndex)&&(identical(other.unitController, unitController) || other.unitController == unitController));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,isLoading,const DeepCollectionEquality().hash(_units),activeIndex,unitController);
+
+@override
+String toString() {
+  return 'CreateAddonUnitsState(isLoading: $isLoading, units: $units, activeIndex: $activeIndex, unitController: $unitController)';
+}
+
+
 }
 
 /// @nodoc
-class __$$CreateAddonUnitsStateImplCopyWithImpl<$Res>
-    extends _$CreateAddonUnitsStateCopyWithImpl<$Res,
-        _$CreateAddonUnitsStateImpl>
-    implements _$$CreateAddonUnitsStateImplCopyWith<$Res> {
-  __$$CreateAddonUnitsStateImplCopyWithImpl(_$CreateAddonUnitsStateImpl _value,
-      $Res Function(_$CreateAddonUnitsStateImpl) _then)
-      : super(_value, _then);
+abstract mixin class _$CreateAddonUnitsStateCopyWith<$Res> implements $CreateAddonUnitsStateCopyWith<$Res> {
+  factory _$CreateAddonUnitsStateCopyWith(_CreateAddonUnitsState value, $Res Function(_CreateAddonUnitsState) _then) = __$CreateAddonUnitsStateCopyWithImpl;
+@override @useResult
+$Res call({
+ bool isLoading, List<UnitData> units, int activeIndex, TextEditingController? unitController
+});
 
-  /// Create a copy of CreateAddonUnitsState
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? isLoading = null,
-    Object? units = null,
-    Object? activeIndex = null,
-    Object? unitController = freezed,
-  }) {
-    return _then(_$CreateAddonUnitsStateImpl(
-      isLoading: null == isLoading
-          ? _value.isLoading
-          : isLoading // ignore: cast_nullable_to_non_nullable
-              as bool,
-      units: null == units
-          ? _value._units
-          : units // ignore: cast_nullable_to_non_nullable
-              as List<UnitData>,
-      activeIndex: null == activeIndex
-          ? _value.activeIndex
-          : activeIndex // ignore: cast_nullable_to_non_nullable
-              as int,
-      unitController: freezed == unitController
-          ? _value.unitController
-          : unitController // ignore: cast_nullable_to_non_nullable
-              as TextEditingController?,
-    ));
-  }
+
+
+
 }
-
 /// @nodoc
+class __$CreateAddonUnitsStateCopyWithImpl<$Res>
+    implements _$CreateAddonUnitsStateCopyWith<$Res> {
+  __$CreateAddonUnitsStateCopyWithImpl(this._self, this._then);
 
-class _$CreateAddonUnitsStateImpl extends _CreateAddonUnitsState {
-  const _$CreateAddonUnitsStateImpl(
-      {this.isLoading = false,
-      final List<UnitData> units = const [],
-      this.activeIndex = 0,
-      this.unitController})
-      : _units = units,
-        super._();
+  final _CreateAddonUnitsState _self;
+  final $Res Function(_CreateAddonUnitsState) _then;
 
-  @override
-  @JsonKey()
-  final bool isLoading;
-  final List<UnitData> _units;
-  @override
-  @JsonKey()
-  List<UnitData> get units {
-    if (_units is EqualUnmodifiableListView) return _units;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_units);
-  }
-
-  @override
-  @JsonKey()
-  final int activeIndex;
-  @override
-  final TextEditingController? unitController;
-
-  @override
-  String toString() {
-    return 'CreateAddonUnitsState(isLoading: $isLoading, units: $units, activeIndex: $activeIndex, unitController: $unitController)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$CreateAddonUnitsStateImpl &&
-            (identical(other.isLoading, isLoading) ||
-                other.isLoading == isLoading) &&
-            const DeepCollectionEquality().equals(other._units, _units) &&
-            (identical(other.activeIndex, activeIndex) ||
-                other.activeIndex == activeIndex) &&
-            (identical(other.unitController, unitController) ||
-                other.unitController == unitController));
-  }
-
-  @override
-  int get hashCode => Object.hash(runtimeType, isLoading,
-      const DeepCollectionEquality().hash(_units), activeIndex, unitController);
-
-  /// Create a copy of CreateAddonUnitsState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$CreateAddonUnitsStateImplCopyWith<_$CreateAddonUnitsStateImpl>
-      get copyWith => __$$CreateAddonUnitsStateImplCopyWithImpl<
-          _$CreateAddonUnitsStateImpl>(this, _$identity);
+/// Create a copy of CreateAddonUnitsState
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? isLoading = null,Object? units = null,Object? activeIndex = null,Object? unitController = freezed,}) {
+  return _then(_CreateAddonUnitsState(
+isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
+as bool,units: null == units ? _self._units : units // ignore: cast_nullable_to_non_nullable
+as List<UnitData>,activeIndex: null == activeIndex ? _self.activeIndex : activeIndex // ignore: cast_nullable_to_non_nullable
+as int,unitController: freezed == unitController ? _self.unitController : unitController // ignore: cast_nullable_to_non_nullable
+as TextEditingController?,
+  ));
 }
 
-abstract class _CreateAddonUnitsState extends CreateAddonUnitsState {
-  const factory _CreateAddonUnitsState(
-          {final bool isLoading,
-          final List<UnitData> units,
-          final int activeIndex,
-          final TextEditingController? unitController}) =
-      _$CreateAddonUnitsStateImpl;
-  const _CreateAddonUnitsState._() : super._();
 
-  @override
-  bool get isLoading;
-  @override
-  List<UnitData> get units;
-  @override
-  int get activeIndex;
-  @override
-  TextEditingController? get unitController;
-
-  /// Create a copy of CreateAddonUnitsState
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$CreateAddonUnitsStateImplCopyWith<_$CreateAddonUnitsStateImpl>
-      get copyWith => throw _privateConstructorUsedError;
 }
+
+// dart format on

@@ -13,8 +13,11 @@ class SelectDateModal extends StatefulWidget {
   final String? initialDate;
   final Function(DateTime? date) onDateSaved;
 
-  const SelectDateModal({super.key, this.initialDate, required this.onDateSaved})
-      ;
+  const SelectDateModal({
+    super.key,
+    this.initialDate,
+    required this.onDateSaved,
+  });
 
   @override
   State<SelectDateModal> createState() => _SelectDateModalState();
@@ -51,9 +54,9 @@ class _SelectDateModalState extends State<SelectDateModal> {
             padding: REdgeInsets.symmetric(horizontal: 16),
             child: Text(
               AppHelpers.getTranslation(TrKeys.selectDeliveryDate),
-              style: Style.interNormal(
-                size: 14.sp,
-                color: Style.blackColor,
+              style: AppStyle.interNormal(
+                size: 14,
+                color: AppStyle.blackColor,
                 letterSpacing: -0.3,
               ),
             ),
@@ -61,9 +64,7 @@ class _SelectDateModalState extends State<SelectDateModal> {
           SizedBox(
             height: 300.r,
             child: CupertinoTheme(
-              data: const CupertinoThemeData(
-                brightness: Brightness.light,
-              ),
+              data: const CupertinoThemeData(brightness: Brightness.light),
               child: CupertinoDatePicker(
                 mode: CupertinoDatePickerMode.date,
                 initialDateTime: _date,

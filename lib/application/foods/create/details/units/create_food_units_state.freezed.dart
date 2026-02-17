@@ -1,5 +1,5 @@
-// coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// coverage:ignore-file
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
@@ -9,220 +9,278 @@ part of 'create_food_units_state.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// dart format off
 T _$identity<T>(T value) => value;
-
-final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
-
 /// @nodoc
 mixin _$CreateFoodUnitsState {
-  bool get isLoading => throw _privateConstructorUsedError;
-  List<UnitData> get units => throw _privateConstructorUsedError;
-  int get activeIndex => throw _privateConstructorUsedError;
-  TextEditingController? get unitController =>
-      throw _privateConstructorUsedError;
 
-  /// Create a copy of CreateFoodUnitsState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  $CreateFoodUnitsStateCopyWith<CreateFoodUnitsState> get copyWith =>
-      throw _privateConstructorUsedError;
+ bool get isLoading; List<UnitData> get units; int get activeIndex; TextEditingController? get unitController;
+/// Create a copy of CreateFoodUnitsState
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$CreateFoodUnitsStateCopyWith<CreateFoodUnitsState> get copyWith => _$CreateFoodUnitsStateCopyWithImpl<CreateFoodUnitsState>(this as CreateFoodUnitsState, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is CreateFoodUnitsState&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&const DeepCollectionEquality().equals(other.units, units)&&(identical(other.activeIndex, activeIndex) || other.activeIndex == activeIndex)&&(identical(other.unitController, unitController) || other.unitController == unitController));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,isLoading,const DeepCollectionEquality().hash(units),activeIndex,unitController);
+
+@override
+String toString() {
+  return 'CreateFoodUnitsState(isLoading: $isLoading, units: $units, activeIndex: $activeIndex, unitController: $unitController)';
+}
+
+
 }
 
 /// @nodoc
-abstract class $CreateFoodUnitsStateCopyWith<$Res> {
-  factory $CreateFoodUnitsStateCopyWith(CreateFoodUnitsState value,
-          $Res Function(CreateFoodUnitsState) then) =
-      _$CreateFoodUnitsStateCopyWithImpl<$Res, CreateFoodUnitsState>;
-  @useResult
-  $Res call(
-      {bool isLoading,
-      List<UnitData> units,
-      int activeIndex,
-      TextEditingController? unitController});
-}
+abstract mixin class $CreateFoodUnitsStateCopyWith<$Res>  {
+  factory $CreateFoodUnitsStateCopyWith(CreateFoodUnitsState value, $Res Function(CreateFoodUnitsState) _then) = _$CreateFoodUnitsStateCopyWithImpl;
+@useResult
+$Res call({
+ bool isLoading, List<UnitData> units, int activeIndex, TextEditingController? unitController
+});
 
+
+
+
+}
 /// @nodoc
-class _$CreateFoodUnitsStateCopyWithImpl<$Res,
-        $Val extends CreateFoodUnitsState>
+class _$CreateFoodUnitsStateCopyWithImpl<$Res>
     implements $CreateFoodUnitsStateCopyWith<$Res> {
-  _$CreateFoodUnitsStateCopyWithImpl(this._value, this._then);
+  _$CreateFoodUnitsStateCopyWithImpl(this._self, this._then);
 
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
+  final CreateFoodUnitsState _self;
+  final $Res Function(CreateFoodUnitsState) _then;
 
-  /// Create a copy of CreateFoodUnitsState
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? isLoading = null,
-    Object? units = null,
-    Object? activeIndex = null,
-    Object? unitController = freezed,
-  }) {
-    return _then(_value.copyWith(
-      isLoading: null == isLoading
-          ? _value.isLoading
-          : isLoading // ignore: cast_nullable_to_non_nullable
-              as bool,
-      units: null == units
-          ? _value.units
-          : units // ignore: cast_nullable_to_non_nullable
-              as List<UnitData>,
-      activeIndex: null == activeIndex
-          ? _value.activeIndex
-          : activeIndex // ignore: cast_nullable_to_non_nullable
-              as int,
-      unitController: freezed == unitController
-          ? _value.unitController
-          : unitController // ignore: cast_nullable_to_non_nullable
-              as TextEditingController?,
-    ) as $Val);
-  }
+/// Create a copy of CreateFoodUnitsState
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? isLoading = null,Object? units = null,Object? activeIndex = null,Object? unitController = freezed,}) {
+  return _then(_self.copyWith(
+isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
+as bool,units: null == units ? _self.units : units // ignore: cast_nullable_to_non_nullable
+as List<UnitData>,activeIndex: null == activeIndex ? _self.activeIndex : activeIndex // ignore: cast_nullable_to_non_nullable
+as int,unitController: freezed == unitController ? _self.unitController : unitController // ignore: cast_nullable_to_non_nullable
+as TextEditingController?,
+  ));
+}
+
+}
+
+
+/// Adds pattern-matching-related methods to [CreateFoodUnitsState].
+extension CreateFoodUnitsStatePatterns on CreateFoodUnitsState {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _CreateFoodUnitsState value)?  $default,{required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _CreateFoodUnitsState() when $default != null:
+return $default(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _CreateFoodUnitsState value)  $default,){
+final _that = this;
+switch (_that) {
+case _CreateFoodUnitsState():
+return $default(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _CreateFoodUnitsState value)?  $default,){
+final _that = this;
+switch (_that) {
+case _CreateFoodUnitsState() when $default != null:
+return $default(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( bool isLoading,  List<UnitData> units,  int activeIndex,  TextEditingController? unitController)?  $default,{required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _CreateFoodUnitsState() when $default != null:
+return $default(_that.isLoading,_that.units,_that.activeIndex,_that.unitController);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( bool isLoading,  List<UnitData> units,  int activeIndex,  TextEditingController? unitController)  $default,) {final _that = this;
+switch (_that) {
+case _CreateFoodUnitsState():
+return $default(_that.isLoading,_that.units,_that.activeIndex,_that.unitController);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( bool isLoading,  List<UnitData> units,  int activeIndex,  TextEditingController? unitController)?  $default,) {final _that = this;
+switch (_that) {
+case _CreateFoodUnitsState() when $default != null:
+return $default(_that.isLoading,_that.units,_that.activeIndex,_that.unitController);case _:
+  return null;
+
+}
+}
+
 }
 
 /// @nodoc
-abstract class _$$CreateFoodUnitsStateImplCopyWith<$Res>
-    implements $CreateFoodUnitsStateCopyWith<$Res> {
-  factory _$$CreateFoodUnitsStateImplCopyWith(_$CreateFoodUnitsStateImpl value,
-          $Res Function(_$CreateFoodUnitsStateImpl) then) =
-      __$$CreateFoodUnitsStateImplCopyWithImpl<$Res>;
-  @override
-  @useResult
-  $Res call(
-      {bool isLoading,
-      List<UnitData> units,
-      int activeIndex,
-      TextEditingController? unitController});
+
+
+class _CreateFoodUnitsState extends CreateFoodUnitsState {
+  const _CreateFoodUnitsState({this.isLoading = false, final  List<UnitData> units = const [], this.activeIndex = 0, this.unitController}): _units = units,super._();
+  
+
+@override@JsonKey() final  bool isLoading;
+ final  List<UnitData> _units;
+@override@JsonKey() List<UnitData> get units {
+  if (_units is EqualUnmodifiableListView) return _units;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_units);
+}
+
+@override@JsonKey() final  int activeIndex;
+@override final  TextEditingController? unitController;
+
+/// Create a copy of CreateFoodUnitsState
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$CreateFoodUnitsStateCopyWith<_CreateFoodUnitsState> get copyWith => __$CreateFoodUnitsStateCopyWithImpl<_CreateFoodUnitsState>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _CreateFoodUnitsState&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&const DeepCollectionEquality().equals(other._units, _units)&&(identical(other.activeIndex, activeIndex) || other.activeIndex == activeIndex)&&(identical(other.unitController, unitController) || other.unitController == unitController));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,isLoading,const DeepCollectionEquality().hash(_units),activeIndex,unitController);
+
+@override
+String toString() {
+  return 'CreateFoodUnitsState(isLoading: $isLoading, units: $units, activeIndex: $activeIndex, unitController: $unitController)';
+}
+
+
 }
 
 /// @nodoc
-class __$$CreateFoodUnitsStateImplCopyWithImpl<$Res>
-    extends _$CreateFoodUnitsStateCopyWithImpl<$Res, _$CreateFoodUnitsStateImpl>
-    implements _$$CreateFoodUnitsStateImplCopyWith<$Res> {
-  __$$CreateFoodUnitsStateImplCopyWithImpl(_$CreateFoodUnitsStateImpl _value,
-      $Res Function(_$CreateFoodUnitsStateImpl) _then)
-      : super(_value, _then);
+abstract mixin class _$CreateFoodUnitsStateCopyWith<$Res> implements $CreateFoodUnitsStateCopyWith<$Res> {
+  factory _$CreateFoodUnitsStateCopyWith(_CreateFoodUnitsState value, $Res Function(_CreateFoodUnitsState) _then) = __$CreateFoodUnitsStateCopyWithImpl;
+@override @useResult
+$Res call({
+ bool isLoading, List<UnitData> units, int activeIndex, TextEditingController? unitController
+});
 
-  /// Create a copy of CreateFoodUnitsState
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? isLoading = null,
-    Object? units = null,
-    Object? activeIndex = null,
-    Object? unitController = freezed,
-  }) {
-    return _then(_$CreateFoodUnitsStateImpl(
-      isLoading: null == isLoading
-          ? _value.isLoading
-          : isLoading // ignore: cast_nullable_to_non_nullable
-              as bool,
-      units: null == units
-          ? _value._units
-          : units // ignore: cast_nullable_to_non_nullable
-              as List<UnitData>,
-      activeIndex: null == activeIndex
-          ? _value.activeIndex
-          : activeIndex // ignore: cast_nullable_to_non_nullable
-              as int,
-      unitController: freezed == unitController
-          ? _value.unitController
-          : unitController // ignore: cast_nullable_to_non_nullable
-              as TextEditingController?,
-    ));
-  }
+
+
+
 }
-
 /// @nodoc
+class __$CreateFoodUnitsStateCopyWithImpl<$Res>
+    implements _$CreateFoodUnitsStateCopyWith<$Res> {
+  __$CreateFoodUnitsStateCopyWithImpl(this._self, this._then);
 
-class _$CreateFoodUnitsStateImpl extends _CreateFoodUnitsState {
-  const _$CreateFoodUnitsStateImpl(
-      {this.isLoading = false,
-      final List<UnitData> units = const [],
-      this.activeIndex = 0,
-      this.unitController})
-      : _units = units,
-        super._();
+  final _CreateFoodUnitsState _self;
+  final $Res Function(_CreateFoodUnitsState) _then;
 
-  @override
-  @JsonKey()
-  final bool isLoading;
-  final List<UnitData> _units;
-  @override
-  @JsonKey()
-  List<UnitData> get units {
-    if (_units is EqualUnmodifiableListView) return _units;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_units);
-  }
-
-  @override
-  @JsonKey()
-  final int activeIndex;
-  @override
-  final TextEditingController? unitController;
-
-  @override
-  String toString() {
-    return 'CreateFoodUnitsState(isLoading: $isLoading, units: $units, activeIndex: $activeIndex, unitController: $unitController)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$CreateFoodUnitsStateImpl &&
-            (identical(other.isLoading, isLoading) ||
-                other.isLoading == isLoading) &&
-            const DeepCollectionEquality().equals(other._units, _units) &&
-            (identical(other.activeIndex, activeIndex) ||
-                other.activeIndex == activeIndex) &&
-            (identical(other.unitController, unitController) ||
-                other.unitController == unitController));
-  }
-
-  @override
-  int get hashCode => Object.hash(runtimeType, isLoading,
-      const DeepCollectionEquality().hash(_units), activeIndex, unitController);
-
-  /// Create a copy of CreateFoodUnitsState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$CreateFoodUnitsStateImplCopyWith<_$CreateFoodUnitsStateImpl>
-      get copyWith =>
-          __$$CreateFoodUnitsStateImplCopyWithImpl<_$CreateFoodUnitsStateImpl>(
-              this, _$identity);
+/// Create a copy of CreateFoodUnitsState
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? isLoading = null,Object? units = null,Object? activeIndex = null,Object? unitController = freezed,}) {
+  return _then(_CreateFoodUnitsState(
+isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
+as bool,units: null == units ? _self._units : units // ignore: cast_nullable_to_non_nullable
+as List<UnitData>,activeIndex: null == activeIndex ? _self.activeIndex : activeIndex // ignore: cast_nullable_to_non_nullable
+as int,unitController: freezed == unitController ? _self.unitController : unitController // ignore: cast_nullable_to_non_nullable
+as TextEditingController?,
+  ));
 }
 
-abstract class _CreateFoodUnitsState extends CreateFoodUnitsState {
-  const factory _CreateFoodUnitsState(
-          {final bool isLoading,
-          final List<UnitData> units,
-          final int activeIndex,
-          final TextEditingController? unitController}) =
-      _$CreateFoodUnitsStateImpl;
-  const _CreateFoodUnitsState._() : super._();
 
-  @override
-  bool get isLoading;
-  @override
-  List<UnitData> get units;
-  @override
-  int get activeIndex;
-  @override
-  TextEditingController? get unitController;
-
-  /// Create a copy of CreateFoodUnitsState
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$CreateFoodUnitsStateImplCopyWith<_$CreateFoodUnitsStateImpl>
-      get copyWith => throw _privateConstructorUsedError;
 }
+
+// dart format on

@@ -5,7 +5,7 @@ import 'package:venderfoodyman/infrastructure/models/models.dart';
 part 'products_state.freezed.dart';
 
 @freezed
-class ProductsState with _$ProductsState {
+abstract class ProductsState with _$ProductsState {
   const factory ProductsState({
     @Default(false) bool isLoading,
     @Default([]) List<TypedExtra> typedExtras,

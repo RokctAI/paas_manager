@@ -6,7 +6,7 @@ import 'package:venderfoodyman/infrastructure/models/models.dart';
 part 'table_state.freezed.dart';
 
 @freezed
-class TableState with _$TableState {
+abstract class TableState with _$TableState {
   const factory TableState({
     @Default([]) List<TableData> tables,
     @Default(0) int selectedIndex,

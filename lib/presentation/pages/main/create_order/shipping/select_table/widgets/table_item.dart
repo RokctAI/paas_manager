@@ -25,11 +25,13 @@ class TableItem extends StatelessWidget {
         margin: REdgeInsets.only(bottom: 8),
         padding: REdgeInsets.symmetric(horizontal: 16),
         decoration: BoxDecoration(
-          color: isSelected ? Style.primary.withOpacity(0.06) : Style.white,
+          color: isSelected
+              ? AppStyle.primary.withOpacity(0.06)
+              : AppStyle.white,
           borderRadius: isSelected ? null : BorderRadius.circular(10.r),
           border: isSelected
               ? Border(
-                  left: BorderSide(color: Style.primary, width: 1.r),
+                  left: BorderSide(color: AppStyle.primary, width: 1.r),
                 )
               : null,
         ),
@@ -40,19 +42,16 @@ class TableItem extends StatelessWidget {
             Expanded(
               child: Text(
                 table?.name ?? "",
-                style: Style.interSemi(size: 15.sp),
+                style: AppStyle.interSemi(size: 15),
               ),
             ),
             4.verticalSpace,
             Row(
               children: [
-                Icon(
-                  Icons.chair_alt,
-                  size: 21.r,
-                ),
+                Icon(Icons.chair_alt, size: 21.r),
                 Text(
                   "${table?.chairCount ?? 0}",
-                  style: Style.interNormal(size: 12.sp),
+                  style: AppStyle.interNormal(size: 12),
                 ),
               ],
             ),

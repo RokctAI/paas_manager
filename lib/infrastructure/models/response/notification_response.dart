@@ -1,4 +1,3 @@
-import '../data/blog_data.dart';
 import '../models.dart';
 
 class NotificationResponse {

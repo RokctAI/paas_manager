@@ -5,13 +5,15 @@ import 'package:venderfoodyman/infrastructure/models/models.dart';
 part 'edit_food_details_state.freezed.dart';
 
 @freezed
-class EditFoodDetailsState with _$EditFoodDetailsState {
+abstract class EditFoodDetailsState with _$EditFoodDetailsState {
   const factory EditFoodDetailsState({
     @Default(false) bool isLoading,
     @Default(false) bool active,
     @Default('') String title,
     @Default('') String interval,
     @Default('') String description,
+    @Default({}) Map<String, String> titleTranslations,
+    @Default({}) Map<String, String> descriptionTranslations,
     @Default('') String minQty,
     @Default('') String maxQty,
     @Default('') String tax,

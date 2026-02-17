@@ -1,5 +1,5 @@
-// coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// coverage:ignore-file
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
@@ -9,246 +9,281 @@ part of 'edit_food_kitchens_state.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// dart format off
 T _$identity<T>(T value) => value;
-
-final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
-
 /// @nodoc
 mixin _$EditFoodKitchensState {
-  bool get isLoading => throw _privateConstructorUsedError;
-  List<KitchenModel> get kitchens => throw _privateConstructorUsedError;
-  int get activeIndex => throw _privateConstructorUsedError;
-  TextEditingController? get kitchenController =>
-      throw _privateConstructorUsedError;
-  KitchenModel? get foodKitchen => throw _privateConstructorUsedError;
 
-  /// Create a copy of EditFoodKitchensState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  $EditFoodKitchensStateCopyWith<EditFoodKitchensState> get copyWith =>
-      throw _privateConstructorUsedError;
+ bool get isLoading; List<KitchenModel> get kitchens; int get activeIndex; TextEditingController? get kitchenController; KitchenModel? get foodKitchen;
+/// Create a copy of EditFoodKitchensState
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$EditFoodKitchensStateCopyWith<EditFoodKitchensState> get copyWith => _$EditFoodKitchensStateCopyWithImpl<EditFoodKitchensState>(this as EditFoodKitchensState, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is EditFoodKitchensState&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&const DeepCollectionEquality().equals(other.kitchens, kitchens)&&(identical(other.activeIndex, activeIndex) || other.activeIndex == activeIndex)&&(identical(other.kitchenController, kitchenController) || other.kitchenController == kitchenController)&&(identical(other.foodKitchen, foodKitchen) || other.foodKitchen == foodKitchen));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,isLoading,const DeepCollectionEquality().hash(kitchens),activeIndex,kitchenController,foodKitchen);
+
+@override
+String toString() {
+  return 'EditFoodKitchensState(isLoading: $isLoading, kitchens: $kitchens, activeIndex: $activeIndex, kitchenController: $kitchenController, foodKitchen: $foodKitchen)';
+}
+
+
 }
 
 /// @nodoc
-abstract class $EditFoodKitchensStateCopyWith<$Res> {
-  factory $EditFoodKitchensStateCopyWith(EditFoodKitchensState value,
-          $Res Function(EditFoodKitchensState) then) =
-      _$EditFoodKitchensStateCopyWithImpl<$Res, EditFoodKitchensState>;
-  @useResult
-  $Res call(
-      {bool isLoading,
-      List<KitchenModel> kitchens,
-      int activeIndex,
-      TextEditingController? kitchenController,
-      KitchenModel? foodKitchen});
-}
+abstract mixin class $EditFoodKitchensStateCopyWith<$Res>  {
+  factory $EditFoodKitchensStateCopyWith(EditFoodKitchensState value, $Res Function(EditFoodKitchensState) _then) = _$EditFoodKitchensStateCopyWithImpl;
+@useResult
+$Res call({
+ bool isLoading, List<KitchenModel> kitchens, int activeIndex, TextEditingController? kitchenController, KitchenModel? foodKitchen
+});
 
+
+
+
+}
 /// @nodoc
-class _$EditFoodKitchensStateCopyWithImpl<$Res,
-        $Val extends EditFoodKitchensState>
+class _$EditFoodKitchensStateCopyWithImpl<$Res>
     implements $EditFoodKitchensStateCopyWith<$Res> {
-  _$EditFoodKitchensStateCopyWithImpl(this._value, this._then);
+  _$EditFoodKitchensStateCopyWithImpl(this._self, this._then);
 
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
+  final EditFoodKitchensState _self;
+  final $Res Function(EditFoodKitchensState) _then;
 
-  /// Create a copy of EditFoodKitchensState
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? isLoading = null,
-    Object? kitchens = null,
-    Object? activeIndex = null,
-    Object? kitchenController = freezed,
-    Object? foodKitchen = freezed,
-  }) {
-    return _then(_value.copyWith(
-      isLoading: null == isLoading
-          ? _value.isLoading
-          : isLoading // ignore: cast_nullable_to_non_nullable
-              as bool,
-      kitchens: null == kitchens
-          ? _value.kitchens
-          : kitchens // ignore: cast_nullable_to_non_nullable
-              as List<KitchenModel>,
-      activeIndex: null == activeIndex
-          ? _value.activeIndex
-          : activeIndex // ignore: cast_nullable_to_non_nullable
-              as int,
-      kitchenController: freezed == kitchenController
-          ? _value.kitchenController
-          : kitchenController // ignore: cast_nullable_to_non_nullable
-              as TextEditingController?,
-      foodKitchen: freezed == foodKitchen
-          ? _value.foodKitchen
-          : foodKitchen // ignore: cast_nullable_to_non_nullable
-              as KitchenModel?,
-    ) as $Val);
-  }
+/// Create a copy of EditFoodKitchensState
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? isLoading = null,Object? kitchens = null,Object? activeIndex = null,Object? kitchenController = freezed,Object? foodKitchen = freezed,}) {
+  return _then(_self.copyWith(
+isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
+as bool,kitchens: null == kitchens ? _self.kitchens : kitchens // ignore: cast_nullable_to_non_nullable
+as List<KitchenModel>,activeIndex: null == activeIndex ? _self.activeIndex : activeIndex // ignore: cast_nullable_to_non_nullable
+as int,kitchenController: freezed == kitchenController ? _self.kitchenController : kitchenController // ignore: cast_nullable_to_non_nullable
+as TextEditingController?,foodKitchen: freezed == foodKitchen ? _self.foodKitchen : foodKitchen // ignore: cast_nullable_to_non_nullable
+as KitchenModel?,
+  ));
+}
+
+}
+
+
+/// Adds pattern-matching-related methods to [EditFoodKitchensState].
+extension EditFoodKitchensStatePatterns on EditFoodKitchensState {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _EditFoodKitchensState value)?  $default,{required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _EditFoodKitchensState() when $default != null:
+return $default(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _EditFoodKitchensState value)  $default,){
+final _that = this;
+switch (_that) {
+case _EditFoodKitchensState():
+return $default(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _EditFoodKitchensState value)?  $default,){
+final _that = this;
+switch (_that) {
+case _EditFoodKitchensState() when $default != null:
+return $default(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( bool isLoading,  List<KitchenModel> kitchens,  int activeIndex,  TextEditingController? kitchenController,  KitchenModel? foodKitchen)?  $default,{required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _EditFoodKitchensState() when $default != null:
+return $default(_that.isLoading,_that.kitchens,_that.activeIndex,_that.kitchenController,_that.foodKitchen);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( bool isLoading,  List<KitchenModel> kitchens,  int activeIndex,  TextEditingController? kitchenController,  KitchenModel? foodKitchen)  $default,) {final _that = this;
+switch (_that) {
+case _EditFoodKitchensState():
+return $default(_that.isLoading,_that.kitchens,_that.activeIndex,_that.kitchenController,_that.foodKitchen);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( bool isLoading,  List<KitchenModel> kitchens,  int activeIndex,  TextEditingController? kitchenController,  KitchenModel? foodKitchen)?  $default,) {final _that = this;
+switch (_that) {
+case _EditFoodKitchensState() when $default != null:
+return $default(_that.isLoading,_that.kitchens,_that.activeIndex,_that.kitchenController,_that.foodKitchen);case _:
+  return null;
+
+}
+}
+
 }
 
 /// @nodoc
-abstract class _$$EditFoodKitchensStateImplCopyWith<$Res>
-    implements $EditFoodKitchensStateCopyWith<$Res> {
-  factory _$$EditFoodKitchensStateImplCopyWith(
-          _$EditFoodKitchensStateImpl value,
-          $Res Function(_$EditFoodKitchensStateImpl) then) =
-      __$$EditFoodKitchensStateImplCopyWithImpl<$Res>;
-  @override
-  @useResult
-  $Res call(
-      {bool isLoading,
-      List<KitchenModel> kitchens,
-      int activeIndex,
-      TextEditingController? kitchenController,
-      KitchenModel? foodKitchen});
+
+
+class _EditFoodKitchensState extends EditFoodKitchensState {
+  const _EditFoodKitchensState({this.isLoading = false, final  List<KitchenModel> kitchens = const [], this.activeIndex = 0, this.kitchenController, this.foodKitchen}): _kitchens = kitchens,super._();
+  
+
+@override@JsonKey() final  bool isLoading;
+ final  List<KitchenModel> _kitchens;
+@override@JsonKey() List<KitchenModel> get kitchens {
+  if (_kitchens is EqualUnmodifiableListView) return _kitchens;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_kitchens);
+}
+
+@override@JsonKey() final  int activeIndex;
+@override final  TextEditingController? kitchenController;
+@override final  KitchenModel? foodKitchen;
+
+/// Create a copy of EditFoodKitchensState
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$EditFoodKitchensStateCopyWith<_EditFoodKitchensState> get copyWith => __$EditFoodKitchensStateCopyWithImpl<_EditFoodKitchensState>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _EditFoodKitchensState&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&const DeepCollectionEquality().equals(other._kitchens, _kitchens)&&(identical(other.activeIndex, activeIndex) || other.activeIndex == activeIndex)&&(identical(other.kitchenController, kitchenController) || other.kitchenController == kitchenController)&&(identical(other.foodKitchen, foodKitchen) || other.foodKitchen == foodKitchen));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,isLoading,const DeepCollectionEquality().hash(_kitchens),activeIndex,kitchenController,foodKitchen);
+
+@override
+String toString() {
+  return 'EditFoodKitchensState(isLoading: $isLoading, kitchens: $kitchens, activeIndex: $activeIndex, kitchenController: $kitchenController, foodKitchen: $foodKitchen)';
+}
+
+
 }
 
 /// @nodoc
-class __$$EditFoodKitchensStateImplCopyWithImpl<$Res>
-    extends _$EditFoodKitchensStateCopyWithImpl<$Res,
-        _$EditFoodKitchensStateImpl>
-    implements _$$EditFoodKitchensStateImplCopyWith<$Res> {
-  __$$EditFoodKitchensStateImplCopyWithImpl(_$EditFoodKitchensStateImpl _value,
-      $Res Function(_$EditFoodKitchensStateImpl) _then)
-      : super(_value, _then);
+abstract mixin class _$EditFoodKitchensStateCopyWith<$Res> implements $EditFoodKitchensStateCopyWith<$Res> {
+  factory _$EditFoodKitchensStateCopyWith(_EditFoodKitchensState value, $Res Function(_EditFoodKitchensState) _then) = __$EditFoodKitchensStateCopyWithImpl;
+@override @useResult
+$Res call({
+ bool isLoading, List<KitchenModel> kitchens, int activeIndex, TextEditingController? kitchenController, KitchenModel? foodKitchen
+});
 
-  /// Create a copy of EditFoodKitchensState
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? isLoading = null,
-    Object? kitchens = null,
-    Object? activeIndex = null,
-    Object? kitchenController = freezed,
-    Object? foodKitchen = freezed,
-  }) {
-    return _then(_$EditFoodKitchensStateImpl(
-      isLoading: null == isLoading
-          ? _value.isLoading
-          : isLoading // ignore: cast_nullable_to_non_nullable
-              as bool,
-      kitchens: null == kitchens
-          ? _value._kitchens
-          : kitchens // ignore: cast_nullable_to_non_nullable
-              as List<KitchenModel>,
-      activeIndex: null == activeIndex
-          ? _value.activeIndex
-          : activeIndex // ignore: cast_nullable_to_non_nullable
-              as int,
-      kitchenController: freezed == kitchenController
-          ? _value.kitchenController
-          : kitchenController // ignore: cast_nullable_to_non_nullable
-              as TextEditingController?,
-      foodKitchen: freezed == foodKitchen
-          ? _value.foodKitchen
-          : foodKitchen // ignore: cast_nullable_to_non_nullable
-              as KitchenModel?,
-    ));
-  }
+
+
+
 }
-
 /// @nodoc
+class __$EditFoodKitchensStateCopyWithImpl<$Res>
+    implements _$EditFoodKitchensStateCopyWith<$Res> {
+  __$EditFoodKitchensStateCopyWithImpl(this._self, this._then);
 
-class _$EditFoodKitchensStateImpl extends _EditFoodKitchensState {
-  const _$EditFoodKitchensStateImpl(
-      {this.isLoading = false,
-      final List<KitchenModel> kitchens = const [],
-      this.activeIndex = 0,
-      this.kitchenController,
-      this.foodKitchen})
-      : _kitchens = kitchens,
-        super._();
+  final _EditFoodKitchensState _self;
+  final $Res Function(_EditFoodKitchensState) _then;
 
-  @override
-  @JsonKey()
-  final bool isLoading;
-  final List<KitchenModel> _kitchens;
-  @override
-  @JsonKey()
-  List<KitchenModel> get kitchens {
-    if (_kitchens is EqualUnmodifiableListView) return _kitchens;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_kitchens);
-  }
-
-  @override
-  @JsonKey()
-  final int activeIndex;
-  @override
-  final TextEditingController? kitchenController;
-  @override
-  final KitchenModel? foodKitchen;
-
-  @override
-  String toString() {
-    return 'EditFoodKitchensState(isLoading: $isLoading, kitchens: $kitchens, activeIndex: $activeIndex, kitchenController: $kitchenController, foodKitchen: $foodKitchen)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$EditFoodKitchensStateImpl &&
-            (identical(other.isLoading, isLoading) ||
-                other.isLoading == isLoading) &&
-            const DeepCollectionEquality().equals(other._kitchens, _kitchens) &&
-            (identical(other.activeIndex, activeIndex) ||
-                other.activeIndex == activeIndex) &&
-            (identical(other.kitchenController, kitchenController) ||
-                other.kitchenController == kitchenController) &&
-            (identical(other.foodKitchen, foodKitchen) ||
-                other.foodKitchen == foodKitchen));
-  }
-
-  @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      isLoading,
-      const DeepCollectionEquality().hash(_kitchens),
-      activeIndex,
-      kitchenController,
-      foodKitchen);
-
-  /// Create a copy of EditFoodKitchensState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$EditFoodKitchensStateImplCopyWith<_$EditFoodKitchensStateImpl>
-      get copyWith => __$$EditFoodKitchensStateImplCopyWithImpl<
-          _$EditFoodKitchensStateImpl>(this, _$identity);
+/// Create a copy of EditFoodKitchensState
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? isLoading = null,Object? kitchens = null,Object? activeIndex = null,Object? kitchenController = freezed,Object? foodKitchen = freezed,}) {
+  return _then(_EditFoodKitchensState(
+isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
+as bool,kitchens: null == kitchens ? _self._kitchens : kitchens // ignore: cast_nullable_to_non_nullable
+as List<KitchenModel>,activeIndex: null == activeIndex ? _self.activeIndex : activeIndex // ignore: cast_nullable_to_non_nullable
+as int,kitchenController: freezed == kitchenController ? _self.kitchenController : kitchenController // ignore: cast_nullable_to_non_nullable
+as TextEditingController?,foodKitchen: freezed == foodKitchen ? _self.foodKitchen : foodKitchen // ignore: cast_nullable_to_non_nullable
+as KitchenModel?,
+  ));
 }
 
-abstract class _EditFoodKitchensState extends EditFoodKitchensState {
-  const factory _EditFoodKitchensState(
-      {final bool isLoading,
-      final List<KitchenModel> kitchens,
-      final int activeIndex,
-      final TextEditingController? kitchenController,
-      final KitchenModel? foodKitchen}) = _$EditFoodKitchensStateImpl;
-  const _EditFoodKitchensState._() : super._();
 
-  @override
-  bool get isLoading;
-  @override
-  List<KitchenModel> get kitchens;
-  @override
-  int get activeIndex;
-  @override
-  TextEditingController? get kitchenController;
-  @override
-  KitchenModel? get foodKitchen;
-
-  /// Create a copy of EditFoodKitchensState
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$EditFoodKitchensStateImplCopyWith<_$EditFoodKitchensStateImpl>
-      get copyWith => throw _privateConstructorUsedError;
 }
+
+// dart format on

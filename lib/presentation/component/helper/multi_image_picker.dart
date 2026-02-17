@@ -6,9 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:venderfoodyman/infrastructure/models/models.dart';
 import 'package:venderfoodyman/infrastructure/services/services.dart';
-import 'package:venderfoodyman/infrastructure/services/tpying_delay.dart';
 import 'package:venderfoodyman/presentation/styles/style.dart';
-
 import '../buttons/animation_button_effect.dart';
 import 'blur_wrap.dart';
 import 'common_image.dart';
@@ -32,7 +30,7 @@ class MultiImagePicker extends StatelessWidget {
     return _editProductImage(context);
   }
 
-  _editProductImage(BuildContext context) {
+  Column _editProductImage(BuildContext context) {
     int itemCount = (listOfImages?.length ?? 0) + (imageUrls?.length ?? 0);
     return Column(
       children: [
@@ -42,8 +40,9 @@ class MultiImagePicker extends StatelessWidget {
                   Delayed(milliseconds: 300).run(() async {
                     XFile? file;
                     try {
-                      file = await ImagePicker()
-                          .pickImage(source: ImageSource.gallery);
+                      file = await ImagePicker().pickImage(
+                        source: ImageSource.gallery,
+                      );
                     } catch (ex) {
                       debugPrint('===> trying to select image $ex');
                     }
@@ -56,7 +55,7 @@ class MultiImagePicker extends StatelessWidget {
                   width: double.infinity,
                   height: 180.r,
                   decoration: BoxDecoration(
-                    color: Style.white,
+                    color: AppStyle.white,
                     borderRadius: BorderRadius.circular(10.r),
                   ),
                   padding: REdgeInsets.symmetric(vertical: 24),
@@ -64,26 +63,26 @@ class MultiImagePicker extends StatelessWidget {
                     children: [
                       Icon(
                         FlutterRemix.upload_cloud_2_line,
-                        color: Style.primary,
+                        color: AppStyle.primary,
                         size: 36.r,
                       ),
                       16.verticalSpace,
                       Text(
                         AppHelpers.getTranslation(TrKeys.productPicture),
-                        style: Style.interSemi(
+                        style: AppStyle.interSemi(
                           size: 14,
-                          color: Style.black,
+                          color: AppStyle.black,
                           letterSpacing: -0.3,
                         ),
                       ),
                       Text(
                         AppHelpers.getTranslation(TrKeys.recommendedSize),
-                        style: Style.interRegular(
+                        style: AppStyle.interRegular(
                           size: 14,
-                          color: Style.black,
+                          color: AppStyle.black,
                           letterSpacing: -0.3,
                         ),
-                      )
+                      ),
                     ],
                   ),
                 ),
@@ -91,7 +90,8 @@ class MultiImagePicker extends StatelessWidget {
             : Stack(
                 children: [
                   CommonImage(
-                    fileImage: ((imageUrls?.isEmpty ?? true) &&
+                    fileImage:
+                        ((imageUrls?.isEmpty ?? true) &&
                             (listOfImages?.isNotEmpty ?? false))
                         ? File(listOfImages?.first ?? "")
                         : null,
@@ -123,11 +123,11 @@ class MultiImagePicker extends StatelessWidget {
                           width: 40.r,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            color: Style.white.withOpacity(0.2),
+                            color: AppStyle.white.withOpacity(0.2),
                           ),
                           child: Icon(
                             FlutterRemix.delete_bin_fill,
-                            color: Style.white,
+                            color: AppStyle.white,
                             size: 18.r,
                           ),
                         ),
@@ -138,83 +138,89 @@ class MultiImagePicker extends StatelessWidget {
               ),
         if (itemCount > 0)
           GridView.builder(
-              padding: REdgeInsets.only(top: 12),
-              itemCount: itemCount,
-              gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                  crossAxisSpacing: 8.r,
-                  mainAxisSpacing: 8.r,
-                  maxCrossAxisExtent: 100.r,
-                  childAspectRatio: 0.9),
-              physics: const NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              itemBuilder: (BuildContext context, int index) {
-                return itemCount == index + 1
-                    ? _mediaPicker(context)
-                    : Stack(
-                        children: [
-                          Positioned(
-                            top: 0,
-                            left: 0,
-                            right: 0,
-                            bottom: 0,
-                            child: CommonImage(
-                              fileImage: (imageUrls?.length ?? 0) > index + 1
-                                  ? null
-                                  : File(listOfImages?[index -
-                                          (imageUrls?.length ?? 0) +
-                                          1] ??
-                                      ""),
-                              url: (imageUrls?.length ?? 0) > index + 1
-                                  ? imageUrls![index + 1]?.path
-                                  : null,
-                              preview: (imageUrls?.length ?? 0) > index + 1
-                                  ? imageUrls![index + 1]?.preview
-                                  : null,
-                              height: 80,
-                              width: 70,
-                              radius: 12,
-                              fit: BoxFit.cover,
-                            ),
+            padding: REdgeInsets.only(top: 12),
+            itemCount: itemCount,
+            gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+              crossAxisSpacing: 8.r,
+              mainAxisSpacing: 8.r,
+              maxCrossAxisExtent: 100.r,
+              childAspectRatio: 0.9,
+            ),
+            physics: const NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
+            itemBuilder: (BuildContext context, int index) {
+              return itemCount == index + 1
+                  ? _mediaPicker(context)
+                  : Stack(
+                      children: [
+                        Positioned(
+                          top: 0,
+                          left: 0,
+                          right: 0,
+                          bottom: 0,
+                          child: CommonImage(
+                            fileImage: (imageUrls?.length ?? 0) > index + 1
+                                ? null
+                                : File(
+                                    listOfImages?[index -
+                                            (imageUrls?.length ?? 0) +
+                                            1] ??
+                                        "",
+                                  ),
+                            url: (imageUrls?.length ?? 0) > index + 1
+                                ? imageUrls![index + 1]?.path
+                                : null,
+                            preview: (imageUrls?.length ?? 0) > index + 1
+                                ? imageUrls![index + 1]?.preview
+                                : null,
+                            height: 80,
+                            width: 70,
+                            radius: 12,
+                            fit: BoxFit.cover,
                           ),
-                          if ((imageUrls?.length ?? 0) > index + 1
-                              ? imageUrls![index + 1]?.preview == null
-                              : true)
-                            Positioned.fill(
-                              child: Center(
-                                child: ButtonEffectAnimation(
-                                  onTap: () {
-                                    String path;
-                                    try {
-                                      path = imageUrls?[index + 1]?.path ?? "";
-                                    } catch (e) {
-                                      path = listOfImages?[(index -
-                                                  (imageUrls?.length ?? 0)) +
-                                              1] ??
-                                          "";
-                                    }
-                                    onDelete(path);
-                                  },
-                                  child: Container(
-                                    padding: EdgeInsets.all(8.r),
-                                    decoration: BoxDecoration(
-                                        color: Style.white.withOpacity(0.8),
-                                        shape: BoxShape.circle),
-                                    child: const Icon(
-                                      FlutterRemix.delete_bin_line,
-                                      color: Style.black,
-                                    ),
+                        ),
+                        if ((imageUrls?.length ?? 0) > index + 1
+                            ? imageUrls![index + 1]?.preview == null
+                            : true)
+                          Positioned.fill(
+                            child: Center(
+                              child: ButtonEffectAnimation(
+                                onTap: () {
+                                  String path;
+                                  try {
+                                    path = imageUrls?[index + 1]?.path ?? "";
+                                  } catch (e) {
+                                    path =
+                                        listOfImages?[(index -
+                                                (imageUrls?.length ?? 0)) +
+                                            1] ??
+                                        "";
+                                  }
+                                  onDelete(path);
+                                },
+                                child: Container(
+                                  padding: EdgeInsets.all(8.r),
+                                  decoration: BoxDecoration(
+                                    color: AppStyle.white.withOpacity(0.8),
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: const Icon(
+                                    FlutterRemix.delete_bin_line,
+                                    color: AppStyle.black,
                                   ),
                                 ),
                               ),
-                            )
-                        ],
-                      );
-              }),
+                            ),
+                          ),
+                      ],
+                    );
+            },
+          ),
       ],
     );
   }
 
-  _mediaPicker(BuildContext context) {
+  ButtonEffectAnimation _mediaPicker(BuildContext context) {
     return ButtonEffectAnimation(
       onTap: () async {
         Delayed(milliseconds: 300).run(() async {
@@ -230,15 +236,16 @@ class MultiImagePicker extends StatelessWidget {
         });
       },
       child: DottedBorder(
-        dashPattern: const [8],
-        color: Style.primary,
-        strokeWidth: 2.6,
-        borderType: BorderType.RRect,
-        radius: const Radius.circular(10),
+        options: RoundedRectDottedBorderOptions(
+          dashPattern: const [8],
+          color: AppStyle.primary,
+          strokeWidth: 2.6,
+          radius: const Radius.circular(10),
+        ),
         child: Center(
           child: Icon(
             FlutterRemix.upload_cloud_2_line,
-            color: Style.primary,
+            color: AppStyle.primary,
             size: 28.r,
           ),
         ),

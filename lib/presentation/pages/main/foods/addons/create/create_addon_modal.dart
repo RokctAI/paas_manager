@@ -11,7 +11,7 @@ import 'package:venderfoodyman/application/providers.dart';
 import 'package:venderfoodyman/infrastructure/services/services.dart';
 
 class CreateAddonModal extends ConsumerStatefulWidget {
-  const CreateAddonModal({super.key}) ;
+  const CreateAddonModal({super.key});
 
   @override
   ConsumerState<CreateAddonModal> createState() => _CreateAddonModalState();
@@ -56,7 +56,8 @@ class _CreateAddonModalState extends ConsumerState<CreateAddonModal> {
                                 children: [
                                   24.verticalSpace,
                                   UnderlinedTextField(
-                                    label: '${AppHelpers.getTranslation(TrKeys.title)}*',
+                                    label:
+                                        '${AppHelpers.getTranslation(TrKeys.title)}*',
                                     inputType: TextInputType.text,
                                     textCapitalization:
                                         TextCapitalization.sentences,
@@ -85,27 +86,30 @@ class _CreateAddonModalState extends ConsumerState<CreateAddonModal> {
                                             '${AppHelpers.getTranslation(TrKeys.units)}*',
                                         suffixIcon: Icon(
                                           FlutterRemix.arrow_down_s_line,
-                                          color: Style.blackColor,
+                                          color: AppStyle.blackColor,
                                           size: 18.r,
                                         ),
                                         readOnly: true,
                                         validator: AppValidators.emptyCheck,
-                                        onTap: () => AppHelpers
-                                            .showCustomModalBottomSheet(
-                                          paddingTop: MediaQuery.of(context)
-                                                  .padding
-                                                  .top +
-                                              300.h,
-                                          context: context,
-                                          modal: const CreateAddonUnitsModal(),
-                                          isDarkMode: false,
-                                        ),
+                                        onTap: () =>
+                                            AppHelpers.showCustomModalBottomSheet(
+                                              paddingTop:
+                                                  MediaQuery.of(
+                                                    context,
+                                                  ).padding.top +
+                                                  300.h,
+                                              context: context,
+                                              modal:
+                                                  const CreateAddonUnitsModal(),
+                                              isDarkMode: false,
+                                            ),
                                       );
                                     },
                                   ),
                                   24.verticalSpace,
                                   UnderlinedTextField(
-                                    label: '${AppHelpers.getTranslation(TrKeys.tax)}*',
+                                    label:
+                                        '${AppHelpers.getTranslation(TrKeys.tax)}*',
                                     inputType: TextInputType.number,
                                     textInputAction: TextInputAction.next,
                                     onChanged: event.setTax,
@@ -113,8 +117,9 @@ class _CreateAddonModalState extends ConsumerState<CreateAddonModal> {
                                   ),
                                   24.verticalSpace,
                                   UnderlinedTextField(
-                                    label:
-                                        AppHelpers.getTranslation(TrKeys.sku),
+                                    label: AppHelpers.getTranslation(
+                                      TrKeys.sku,
+                                    ),
                                     inputType: TextInputType.text,
                                     textInputAction: TextInputAction.done,
                                     onChanged: event.setBarcode,
@@ -153,11 +158,13 @@ class _CreateAddonModalState extends ConsumerState<CreateAddonModal> {
                                         MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text(
-                                        AppHelpers.getTranslation(TrKeys.active),
-                                        style: Style.interNormal(
-                                          size: 14.sp,
+                                        AppHelpers.getTranslation(
+                                          TrKeys.active,
+                                        ),
+                                        style: AppStyle.interNormal(
+                                          size: 14,
                                           letterSpacing: -0.3,
-                                          color: Style.blackColor,
+                                          color: AppStyle.blackColor,
                                         ),
                                       ),
                                       CustomToggle(
@@ -184,7 +191,8 @@ class _CreateAddonModalState extends ConsumerState<CreateAddonModal> {
                                     AppHelpers.showCheckTopSnackBar(
                                       context,
                                       text: AppHelpers.getTranslation(
-                                          TrKeys.successfullyCreated),
+                                        TrKeys.successfullyCreated,
+                                      ),
                                       type: SnackBarType.success,
                                     );
                                     addonsEvent.refreshAddons();

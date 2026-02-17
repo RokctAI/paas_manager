@@ -7,10 +7,11 @@ import 'package:venderfoodyman/presentation/styles/style.dart';
 import 'package:venderfoodyman/presentation/routes/app_router.dart';
 import '../../../component/components.dart';
 import 'package:venderfoodyman/infrastructure/services/services.dart';
+
 class LogoutModal extends StatelessWidget {
   final bool isDeleteAccount;
 
-  const LogoutModal({super.key, this.isDeleteAccount = false}) ;
+  const LogoutModal({super.key, this.isDeleteAccount = false});
 
   @override
   Widget build(BuildContext context) {
@@ -23,10 +24,12 @@ class LogoutModal extends StatelessWidget {
             const ModalDrag(),
             12.verticalSpace,
             Text(
-              AppHelpers.getTranslation(isDeleteAccount
-                  ? TrKeys.areYouSure
-                  : TrKeys.doYouReallyWantToLogout),
-              style: Style.interSemi(size: 16.sp),
+              AppHelpers.getTranslation(
+                isDeleteAccount
+                    ? TrKeys.areYouSure
+                    : TrKeys.doYouReallyWantToLogout,
+              ),
+              style: AppStyle.interSemi(size: 16),
               textAlign: TextAlign.center,
             ),
             40.verticalSpace,
@@ -34,36 +37,44 @@ class LogoutModal extends StatelessWidget {
               children: [
                 Expanded(
                   child: CustomButton(
-                      borderColor: Style.black,
-                      background: Style.transparent,
-                      title: AppHelpers.getTranslation(TrKeys.cancel),
-                      onPressed: () {
-                        Navigator.pop(context);
-                      }),
+                    borderColor: AppStyle.black,
+                    background: AppStyle.transparent,
+                    textColor: AppStyle.black,
+                    title: AppHelpers.getTranslation(TrKeys.cancel),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  ),
                 ),
                 16.horizontalSpace,
                 Expanded(
-                  child: Consumer(builder: (context, ref, child) {
-                    if (isDeleteAccount) {
-                      return CustomButton(
-                          background: Style.red,
-                          textColor: Style.white,
-                          title: AppHelpers.getTranslation(TrKeys.deleteAccount),
+                  child: Consumer(
+                    builder: (context, ref, child) {
+                      if (isDeleteAccount) {
+                        return CustomButton(
+                          background: AppStyle.red,
+                          textColor: AppStyle.white,
+                          title: AppHelpers.getTranslation(
+                            TrKeys.deleteAccount,
+                          ),
                           onPressed: () {
                             ref
                                 .read(profileProvider.notifier)
                                 .deleteAccount(context);
-                          });
-                    } else {
-                      return CustomButton(
+                          },
+                        );
+                      } else {
+                        return CustomButton(
                           title: AppHelpers.getTranslation(TrKeys.logout),
                           onPressed: () {
                             LocalStorage.logout();
                             context.router.popUntilRoot();
-                            context.replaceRoute(const LoginRoute());
-                          });
-                    }
-                  }),
+                            context.replaceRoute(const AuthRoute());
+                          },
+                        );
+                      }
+                    },
+                  ),
                 ),
               ],
             ),

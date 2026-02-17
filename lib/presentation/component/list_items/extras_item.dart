@@ -24,7 +24,7 @@ class ExtrasItem extends StatelessWidget {
       child: GestureDetector(
         onTap: onTap,
         child: Container(
-          color: Style.transparent,
+          color: AppStyle.transparent,
           padding: REdgeInsets.symmetric(vertical: 16),
           margin: REdgeInsets.only(right: 14),
           child: Row(
@@ -34,14 +34,14 @@ class ExtrasItem extends StatelessWidget {
                     ? FlutterRemix.checkbox_circle_fill
                     : FlutterRemix.checkbox_blank_circle_line,
                 color: (extras.isChecked ?? false)
-                    ? Style.primary
-                    : Style.blackColor,
+                    ? AppStyle.primary
+                    : AppStyle.blackColor,
                 size: 24.r,
               ),
               4.horizontalSpace,
               Text(
                 '${extras.translation?.title}',
-                style: Style.interSemi(size: 14.sp, letterSpacing: -0.3),
+                style: AppStyle.interSemi(size: 14, letterSpacing: -0.3),
               ),
             ],
           ),

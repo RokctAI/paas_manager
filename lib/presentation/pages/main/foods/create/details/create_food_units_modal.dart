@@ -8,7 +8,7 @@ import 'package:venderfoodyman/application/providers.dart';
 import 'package:venderfoodyman/infrastructure/services/services.dart';
 
 class CreateFoodUnitsModal extends ConsumerStatefulWidget {
-  const CreateFoodUnitsModal({super.key}) ;
+  const CreateFoodUnitsModal({super.key});
 
   @override
   ConsumerState<CreateFoodUnitsModal> createState() =>
@@ -32,7 +32,10 @@ class _CreateFoodUnitsModalState extends ConsumerState<CreateFoodUnitsModal> {
         child: Column(
           children: [
             const ModalDrag(),
-            TitleAndIcon(title: AppHelpers.getTranslation(TrKeys.units), titleSize: 16),
+            TitleAndIcon(
+              title: AppHelpers.getTranslation(TrKeys.units),
+              titleSize: 16,
+            ),
             24.verticalSpace,
             Expanded(
               child: Consumer(

@@ -24,7 +24,7 @@ class PopButton extends StatelessWidget {
             width: 48.r,
             height: 48.r,
             decoration: BoxDecoration(
-              color: Style.blackColor,
+              color: AppStyle.blackColor,
               borderRadius: BorderRadius.circular(10.r),
             ),
             alignment: Alignment.center,
@@ -32,7 +32,7 @@ class PopButton extends StatelessWidget {
               isLtr
                   ? FlutterRemix.arrow_left_s_line
                   : FlutterRemix.arrow_right_s_line,
-              color: Style.white,
+              color: AppStyle.white,
               size: 20.r,
             ),
           ),

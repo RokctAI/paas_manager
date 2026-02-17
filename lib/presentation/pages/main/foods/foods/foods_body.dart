@@ -6,6 +6,7 @@ import 'package:venderfoodyman/application/foods/edit/details/kitchen/edit_food_
 
 import '../edit/edit_product_modal.dart';
 import '../../../../component/components.dart';
+import '../../../../styles/style.dart';
 import 'package:venderfoodyman/application/providers.dart';
 import 'package:venderfoodyman/infrastructure/services/services.dart';
 
@@ -26,32 +27,144 @@ class FoodsBody extends StatelessWidget {
         24.verticalSpace,
         Consumer(
           builder: (context, ref, child) {
-            final categoriesState = ref.watch(foodCategoriesProvider);
-            final categoriesEvent = ref.read(foodCategoriesProvider.notifier);
+            final productsState = ref.watch(foodsProvider);
             final productsEvent = ref.read(foodsProvider.notifier);
-            return categoriesState.isLoading
+            final categoriesEvent = ref.read(categoriesProvider.notifier);
+            return Padding(
+              padding: REdgeInsets.symmetric(horizontal: 16),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: GestureDetector(
+                      onTap: () {
+                        productsEvent.setProductType(
+                          'single',
+                          refreshController: productController,
+                        );
+                        categoriesEvent.fetchCategories(
+                          context,
+                          controller: categoryController,
+                        );
+                      },
+                      child: Container(
+                        padding: EdgeInsets.symmetric(vertical: 8.h),
+                        decoration: BoxDecoration(
+                          color: productsState.productType == 'single'
+                              ? AppStyle.blackColor
+                              : AppStyle.white,
+                          borderRadius: BorderRadius.circular(10.r),
+                          border: Border.all(
+                            color: productsState.productType == 'single'
+                                ? AppStyle.blackColor
+                                : AppStyle.borderColor,
+                          ),
+                        ),
+                        child: Center(
+                          child: Text(
+                            AppHelpers.getTranslation(TrKeys.product),
+                            style: AppStyle.interSemi(
+                              size: 14,
+                              color: productsState.productType == 'single'
+                                  ? AppStyle.white
+                                  : AppStyle.blackColor,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  16.horizontalSpace,
+                  Expanded(
+                    child: GestureDetector(
+                      onTap: () {
+                        productsEvent.setProductType(
+                          'combo',
+                          refreshController: productController,
+                        );
+                        categoriesEvent.fetchComboCategories(
+                          context,
+                          controller: categoryController,
+                        );
+                      },
+                      child: Container(
+                        padding: EdgeInsets.symmetric(vertical: 8.h),
+                        decoration: BoxDecoration(
+                          color: productsState.productType == 'combo'
+                              ? AppStyle.blackColor
+                              : AppStyle.white,
+                          borderRadius: BorderRadius.circular(10.r),
+                          border: Border.all(
+                            color: productsState.productType == 'combo'
+                                ? AppStyle.blackColor
+                                : AppStyle.borderColor,
+                          ),
+                        ),
+                        child: Center(
+                          child: Text(
+                            AppHelpers.getTranslation(TrKeys.combo),
+                            style: AppStyle.interSemi(
+                              size: 14,
+                              color: productsState.productType == 'combo'
+                                  ? AppStyle.white
+                                  : AppStyle.blackColor,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        ),
+        16.verticalSpace,
+        Consumer(
+          builder: (context, ref, child) {
+            final categoriesState = ref.watch(categoriesProvider);
+            final categoriesEvent = ref.read(categoriesProvider.notifier);
+            final productsState = ref.watch(foodsProvider);
+            final productsEvent = ref.read(foodsProvider.notifier);
+
+            final isCombo = productsState.productType == 'combo';
+            final currentCategories = isCombo
+                ? categoriesState.comboCategories
+                : categoriesState.categories;
+            final currentActiveIndex = isCombo
+                ? categoriesState.activeComboIndex
+                : categoriesState.activeIndex;
+            final isLoadingCategories = isCombo
+                ? categoriesState.isComboLoading
+                : categoriesState.isLoading;
+
+            return isLoadingCategories
                 ? const TabBarLoading()
                 : SizedBox(
                     height: 36.h,
                     child: CategoriesTabBar(
-                      categories: categoriesState.categories,
-                      activeIndex: categoriesState.activeIndex,
+                      categories: currentCategories,
+                      activeIndex: currentActiveIndex,
                       refreshController: categoryController,
                       onChangeTab: (index) {
-                        categoriesEvent.setActiveIndex(index);
-                        if (index != categoriesState.activeIndex) {
+                        categoriesEvent.setActiveIndex(index, isCombo: isCombo);
+                        if (index != currentActiveIndex) {
                           productsEvent.fetchCategoryProducts(
                             categoryId: index == 1
                                 ? null
-                                : categoriesState.categories[index - 2].id,
+                                : currentCategories[index - 2].id,
                             refreshController: productController,
                           );
                         }
                       },
-                      onLoading: () => categoriesEvent.fetchCategories(
-                        context: context,
-                        refreshController: categoryController,
-                      ),
+                      onLoading: () => isCombo
+                          ? categoriesEvent.fetchComboCategories(
+                              context,
+                              controller: categoryController,
+                            )
+                          : categoriesEvent.fetchCategories(
+                              context,
+                              controller: categoryController,
+                            ),
                     ),
                   );
           },

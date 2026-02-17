@@ -30,16 +30,15 @@ class HorizontalImagePicker extends StatelessWidget {
     return Container(
       height: 150.h,
       width: double.infinity,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16.r),
-      ),
+      decoration: BoxDecoration(borderRadius: BorderRadius.circular(16.r)),
       child: (isAdding && imageFilePath == null)
           ? InkWell(
               onTap: () async {
                 XFile? file;
                 try {
-                  file = await ImagePicker()
-                      .pickImage(source: ImageSource.gallery);
+                  file = await ImagePicker().pickImage(
+                    source: ImageSource.gallery,
+                  );
                 } catch (ex) {
                   debugPrint('===> trying to select image $ex');
                 }
@@ -51,7 +50,7 @@ class HorizontalImagePicker extends StatelessWidget {
                 width: double.infinity,
                 height: 180.h,
                 decoration: BoxDecoration(
-                  color: Style.white,
+                  color: AppStyle.white,
                   borderRadius: BorderRadius.circular(10.r),
                 ),
                 padding: REdgeInsets.symmetric(vertical: 24),
@@ -61,8 +60,9 @@ class HorizontalImagePicker extends StatelessWidget {
                       onTap: () async {
                         XFile? file;
                         try {
-                          file = await ImagePicker()
-                              .pickImage(source: ImageSource.gallery);
+                          file = await ImagePicker().pickImage(
+                            source: ImageSource.gallery,
+                          );
                         } catch (ex) {
                           debugPrint('===> trying to select image $ex');
                         }
@@ -72,27 +72,27 @@ class HorizontalImagePicker extends StatelessWidget {
                       },
                       child: Icon(
                         FlutterRemix.upload_cloud_2_line,
-                        color: Style.primary,
+                        color: AppStyle.primary,
                         size: 36.r,
                       ),
                     ),
                     16.verticalSpace,
                     Text(
                       AppHelpers.getTranslation(TrKeys.productPicture),
-                      style: Style.interSemi(
+                      style: AppStyle.interSemi(
                         size: 14,
-                        color: Style.blackColor,
+                        color: AppStyle.blackColor,
                         letterSpacing: -0.3,
                       ),
                     ),
                     Text(
                       AppHelpers.getTranslation(TrKeys.recommendedSize),
-                      style: Style.interRegular(
+                      style: AppStyle.interRegular(
                         size: 14,
-                        color: Style.blackColor,
+                        color: AppStyle.blackColor,
                         letterSpacing: -0.3,
                       ),
-                    )
+                    ),
                   ],
                 ),
               ),
@@ -128,8 +128,9 @@ class HorizontalImagePicker extends StatelessWidget {
                           onTap: () async {
                             XFile? file;
                             try {
-                              file = await ImagePicker()
-                                  .pickImage(source: ImageSource.gallery);
+                              file = await ImagePicker().pickImage(
+                                source: ImageSource.gallery,
+                              );
                             } catch (ex) {
                               debugPrint('===> trying to select image $ex');
                             }
@@ -144,15 +145,16 @@ class HorizontalImagePicker extends StatelessWidget {
                               width: 36.r,
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
-                                color: Style.white.withOpacity(0.15),
+                                color: AppStyle.white.withOpacity(0.15),
                               ),
                               child: Icon(
                                 FlutterRemix.image_add_fill,
-                                color: (!isAdding &&
+                                color:
+                                    (!isAdding &&
                                         imageUrl == null &&
                                         imageFilePath == null)
-                                    ? Style.blackColor
-                                    : Style.white,
+                                    ? AppStyle.blackColor
+                                    : AppStyle.white,
                                 size: 18.r,
                               ),
                             ),
@@ -171,11 +173,11 @@ class HorizontalImagePicker extends StatelessWidget {
                                 width: 36.r,
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
-                                  color: Style.white.withOpacity(0.15),
+                                  color: AppStyle.white.withOpacity(0.15),
                                 ),
                                 child: Icon(
                                   FlutterRemix.delete_bin_fill,
-                                  color: Style.white,
+                                  color: AppStyle.white,
                                   size: 18.r,
                                 ),
                               ),

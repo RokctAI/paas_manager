@@ -16,26 +16,26 @@ class CustomDatePicker extends StatefulWidget {
 class _CustomDatePickerState extends State<CustomDatePicker> {
   final config = CalendarDatePicker2Config(
     calendarType: CalendarDatePicker2Type.range,
-    selectedDayHighlightColor: Style.primary,
-    weekdayLabelTextStyle: Style.interNormal(
-      size: 14.sp,
+    selectedDayHighlightColor: AppStyle.primary,
+    weekdayLabelTextStyle: AppStyle.interNormal(
+      size: 14,
       letterSpacing: -0.3,
-      color: Style.blackColor,
+      color: AppStyle.blackColor,
     ),
-    controlsTextStyle: Style.interNormal(
-      size: 14.sp,
+    controlsTextStyle: AppStyle.interNormal(
+      size: 14,
       letterSpacing: -0.3,
-      color: Style.blackColor,
+      color: AppStyle.blackColor,
     ),
-    dayTextStyle: Style.interNormal(
-      size: 14.sp,
+    dayTextStyle: AppStyle.interNormal(
+      size: 14,
       letterSpacing: -0.3,
-      color: Style.blackColor,
+      color: AppStyle.blackColor,
     ),
-    disabledDayTextStyle: Style.interNormal(
-      size: 14.sp,
+    disabledDayTextStyle: AppStyle.interNormal(
+      size: 14,
       letterSpacing: -0.3,
-      color: Style.textColor,
+      color: AppStyle.textColor,
     ),
     dayBorderRadius: BorderRadius.circular(10.r),
   );

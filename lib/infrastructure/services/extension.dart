@@ -2,7 +2,11 @@ import 'package:venderfoodyman/infrastructure/models/models.dart';
 
 import 'enums.dart';
 
-
+extension BoolParsing on String {
+  bool toBool() {
+    return this == "true" || this == "1";
+  }
+}
 
 extension Time on DateTime {
   bool toEqualTime(DateTime time) {
@@ -33,10 +37,11 @@ extension Time on DateTime {
     return day == date.day && month == date.month && year == date.year;
   }
 
-  int getDayDifference(DateTime date) => DateTime.utc(year, month, day)
-      .difference(DateTime.utc(date.year, date.month, date.day))
-      .inDays
-      .abs();
+  int getDayDifference(DateTime date) => DateTime.utc(
+    year,
+    month,
+    day,
+  ).difference(DateTime.utc(date.year, date.month, date.day)).inDays.abs();
 
   int getThreeDayDifference(DateTime date) {
     return (difference(DateTime(date.year, date.month, date.day)).inDays.abs() /
@@ -45,16 +50,18 @@ extension Time on DateTime {
   }
 
   int getWeekDifference(DateTime date, {WeekDays start = WeekDays.monday}) =>
-      (firstDayOfWeek(start: start)
-                  .difference(date.firstDayOfWeek(start: start))
-                  .inDays
-                  .abs() /
+      (firstDayOfWeek(
+                start: start,
+              ).difference(date.firstDayOfWeek(start: start)).inDays.abs() /
               7)
           .ceil();
 
   List<DateTime> datesOfWeek({WeekDays start = WeekDays.monday}) {
-    final startDay =
-        DateTime(year, month, day - (weekday - start.index - 1) % 7);
+    final startDay = DateTime(
+      year,
+      month,
+      day - (weekday - start.index - 1) % 7,
+    );
 
     return [
       startDay,
@@ -89,13 +96,8 @@ extension Time on DateTime {
 
   int get getTotalMinutes => hour * 60 + minute;
 
-  DateTime copyFromMinutes([int totalMinutes = 0]) => DateTime(
-        year,
-        month,
-        day,
-        totalMinutes ~/ 60,
-        totalMinutes % 60,
-      );
+  DateTime copyFromMinutes([int totalMinutes = 0]) =>
+      DateTime(year, month, day, totalMinutes ~/ 60, totalMinutes % 60);
 
   DateTime get withoutTime => DateTime(year, month, day);
 
@@ -191,9 +193,8 @@ extension ExtendedIterable<E> on Iterable<E> {
   }
 }
 
-
-extension BoolParsing on String {
-  bool toBool() {
-    return this == "true" || this == "1";
-  }
-}
+// extension BoolParsing on String {
+//   bool toBool() {
+//     return this == "true" || this == "1";
+//   }
+// }

@@ -18,7 +18,7 @@ class DeliveryTypeItem extends StatelessWidget {
     required this.desc,
     required this.isActive,
     required this.onTap,
-  }) ;
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +29,7 @@ class DeliveryTypeItem extends StatelessWidget {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10.r),
             border: Border.all(
-              color: isActive ? Style.primary : Style.shimmerBase,
+              color: isActive ? AppStyle.primary : AppStyle.shimmerBase,
             ),
           ),
           padding: REdgeInsets.all(10),
@@ -38,14 +38,14 @@ class DeliveryTypeItem extends StatelessWidget {
               Container(
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: isActive ? Style.blackColor : Style.transparent,
-                  border: Border.all(color: Style.blackColor),
+                  color: isActive ? AppStyle.blackColor : AppStyle.transparent,
+                  border: Border.all(color: AppStyle.blackColor),
                 ),
                 padding: EdgeInsets.all(10.r),
                 child: Center(
                   child: Icon(
                     iconData,
-                    color: isActive ? Style.primary : Style.blackColor,
+                    color: isActive ? AppStyle.primary : AppStyle.blackColor,
                   ),
                 ),
               ),
@@ -56,17 +56,17 @@ class DeliveryTypeItem extends StatelessWidget {
                 children: [
                   Text(
                     title,
-                    style: Style.interSemi(
-                      size: 14.sp,
-                      color: Style.blackColor,
+                    style: AppStyle.interSemi(
+                      size: 14,
+                      color: AppStyle.blackColor,
                       letterSpacing: -0.3,
                     ),
                   ),
                   Text(
                     desc,
-                    style: Style.interNormal(
-                      size: 12.sp,
-                      color: Style.blackColor,
+                    style: AppStyle.interNormal(
+                      size: 12,
+                      color: AppStyle.blackColor,
                       letterSpacing: -0.3,
                     ),
                   ),

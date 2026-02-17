@@ -35,16 +35,15 @@ class OrderPaymentNotifier extends StateNotifier<OrderPaymentState> {
     final response = await _ordersRepository.getPayments();
     response.when(
       success: (data) {
-        final List<Payment> payments = data.data ?? [];
-        List<Payment> filtered = [];
+        List<PaymentData> payments = data.data ?? [];
+        List<PaymentData> filtered = [];
         for (final payment in payments) {
-          if (type != TrKeys.delivery &&
-              payment.payment?.tag?.toLowerCase() == 'cash') {
+          if (type != TrKeys.delivery && payment.tag?.toLowerCase() == 'cash') {
             filtered.add(payment);
             break;
           } else {
-            if (payment.payment?.tag?.toLowerCase() == 'wallet' ||
-                payment.payment?.tag?.toLowerCase() == 'cash') {
+            if (payment.tag?.toLowerCase() == 'wallet' ||
+                payment.tag?.toLowerCase() == 'cash') {
               filtered.add(payment);
             }
           }

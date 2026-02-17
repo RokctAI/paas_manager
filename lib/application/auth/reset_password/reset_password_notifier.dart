@@ -39,7 +39,7 @@ class ResetPasswordNotifier extends StateNotifier<ResetPasswordState> {
     state = state.copyWith(showConfirmPassword: !state.showConfirmPassword);
   }
 
-  checkEmail() {
+  bool checkEmail() {
     return AppValidators.isValidEmail(state.email);
   }
 

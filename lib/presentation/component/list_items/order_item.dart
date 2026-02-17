@@ -30,7 +30,7 @@ class OrderItem extends StatelessWidget {
           margin: REdgeInsets.only(bottom: 10),
           padding: REdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: Style.white,
+            color: AppStyle.white,
             borderRadius: BorderRadius.circular(10.r),
           ),
           child: Column(
@@ -57,20 +57,22 @@ class OrderItem extends StatelessWidget {
                               Text(
                                 order.user == null
                                     ? AppHelpers.getTranslation(
-                                        TrKeys.deletedUser)
+                                        TrKeys.deletedUser,
+                                      )
                                     : '${order.user?.firstname ?? AppHelpers.getTranslation(TrKeys.noName)} ${order.user?.lastname ?? ''}',
-                                style: Style.interRegular(
-                                  size: 14.sp,
-                                  color: Style.blackColor,
+                                style: AppStyle.interRegular(
+                                  size: 14,
+                                  color: AppStyle.blackColor,
                                 ),
                               ),
                               4.verticalSpace,
                               Text(
                                 AppHelpers.getTranslation(
-                                    order.deliveryType ?? ""),
-                                style: Style.interNormal(
-                                  size: 12.sp,
-                                  color: Style.blackColor,
+                                  order.deliveryType ?? "",
+                                ),
+                                style: AppStyle.interNormal(
+                                  size: 12,
+                                  color: AppStyle.blackColor,
                                 ),
                               ),
                             ],
@@ -86,16 +88,19 @@ class OrderItem extends StatelessWidget {
                       height: 10.r,
                       decoration: const BoxDecoration(
                         shape: BoxShape.circle,
-                        color: Style.red,
+                        color: AppStyle.red,
                       ),
                     ),
                   if (isHistoryOrder)
-                    Text(AppHelpers.getTranslation(
-                        order.transaction?.paymentSystem?.tag ?? ''))
+                    Text(
+                      AppHelpers.getTranslation(
+                        order.transaction?.paymentSystem?.tag ?? '',
+                      ),
+                    ),
                 ],
               ),
               14.verticalSpace,
-              Divider(color: Style.greyColor, thickness: 1.r, height: 1.r),
+              Divider(color: AppStyle.greyColor, thickness: 1.r, height: 1.r),
               14.verticalSpace,
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -103,25 +108,26 @@ class OrderItem extends StatelessWidget {
                   RichText(
                     text: TextSpan(
                       text: '№ ${order.id}',
-                      style: Style.interNormal(
-                        color: Style.blackColor,
-                        size: 14.sp,
+                      style: AppStyle.interNormal(
+                        color: AppStyle.blackColor,
+                        size: 14,
                         letterSpacing: -0.3,
                       ),
                       children: [
                         TextSpan(
                           text: ' | ',
-                          style: Style.interNormal(
-                            color: Style.borderColor,
-                            size: 14.sp,
+                          style: AppStyle.interNormal(
+                            color: AppStyle.borderColor,
+                            size: 14,
                             letterSpacing: -0.3,
                           ),
                         ),
                         TextSpan(
-                          text: '${order.deliveryDate ?? ''} ${order.deliveryTime ?? ''}',
-                          style: Style.interNormal(
-                            color: Style.blackColor,
-                            size: 14.sp,
+                          text:
+                              '${order.deliveryDate ?? ''} ${order.deliveryTime ?? ''}',
+                          style: AppStyle.interNormal(
+                            color: AppStyle.blackColor,
+                            size: 14,
                             letterSpacing: -0.3,
                           ),
                         ),
@@ -130,12 +136,15 @@ class OrderItem extends StatelessWidget {
                   ),
                   Text(
                     AppHelpers.numberFormat(
-                         order.totalPrice?.isNegative ?? true
-                            ? 0
-                            : order.totalPrice ?? 0,
-                        symbol: order.currency?.symbol),
-                    style:
-                        Style.interNormal(size: 14.sp, color: Style.blackColor),
+                      order.totalPrice?.isNegative ?? true
+                          ? 0
+                          : order.totalPrice ?? 0,
+                      symbol: order.currency?.symbol,
+                    ),
+                    style: AppStyle.interNormal(
+                      size: 14,
+                      color: AppStyle.blackColor,
+                    ),
                   ),
                 ],
               ),

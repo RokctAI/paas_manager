@@ -6,7 +6,7 @@ import '../../../../../../../infrastructure/models/models.dart';
 part 'create_addon_units_state.freezed.dart';
 
 @freezed
-class CreateAddonUnitsState with _$CreateAddonUnitsState {
+abstract class CreateAddonUnitsState with _$CreateAddonUnitsState {
   const factory CreateAddonUnitsState({
     @Default(false) bool isLoading,
     @Default([]) List<UnitData> units,

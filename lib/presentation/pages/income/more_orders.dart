@@ -5,7 +5,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:venderfoodyman/application/restaurant/income/statistics/statistics_provider.dart';
 import 'package:venderfoodyman/presentation/component/filter_screen.dart';
-
 import '../../component/helper/modal_drag.dart';
 import '../../component/helper/modal_wrap.dart';
 import '../../component/loading/loading.dart';
@@ -16,11 +15,7 @@ class MoreOrders extends ConsumerStatefulWidget {
   final DateTime? endTime;
   final DateTime? startTime;
 
-  const MoreOrders({
-    super.key,
-    required this.endTime,
-    required this.startTime,
-  });
+  const MoreOrders({super.key, required this.endTime, required this.startTime});
 
   @override
   ConsumerState<MoreOrders> createState() => _MoreOrdersState();
@@ -33,8 +28,12 @@ class _MoreOrdersState extends ConsumerState<MoreOrders> {
   void initState() {
     _refreshController = RefreshController();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(statisticsProvider.notifier).fetchStatisticsOrder(
-          startTime: widget.startTime, endTime: widget.endTime);
+      ref
+          .read(statisticsProvider.notifier)
+          .fetchStatisticsOrder(
+            startTime: widget.startTime,
+            endTime: widget.endTime,
+          );
     });
     super.initState();
   }
@@ -64,12 +63,14 @@ class _MoreOrdersState extends ConsumerState<MoreOrders> {
                   children: [
                     Text(
                       AppHelpers.getTranslation(TrKeys.moreOrders),
-                      style: Style.interSemi(size: 18.sp),
+                      style: AppStyle.interSemi(size: 18),
                     ),
                     Text(
                       AppHelpers.getTranslation(TrKeys.moreOrders),
-                      style:
-                      Style.interNormal(size: 14.sp, letterSpacing: -0.3),
+                      style: AppStyle.interNormal(
+                        size: 14,
+                        letterSpacing: -0.3,
+                      ),
                     ),
                   ],
                 ),
@@ -85,10 +86,11 @@ class _MoreOrdersState extends ConsumerState<MoreOrders> {
                           ref
                               .read(statisticsProvider.notifier)
                               .fetchStatisticsOrderByDay(
-                              startTime:
-                              rangeDatePicker.last ?? DateTime.now(),
-                              endTime:
-                              rangeDatePicker.first ?? DateTime.now());
+                                startTime:
+                                    rangeDatePicker.last ?? DateTime.now(),
+                                endTime:
+                                    rangeDatePicker.first ?? DateTime.now(),
+                              );
                         },
                       ),
                       isDarkMode: true,
@@ -97,15 +99,15 @@ class _MoreOrdersState extends ConsumerState<MoreOrders> {
                   child: Container(
                     padding: EdgeInsets.all(10.r),
                     decoration: const BoxDecoration(
-                      color: Style.white,
+                      color: AppStyle.white,
                       shape: BoxShape.circle,
                     ),
                     child: const Icon(
                       FlutterRemix.calendar_event_fill,
-                      color: Style.black,
+                      color: AppStyle.black,
                     ),
                   ),
-                )
+                ),
               ],
             ),
             40.verticalSpace,
@@ -122,9 +124,10 @@ class _MoreOrdersState extends ConsumerState<MoreOrders> {
                           ref
                               .read(statisticsProvider.notifier)
                               .fetchStatisticsOrderPage(
-                                  refreshController: _refreshController,
-                                  startTime: widget.startTime,
-                                  endTime: widget.endTime);
+                                refreshController: _refreshController,
+                                startTime: widget.startTime,
+                                endTime: widget.endTime,
+                              );
                         } else {
                           _refreshController.loadNoData();
                         }
@@ -132,32 +135,34 @@ class _MoreOrdersState extends ConsumerState<MoreOrders> {
                       onRefresh: () => ref
                           .read(statisticsProvider.notifier)
                           .fetchStatisticsOrder(
-                              startTime: widget.startTime,
-                              endTime: widget.endTime),
+                            startTime: widget.startTime,
+                            endTime: widget.endTime,
+                          ),
                       child: Table(
                         columnWidths: const {
                           0: FixedColumnWidth(48),
                           1: FixedColumnWidth(80),
-                          2: FixedColumnWidth(100)
+                          2: FixedColumnWidth(100),
                         },
-                        border: TableBorder.all(color: Style.transparent),
+                        border: TableBorder.all(color: AppStyle.transparent),
                         children: [
                           TableRow(
                             decoration: BoxDecoration(
-                                border: Border(
-                              bottom: BorderSide(
-                                color: Style.black.withOpacity(.5),
+                              border: Border(
+                                bottom: BorderSide(
+                                  color: AppStyle.black.withOpacity(.5),
+                                ),
                               ),
-                            )),
+                            ),
                             children: [
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
                                     AppHelpers.getTranslation(TrKeys.order),
-                                    style: Style.interSemi(
-                                      size: 13.sp,
-                                      color: Style.blackColor,
+                                    style: AppStyle.interSemi(
+                                      size: 13,
+                                      color: AppStyle.blackColor,
                                       letterSpacing: -0.3,
                                     ),
                                   ),
@@ -168,12 +173,12 @@ class _MoreOrdersState extends ConsumerState<MoreOrders> {
                                 children: [
                                   Text(
                                     AppHelpers.getTranslation(TrKeys.price),
-                                    style: Style.interSemi(
-                                      size: 13.sp,
-                                      color: Style.blackColor,
+                                    style: AppStyle.interSemi(
+                                      size: 13,
+                                      color: AppStyle.blackColor,
                                       letterSpacing: -0.3,
                                     ),
-                                  )
+                                  ),
                                 ],
                               ),
                               Column(
@@ -181,12 +186,12 @@ class _MoreOrdersState extends ConsumerState<MoreOrders> {
                                 children: [
                                   Text(
                                     AppHelpers.getTranslation(TrKeys.user),
-                                    style: Style.interSemi(
-                                      size: 13.sp,
-                                      color: Style.blackColor,
+                                    style: AppStyle.interSemi(
+                                      size: 13,
+                                      color: AppStyle.blackColor,
                                       letterSpacing: -0.3,
                                     ),
-                                  )
+                                  ),
                                 ],
                               ),
                               Column(
@@ -194,9 +199,9 @@ class _MoreOrdersState extends ConsumerState<MoreOrders> {
                                 children: [
                                   Text(
                                     AppHelpers.getTranslation(TrKeys.products),
-                                    style: Style.interSemi(
-                                      size: 13.sp,
-                                      color: Style.blackColor,
+                                    style: AppStyle.interSemi(
+                                      size: 13,
+                                      color: AppStyle.blackColor,
                                       letterSpacing: -0.3,
                                     ),
                                   ),
@@ -204,20 +209,23 @@ class _MoreOrdersState extends ConsumerState<MoreOrders> {
                               ),
                             ],
                           ),
-                          for (int i = 0;
-                              i <
-                                  (ref
-                                      .watch(statisticsProvider)
-                                      .listOfOrder
-                                      .length);
-                              i++)
+                          for (
+                            int i = 0;
+                            i <
+                                (ref
+                                    .watch(statisticsProvider)
+                                    .listOfOrder
+                                    .length);
+                            i++
+                          )
                             TableRow(
                               decoration: BoxDecoration(
-                                  border: Border(
-                                bottom: BorderSide(
-                                  color: Style.black.withOpacity(.3),
+                                border: Border(
+                                  bottom: BorderSide(
+                                    color: AppStyle.black.withOpacity(.3),
+                                  ),
                                 ),
-                              )),
+                              ),
                               children: [
                                 Padding(
                                   padding: EdgeInsets.symmetric(vertical: 12.h),
@@ -227,12 +235,12 @@ class _MoreOrdersState extends ConsumerState<MoreOrders> {
                                     children: [
                                       Text(
                                         "#${ref.watch(statisticsProvider).listOfOrder[i].id ?? 0}",
-                                        style: Style.interNormal(
-                                          size: 12.sp,
-                                          color: Style.blackColor,
+                                        style: AppStyle.interNormal(
+                                          size: 12,
+                                          color: AppStyle.blackColor,
                                           letterSpacing: -0.3,
                                         ),
-                                      )
+                                      ),
                                     ],
                                   ),
                                 ),
@@ -241,16 +249,18 @@ class _MoreOrdersState extends ConsumerState<MoreOrders> {
                                   child: Column(
                                     children: [
                                       Text(
-                                        AppHelpers.numberFormat(ref
-                                            .watch(statisticsProvider)
-                                            .listOfOrder[i]
-                                            .price),
-                                        style: Style.interSemi(
-                                          size: 12.sp,
-                                          color: Style.blackColor,
+                                        AppHelpers.numberFormat(
+                                          ref
+                                              .watch(statisticsProvider)
+                                              .listOfOrder[i]
+                                              .price,
+                                        ),
+                                        style: AppStyle.interSemi(
+                                          size: 12,
+                                          color: AppStyle.blackColor,
                                           letterSpacing: -0.3,
                                         ),
-                                      )
+                                      ),
                                     ],
                                   ),
                                 ),
@@ -266,12 +276,12 @@ class _MoreOrdersState extends ConsumerState<MoreOrders> {
                                                 .listOfOrder[i]
                                                 .firstname ??
                                             '',
-                                        style: Style.interNormal(
-                                          size: 12.sp,
-                                          color: Style.blackColor,
+                                        style: AppStyle.interNormal(
+                                          size: 12,
+                                          color: AppStyle.blackColor,
                                           letterSpacing: -0.3,
                                         ),
-                                      )
+                                      ),
                                     ],
                                   ),
                                 ),
@@ -285,14 +295,16 @@ class _MoreOrdersState extends ConsumerState<MoreOrders> {
                                           .watch(statisticsProvider)
                                           .listOfOrder[i]
                                           .products
-                                          ?.map((e) => Text(
-                                                e,
-                                                style: Style.interNormal(
-                                                  size: 12.sp,
-                                                  color: Style.blackColor,
-                                                  letterSpacing: -0.3,
-                                                ),
-                                              ))
+                                          ?.map(
+                                            (e) => Text(
+                                              e,
+                                              style: AppStyle.interNormal(
+                                                size: 12,
+                                                color: AppStyle.blackColor,
+                                                letterSpacing: -0.3,
+                                              ),
+                                            ),
+                                          ),
                                     ],
                                   ),
                                 ),

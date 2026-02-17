@@ -10,9 +10,7 @@ abstract class ProductsInterface {
     int? groupId,
   });
 
-  Future<ApiResult<void>> deleteExtrasItem({
-    required int extrasId,
-  });
+  Future<ApiResult<void>> deleteExtrasItem({required int extrasId});
 
   Future<ApiResult<CreateGroupExtrasResponse>> updateExtrasItem({
     required int extrasId,
@@ -81,6 +79,8 @@ abstract class ProductsInterface {
     int? unitId,
     List<String>? images,
     bool isAddon = false,
+    String type = 'single',
+    String? uid,
   });
 
   Future<ApiResult<SingleProductResponse>> getProductDetails(String uuid);
@@ -92,5 +92,6 @@ abstract class ProductsInterface {
     ProductStatus? status,
     bool needAddons = false,
     bool active = false,
+    String? type,
   });
 }

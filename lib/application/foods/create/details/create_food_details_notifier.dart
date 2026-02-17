@@ -22,13 +22,25 @@ class CreateFoodDetailsNotifier
       listOfUrls: [],
       title: '',
       description: '',
+      titleTranslations: {},
+      descriptionTranslations: {},
       minQty: '',
       maxQty: '',
       tax: '',
       qrcode: '',
+      uid: '',
+      productType: 'single',
       active: false,
       createdProduct: null,
     );
+  }
+
+  void setProductType(String type) {
+    state = state.copyWith(productType: type);
+  }
+
+  void setUid(String value) {
+    state = state.copyWith(uid: value.trim());
   }
 
   void setQrcode(String value) {
@@ -80,6 +92,8 @@ class CreateFoodDetailsNotifier
       unitId: unitId,
       kitchenId: kitchenId,
       images: imageUrl,
+      type: state.productType,
+      uid: state.uid.isNotEmpty ? state.uid : null,
     );
     response.when(
       success: (data) {
@@ -122,6 +136,28 @@ class CreateFoodDetailsNotifier
 
   void setTitle(String value) {
     state = state.copyWith(title: value.trim());
+  }
+
+  void setTitleTranslations(Map<String, String> translations) {
+    state = state.copyWith(titleTranslations: translations);
+    // Set default language title as main title
+    final currentLang = LocalStorage.getLanguage()?.locale ?? 'en';
+    if (translations.containsKey(currentLang)) {
+      state = state.copyWith(title: translations[currentLang]!);
+    } else if (translations.isNotEmpty) {
+      state = state.copyWith(title: translations.values.first);
+    }
+  }
+
+  void setDescriptionTranslations(Map<String, String> translations) {
+    state = state.copyWith(descriptionTranslations: translations);
+    // Set default language description as main description
+    final currentLang = LocalStorage.getLanguage()?.locale ?? 'en';
+    if (translations.containsKey(currentLang)) {
+      state = state.copyWith(description: translations[currentLang]!);
+    } else if (translations.isNotEmpty) {
+      state = state.copyWith(description: translations.values.first);
+    }
   }
 
   void setInterval(String value) {

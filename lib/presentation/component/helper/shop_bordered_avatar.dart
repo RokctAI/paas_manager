@@ -18,7 +18,7 @@ class ShopBorderedAvatar extends StatelessWidget {
     required this.size,
     required this.imageSize,
     required this.borderRadius,
-    this.bgColor = Style.greyColor,
+    this.bgColor = AppStyle.greyColor,
   });
 
   @override

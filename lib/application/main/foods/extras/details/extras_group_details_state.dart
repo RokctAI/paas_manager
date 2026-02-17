@@ -5,7 +5,7 @@ import 'package:venderfoodyman/infrastructure/models/models.dart';
 part 'extras_group_details_state.freezed.dart';
 
 @freezed
-class ExtrasGroupDetailsState with _$ExtrasGroupDetailsState {
+abstract class ExtrasGroupDetailsState with _$ExtrasGroupDetailsState {
   const factory ExtrasGroupDetailsState({
     @Default(false) bool isLoading,
     @Default([]) List<Extras> extras,

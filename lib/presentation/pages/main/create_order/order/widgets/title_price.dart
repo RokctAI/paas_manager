@@ -13,7 +13,7 @@ class TitleAndPrice extends StatelessWidget {
     required this.title,
     required this.rightTitle,
     required this.textStyle,
-  }) ;
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -24,9 +24,9 @@ class TitleAndPrice extends StatelessWidget {
         children: [
           Text(
             title,
-            style: Style.interRegular(
-              size: 16.sp,
-              color: Style.blackColor,
+            style: AppStyle.interRegular(
+              size: 16,
+              color: AppStyle.blackColor,
               letterSpacing: -0.3,
             ),
           ),

@@ -81,7 +81,7 @@ class NewOrdersNotifier extends StateNotifier<NewOrdersState> {
         if(status == 401){
           LocalStorage.logout();
           context.router.popUntilRoot();
-          context.replaceRoute(const LoginRoute());
+          context.replaceRoute(const AuthRoute());
         }
       },
     );

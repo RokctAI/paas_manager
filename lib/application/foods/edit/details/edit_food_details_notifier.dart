@@ -147,6 +147,26 @@ class EditFoodDetailsNotifier extends StateNotifier<EditFoodDetailsState> {
     state = state.copyWith(title: value.trim());
   }
 
+  void setTitleTranslations(Map<String, String> translations) {
+    state = state.copyWith(titleTranslations: translations);
+    final currentLang = LocalStorage.getLanguage()?.locale ?? 'en';
+    if (translations.containsKey(currentLang)) {
+      state = state.copyWith(title: translations[currentLang]!);
+    } else if (translations.isNotEmpty) {
+      state = state.copyWith(title: translations.values.first);
+    }
+  }
+
+  void setDescriptionTranslations(Map<String, String> translations) {
+    state = state.copyWith(descriptionTranslations: translations);
+    final currentLang = LocalStorage.getLanguage()?.locale ?? 'en';
+    if (translations.containsKey(currentLang)) {
+      state = state.copyWith(description: translations[currentLang]!);
+    } else if (translations.isNotEmpty) {
+      state = state.copyWith(description: translations.values.first);
+    }
+  }
+
   void setImageFile(String file) {
     List<String> list = List.from(state.images);
     list.add(file);
@@ -181,6 +201,8 @@ class EditFoodDetailsNotifier extends StateNotifier<EditFoodDetailsState> {
       description: product?.translation?.description ?? '',
       barcode: product?.barCode ?? '',
       active: product?.active ?? false,
+      titleTranslations: {},
+      descriptionTranslations: {},
     );
     _oldBarcode = product?.barCode;
     getProductDetailsById(product?.uuid ?? '');
@@ -198,14 +220,23 @@ class EditFoodDetailsNotifier extends StateNotifier<EditFoodDetailsState> {
         );
         if (data.data?.translations != null) {
           Map<String, List<String>> temp = Map.from(state.mapOfDesc);
+          Map<String, String> titleTranslations = {};
+          Map<String, String> descriptionTranslations = {};
           var items = data.data?.translations;
           for (int i = 0; i < data.data!.translations!.length; i++) {
-            temp[items?[i].locale ?? "en"] = [
+            final locale = items?[i].locale ?? "en";
+            temp[locale] = [
               items?[i].title ?? '',
               items?[i].description ?? ''
             ];
+            titleTranslations[locale] = items?[i].title ?? '';
+            descriptionTranslations[locale] = items?[i].description ?? '';
           }
-          state = state.copyWith(mapOfDesc: temp);
+          state = state.copyWith(
+            mapOfDesc: temp,
+            titleTranslations: titleTranslations,
+            descriptionTranslations: descriptionTranslations,
+          );
         }
       },
       failure: (failure, s) {

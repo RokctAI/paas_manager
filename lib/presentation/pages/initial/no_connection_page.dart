@@ -3,8 +3,6 @@ import 'package:auto_route/auto_route.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_remix/flutter_remix.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-
 import 'package:venderfoodyman/presentation/styles/style.dart';
 import 'package:venderfoodyman/presentation/routes/app_router.dart';
 import 'package:venderfoodyman/infrastructure/services/services.dart';
@@ -16,21 +14,21 @@ class NoConnectionPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-      backgroundColor: Style.white,
+      backgroundColor: AppStyle.white,
       body: Column(
         children: [
           const SizedBox(height: 200, width: double.infinity),
           const Icon(
             FlutterRemix.wifi_off_fill,
             size: 120,
-            color: Style.blackColor,
+            color: AppStyle.blackColor,
           ),
           const SizedBox(height: 20),
           Text(
             AppHelpers.getTranslation(TrKeys.noInternetConnection),
             style: GoogleFonts.inter(
-              fontSize: 18.sp,
-              color: Style.blackColor,
+              fontSize: 18,
+              color: AppStyle.blackColor,
               fontWeight: FontWeight.w600,
             ),
           ),
@@ -41,7 +39,7 @@ class NoConnectionPage extends ConsumerWidget {
             },
             child: const Icon(
               FlutterRemix.restart_fill,
-              color: Style.blackColor,
+              color: AppStyle.blackColor,
               size: 40,
             ),
           ),

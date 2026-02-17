@@ -9,7 +9,7 @@ import 'package:venderfoodyman/application/providers.dart';
 import 'package:venderfoodyman/infrastructure/services/services.dart';
 
 class StatisticsSection extends StatelessWidget {
-  const StatisticsSection({super.key}) ;
+  const StatisticsSection({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +27,7 @@ class StatisticsSection extends StatelessWidget {
                   Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10.r),
-                      color: Style.white,
+                      color: AppStyle.white,
                     ),
                     padding: REdgeInsets.all(12),
                     child: Column(
@@ -35,38 +35,39 @@ class StatisticsSection extends StatelessWidget {
                       children: [
                         Text(
                           AppHelpers.getTranslation(TrKeys.totalOrders),
-                          style: Style.interNormal(
-                            size: 12.sp,
-                            color: Style.blackColor,
+                          style: AppStyle.interNormal(
+                            size: 12,
+                            color: AppStyle.blackColor,
                             letterSpacing: -0.3,
                           ),
                         ),
                         const Spacer(),
                         Text(
                           '${state.countData?.totalCount ?? 0}',
-                          style: Style.interSemi(
-                            size: 34.sp,
-                            color: Style.blackColor,
+                          style: AppStyle.interSemi(
+                            size: 34,
+                            color: AppStyle.blackColor,
                             letterSpacing: -1,
                           ),
                         ),
                         RichText(
                           text: TextSpan(
                             text: AppHelpers.getTranslation(TrKeys.today),
-                            style: Style.interNormal(
-                              size: 12.sp,
-                              color: Style.blackColor,
+                            style: AppStyle.interNormal(
+                              size: 12,
+                              color: AppStyle.blackColor,
                               letterSpacing: -0.3,
                             ),
                             children: [
                               TextSpan(
-                                text: ' ${state.countData?.totalTodayCount ?? 0}',
-                                style: Style.interSemi(
-                                  size: 12.sp,
-                                  color: Style.blackColor,
+                                text:
+                                    ' ${state.countData?.totalTodayCount ?? 0}',
+                                style: AppStyle.interSemi(
+                                  size: 12,
+                                  color: AppStyle.blackColor,
                                   letterSpacing: -0.3,
                                 ),
-                              )
+                              ),
                             ],
                           ),
                         ),
@@ -80,29 +81,33 @@ class StatisticsSection extends StatelessWidget {
                       Row(
                         children: [
                           StatisticsItem(
-                            title: AppHelpers.getTranslation(TrKeys.acceptedOrders),
+                            title: AppHelpers.getTranslation(
+                              TrKeys.acceptedOrders,
+                            ),
                             count: state.countData?.totalAcceptedCount ?? 0,
                             percentage: state.countData?.totalCount == 0
                                 ? 0
                                 : ((state.countData?.totalAcceptedCount ?? 0) /
-                                        (state.countData?.totalCount ?? 1)) *
-                                    100,
-                            bgColor: Style.green,
-                            textColor: Style.white,
-                            iconColor: Style.white.withOpacity(0.54),
+                                          (state.countData?.totalCount ?? 1)) *
+                                      100,
+                            bgColor: AppStyle.green,
+                            textColor: AppStyle.white,
+                            iconColor: AppStyle.white.withOpacity(0.54),
                           ),
                           8.horizontalSpace,
                           StatisticsItem(
-                            title: AppHelpers.getTranslation(TrKeys.cancelOrders),
+                            title: AppHelpers.getTranslation(
+                              TrKeys.cancelOrders,
+                            ),
                             count: state.countData?.totalCanceledCount ?? 0,
                             percentage: state.countData?.totalCount == 0
                                 ? 0
                                 : ((state.countData?.totalCanceledCount ?? 0) /
-                                        (state.countData?.totalCount ?? 1)) *
-                                    100,
-                            bgColor: Style.red,
-                            textColor: Style.white,
-                            iconColor: Style.white.withOpacity(0.54),
+                                          (state.countData?.totalCount ?? 1)) *
+                                      100,
+                            bgColor: AppStyle.red,
+                            textColor: AppStyle.white,
+                            iconColor: AppStyle.white.withOpacity(0.54),
                           ),
                         ],
                       ),
@@ -110,17 +115,18 @@ class StatisticsSection extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           StatisticsItem(
-                            title:
-                                AppHelpers.getTranslation(TrKeys.deliveredOrdersCount),
+                            title: AppHelpers.getTranslation(
+                              TrKeys.deliveredOrdersCount,
+                            ),
                             count: state.countData?.totalDeliveredCount ?? 0,
                             percentage: state.countData?.totalCount == 0
                                 ? 0
                                 : ((state.countData?.totalDeliveredCount ?? 0) /
-                                        (state.countData?.totalCount ?? 1)) *
-                                    100,
-                            bgColor: Style.white,
-                            textColor: Style.blackColor,
-                            iconColor: Style.iconColor,
+                                          (state.countData?.totalCount ?? 1)) *
+                                      100,
+                            bgColor: AppStyle.white,
+                            textColor: AppStyle.blackColor,
+                            iconColor: AppStyle.iconColor,
                           ),
                           8.horizontalSpace,
                           StatisticsItem(
@@ -129,11 +135,11 @@ class StatisticsSection extends StatelessWidget {
                             percentage: state.countData?.totalCount == 0
                                 ? 0
                                 : ((state.countData?.totalNewCount ?? 0) /
-                                        (state.countData?.totalCount ?? 1)) *
-                                    100,
-                            bgColor: Style.white,
-                            textColor: Style.blackColor,
-                            iconColor: Style.iconColor,
+                                          (state.countData?.totalCount ?? 1)) *
+                                      100,
+                            bgColor: AppStyle.white,
+                            textColor: AppStyle.blackColor,
+                            iconColor: AppStyle.iconColor,
                           ),
                         ],
                       ),

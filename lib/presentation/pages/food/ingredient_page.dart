@@ -27,18 +27,22 @@ class IngredientPage extends StatelessWidget {
                     children: [
                       Text(
                         "Small",
-                        style: Style.interRegular(
-                            size: 14.sp, color: Style.blackColor),
+                        style: AppStyle.interRegular(
+                          size: 14,
+                          color: AppStyle.blackColor,
+                        ),
                       ),
                       Text(
                         "\$64",
-                        style: Style.interRegular(
-                            size: 14.sp, color: Style.blackColor),
+                        style: AppStyle.interRegular(
+                          size: 14,
+                          color: AppStyle.blackColor,
+                        ),
                       ),
                     ],
                   ),
                   16.verticalSpace,
-                  const Divider(color: Style.shimmerBase)
+                  const Divider(color: AppStyle.shimmerBase),
                 ],
               );
             },
@@ -56,22 +60,26 @@ class IngredientPage extends StatelessWidget {
                     children: [
                       Text(
                         "Double cheese",
-                        style: Style.interRegular(
-                            size: 14.sp, color: Style.blackColor),
+                        style: AppStyle.interRegular(
+                          size: 14,
+                          color: AppStyle.blackColor,
+                        ),
                       ),
                       Text(
                         "\$76",
-                        style: Style.interRegular(
-                            size: 14.sp, color: Style.blackColor),
+                        style: AppStyle.interRegular(
+                          size: 14,
+                          color: AppStyle.blackColor,
+                        ),
                       ),
                     ],
                   ),
                   16.verticalSpace,
-                  const Divider(color: Style.shimmerBase)
+                  const Divider(color: AppStyle.shimmerBase),
                 ],
               );
             },
-          )
+          ),
         ],
       ),
     );

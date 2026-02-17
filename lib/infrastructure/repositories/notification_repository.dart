@@ -7,9 +7,7 @@ import 'package:venderfoodyman/infrastructure/services/services.dart';
 
 class NotificationRepository extends NotificationInterface {
   @override
-  Future<ApiResult<NotificationResponse>> getNotifications({
-    int? page,
-  }) async {
+  Future<ApiResult<NotificationResponse>> getNotifications({int? page}) async {
     final data = {
       if (page != null) 'page': page,
       'column': 'created_at',
@@ -29,8 +27,9 @@ class NotificationRepository extends NotificationInterface {
     } catch (e) {
       debugPrint('==> get notification failure: $e');
       return ApiResult.failure(
-          error: AppHelpers.errorHandler(e),
-          statusCode: NetworkExceptions.getDioStatus(e));
+        error: AppHelpers.errorHandler(e),
+        statusCode: NetworkExceptions.getDioStatus(e),
+      );
     }
   }
 
@@ -47,8 +46,9 @@ class NotificationRepository extends NotificationInterface {
     } catch (e) {
       debugPrint('==> get notification failure: $e');
       return ApiResult.failure(
-          error: AppHelpers.errorHandler(e),
-          statusCode: NetworkExceptions.getDioStatus(e));
+        error: AppHelpers.errorHandler(e),
+        statusCode: NetworkExceptions.getDioStatus(e),
+      );
     }
   }
 
@@ -64,22 +64,19 @@ class NotificationRepository extends NotificationInterface {
         '/api/v1/dashboard/notifications/$id/read-at',
         queryParameters: data,
       );
-      return const ApiResult.success(
-        data: true,
-      );
+      return const ApiResult.success(data: true);
     } catch (e) {
       debugPrint('==> get notification failure: $e');
       return ApiResult.failure(
-          error: AppHelpers.errorHandler(e),
-          statusCode: NetworkExceptions.getDioStatus(e));
+        error: AppHelpers.errorHandler(e),
+        statusCode: NetworkExceptions.getDioStatus(e),
+      );
     }
   }
 
   @override
   Future<ApiResult<NotificationResponse>> getAllNotifications() async {
-    final data = {
-      'lang': LocalStorage.getLanguage()?.locale,
-    };
+    final data = {'lang': LocalStorage.getLanguage()?.locale};
     try {
       final client = dioHttp.client(requireAuth: true);
       final response = await client.get(
@@ -92,8 +89,9 @@ class NotificationRepository extends NotificationInterface {
     } catch (e) {
       debugPrint('==> get notification failure: $e');
       return ApiResult.failure(
-          error: AppHelpers.errorHandler(e),
-          statusCode: NetworkExceptions.getDioStatus(e));
+        error: AppHelpers.errorHandler(e),
+        statusCode: NetworkExceptions.getDioStatus(e),
+      );
     }
   }
 
@@ -110,8 +108,9 @@ class NotificationRepository extends NotificationInterface {
     } catch (e) {
       debugPrint('==> get notification failure: $e');
       return ApiResult.failure(
-          error: AppHelpers.errorHandler(e),
-          statusCode: NetworkExceptions.getDioStatus(e));
+        error: AppHelpers.errorHandler(e),
+        statusCode: NetworkExceptions.getDioStatus(e),
+      );
     }
   }
 }

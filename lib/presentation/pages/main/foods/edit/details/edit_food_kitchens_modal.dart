@@ -3,17 +3,16 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:venderfoodyman/application/foods/edit/details/kitchen/edit_food_kitchens_provider.dart';
-import 'package:venderfoodyman/presentation/component/list_items/food_kitchen_item.dart';
-
-import 'package:venderfoodyman/presentation/styles/style.dart';
-import '../../../../../component/components.dart';
 import 'package:venderfoodyman/infrastructure/services/services.dart';
+import 'package:venderfoodyman/presentation/component/components.dart';
+import 'package:venderfoodyman/presentation/styles/style.dart';
 
 class EditFoodKitchensModal extends ConsumerStatefulWidget {
-  const EditFoodKitchensModal({super.key}) ;
+  const EditFoodKitchensModal({super.key});
 
   @override
-  ConsumerState<EditFoodKitchensModal> createState() => _EditFoodKitchensModalState();
+  ConsumerState<EditFoodKitchensModal> createState() =>
+      _EditFoodKitchensModalState();
 }
 
 class _EditFoodKitchensModalState extends ConsumerState<EditFoodKitchensModal> {
@@ -47,7 +46,7 @@ class _EditFoodKitchensModalState extends ConsumerState<EditFoodKitchensModal> {
                     ? Center(
                         child: CircularProgressIndicator(
                           strokeWidth: 3.r,
-                          color: Style.primary,
+                          color: AppStyle.primary,
                         ),
                       )
                     : Expanded(

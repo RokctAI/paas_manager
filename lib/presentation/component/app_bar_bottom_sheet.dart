@@ -20,16 +20,16 @@ class AppBarBottomSheet extends StatelessWidget {
             onTap: context.maybePop,
             child: Icon(
               Icons.arrow_back,
-              color: Style.blackColor,
+              color: AppStyle.blackColor,
               size: 24.r,
             ),
           ),
         ),
         Text(
           title,
-          style: Style.interSemi(
+          style: AppStyle.interSemi(
             size: 20,
-            color: Style.blackColor,
+            color: AppStyle.blackColor,
             letterSpacing: -0.01,
           ),
         ),

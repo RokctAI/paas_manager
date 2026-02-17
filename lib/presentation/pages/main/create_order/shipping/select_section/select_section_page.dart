@@ -25,11 +25,9 @@ class _SelectSectionPageState extends ConsumerState<SelectSectionPage> {
   void initState() {
     super.initState();
     _refreshController = RefreshController();
-    WidgetsBinding.instance.addPostFrameCallback(
-      (_) {
-        ref.read(sectionProvider.notifier).initialFetchSections();
-      },
-    );
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(sectionProvider.notifier).initialFetchSections();
+    });
   }
 
   @override
@@ -42,7 +40,7 @@ class _SelectSectionPageState extends ConsumerState<SelectSectionPage> {
   Widget build(BuildContext context) {
     return KeyboardDisable(
       child: Scaffold(
-        backgroundColor: Style.greyColor,
+        backgroundColor: AppStyle.greyColor,
         body: Consumer(
           builder: (context, ref, child) {
             final state = ref.watch(sectionProvider);

@@ -32,7 +32,7 @@ class EditableFoodStockItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Style.white,
+        color: AppStyle.white,
         borderRadius: BorderRadius.circular(16.r),
       ),
       padding: REdgeInsets.symmetric(horizontal: 20, vertical: 16),
@@ -47,8 +47,9 @@ class EditableFoodStockItem extends StatelessWidget {
                   label: '${AppHelpers.getTranslation(TrKeys.price)}*',
                   inputType: TextInputType.number,
                   textInputAction: TextInputAction.next,
-                  initialText:
-                      stock.price == null ? '' : stock.price.toString(),
+                  initialText: stock.price == null
+                      ? ''
+                      : stock.price.toString(),
                   onChanged: onPriceChange,
                   validator: AppValidators.emptyCheck,
                 ),
@@ -59,8 +60,9 @@ class EditableFoodStockItem extends StatelessWidget {
                   label: '${AppHelpers.getTranslation(TrKeys.quantity)}*',
                   inputType: TextInputType.number,
                   textInputAction: TextInputAction.next,
-                  initialText:
-                      stock.quantity == null ? '' : stock.quantity.toString(),
+                  initialText: stock.quantity == null
+                      ? ''
+                      : stock.quantity.toString(),
                   onChanged: onQuantityChange,
                   validator: AppValidators.emptyCheck,
                 ),
@@ -75,13 +77,10 @@ class EditableFoodStockItem extends StatelessWidget {
                       margin: REdgeInsets.only(left: 10),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(6.r),
-                        color: Style.greyColor,
+                        color: AppStyle.greyColor,
                       ),
                       alignment: Alignment.center,
-                      child: Icon(
-                        FlutterRemix.delete_bin_line,
-                        size: 18.r,
-                      ),
+                      child: Icon(FlutterRemix.delete_bin_line, size: 18.r),
                     ),
                   ),
                 ),

@@ -6,7 +6,7 @@ import 'package:venderfoodyman/infrastructure/models/models.dart';
 part 'create_food_units_state.freezed.dart';
 
 @freezed
-class CreateFoodUnitsState with _$CreateFoodUnitsState {
+abstract class CreateFoodUnitsState with _$CreateFoodUnitsState {
   const factory CreateFoodUnitsState({
     @Default(false) bool isLoading,
     @Default([]) List<UnitData> units,

@@ -1,23 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:venderfoodyman/domain/di/dependency_manager.dart';
 
 import 'login_state.dart';
-import 'package:venderfoodyman/domain/interface/interfaces.dart';
 import 'package:venderfoodyman/infrastructure/services/services.dart';
 
 class LoginNotifier extends StateNotifier<LoginState> {
-  final AuthInterface _authRepository;
-  final UsersInterface _userRepository;
   String _email = '';
   String _password = '';
 
-  LoginNotifier(this._authRepository, this._userRepository)
-      : super(const LoginState());
-
+  LoginNotifier() : super(const LoginState());
 
   Future<void> getProfileDetails() async {
-    final response = await _userRepository.getProfileDetails();
+    final response = await usersRepository.getProfileDetails();
     response.when(
       success: (data) {
         LocalStorage.setUser(data.data);
@@ -25,7 +21,7 @@ class LoginNotifier extends StateNotifier<LoginState> {
           LocalStorage.setWallet(data.data?.wallet);
         }
       },
-      failure: (failure,status) {
+      failure: (failure, status) {
         debugPrint('==> get profile details failure: $failure');
       },
     );
@@ -59,11 +55,14 @@ class LoginNotifier extends StateNotifier<LoginState> {
     VoidCallback? seller,
     VoidCallback? admin,
     VoidCallback? accessDenied,
+    required int index,
   }) async {
     if (await AppConnectivity.connectivity()) {
       state = state.copyWith(isLoading: true);
-      final response =
-          await _authRepository.login(email: _email, password: _password);
+      final response = await authRepository.login(
+        email: _email,
+        password: _password,
+      );
       response.when(
         success: (data) async {
           if (data.data?.user?.role == 'seller') {
@@ -84,10 +83,10 @@ class LoginNotifier extends StateNotifier<LoginState> {
           } catch (e) {
             debugPrint('===> error with getting firebase token $e');
           }
-          _userRepository.updateFirebaseToken(fcmToken);
+          usersRepository.updateFirebaseToken(fcmToken);
           state = state.copyWith(isLoading: false);
         },
-        failure: (failure,status) {
+        failure: (failure, status) {
           debugPrint('===> login request failure $failure');
           state = state.copyWith(isLoading: false, isLoginError: true);
         },

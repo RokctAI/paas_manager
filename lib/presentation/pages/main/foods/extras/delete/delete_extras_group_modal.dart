@@ -13,8 +13,7 @@ import '../../../../../../../infrastructure/services/services.dart';
 class DeleteExtrasGroupModal extends StatelessWidget {
   final Group group;
 
-  const DeleteExtrasGroupModal({super.key, required this.group})
-      ;
+  const DeleteExtrasGroupModal({super.key, required this.group});
 
   @override
   Widget build(BuildContext context) {
@@ -30,8 +29,8 @@ class DeleteExtrasGroupModal extends StatelessWidget {
               '${AppHelpers.getTranslation(TrKeys.areYouSureToDelete)} "${group.translation?.title}"?',
               textAlign: TextAlign.center,
               style: GoogleFonts.inter(
-                fontSize: 18.sp,
-                color: Style.blackColor,
+                fontSize: 18,
+                color: AppStyle.blackColor,
                 fontWeight: FontWeight.w500,
                 letterSpacing: -14 * 0.02,
               ),
@@ -43,8 +42,8 @@ class DeleteExtrasGroupModal extends StatelessWidget {
                   child: CustomButton(
                     title: AppHelpers.getTranslation(TrKeys.cancel),
                     onPressed: context.maybePop,
-                    background: Style.transparent,
-                    borderColor: Style.blackColor,
+                    background: AppStyle.transparent,
+                    borderColor: AppStyle.blackColor,
                   ),
                 ),
                 16.horizontalSpace,
@@ -53,21 +52,22 @@ class DeleteExtrasGroupModal extends StatelessWidget {
                     builder: (context, ref, child) {
                       return CustomButton(
                         title: AppHelpers.getTranslation(TrKeys.yes),
-                        isLoading:
-                            ref.watch(deleteExtrasGroupProvider).isLoading,
+                        isLoading: ref
+                            .watch(deleteExtrasGroupProvider)
+                            .isLoading,
                         onPressed: () => ref
                             .read(deleteExtrasGroupProvider.notifier)
                             .deleteExtrasGroup(
-                          context,
-                          groupId: group.id,
-                          success: () {
-                            ref.read(extrasProvider.notifier).fetchGroups();
-                            context.router.popUntilRoot();
-                          },
-                        ),
-                        background: Style.red,
-                        borderColor: Style.red,
-                        textColor: Style.white,
+                              context,
+                              groupId: group.id,
+                              success: () {
+                                ref.read(extrasProvider.notifier).fetchGroups();
+                                context.router.popUntilRoot();
+                              },
+                            ),
+                        background: AppStyle.red,
+                        borderColor: AppStyle.red,
+                        textColor: AppStyle.white,
                       );
                     },
                   ),

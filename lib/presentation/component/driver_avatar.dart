@@ -31,13 +31,19 @@ class DriverAvatar extends StatelessWidget {
           children: [
             Text(
               name,
-              style: Style.interRegular(size: 14.sp, color: Style.blackColor),
+              style: AppStyle.interRegular(
+                size: 14,
+                color: AppStyle.blackColor,
+              ),
             ),
             4.verticalSpace,
             Text(
               desc,
-              style: Style.interNormal(size: 12.sp, color: Style.blackColor),
-            )
+              style: AppStyle.interNormal(
+                size: 12,
+                color: AppStyle.blackColor,
+              ),
+            ),
           ],
         ),
       ],

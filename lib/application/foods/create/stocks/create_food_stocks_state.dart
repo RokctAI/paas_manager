@@ -5,7 +5,7 @@ import 'package:venderfoodyman/infrastructure/models/models.dart';
 part 'create_food_stocks_state.freezed.dart';
 
 @freezed
-class CreateFoodStocksState with _$CreateFoodStocksState {
+abstract class CreateFoodStocksState with _$CreateFoodStocksState {
   const factory CreateFoodStocksState({
     @Default(false) bool isLoading,
     @Default(false) bool isSaving,
@@ -13,9 +13,8 @@ class CreateFoodStocksState with _$CreateFoodStocksState {
     @Default([]) List<Group> groups,
     @Default([]) List<Stock> stocks,
     @Default([]) List<Extras> activeGroupExtras,
-    @Default({}) Map<String,List<Extras?>> selectGroups,
+    @Default({}) Map<String, List<Extras?>> selectGroups,
   }) = _CreateFoodStocksState;
 
   const CreateFoodStocksState._();
 }
-

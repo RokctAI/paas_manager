@@ -16,7 +16,7 @@ class EditExtrasItemModal extends ConsumerStatefulWidget {
     super.key,
     required this.group,
     required this.extras,
-  }) ;
+  });
 
   @override
   ConsumerState<EditExtrasItemModal> createState() =>
@@ -51,7 +51,9 @@ class _EditExtrasItemModalState extends ConsumerState<EditExtrasItemModal> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   const ModalDrag(),
-                  TitleAndIcon(title: AppHelpers.getTranslation(TrKeys.addNewExtras)),
+                  TitleAndIcon(
+                    title: AppHelpers.getTranslation(TrKeys.addNewExtras),
+                  ),
                   24.verticalSpace,
                   UnderlinedTextField(
                     label: AppHelpers.getTranslation(TrKeys.title),

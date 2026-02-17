@@ -97,11 +97,11 @@ class CreateFoodStocksNotifier extends StateNotifier<CreateFoodStocksState> {
     }
     state = state.copyWith(selectGroups: selectGroups);
     toggleCheckedGroup(groupIndex);
-    await combination();
+     combination();
     state = state.copyWith(stocks: _localStocks);
   }
 
-  combination() {
+  void combination() {
     List<Stock> stocks = [];
     if (state.selectGroups.values.isNotEmpty) {
       List<List<Extras>> list =

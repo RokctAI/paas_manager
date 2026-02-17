@@ -7,7 +7,7 @@ import 'package:venderfoodyman/application/providers.dart';
 import 'package:venderfoodyman/infrastructure/services/services.dart';
 
 class EditFoodCategoriesModal extends ConsumerStatefulWidget {
-  const EditFoodCategoriesModal({super.key}) ;
+  const EditFoodCategoriesModal({super.key});
 
   @override
   ConsumerState<EditFoodCategoriesModal> createState() =>
@@ -20,9 +20,17 @@ class _EditFoodCategoriesScreenState
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback(
-      (_) => ref
-          .read(editFoodCategoriesProvider.notifier)
-          .setCategories(ref.watch(foodCategoriesProvider).categories),
+      (_) {
+        final product = ref.read(editFoodDetailsProvider).product;
+        final type = product?.type;
+        final allCategoriesState = ref.read(allCategoriesProvider);
+        final isCombo = type == 'combo';
+        final categories = isCombo
+            ? allCategoriesState.comboCategories
+            : allCategoriesState.categories;
+
+        ref.read(editFoodCategoriesProvider.notifier).setCategories(categories);
+      },
     );
   }
 

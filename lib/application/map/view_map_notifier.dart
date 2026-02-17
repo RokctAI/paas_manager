@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import 'package:venderfoodyman/infrastructure/models/data/address_data.dart';
+import 'package:venderfoodyman/infrastructure/models/models.dart';
 import 'package:venderfoodyman/infrastructure/services/services.dart';
 import 'package:venderfoodyman/presentation/pages/add_address.dart';
 import 'view_map_state.dart';
@@ -24,7 +23,7 @@ class ViewMapNotifier extends StateNotifier<ViewMapState> {
     }
   }
 
-  updateActive() {
+  void updateActive() {
     state = state.copyWith(isLoading: true);
   }
 

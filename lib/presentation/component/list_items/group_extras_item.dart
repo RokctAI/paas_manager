@@ -25,7 +25,7 @@ class GroupExtrasItem extends StatelessWidget {
         child: Container(
           width: double.infinity,
           decoration: BoxDecoration(
-            color: Style.white,
+            color: AppStyle.white,
             borderRadius: BorderRadius.circular(10.r),
           ),
           padding: REdgeInsets.all(18),
@@ -39,11 +39,14 @@ class GroupExtrasItem extends StatelessWidget {
                     width: 18.w,
                     height: 18.h,
                     decoration: BoxDecoration(
-                      color:
-                          isSelected ? Style.primary : Style.transparent,
+                      color: isSelected
+                          ? AppStyle.primary
+                          : AppStyle.transparent,
                       shape: BoxShape.circle,
                       border: Border.all(
-                        color: isSelected ? Style.blackColor : Style.textColor,
+                        color: isSelected
+                            ? AppStyle.blackColor
+                            : AppStyle.textColor,
                         width: isSelected ? 4 : 2,
                       ),
                     ),
@@ -51,9 +54,9 @@ class GroupExtrasItem extends StatelessWidget {
                   16.horizontalSpace,
                   Text(
                     '${extras.value}',
-                    style: Style.interRegular(
-                      size: 15.sp,
-                      color: Style.blackColor,
+                    style: AppStyle.interRegular(
+                      size: 15,
+                      color: AppStyle.blackColor,
                       letterSpacing: -0.3,
                     ),
                   ),

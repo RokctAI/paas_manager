@@ -39,7 +39,7 @@ class OrderUserNotifier extends StateNotifier<OrderUserState> {
         '${selectedUser.firstname ?? AppHelpers.getTranslation(TrKeys.noName)} ${selectedUser.lastname ?? ''}';
   }
 
-  setPhone(String value){
+  void setPhone(String value){
     state=state.copyWith(selectedUser: state.selectedUser?.copyWith(phone: value));
   }
 

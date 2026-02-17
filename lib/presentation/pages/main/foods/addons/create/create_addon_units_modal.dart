@@ -9,7 +9,7 @@ import 'package:venderfoodyman/application/providers.dart';
 import 'package:venderfoodyman/infrastructure/services/services.dart';
 
 class CreateAddonUnitsModal extends ConsumerStatefulWidget {
-  const CreateAddonUnitsModal({super.key}) ;
+  const CreateAddonUnitsModal({super.key});
 
   @override
   ConsumerState<CreateAddonUnitsModal> createState() =>
@@ -33,7 +33,10 @@ class _CreateAddonUnitsModalState extends ConsumerState<CreateAddonUnitsModal> {
         child: Column(
           children: [
             const ModalDrag(),
-            TitleAndIcon(title: AppHelpers.getTranslation(TrKeys.units), titleSize: 16),
+            TitleAndIcon(
+              title: AppHelpers.getTranslation(TrKeys.units),
+              titleSize: 16,
+            ),
             24.verticalSpace,
             Expanded(
               child: Consumer(
@@ -44,7 +47,7 @@ class _CreateAddonUnitsModalState extends ConsumerState<CreateAddonUnitsModal> {
                       ? Center(
                           child: CircularProgressIndicator(
                             strokeWidth: 3.r,
-                            color: Style.blackColor,
+                            color: AppStyle.blackColor,
                           ),
                         )
                       : ListView.builder(

@@ -15,6 +15,7 @@ class FoodsNotifier extends StateNotifier<FoodsState> {
   Timer? _timer;
   String _query = '';
   int? _categoryId;
+  String _productType = 'single';
 
   FoodsNotifier(this._productsRepository) : super(const FoodsState());
 
@@ -27,6 +28,7 @@ class FoodsNotifier extends StateNotifier<FoodsState> {
       page: ++_page,
       query: _query.isEmpty ? null : _query.trim(),
       categoryId: _categoryId,
+      type: _productType,
     );
     response.when(
       success: (data) {
@@ -57,6 +59,7 @@ class FoodsNotifier extends StateNotifier<FoodsState> {
       categoryId: _categoryId,
       query: _query.isEmpty ? null : _query.trim(),
       page: ++_page,
+      type: _productType,
     );
     response.when(
       success: (data) {
@@ -80,7 +83,10 @@ class FoodsNotifier extends StateNotifier<FoodsState> {
     _query = '';
     _categoryId = null;
     state = state.copyWith(isLoading: true);
-    final response = await _productsRepository.getProducts(page: ++_page);
+    final response = await _productsRepository.getProducts(
+      page: ++_page,
+      type: _productType,
+    );
     response.when(
       success: (data) {
         List<ProductData> products = data.data ?? [];
@@ -102,6 +108,7 @@ class FoodsNotifier extends StateNotifier<FoodsState> {
       page: ++_page,
       categoryId: _categoryId,
       query: _query.isEmpty ? null : _query.trim(),
+      type: _productType,
     );
     response.when(
       success: (data) {
@@ -129,6 +136,19 @@ class FoodsNotifier extends StateNotifier<FoodsState> {
       products[index] = product;
       state = state.copyWith(foods: products);
     }
+  }
+
+  void setProductType(String type, {RefreshController? refreshController}) {
+    if (_productType == type) {
+      return;
+    }
+    _productType = type;
+    _categoryId = null;
+    state = state.copyWith(productType: type);
+    fetchCategoryProducts(
+      categoryId: null,
+      refreshController: refreshController,
+    );
   }
 
   void setQuery({required String query, int? categoryId}) {
@@ -186,6 +206,7 @@ class FoodsNotifier extends StateNotifier<FoodsState> {
       page: ++_page,
       categoryId: categoryId,
       query: _query.isEmpty ? null : _query,
+      type: _productType,
     );
     response.when(
       success: (data) {

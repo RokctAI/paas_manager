@@ -11,8 +11,7 @@ import '../../../../../../../infrastructure/services/services.dart';
 class CreateNewGroupItemModal extends StatefulWidget {
   final Group group;
 
-  const CreateNewGroupItemModal({super.key, required this.group})
-      ;
+  const CreateNewGroupItemModal({super.key, required this.group});
 
   @override
   State<CreateNewGroupItemModal> createState() =>
@@ -37,7 +36,9 @@ class _CreateNewGroupItemModalState extends State<CreateNewGroupItemModal> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   const ModalDrag(),
-                  TitleAndIcon(title: AppHelpers.getTranslation(TrKeys.addNewExtras)),
+                  TitleAndIcon(
+                    title: AppHelpers.getTranslation(TrKeys.addNewExtras),
+                  ),
                   24.verticalSpace,
                   UnderlinedTextField(
                     label: AppHelpers.getTranslation(TrKeys.title),

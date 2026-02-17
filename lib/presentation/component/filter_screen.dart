@@ -16,8 +16,11 @@ class FilterScreen extends StatefulWidget {
   final bool isTabBar;
   final ValueChanged<List<DateTime?>> onChangeDay;
 
-  const FilterScreen(
-      {super.key, this.isTabBar = true, required this.onChangeDay});
+  const FilterScreen({
+    super.key,
+    this.isTabBar = true,
+    required this.onChangeDay,
+  });
 
   @override
   State<FilterScreen> createState() => _FilterScreenState();
@@ -44,45 +47,38 @@ class _FilterScreenState extends State<FilterScreen>
         overflow: TextOverflow.clip,
       ),
     ),
-    Tab(
-      child: Text(AppHelpers.getTranslation(TrKeys.overall)),
-    ),
+    Tab(child: Text(AppHelpers.getTranslation(TrKeys.overall))),
   ];
 
   @override
   void initState() {
     _tabController = TabController(length: 4, vsync: this);
-    _tabController.addListener(
-      () {
-        switch (_tabController.index) {
-          case 0:
-            _rangeDatePicker = [
-              DateTime.now(),
-              DateTime.now(),
-            ];
-            break;
-          case 1:
-            _rangeDatePicker = [
-              DateTime.now().subtract(const Duration(days: 7)),
-              DateTime.now(),
-            ];
-            break;
-          case 2:
-            _rangeDatePicker = [
-              DateTime.now().subtract(const Duration(days: 30)),
-              DateTime.now(),
-            ];
-            break;
-          case 3:
-            _rangeDatePicker = [
-              DateTime.now().subtract(const Duration(days: 120)),
-              DateTime.now(),
-            ];
-            break;
-        }
-        setState(() {});
-      },
-    );
+    _tabController.addListener(() {
+      switch (_tabController.index) {
+        case 0:
+          _rangeDatePicker = [DateTime.now(), DateTime.now()];
+          break;
+        case 1:
+          _rangeDatePicker = [
+            DateTime.now().subtract(const Duration(days: 7)),
+            DateTime.now(),
+          ];
+          break;
+        case 2:
+          _rangeDatePicker = [
+            DateTime.now().subtract(const Duration(days: 30)),
+            DateTime.now(),
+          ];
+          break;
+        case 3:
+          _rangeDatePicker = [
+            DateTime.now().subtract(const Duration(days: 120)),
+            DateTime.now(),
+          ];
+          break;
+      }
+      setState(() {});
+    });
     super.initState();
   }
 
@@ -102,23 +98,27 @@ class _FilterScreenState extends State<FilterScreen>
           const ModalDrag(),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 16.w),
-            child: TitleAndIcon(title: AppHelpers.getTranslation(TrKeys.filter)),
+            child: TitleAndIcon(
+              title: AppHelpers.getTranslation(TrKeys.filter),
+            ),
           ),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 16.w),
             child: Text(
               AppHelpers.getTranslation(TrKeys.selectDesiredOrderHistory),
-              style: Style.interNormal(
-                size: 14.sp,
-                color: Style.blackColor,
+              style: AppStyle.interNormal(
+                size: 14,
+                color: AppStyle.blackColor,
                 letterSpacing: -0.3,
               ),
             ),
           ),
           widget.isTabBar
               ? Padding(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 16.w, vertical: 24.h),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 16.w,
+                    vertical: 24.h,
+                  ),
                   child: CustomTabBar(
                     tabController: _tabController,
                     tabs: _tabs,

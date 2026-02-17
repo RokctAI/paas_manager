@@ -89,11 +89,11 @@ class LanguagesNotifier extends StateNotifier<LanguagesState> {
     }
   }
 
-  void makeSelectedLang({Function(LanguageData)? afterUpdate}) {
+  Future<void> makeSelectedLang({Function(LanguageData)? afterUpdate}) async {
     LocalStorage.setLanguageSelected(true);
     LocalStorage.setLanguageData(state.languages[state.index]);
     LocalStorage.setLangLtr(state.languages[state.index].backward);
-    getTranslations(
+    await getTranslations(
       afterUpdate: () {
         if (afterUpdate != null) {
           afterUpdate(state.languages[state.index]);
@@ -103,11 +103,23 @@ class LanguagesNotifier extends StateNotifier<LanguagesState> {
   }
 
   Future<void> getTranslations({VoidCallback? afterUpdate}) async {
+    final currentLocale = LocalStorage.getLanguage()?.locale ?? 'en';
+    final cachedTranslations = LocalStorage.getTranslations(locale: currentLocale);
+
+    // Agar cache'da mavjud bo'lsa, API'ga murojaat qilmasdan ishlatamiz
+    if (cachedTranslations.isNotEmpty) {
+      if (afterUpdate != null) {
+        afterUpdate();
+      }
+      return;
+    }
+
+    // Cache'da yo'q bo'lsa, API'dan yuklaymiz
     state = state.copyWith(isLoading: true, isSelectLanguage: false);
     final response = await _settingsRepository.getTranslations();
     response.when(
-      success: (data) {
-        LocalStorage.setTranslations(data.data);
+      success: (data) async {
+        await LocalStorage.setTranslations(data.data);
         if (afterUpdate != null) {
           afterUpdate();
         }

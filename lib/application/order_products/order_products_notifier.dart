@@ -15,9 +15,27 @@ class OrderProductsNotifier extends StateNotifier<OrderProductsState> {
   bool _hasMore = true;
   Timer? _timer;
   String _query = '';
+  String _productType = 'single';
 
   OrderProductsNotifier(this._productsRepository)
       : super(const OrderProductsState());
+
+  void setProductType(
+    String type, {
+    required List<Stock> cartStocks,
+    RefreshController? refreshController,
+  }) {
+    if (_productType == type) {
+      return;
+    }
+    _productType = type;
+    state = state.copyWith(productType: type);
+    fetchProducts(
+      isRefresh: true,
+      cartStocks: cartStocks,
+      refreshController: refreshController,
+    );
+  }
 
   void updateProducts({required List<Stock> cartStocks}) {
     List<ProductData> products = List.from(state.products);
@@ -120,6 +138,7 @@ class OrderProductsNotifier extends StateNotifier<OrderProductsState> {
       categoryId: categoryId,
       query: _query.isEmpty ? null : _query,
       status: ProductStatus.published,
+      type: _productType,
     );
     response.when(
       success: (data) {

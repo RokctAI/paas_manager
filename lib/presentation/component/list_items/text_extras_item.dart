@@ -26,7 +26,7 @@ class TextExtrasItem extends StatelessWidget {
         child: Container(
           width: double.infinity,
           decoration: BoxDecoration(
-            color: Style.white,
+            color: AppStyle.white,
             borderRadius: BorderRadius.circular(10.r),
           ),
           child: Column(
@@ -39,10 +39,12 @@ class TextExtrasItem extends StatelessWidget {
                     width: 18.w,
                     height: 18.h,
                     decoration: BoxDecoration(
-                      color: isActive ? Style.green : Style.transparent,
+                      color: isActive ? AppStyle.green : AppStyle.transparent,
                       shape: BoxShape.circle,
                       border: Border.all(
-                        color: isActive ? Style.blackColor : Style.greyColor,
+                        color: isActive
+                            ? AppStyle.blackColor
+                            : AppStyle.greyColor,
                         width: isActive ? 4.r : 2.r,
                       ),
                     ),
@@ -50,9 +52,9 @@ class TextExtrasItem extends StatelessWidget {
                   16.horizontalSpace,
                   Text(
                     title,
-                    style: Style.interNormal(
-                      size: 16.sp,
-                      color: Style.blackColor,
+                    style: AppStyle.interNormal(
+                      size: 16,
+                      color: AppStyle.blackColor,
                     ),
                   ),
                 ],
@@ -62,7 +64,7 @@ class TextExtrasItem extends StatelessWidget {
                   children: [
                     16.verticalSpace,
                     Divider(
-                      color: Style.textColor.withOpacity(0.1),
+                      color: AppStyle.textColor.withOpacity(0.1),
                       height: 1.r,
                       thickness: 1.r,
                     ),

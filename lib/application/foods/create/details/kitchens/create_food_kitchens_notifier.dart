@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:venderfoodyman/infrastructure/models/data/kitchen_data.dart';
+import 'package:venderfoodyman/infrastructure/models/models.dart';
 import 'package:venderfoodyman/infrastructure/services/services.dart';
 import 'create_food_kitchens_state.dart';
 import 'package:venderfoodyman/domain/interface/interfaces.dart';
-import 'package:venderfoodyman/infrastructure/models/models.dart';
 
 class CreateFoodKitchensNotifier extends StateNotifier<CreateFoodKitchensState> {
   final CatalogInterface _catalogRepository;

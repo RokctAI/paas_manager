@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:audioplayers/audioplayers.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -35,6 +38,17 @@ class _MainPageState extends State<MainPage> {
     IndexedStackChild(child: const RestaurantPage(), preload: false),
   ];
 
+  Timer? timer;
+  int time = 0;
+  final player = AudioPlayer();
+
+  Future playMusic() async {
+    timer?.cancel();
+    timer = Timer.periodic(const Duration(seconds: 3), (timer) async {
+      await player.play(AssetSource("audio/notification.wav"));
+    });
+  }
+
   @override
   void initState() {
     FirebaseMessaging.instance.requestPermission(
@@ -47,13 +61,17 @@ class _MainPageState extends State<MainPage> {
     });
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {});
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      AppHelpers.showCheckTopSnackBar(
-        // ignore: use_build_context_synchronously
-        context,
-        type: SnackBarType.success,
-        text:
-            "${AppHelpers.getTranslation(TrKeys.id)} #${message.notification?.title} ${message.notification?.body}",
-      );
+      if (AppConstants.playMusicOnOrderStatusChange) {
+        player.play(AssetSource("audio/notification.wav"));
+      }
+      if (mounted) {
+        AppHelpers.showCheckTopSnackBar(
+          context,
+          type: SnackBarType.success,
+          text:
+              "${AppHelpers.getTranslation(TrKeys.id)} #${message.notification?.title} ${message.notification?.body}",
+        );
+      }
     });
     super.initState();
   }
@@ -67,15 +85,25 @@ class _MainPageState extends State<MainPage> {
         child: Scaffold(
           resizeToAvoidBottomInset: false,
           body: Consumer(
-            builder: (
-              BuildContext context,
-              WidgetRef ref,
-              Widget? child,
-            ) =>
-                ProsteIndexedStack(
-              index: ref.watch(mainProvider).selectedIndex,
-              children: list,
-            ),
+            builder: (context, ref, child) {
+              if (AppConstants.keepPlayingOnNewOrder) {
+                ref.listen(newOrdersProvider, (previous, next) async {
+                  if (next.orders.isEmpty) {
+                    await player.stop();
+                    timer?.cancel();
+                  }
+
+                  if (time != 0 && next.orders.isNotEmpty) {
+                    await playMusic();
+                  }
+                  time++;
+                });
+              }
+              return ProsteIndexedStack(
+                index: ref.watch(mainProvider).selectedIndex,
+                children: list,
+              );
+            },
           ),
           floatingActionButtonLocation:
               FloatingActionButtonLocation.centerFloat,
@@ -91,7 +119,9 @@ class _MainPageState extends State<MainPage> {
                     child: AnimatedContainer(
                       duration: const Duration(milliseconds: 500),
                       decoration: BoxDecoration(
-                        color: Style.bottomNavigationBarColor.withOpacity(0.6),
+                        color: AppStyle.bottomNavigationBarColor.withOpacity(
+                          0.6,
+                        ),
                         borderRadius: BorderRadius.circular(100.r),
                       ),
                       height: 60.r,
@@ -120,15 +150,12 @@ class _MainPageState extends State<MainPage> {
                               selectIcon: FlutterRemix.restaurant_fill,
                               unSelectIcon: FlutterRemix.restaurant_line,
                             ),
-                            _profileItem(
-                              () {
-                                event.selectIndex(2);
-                                ref
-                                    .read(mainProvider.notifier)
-                                    .changeScrolling(false);
-                              },
-                              state.selectedIndex,
-                            ),
+                            _profileItem(() {
+                              event.selectIndex(2);
+                              ref
+                                  .read(mainProvider.notifier)
+                                  .changeScrolling(false);
+                            }, state.selectedIndex),
                           ],
                         ),
                       ),
@@ -140,65 +167,65 @@ class _MainPageState extends State<MainPage> {
                             tag: AppConstants.heroTagAddOrderButton,
                             child: Consumer(
                               builder: (context, ref, child) {
-                                final foodTabState =
-                                    ref.watch(foodTabsProvider);
+                                final foodTabState = ref.watch(
+                                  foodTabsProvider,
+                                );
                                 return GestureDetector(
                                   onTap: () {
                                     state.selectedIndex == 0
-                                        ? context
-                                            .pushRoute(const CreateOrderRoute())
+                                        ? context.pushRoute(
+                                            const CreateOrderRoute(),
+                                          )
                                         : (foodTabState.selectedIndex == 0
-                                            ? AppHelpers
-                                                .showCustomModalBottomSheet(
-                                                paddingTop:
-                                                    MediaQuery.of(context)
-                                                            .padding
-                                                            .top +
-                                                        64.h,
-                                                context: context,
-                                                modal:
-                                                    const CreateProductModal(),
-                                                isDarkMode: false,
-                                              )
-                                            : (foodTabState.selectedIndex == 1
-                                                ? AppHelpers
-                                                    .showCustomModalBottomSheet(
-                                                    paddingTop:
-                                                        MediaQuery.of(context)
-                                                                .padding
-                                                                .top +
+                                              ? AppHelpers.showCustomModalBottomSheet(
+                                                  paddingTop:
+                                                      MediaQuery.paddingOf(
+                                                        context,
+                                                      ).top +
+                                                      64.h,
+                                                  context: context,
+                                                  modal:
+                                                      const CreateProductModal(),
+                                                  isDarkMode: false,
+                                                )
+                                              : (foodTabState.selectedIndex == 1
+                                                    ? AppHelpers.showCustomModalBottomSheet(
+                                                        paddingTop:
+                                                            MediaQuery.paddingOf(
+                                                              context,
+                                                            ).top +
                                                             64.h,
-                                                    context: context,
-                                                    modal:
-                                                        const CreateAddonModal(),
-                                                    isDarkMode: false,
-                                                  )
-                                                : AppHelpers
-                                                    .showCustomModalBottomSheet(
-                                                    paddingTop:
-                                                        MediaQuery.of(context)
-                                                                .padding
-                                                                .top +
+                                                        context: context,
+                                                        modal:
+                                                            const CreateAddonModal(),
+                                                        isDarkMode: false,
+                                                      )
+                                                    : AppHelpers.showCustomModalBottomSheet(
+                                                        paddingTop:
+                                                            MediaQuery.paddingOf(
+                                                              context,
+                                                            ).top +
                                                             64.h,
-                                                    context: context,
-                                                    modal:
-                                                        const CreateExtrasGroupModal(),
-                                                    isDarkMode: false,
-                                                  )));
+                                                        context: context,
+                                                        modal:
+                                                            const CreateExtrasGroupModal(),
+                                                        isDarkMode: false,
+                                                      )));
                                   },
                                   child: Container(
-                                    margin:
-                                        EdgeInsetsDirectional.only(start: 8.r),
+                                    margin: EdgeInsetsDirectional.only(
+                                      start: 8.r,
+                                    ),
                                     width: 56.r,
                                     height: 56.r,
-                                    decoration: const BoxDecoration(
+                                    decoration: BoxDecoration(
                                       shape: BoxShape.circle,
-                                      color: Style.primary,
+                                      color: AppStyle.primary,
                                     ),
                                     child: Icon(
                                       FlutterRemix.add_line,
                                       size: 26.r,
-                                      color: Style.blackColor,
+                                      color: AppStyle.buttonFontColor,
                                     ),
                                   ),
                                 );
@@ -206,7 +233,7 @@ class _MainPageState extends State<MainPage> {
                             ),
                           ),
                         )
-                      : const SizedBox.shrink()
+                      : const SizedBox.shrink(),
                 ],
               );
             },
@@ -225,7 +252,7 @@ class _MainPageState extends State<MainPage> {
         margin: EdgeInsets.only(left: 12.r),
         decoration: BoxDecoration(
           border: Border.all(
-            color: index == 2 ? Style.primary : Style.transparent,
+            color: index == 2 ? AppStyle.primary : AppStyle.transparent,
             width: 2.w,
           ),
           shape: BoxShape.circle,

@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:ftoast/ftoast.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -6,6 +7,7 @@ import 'package:top_snackbar_flutter/top_snack_bar.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:venderfoodyman/infrastructure/models/models.dart';
+import 'package:venderfoodyman/presentation/component/buttons/custom_button.dart';
 import 'package:venderfoodyman/presentation/styles/style.dart';
 import 'enums.dart';
 import 'tr_keys.dart';
@@ -14,6 +16,74 @@ import 'local_storage.dart';
 
 class AppHelpers {
   AppHelpers._();
+
+  static Future openDialog({
+    required BuildContext context,
+    required String title,
+  }) {
+    return showDialog(
+      context: context,
+      builder: (_) {
+        return Dialog(
+          backgroundColor: AppStyle.transparent,
+          insetPadding: EdgeInsets.symmetric(horizontal: 16.w),
+          child: Container(
+            margin: EdgeInsets.all(24.w),
+            width: double.infinity,
+            padding: EdgeInsets.all(24.w),
+            decoration: BoxDecoration(
+              color: AppStyle.white,
+              borderRadius: BorderRadius.circular(24.r),
+            ),
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Text(
+                    getTranslation(title),
+                    textAlign: TextAlign.center,
+                    style: AppStyle.interNormal(size: 18),
+                  ),
+                  24.verticalSpace,
+                  CustomButton(
+                    onPressed: () => Navigator.pop(context),
+                    title: getTranslation(TrKeys.close),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  static void errorSnackBar(BuildContext context, {String? text}) {
+    FToast.toast(
+      context,
+      toast: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            padding: EdgeInsets.all(16.r),
+            margin: EdgeInsets.only(
+              bottom: MediaQuery.sizeOf(context).height / 1.5,
+              left: 32.r,
+              right: 32.r,
+            ),
+            decoration: BoxDecoration(
+              color: AppStyle.primary,
+              borderRadius: BorderRadius.circular((AppConstants.radius / 2).r),
+            ),
+            child: Text(
+              text ?? AppHelpers.getTranslation(TrKeys.failed),
+              style: AppStyle.interNormal(color: AppStyle.white, size: 14),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 
   static List<List<Extras>> cartesian(List<List<dynamic>> args) {
     List<List<Extras>> r = [];
@@ -35,30 +105,27 @@ class AppHelpers {
     return r;
   }
 
-  static String numberFormat(
-    num? number, {
-    String? symbol,
-    int? maxLength,
-  }) {
+  static String numberFormat(num? number, {String? symbol, int? maxLength}) {
     symbol = symbol ?? LocalStorage.getSelectedCurrency()?.symbol ?? '';
 
     bool isBefore = LocalStorage.getSelectedCurrency()?.position == "before";
     String beforeSymbol = (isBefore ? symbol : '');
     String afterSymbol = (isBefore ? '' : ' $symbol');
-    if ((number?.toInt().toString().length ?? 0) > 12) {
+    if ((number?.toStringAsFixed(1).length ?? 0) > 12) {
       maxLength = maxLength;
     } else {
       maxLength = 16;
     }
-    if ((number?.toInt().toString().length ?? 0) > (maxLength ?? 16)) {
+    if ((number?.toStringAsFixed(1).length ?? 0) > (maxLength ?? 16)) {
       return beforeSymbol +
           (number?.toStringAsExponential(maxLength ?? 10) ?? '') +
           afterSymbol;
     }
-    if ((number?.toInt().toString().length ?? 0) > 8) {
+    if ((number?.toStringAsFixed(1).length ?? 0) > 8) {
       return beforeSymbol +
-          NumberFormat.compact(locale: LocalStorage.getLanguage()?.locale)
-              .format(number) +
+          NumberFormat.compact(
+            locale: LocalStorage.getLanguage()?.locale,
+          ).format(number) +
           afterSymbol;
     }
     if (isBefore) {
@@ -74,6 +141,23 @@ class AppHelpers {
         decimalDigits: 2,
       ).format(number ?? 0);
     }
+  }
+
+  static SignUpType getAuthOption() {
+    final List<SettingsData> settings = LocalStorage.getSettingsList();
+    for (final setting in settings) {
+      if (setting.key == 'auth_option') {
+        switch (setting.value) {
+          case 'phone':
+            return SignUpType.phone;
+          case 'email':
+            return SignUpType.email;
+          default:
+            return SignUpType.both;
+        }
+      }
+    }
+    return SignUpType.both;
   }
 
   static String? selectedAddonsTitles(Stock stock) {
@@ -120,8 +204,9 @@ class AppHelpers {
     if (shop == null) {
       return getTranslation(TrKeys.theRestaurantIsClosedToday);
     }
-    final currentWeekday =
-        DateFormat('EEEE').format(DateTime.now()).toLowerCase();
+    final currentWeekday = DateFormat(
+      'EEEE',
+    ).format(DateTime.now()).toLowerCase();
     final List<ShopWorkingDays> workingDays = shop.shopWorkingDays ?? [];
     for (final day in workingDays) {
       if (day.day?.toLowerCase() == currentWeekday) {
@@ -138,8 +223,10 @@ class AppHelpers {
     final List<SettingsData> settings = LocalStorage.getSettingsList();
     for (final setting in settings) {
       if (setting.key == 'location') {
-        final String? latString =
-            setting.value?.substring(0, setting.value?.indexOf(','));
+        final String? latString = setting.value?.substring(
+          0,
+          setting.value?.indexOf(','),
+        );
         if (latString == null) {
           return null;
         }
@@ -154,13 +241,17 @@ class AppHelpers {
     final List<SettingsData> settings = LocalStorage.getSettingsList();
     for (final setting in settings) {
       if (setting.key == 'location') {
-        final String? latString =
-            setting.value?.substring(0, setting.value?.indexOf(','));
+        final String? latString = setting.value?.substring(
+          0,
+          setting.value?.indexOf(','),
+        );
         if (latString == null) {
           return null;
         }
-        final String? lonString = setting.value
-            ?.substring((latString.length) + 2, setting.value?.length);
+        final String? lonString = setting.value?.substring(
+          (latString.length) + 2,
+          setting.value?.length,
+        );
         if (lonString == null) {
           return null;
         }
@@ -199,6 +290,8 @@ class AppHelpers {
       case 'new':
         return OrderStatus.accepted;
       case 'accepted':
+        return OrderStatus.cooking;
+      case 'cooking':
         return OrderStatus.ready;
       case 'ready':
         return OrderStatus.onAWay;
@@ -218,6 +311,8 @@ class AppHelpers {
       case 'new':
         return getTranslation(TrKeys.swipeToAccept);
       case 'accepted':
+        return getTranslation(TrKeys.swipeToCooking);
+      case 'cooking':
         return getTranslation(TrKeys.swipeToReady);
       case 'ready':
         return getTranslation(TrKeys.swipeToWay);
@@ -238,6 +333,8 @@ class AppHelpers {
         return OrderStatus.newOrder;
       case 'accepted':
         return OrderStatus.accepted;
+      case 'cooking':
+        return OrderStatus.cooking;
       case 'ready':
         return OrderStatus.ready;
       case 'on_a_way':
@@ -249,6 +346,37 @@ class AppHelpers {
       default:
         return OrderStatus.newOrder;
     }
+  }
+
+  static void showPopup({
+    required BuildContext context,
+    required Iterable<PopupMenuItem> items,
+    double radius = AppConstants.radius,
+    bool isRight = false,
+  }) {
+    final renderBox = context.findRenderObject() as RenderBox;
+    final size = renderBox.size;
+    final position = renderBox.localToGlobal(Offset.zero);
+    showMenu(
+      context: context,
+      position: RelativeRect.fromLTRB(
+        position.dx + (isRight ? size.width : 0),
+        position.dy + size.height / 3,
+        position.dx,
+        position.dy + (isRight ? size.width : 0),
+      ),
+      elevation: 3,
+      constraints: BoxConstraints(
+        minWidth: size.width / 2,
+        maxWidth: size.width,
+      ),
+      shadowColor: AppStyle.differBorderColor,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(radius.r),
+      ),
+      color: AppStyle.white,
+      items: items.toList(),
+    );
   }
 
   static bool checkIsSvg(String? url) {
@@ -269,7 +397,7 @@ class AppHelpers {
     return '';
   }
 
-  static showNoConnectionSnackBar(BuildContext context) {
+  static void showNoConnectionSnackBar(BuildContext context) {
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
     final snackBar = SnackBar(
       backgroundColor: Colors.teal,
@@ -280,7 +408,7 @@ class AppHelpers {
         style: GoogleFonts.inter(
           fontSize: 14,
           fontWeight: FontWeight.w600,
-          color: Style.white,
+          color: AppStyle.white,
         ),
       ),
       action: SnackBarAction(
@@ -295,7 +423,7 @@ class AppHelpers {
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
-  static showCheckTopSnackBar(
+  static void showCheckTopSnackBar(
     BuildContext context, {
     String? text,
     SnackBarType? type,
@@ -304,19 +432,22 @@ class AppHelpers {
       Overlay.of(context),
       type == SnackBarType.error
           ? CustomSnackBar.error(
-              message: text ??
+              message:
+                  text ??
                   AppHelpers.getTranslation(
-                      TrKeys.somethingWentWrongWithTheServer),
+                    TrKeys.somethingWentWrongWithTheServer,
+                  ),
             )
           : (type == SnackBarType.success
-              ? CustomSnackBar.success(
-                  message: text ??
-                      AppHelpers.getTranslation(TrKeys.successfullyCompleted),
-                )
-              : CustomSnackBar.info(
-                  message:
-                      text ?? AppHelpers.getTranslation(TrKeys.infoMessage),
-                )),
+                ? CustomSnackBar.success(
+                    message:
+                        text ??
+                        AppHelpers.getTranslation(TrKeys.successfullyCompleted),
+                  )
+                : CustomSnackBar.info(
+                    message:
+                        text ?? AppHelpers.getTranslation(TrKeys.infoMessage),
+                  )),
     );
   }
 
@@ -325,8 +456,13 @@ class AppHelpers {
     if (AppConstants.autoTrn) {
       return (translations[trKey] ??
           (trKey.isNotEmpty
-              ? trKey.replaceAll(".", " ").replaceAll("_", " ").replaceFirst(
-                  trKey.substring(0, 1), trKey.substring(0, 1).toUpperCase())
+              ? trKey
+                    .replaceAll(".", " ")
+                    .replaceAll("_", " ")
+                    .replaceFirst(
+                      trKey.substring(0, 1),
+                      trKey.substring(0, 1).toUpperCase(),
+                    )
               : ''));
     } else {
       return translations[trKey] ?? trKey;
@@ -355,7 +491,7 @@ class AppHelpers {
       constraints: BoxConstraints(
         maxHeight: MediaQuery.sizeOf(context).height - paddingTop.r,
       ),
-      backgroundColor: Style.transparent,
+      backgroundColor: AppStyle.transparent,
       context: context,
       builder: (context) =>
           Padding(padding: MediaQuery.of(context).viewInsets, child: modal),
@@ -385,7 +521,7 @@ class AppHelpers {
       constraints: BoxConstraints(
         maxHeight: MediaQuery.sizeOf(context).height - paddingTop.r,
       ),
-      backgroundColor: Style.transparent,
+      backgroundColor: AppStyle.transparent,
       context: context,
       builder: (context) => DraggableScrollableSheet(
         initialChildSize: initSize,
@@ -418,7 +554,7 @@ class AppHelpers {
       constraints: BoxConstraints(
         maxHeight: MediaQuery.sizeOf(context).height - paddingTop.r,
       ),
-      backgroundColor: Style.transparent,
+      backgroundColor: AppStyle.transparent,
       context: context,
       builder: (context) => modal,
     );
@@ -444,25 +580,25 @@ class AppHelpers {
     );
   }
 
-  static String errorHandler(e) {
+  static String errorHandler(dynamic e) {
     try {
       return (e.runtimeType == DioException)
           ? ((e as DioException).response?.data["message"] == "Bad request."
-              ? (e.response?.data["params"] as Map).values.first[0]
-              : e.response?.data["message"])
+                ? (e.response?.data["params"] as Map).values.first[0]
+                : e.response?.data["message"])
           : e.toString();
     } catch (s) {
       try {
         return (e.runtimeType == DioException)
             ? ((e as DioException).response?.data.toString().substring(
-                    (e.response?.data.toString().indexOf("<title>") ?? 0) + 7,
-                    e.response?.data.toString().indexOf("</title") ?? 0))
-                .toString()
+                (e.response?.data.toString().indexOf("<title>") ?? 0) + 7,
+                e.response?.data.toString().indexOf("</title") ?? 0,
+              )).toString()
             : e.toString();
       } catch (r) {
         return (e.runtimeType == DioException)
             ? ((e as DioException).response?.data["error"]["message"])
-                .toString()
+                  .toString()
             : e.toString();
       }
     }

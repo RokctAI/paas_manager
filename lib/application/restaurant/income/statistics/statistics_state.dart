@@ -4,7 +4,7 @@ import 'package:venderfoodyman/infrastructure/models/models.dart';
 part 'statistics_state.freezed.dart';
 
 @freezed
-class StatisticsState with _$StatisticsState {
+abstract class StatisticsState with _$StatisticsState {
   const factory StatisticsState({
     @Default(false) bool isLoading,
     @Default(true) bool isRefresh,

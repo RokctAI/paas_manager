@@ -15,20 +15,20 @@ class CustomTabBar extends StatelessWidget {
       padding: EdgeInsets.all(6.r),
       height: 48.h,
       decoration: BoxDecoration(
-        color: Style.transparent,
+        color: AppStyle.transparent,
         borderRadius: BorderRadius.circular(10.r),
-        border: Border.all(color: Style.tabBarBorderColor),
+        border: Border.all(color: AppStyle.tabBarBorderColor),
       ),
       child: TabBar(
         controller: tabController,
         indicator: BoxDecoration(
           borderRadius: BorderRadius.circular(10.r),
-          color: Style.blackColor,
+          color: AppStyle.blackColor,
         ),
-        labelColor: Style.white,
-        unselectedLabelColor: Style.textColor,
-        unselectedLabelStyle: Style.interRegular(size: 14.sp),
-        labelStyle: Style.interSemi(size: 14.sp),
+        labelColor: AppStyle.white,
+        unselectedLabelColor: AppStyle.textColor,
+        unselectedLabelStyle: AppStyle.interRegular(size: 14),
+        labelStyle: AppStyle.interSemi(size: 14),
         tabs: tabs,
       ),
     );

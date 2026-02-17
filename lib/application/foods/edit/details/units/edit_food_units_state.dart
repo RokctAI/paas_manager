@@ -6,7 +6,7 @@ import 'package:venderfoodyman/infrastructure/models/models.dart';
 part 'edit_food_units_state.freezed.dart';
 
 @freezed
-class EditFoodUnitsState with _$EditFoodUnitsState {
+abstract class EditFoodUnitsState with _$EditFoodUnitsState {
   const factory EditFoodUnitsState({
     @Default(false) bool isLoading,
     @Default([]) List<UnitData> units,

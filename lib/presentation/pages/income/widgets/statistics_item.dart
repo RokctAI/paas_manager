@@ -36,8 +36,8 @@ class StatisticsItem extends StatelessWidget {
         children: [
           Text(
             title,
-            style: Style.interNormal(
-              size: 12.sp,
+            style: AppStyle.interNormal(
+              size: 12,
               color: textColor,
               letterSpacing: -0.3,
             ),
@@ -47,8 +47,8 @@ class StatisticsItem extends StatelessWidget {
             children: [
               Text(
                 '$count',
-                style: Style.interSemi(
-                  size: 14.sp,
+                style: AppStyle.interSemi(
+                  size: 14,
                   color: textColor,
                   letterSpacing: -0.6,
                 ),
@@ -61,12 +61,14 @@ class StatisticsItem extends StatelessWidget {
                       height: 6.r,
                       margin: REdgeInsets.symmetric(horizontal: 4),
                       decoration: BoxDecoration(
-                          shape: BoxShape.circle, color: iconColor),
+                        shape: BoxShape.circle,
+                        color: iconColor,
+                      ),
                     ),
                     Text(
                       '${percentage?.toStringAsFixed(1)}%',
-                      style: Style.interSemi(
-                        size: 14.sp,
+                      style: AppStyle.interSemi(
+                        size: 14,
                         color: textColor,
                         letterSpacing: -0.6,
                       ),
@@ -74,7 +76,7 @@ class StatisticsItem extends StatelessWidget {
                   ],
                 ),
             ],
-          )
+          ),
         ],
       ),
     );

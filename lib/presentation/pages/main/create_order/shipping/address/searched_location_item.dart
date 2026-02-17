@@ -5,7 +5,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:osm_nominatim/osm_nominatim.dart';
 import 'package:venderfoodyman/presentation/styles/style.dart';
 
-
 class SearchedLocationItem extends StatelessWidget {
   final Place place;
   final VoidCallback onTap;
@@ -24,7 +23,7 @@ class SearchedLocationItem extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         Material(
-          color: Style.white,
+          color: AppStyle.white,
           child: InkWell(
             onTap: onTap,
             child: Container(
@@ -35,7 +34,7 @@ class SearchedLocationItem extends StatelessWidget {
                 children: [
                   Icon(
                     FlutterRemix.search_2_line,
-                    color: Style.black,
+                    color: AppStyle.black,
                     size: 20.r,
                   ),
                   8.horizontalSpace,
@@ -46,12 +45,12 @@ class SearchedLocationItem extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                       style: GoogleFonts.k2d(
                         fontWeight: FontWeight.w500,
-                        fontSize: 13.sp,
+                        fontSize: 13,
                         letterSpacing: -14 * 0.01,
-                        color: Style.black,
+                        color: AppStyle.black,
                       ),
                     ),
-                  )
+                  ),
                 ],
               ),
             ),
@@ -59,7 +58,7 @@ class SearchedLocationItem extends StatelessWidget {
         ),
         if (!isLast)
           Divider(
-            color: Style.black.withOpacity(0.06),
+            color: AppStyle.black.withOpacity(0.06),
             thickness: 1.r,
             height: 0.r,
           ),

@@ -27,7 +27,7 @@ class FoodsFilterItem extends StatelessWidget {
     this.currentItem = '',
     this.currentItemTwo = '',
     this.isPrice = false,
-  }) ;
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +35,7 @@ class FoodsFilterItem extends StatelessWidget {
       width: double.infinity,
       padding: REdgeInsets.only(left: 18, right: 18, top: 18, bottom: 10),
       decoration: BoxDecoration(
-        color: Style.white.withOpacity(0.9),
+        color: AppStyle.white.withOpacity(0.9),
         borderRadius: BorderRadius.circular(10.r),
       ),
       child: Column(
@@ -43,7 +43,7 @@ class FoodsFilterItem extends StatelessWidget {
         children: [
           Text(
             title,
-            style: Style.interSemi(size: 16.sp, color: Style.blackColor),
+            style: AppStyle.interSemi(size: 16, color: AppStyle.blackColor),
           ),
           18.verticalSpace,
           Wrap(
@@ -54,13 +54,15 @@ class FoodsFilterItem extends StatelessWidget {
                     child: AnimatedContainer(
                       duration: const Duration(milliseconds: 400),
                       margin: REdgeInsets.only(right: 8, bottom: 8),
-                      padding:
-                          REdgeInsets.symmetric(vertical: 10, horizontal: 16),
+                      padding: REdgeInsets.symmetric(
+                        vertical: 10,
+                        horizontal: 16,
+                      ),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10.r),
                         color: currentItem == e || currentItemTwo == e
-                            ? Style.primary
-                            : Style.greyColor,
+                            ? AppStyle.primary
+                            : AppStyle.greyColor,
                       ),
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
@@ -76,50 +78,44 @@ class FoodsFilterItem extends StatelessWidget {
                                   ],
                                 )
                               : isOffer
-                                  ? Row(
-                                      children: [
-                                        Icon(
-                                          FlutterRemix.leaf_fill,
-                                          size: 16.r,
+                              ? Row(
+                                  children: [
+                                    Icon(FlutterRemix.leaf_fill, size: 16.r),
+                                    6.horizontalSpace,
+                                  ],
+                                )
+                              : isSort
+                              ? Row(
+                                  children: [
+                                    Container(
+                                      width: 14.w,
+                                      height: 14.h,
+                                      decoration: BoxDecoration(
+                                        border: Border.all(
+                                          width: currentItem == e ? 4.r : 2.r,
+                                          color: AppStyle.blackColor,
                                         ),
-                                        6.horizontalSpace,
-                                      ],
-                                    )
-                                  : isSort
-                                      ? Row(
-                                          children: [
-                                            Container(
-                                              width: 14.w,
-                                              height: 14.h,
-                                              decoration: BoxDecoration(
-                                                border: Border.all(
-                                                  width: currentItem == e
-                                                      ? 4.r
-                                                      : 2.r,
-                                                  color: Style.blackColor,
-                                                ),
-                                                color: Style.transparent,
-                                                shape: BoxShape.circle,
-                                              ),
-                                            ),
-                                            6.horizontalSpace,
-                                          ],
-                                        )
-                                      : const SizedBox.shrink(),
+                                        color: AppStyle.transparent,
+                                        shape: BoxShape.circle,
+                                      ),
+                                    ),
+                                    6.horizontalSpace,
+                                  ],
+                                )
+                              : const SizedBox.shrink(),
                           isPrice
                               ? Text(
-                                  AppHelpers.numberFormat(
-                                      double.tryParse(e)),
-                                  style: Style.interNormal(
+                                  AppHelpers.numberFormat(double.tryParse(e)),
+                                  style: AppStyle.interNormal(
                                     size: 14,
-                                    color: Style.blackColor,
+                                    color: AppStyle.blackColor,
                                   ),
                                 )
                               : Text(
                                   e,
-                                  style: Style.interNormal(
+                                  style: AppStyle.interNormal(
                                     size: 14,
-                                    color: Style.blackColor,
+                                    color: AppStyle.blackColor,
                                   ),
                                 ),
                         ],
@@ -128,7 +124,7 @@ class FoodsFilterItem extends StatelessWidget {
                   ),
                 )
                 .toList(),
-          )
+          ),
         ],
       ),
     );

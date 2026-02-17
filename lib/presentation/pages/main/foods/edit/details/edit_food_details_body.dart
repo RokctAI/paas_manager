@@ -3,23 +3,23 @@ import 'package:flutter_remix/flutter_remix.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:venderfoodyman/application/foods/edit/details/kitchen/edit_food_kitchens_provider.dart';
-import 'package:venderfoodyman/presentation/component/helper/multi_image_picker.dart';
-import 'package:venderfoodyman/presentation/pages/main/foods/edit/details/edit_food_kitchens_modal.dart';
-
-import 'edit_food_units_modal.dart';
-import 'edit_food_categories_modal.dart';
-import 'package:venderfoodyman/presentation/styles/style.dart';
-import '../../../../../component/components.dart';
 import 'package:venderfoodyman/application/providers.dart';
 import 'package:venderfoodyman/infrastructure/services/services.dart';
+import 'package:venderfoodyman/presentation/component/components.dart';
+import 'package:venderfoodyman/presentation/styles/style.dart';
+import 'package:venderfoodyman/presentation/pages/main/foods/edit/details/edit_food_kitchens_modal.dart';
+import 'edit_food_units_modal.dart';
+import 'edit_food_categories_modal.dart';
 
 class EditFoodDetailsBody extends StatefulWidget {
   final Function() onSave;
   final ScrollController controller;
 
-  const EditFoodDetailsBody(
-      {super.key, required this.onSave, required this.controller})
-      ;
+  const EditFoodDetailsBody({
+    super.key,
+    required this.onSave,
+    required this.controller,
+  });
 
   @override
   State<EditFoodDetailsBody> createState() => _EditFoodDetailsBodyState();
@@ -48,7 +48,7 @@ class _EditFoodDetailsBodyState extends State<EditFoodDetailsBody> {
                   ? Center(
                       child: CircularProgressIndicator(
                         strokeWidth: 3.r,
-                        color: Style.primary,
+                        color: AppStyle.primary,
                       ),
                     )
                   : Form(
@@ -56,32 +56,78 @@ class _EditFoodDetailsBodyState extends State<EditFoodDetailsBody> {
                       child: Column(
                         children: [
                           24.verticalSpace,
-                          state.isLoading? const Loading(): MultiImagePicker(
-                            imageUrls: state.listOfUrls,
-                            listOfImages: state.images,
-                            onImageChange: event.setImageFile,
-                            onDelete: event.deleteImage,
+                          state.isLoading
+                              ? const Loading()
+                              : MultiImagePicker(
+                                  imageUrls: state.listOfUrls,
+                                  listOfImages: state.images,
+                                  onImageChange: event.setImageFile,
+                                  onDelete: event.deleteImage,
+                                ),
+                          24.verticalSpace,
+                          UnderlinedTextField(
+                            label:
+                                '${AppHelpers.getTranslation(TrKeys.productTitle)}*',
+                            readOnly: true,
+                            textController: TextEditingController(
+                              text: state.title,
+                            ),
+                            validator: AppValidators.emptyCheck,
+                            onTap: () {
+                              AppHelpers.showCustomModalBottomSheet(
+                                context: context,
+                                modal: MultiTranslationInputModal(
+                                  model: AiTranslationModel.product,
+                                  label: AppHelpers.getTranslation(
+                                    TrKeys.productTitle,
+                                  ),
+                                  inputs: state.titleTranslations,
+                                  save: (translations) {
+                                    event.setTitleTranslations(translations);
+                                  },
+                                ),
+                                isDarkMode: false,
+                              );
+                            },
+                            suffixIcon: Icon(
+                              FlutterRemix.translate,
+                              color: AppStyle.blackColor,
+                              size: 20.r,
+                            ),
                           ),
                           24.verticalSpace,
                           UnderlinedTextField(
-                            label: '${AppHelpers.getTranslation(TrKeys.productTitle)}*',
-                            inputType: TextInputType.text,
-                            textCapitalization: TextCapitalization.sentences,
-                            textInputAction: TextInputAction.next,
-                            onChanged: event.setTitle,
-                            initialText: state.product?.translation?.title,
+                            label:
+                                '${AppHelpers.getTranslation(TrKeys.description)}*',
+                            readOnly: true,
+                            onTap: () {
+                              AppHelpers.showCustomModalBottomSheet(
+                                context: context,
+                                modal: MultiTranslationInputModal(
+                                  model: AiTranslationModel.product,
+                                  modelId: state.product?.id,
+                                  label: AppHelpers.getTranslation(
+                                    TrKeys.description,
+                                  ),
+                                  inputs: state.descriptionTranslations,
+                                  save: (translations) {
+                                    event.setDescriptionTranslations(
+                                      translations,
+                                    );
+                                  },
+                                ),
+                                isDarkMode: false,
+                              );
+                            },
+                            textController: TextEditingController(
+                              text: state.description,
+                            ),
                             validator: AppValidators.emptyCheck,
-                          ),
-                          24.verticalSpace,
-                          UnderlinedTextField(
-                            label: '${AppHelpers.getTranslation(TrKeys.description)}*',
-                            inputType: TextInputType.text,
-                            textCapitalization: TextCapitalization.sentences,
-                            textInputAction: TextInputAction.next,
-                            onChanged: event.setDescription,
-                            initialText:
-                                state.product?.translation?.description,
-                            validator: AppValidators.emptyCheck,
+                            suffixIcon: Icon(
+                              FlutterRemix.translate,
+                              color: AppStyle.blackColor,
+                              size: 20.r,
+                            ),
                           ),
                           24.verticalSpace,
                           UnderlinedTextField(
@@ -90,7 +136,7 @@ class _EditFoodDetailsBodyState extends State<EditFoodDetailsBody> {
                                 '${AppHelpers.getTranslation(TrKeys.productCategory)}*',
                             suffixIcon: Icon(
                               FlutterRemix.arrow_down_s_line,
-                              color: Style.blackColor,
+                              color: AppStyle.blackColor,
                               size: 18.r,
                             ),
                             readOnly: true,
@@ -106,10 +152,11 @@ class _EditFoodDetailsBodyState extends State<EditFoodDetailsBody> {
                           24.verticalSpace,
                           UnderlinedTextField(
                             textController: unitState.unitController,
-                            label: '${AppHelpers.getTranslation(TrKeys.units)}*',
+                            label:
+                                '${AppHelpers.getTranslation(TrKeys.units)}*',
                             suffixIcon: Icon(
                               FlutterRemix.arrow_down_s_line,
-                              color: Style.blackColor,
+                              color: AppStyle.blackColor,
                               size: 18.r,
                             ),
                             readOnly: true,
@@ -128,7 +175,7 @@ class _EditFoodDetailsBodyState extends State<EditFoodDetailsBody> {
                             label: AppHelpers.getTranslation(TrKeys.kitchen),
                             suffixIcon: Icon(
                               FlutterRemix.arrow_down_s_line,
-                              color: Style.blackColor,
+                              color: AppStyle.blackColor,
                               size: 18.r,
                             ),
                             readOnly: true,
@@ -142,13 +189,14 @@ class _EditFoodDetailsBodyState extends State<EditFoodDetailsBody> {
                           ),
                           24.verticalSpace,
                           UnderlinedTextField(
-                            label: '${AppHelpers.getTranslation(TrKeys.interval)}*',
+                            label:
+                                '${AppHelpers.getTranslation(TrKeys.interval)}*',
                             inputType: TextInputType.number,
                             textCapitalization: TextCapitalization.sentences,
                             textInputAction: TextInputAction.next,
-                            onChanged: event.setTitle,
-                            initialText:
-                                (state.product?.interval ?? 1).toString(),
+                            onChanged: event.setInterval,
+                            initialText: (state.product?.interval ?? 1)
+                                .toString(),
                             validator: AppValidators.emptyCheck,
                           ),
                           24.verticalSpace,
@@ -179,7 +227,9 @@ class _EditFoodDetailsBodyState extends State<EditFoodDetailsBody> {
                                   onChanged: event.setMaxQty,
                                   validator: (value) =>
                                       AppValidators.maxQtyCheck(
-                                          value, state.minQty),
+                                        value,
+                                        state.minQty,
+                                      ),
                                 ),
                               ),
                             ],
@@ -201,10 +251,10 @@ class _EditFoodDetailsBodyState extends State<EditFoodDetailsBody> {
                             children: [
                               Text(
                                 AppHelpers.getTranslation(TrKeys.showProduct),
-                                style: Style.interNormal(
-                                  size: 14.sp,
+                                style: AppStyle.interNormal(
+                                  size: 14,
                                   letterSpacing: -0.3,
-                                  color: Style.blackColor,
+                                  color: AppStyle.blackColor,
                                 ),
                               ),
                               CustomToggle(
@@ -231,14 +281,17 @@ class _EditFoodDetailsBodyState extends State<EditFoodDetailsBody> {
                                     AppHelpers.showCheckTopSnackBar(
                                       context,
                                       text: AppHelpers.getTranslation(
-                                          TrKeys.successfullyUpdated),
+                                        TrKeys.successfullyUpdated,
+                                      ),
                                       type: SnackBarType.success,
                                     );
                                     foodsEvent.updateSingleProduct(product);
                                   },
                                   failed: () => AppHelpers.showCheckTopSnackBar(
                                     context,
-                                    text: AppHelpers.getTranslation(TrKeys.updateFailed),
+                                    text: AppHelpers.getTranslation(
+                                      TrKeys.updateFailed,
+                                    ),
                                     type: SnackBarType.error,
                                   ),
                                 );

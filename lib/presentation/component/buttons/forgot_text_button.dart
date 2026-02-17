@@ -15,7 +15,7 @@ class ForgotTextButton extends ConsumerWidget {
     required this.title,
     required this.onPressed,
     this.fontSize,
-    this.fontColor = Style.blackColor,
+    this.fontColor = AppStyle.blackColor,
     this.letterSpacing = -14 * 0.02,
   });
 
@@ -24,16 +24,16 @@ class ForgotTextButton extends ConsumerWidget {
     return TextButton(
       style: ButtonStyle(
         overlayColor: MaterialStateColor.resolveWith(
-          (states) => Style.greyColor,
+          (states) => AppStyle.greyColor,
         ),
       ),
       onPressed: onPressed,
       child: Text(
         title,
-        style: Style.interNormal(
+        style: AppStyle.interNormal(
           textDecoration: TextDecoration.underline,
           size: 12,
-          color: Style.blackColor,
+          color: AppStyle.blackColor,
         ),
       ),
     );

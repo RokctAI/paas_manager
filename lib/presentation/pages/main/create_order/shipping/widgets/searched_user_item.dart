@@ -8,31 +8,23 @@ import 'package:venderfoodyman/presentation/styles/style.dart';
 class SearchedUserItem extends StatelessWidget {
   final UserData user;
 
-  const SearchedUserItem({super.key, required this.user}) ;
+  const SearchedUserItem({super.key, required this.user});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: const BoxDecoration(
-        color: Style.white,
-      ),
-      padding: REdgeInsets.symmetric(
-        horizontal: 16,
-        vertical: 10,
-      ),
+      decoration: const BoxDecoration(color: AppStyle.white),
+      padding: REdgeInsets.symmetric(horizontal: 16, vertical: 10),
       margin: REdgeInsets.symmetric(vertical: 2),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             '${user.firstname ?? AppHelpers.getTranslation(TrKeys.noName)} ${user.lastname ?? ''}',
-            style: Style.interNormal(),
+            style: AppStyle.interNormal(),
           ),
           6.verticalSpace,
-          Text(
-            '${user.email}',
-            style: Style.interRegular(size: 12.sp),
-          ),
+          Text('${user.email}', style: AppStyle.interRegular(size: 12)),
         ],
       ),
     );

@@ -8,6 +8,7 @@ abstract class StorageKeys {
   static const String keyToken = 'keyToken';
   static const String keySelectedCurrency = 'keySelectedCurrency';
   static const String keyAppThemeMode = 'keyAppThemeMode';
+  static const String keyActiveLanguages = 'keyActiveLanguages';
   static const String keyGlobalSettings = 'keyGlobalSettings';
   static const String keyTranslations = 'keyTranslations';
   static const String keyLanguageData = 'keyLanguageData';
@@ -17,4 +18,3 @@ abstract class StorageKeys {
   static const String keySystemLanguage = 'keySystemLanguage';
   static const String keyWalletData = 'keyWalletData';
 }
-

@@ -10,8 +10,7 @@ import 'package:venderfoodyman/infrastructure/services/services.dart';
 class CreateFoodEditExtrasModal extends ConsumerStatefulWidget {
   final int groupIndex;
 
-  const CreateFoodEditExtrasModal({super.key, required this.groupIndex})
-      ;
+  const CreateFoodEditExtrasModal({super.key, required this.groupIndex});
 
   @override
   ConsumerState<CreateFoodEditExtrasModal> createState() =>
@@ -54,7 +53,7 @@ class _CreateFoodEditExtrasModalState
                           child: Center(
                             child: CircularProgressIndicator(
                               strokeWidth: 3.r,
-                              color: Style.primary,
+                              color: AppStyle.primary,
                             ),
                           ),
                         )
@@ -71,9 +70,12 @@ class _CreateFoodEditExtrasModalState
                                 groupIndex: widget.groupIndex,
                               ),
                               isSelected: state.selectGroups.values.any(
-                                  (element) => element.any((element) =>
+                                (element) => element.any(
+                                  (element) =>
                                       element?.id ==
-                                      state.activeGroupExtras[index].id)),
+                                      state.activeGroupExtras[index].id,
+                                ),
+                              ),
                             );
                           },
                         );

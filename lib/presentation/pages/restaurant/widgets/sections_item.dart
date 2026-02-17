@@ -13,7 +13,7 @@ class SectionsItem extends StatelessWidget {
     required this.title,
     required this.icon,
     required this.onTap,
-  }) ;
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -21,15 +21,18 @@ class SectionsItem extends StatelessWidget {
       onTap: onTap,
       child: Container(
         margin: EdgeInsets.symmetric(vertical: 20.h),
-        color: Style.transparent,
+        color: AppStyle.transparent,
         child: Row(
           children: [
             Icon(icon),
             16.horizontalSpace,
             Text(
               title,
-              style: Style.interRegular(size: 16.sp, color: Style.blackColor),
-            )
+              style: AppStyle.interRegular(
+                size: 16,
+                color: AppStyle.blackColor,
+              ),
+            ),
           ],
         ),
       ),

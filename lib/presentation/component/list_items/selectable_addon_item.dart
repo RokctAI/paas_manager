@@ -32,8 +32,8 @@ class SelectableAddonItem extends StatelessWidget {
                     : FlutterRemix.checkbox_blank_circle_line,
                 size: 24.r,
                 color: (addon.isSelectedAddon ?? false)
-                    ? Style.primary
-                    : Style.blackColor,
+                    ? AppStyle.primary
+                    : AppStyle.blackColor,
               ),
               14.horizontalSpace,
               Expanded(
@@ -42,13 +42,18 @@ class SelectableAddonItem extends StatelessWidget {
                   children: [
                     Text(
                       '${addon.translation?.title}',
-                      style: Style.interSemi(size: 14.sp, letterSpacing: -0.3),
+                      style: AppStyle.interSemi(
+                        size: 14,
+                        letterSpacing: -0.3,
+                      ),
                     ),
                     4.verticalSpace,
                     Text(
                       '${addon.translation?.description}',
-                      style:
-                          Style.interRegular(size: 12.sp, letterSpacing: -0.3),
+                      style: AppStyle.interRegular(
+                        size: 12,
+                        letterSpacing: -0.3,
+                      ),
                     ),
                   ],
                 ),
@@ -60,7 +65,7 @@ class SelectableAddonItem extends StatelessWidget {
             Divider(
               thickness: 1.r,
               height: 1.r,
-              color: Style.textColor.withOpacity(0.15),
+              color: AppStyle.textColor.withOpacity(0.15),
             ),
         ],
       ),

@@ -1,12 +1,31 @@
 abstract class TrKeys {
   TrKeys._();
+
+  static const String subscriptions = 'subscriptions';
   static const String select = 'select';
+  static const String combo = 'combo';
+  static const String orderCount = 'order.count';
+  static const String duration = 'duration';
+  static const String translateWithAi = 'translate.with.ai';
+  static const String thisContentTranslatedUsingAI =
+      'this.content.translated.using.ai';
+  static const String productCount = 'product.count';
+  static const String subscriptionIncludes = 'subscription.includes';
+  static const String purchase = 'purchase';
+  static const String selectPayment = 'select.payment';
+  static const String youHaveSubscription = 'you.have.subscription';
+  static const String selectTime = 'select.time';
+  static const String product = 'product';
+  static const String month = 'month';
+  static const String withReport = 'with.report';
   static const String gallery = 'gallery';
   static const String sku = 'sku';
   static const String bonus = 'bonus';
   static const String shopBonus = 'shop.bonus';
   static const String tips = 'tips';
   static const String table = 'table';
+  static const String delivered = 'delivered';
+  static const String canceled = 'canceled';
   static const String input = 'input';
   static const String user = 'user';
   static const String kitchen = 'kitchen';
@@ -40,7 +59,8 @@ abstract class TrKeys {
   static const String readAll = 'read_all';
   static const String orderImage = 'order.image';
   static const String id = 'id';
-  static const String thisImageWasUploadDriver = 'this.image.was.uploaded.by.driver';
+  static const String thisImageWasUploadDriver =
+      'this.image.was.uploaded.by.driver';
   static const String areYouSure = 'are.you.sure';
   static const String deleteAccount = 'delete.account';
   static const String userAlready = 'user.already';
@@ -55,6 +75,7 @@ abstract class TrKeys {
   static const String thanksForCategory = 'thanks.for.category';
   static const String subShopCategory = 'sub.shop.category';
   static const String swipeToWay = 'swipe_to_way';
+  static const String swipeToCooking = 'swipe_to_cooking';
   static const String swipeToDelivered = 'swipe_to_delivered';
   static const String swipeToReady = 'swipe_to_ready';
   static const String showProduct = 'show_the_product_to_the_customer';
@@ -101,14 +122,12 @@ abstract class TrKeys {
   static const String checkYourNetworkConnection =
       'check_your_network_connection';
   static const String send = "send";
-  static const String resetPasswordText =
-      "reset_password_text";
+  static const String resetPasswordText = "reset_password_text";
   static const String orAccessQuickly = 'or_access_quickly';
   static const String forgotPassword = 'forgot_password';
   static const String keepMeLoggedIn = 'keep_me_logged_in';
   static const String login = 'login';
-  static const String noProducts =
-      "no_products";
+  static const String noProducts = "no_products";
   static const String noNotices = "no_notices";
   static const String fm = "fm";
   static const String restaurant = "restaurant";
@@ -119,6 +138,7 @@ abstract class TrKeys {
   static const String rejectedOrders = "rejected_orders";
   static const String cancelOrders = "cancel_orders";
   static const String acceptedOrders = 'accepted_orders';
+  static const String cookingOrders = 'cooking_orders';
   static const String newOrders = 'new_orders';
   static const String totalOrders = 'total.orders';
   static const String statistics = 'statistics';
@@ -151,7 +171,7 @@ abstract class TrKeys {
   static const String address = 'address';
   static const String password = 'password';
   static const String email = 'email';
-  static const String phoneNumber = 'phone_number';
+  static const String phoneNumber = 'phone';
   static const String description = 'description';
   static const String restaurantName = 'restaurant_name';
   static const String settings = 'settings';
@@ -267,8 +287,11 @@ abstract class TrKeys {
   static const String goToAdminPanel = 'go_to_admin_panel';
   static const String apply = 'apply';
   static const String enterADeliveryAddress = 'enter_a_delivery_address';
-  static const String confirmPasswordIsNotTheSame = 'confirm_password_is_not_the_same';
+  static const String confirmPasswordIsNotTheSame =
+      'confirm_password_is_not_the_same';
   static const String pleaseTryAgain = 'your_request_rejected_please_try_again';
   static const String note = 'note';
-
+  static const String defaultWord = 'default';
+  static const String enterTitle = 'enter.title';
+  static const String enterDescription = 'enter.description';
 }

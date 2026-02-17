@@ -28,8 +28,9 @@ class OrdersRepository implements OrdersInterface {
     } catch (e) {
       debugPrint('==> create transaction failure: $e');
       return ApiResult.failure(
-          error: AppHelpers.errorHandler(e),
-          statusCode: NetworkExceptions.getDioStatus(e));
+        error: AppHelpers.errorHandler(e),
+        statusCode: NetworkExceptions.getDioStatus(e),
+      );
     }
   }
 
@@ -37,16 +38,16 @@ class OrdersRepository implements OrdersInterface {
   Future<ApiResult<PaymentsResponse>> getPayments() async {
     try {
       final client = dioHttp.client(requireAuth: true);
-      final response =
-          await client.get('/api/v1/dashboard/seller/shop-payments');
-      return ApiResult.success(
-        data: PaymentsResponse.fromJson(response.data),
+      final response = await client.get(
+        '/api/v1/dashboard/seller/shop-payments',
       );
+      return ApiResult.success(data: PaymentsResponse.fromJson(response.data));
     } catch (e) {
       debugPrint('==> get payments error: $e');
       return ApiResult.failure(
-          error: AppHelpers.errorHandler(e),
-          statusCode: NetworkExceptions.getDioStatus(e));
+        error: AppHelpers.errorHandler(e),
+        statusCode: NetworkExceptions.getDioStatus(e),
+      );
     }
   }
 
@@ -77,8 +78,8 @@ class OrdersRepository implements OrdersInterface {
         'stock_id': stock.id,
         'quantity': stock.quantity ?? 1,
         if (addons.isNotEmpty) 'addons': addons,
-        if (stock.bonus ??  false) 'bonus': true,
-        if (stock.shopBonus ??  false) 'bonus_shop': true,
+        if (stock.bonus ?? false) 'bonus': true,
+        if (stock.shopBonus ?? false) 'bonus_shop': true,
       });
     }
     final data = {
@@ -118,8 +119,9 @@ class OrdersRepository implements OrdersInterface {
     } catch (e) {
       debugPrint('==> create order failure: $e');
       return ApiResult.failure(
-          error: AppHelpers.errorHandler(e),
-          statusCode: NetworkExceptions.getDioStatus(e));
+        error: AppHelpers.errorHandler(e),
+        statusCode: NetworkExceptions.getDioStatus(e),
+      );
     }
   }
 
@@ -135,6 +137,9 @@ class OrdersRepository implements OrdersInterface {
         break;
       case OrderStatus.accepted:
         statusText = 'accepted';
+        break;
+      case OrderStatus.cooking:
+        statusText = 'cooking';
         break;
       case OrderStatus.ready:
         statusText = 'ready';
@@ -163,8 +168,9 @@ class OrdersRepository implements OrdersInterface {
     } catch (e) {
       debugPrint('==> update order status failure: $e');
       return ApiResult.failure(
-          error: AppHelpers.errorHandler(e),
-          statusCode: NetworkExceptions.getDioStatus(e));
+        error: AppHelpers.errorHandler(e),
+        statusCode: NetworkExceptions.getDioStatus(e),
+      );
     }
   }
 
@@ -172,20 +178,20 @@ class OrdersRepository implements OrdersInterface {
   Future<ApiResult<SingleOrderResponse>> getOrderDetails({int? orderId}) async {
     try {
       final client = dioHttp.client(requireAuth: true);
-      final data = {
-        'lang': LocalStorage.getLanguage()?.locale,
-      };
+      final data = {'lang': LocalStorage.getLanguage()?.locale};
       final response = await client.get(
-          '/api/v1/dashboard/seller/orders/$orderId',
-          queryParameters: data);
+        '/api/v1/dashboard/seller/orders/$orderId',
+        queryParameters: data,
+      );
       return ApiResult.success(
         data: SingleOrderResponse.fromJson(response.data),
       );
     } catch (e) {
       debugPrint('==> get order details failure: $e');
       return ApiResult.failure(
-          error: AppHelpers.errorHandler(e),
-          statusCode: NetworkExceptions.getDioStatus(e));
+        error: AppHelpers.errorHandler(e),
+        statusCode: NetworkExceptions.getDioStatus(e),
+      );
     }
   }
 
@@ -215,6 +221,8 @@ class OrdersRepository implements OrdersInterface {
         break;
       case OrderStatus.newOrder:
         statusText = 'new';
+      case OrderStatus.cooking:
+        statusText = 'cooking';
         break;
       default:
         statusText = null;
@@ -240,8 +248,9 @@ class OrdersRepository implements OrdersInterface {
     } catch (e) {
       debugPrint('==> get order $status failure: $e');
       return ApiResult.failure(
-          error: AppHelpers.errorHandler(e),
-          statusCode: NetworkExceptions.getDioStatus(e));
+        error: AppHelpers.errorHandler(e),
+        statusCode: NetworkExceptions.getDioStatus(e),
+      );
     }
   }
 
@@ -250,11 +259,12 @@ class OrdersRepository implements OrdersInterface {
     int? page,
     String? from,
     String? to,
+    String? status,
   }) async {
     final data = {
       if (page != null) 'page': page,
-      'statuses[0]': 'delivered',
-      'statuses[1]': 'canceled',
+      'statuses[0]': status,
+      // 'statuses[1]': 'canceled',
       if (from != null) 'date_from': from,
       if (to != null) 'date_to': to,
       'perPage': 10,
@@ -272,8 +282,9 @@ class OrdersRepository implements OrdersInterface {
     } catch (e) {
       debugPrint('==> get order failure: $e');
       return ApiResult.failure(
-          error: AppHelpers.errorHandler(e),
-          statusCode: NetworkExceptions.getDioStatus(e));
+        error: AppHelpers.errorHandler(e),
+        statusCode: NetworkExceptions.getDioStatus(e),
+      );
     }
   }
 
@@ -292,7 +303,7 @@ class OrdersRepository implements OrdersInterface {
         'products[$i][quantity]': '${stocks[i].cartCount}',
       'type': type,
       if (location != null) 'address[latitude]': location.latitude,
-      if (location != null) 'address[longitude]': location.longitude
+      if (location != null) 'address[longitude]': location.longitude,
     };
     for (int i = 0; i < (stocks.length); i++) {
       data['products[$i][stock_id]'] = stocks[i].id;
@@ -313,14 +324,13 @@ class OrdersRepository implements OrdersInterface {
         '/api/v1/dashboard/seller/order/products/calculate',
         queryParameters: data,
       );
-      return ApiResult.success(
-        data: OrderCalculate.fromJson(response.data),
-      );
+      return ApiResult.success(data: OrderCalculate.fromJson(response.data));
     } catch (e, s) {
       debugPrint('==> get order failure: $e, $s');
       return ApiResult.failure(
-          error: AppHelpers.errorHandler(e),
-          statusCode: NetworkExceptions.getDioStatus(e));
+        error: AppHelpers.errorHandler(e),
+        statusCode: NetworkExceptions.getDioStatus(e),
+      );
     }
   }
 }

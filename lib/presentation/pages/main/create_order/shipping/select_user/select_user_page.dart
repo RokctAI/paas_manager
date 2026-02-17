@@ -43,7 +43,7 @@ class _SelectUserPageState extends ConsumerState<SelectUserPage> {
   Widget build(BuildContext context) {
     return KeyboardDisable(
       child: Scaffold(
-        backgroundColor: Style.greyColor,
+        backgroundColor: AppStyle.greyColor,
         body: Consumer(
           builder: (context, ref, child) {
             final state = ref.watch(orderUserProvider);
@@ -67,7 +67,7 @@ class _SelectUserPageState extends ConsumerState<SelectUserPage> {
                           height: 30.r,
                           child: CircularProgressIndicator(
                             strokeWidth: 3.r,
-                            color: Style.blackColor,
+                            color: AppStyle.blackColor,
                           ),
                         ),
                       )

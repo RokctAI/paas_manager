@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:venderfoodyman/infrastructure/models/data/stock.dart';
-import 'package:venderfoodyman/infrastructure/services/app_helpers.dart';
-import 'package:venderfoodyman/infrastructure/services/tr_keys.dart';
+import 'package:venderfoodyman/infrastructure/models/models.dart';
+import 'package:venderfoodyman/infrastructure/services/services.dart';
 import 'package:venderfoodyman/presentation/component/title_icon.dart';
 import 'package:venderfoodyman/presentation/styles/style.dart';
 
@@ -14,13 +13,13 @@ class WIngredientScreen extends StatelessWidget {
   final ValueChanged<int> add;
   final ValueChanged<int> remove;
 
-  const WIngredientScreen(
-      {required this.list,
-      super.key,
-      required this.onChange,
-      required this.add,
-      required this.remove})
-      ;
+  const WIngredientScreen({
+    required this.list,
+    super.key,
+    required this.onChange,
+    required this.add,
+    required this.remove,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +28,7 @@ class WIngredientScreen extends StatelessWidget {
         : Container(
             width: double.infinity,
             decoration: BoxDecoration(
-              color: list.isEmpty ? Style.transparent : Style.white,
+              color: list.isEmpty ? AppStyle.transparent : AppStyle.white,
               borderRadius: BorderRadius.circular(10.r),
             ),
             padding: REdgeInsets.all(18),

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:venderfoodyman/domain/di/dependency_manager.dart';
@@ -38,16 +40,11 @@ class SettingsRepository implements SettingsInterface {
       case UploadType.users:
         type = 'users';
         break;
-      default:
-        type = 'extras';
-        break;
     }
-    final data = FormData.fromMap(
-      {
-        'image': await MultipartFile.fromFile(filePath),
-        'type': type,
-      },
-    );
+    final data = FormData.fromMap({
+      'image': await MultipartFile.fromFile(filePath),
+      'type': type,
+    });
     try {
       final client = dioHttp.client(requireAuth: true);
       final response = await client.post(
@@ -60,16 +57,17 @@ class SettingsRepository implements SettingsInterface {
     } catch (e) {
       debugPrint('==> upload image failure: $e');
       return ApiResult.failure(
-         error: AppHelpers.errorHandler(e),
-          statusCode: NetworkExceptions.getDioStatus(e));
+        error: AppHelpers.errorHandler(e),
+        statusCode: NetworkExceptions.getDioStatus(e),
+      );
     }
   }
 
   @override
   Future<ApiResult<MultiGalleryUploadResponse>> uploadMultiImage(
-      List<String?> filePaths,
-      UploadType uploadType,
-      ) async {
+    List<String?> filePaths,
+    UploadType uploadType,
+  ) async {
     String type = '';
     switch (uploadType) {
       case UploadType.shopsLogo:
@@ -82,14 +80,12 @@ class SettingsRepository implements SettingsInterface {
         type = uploadType.name;
         break;
     }
-    final data = FormData.fromMap(
-      {
-        for (int i = 0; i < filePaths.length; i++)
-          if (filePaths[i] != null)
-            'images[$i]': await MultipartFile.fromFile(filePaths[i]!),
-        'type': type,
-      },
-    );
+    final data = FormData.fromMap({
+      for (int i = 0; i < filePaths.length; i++)
+        if (filePaths[i] != null)
+          'images[$i]': await MultipartFile.fromFile(filePaths[i]!),
+      'type': type,
+    });
     try {
       final client = dioHttp.client(requireAuth: true);
       final response = await client.post(
@@ -102,8 +98,9 @@ class SettingsRepository implements SettingsInterface {
     } catch (e) {
       debugPrint('==> upload multi image failure: $e');
       return ApiResult.failure(
-          error: AppHelpers.errorHandler(e),
-          statusCode: NetworkExceptions.getDioStatus(e));
+        error: AppHelpers.errorHandler(e),
+        statusCode: NetworkExceptions.getDioStatus(e),
+      );
     }
   }
 
@@ -118,8 +115,9 @@ class SettingsRepository implements SettingsInterface {
     } catch (e) {
       debugPrint('==> get currencies failure: $e');
       return ApiResult.failure(
-           error: AppHelpers.errorHandler(e),
-          statusCode: NetworkExceptions.getDioStatus(e));
+        error: AppHelpers.errorHandler(e),
+        statusCode: NetworkExceptions.getDioStatus(e),
+      );
     }
   }
 
@@ -128,14 +126,13 @@ class SettingsRepository implements SettingsInterface {
     try {
       final client = dioHttp.client(requireAuth: false);
       final response = await client.get('/api/v1/rest/settings');
-      return ApiResult.success(
-        data: SettingsResponse.fromJson(response.data),
-      );
+      return ApiResult.success(data: SettingsResponse.fromJson(response.data));
     } catch (e) {
       debugPrint('==> get settings failure: $e');
       return ApiResult.failure(
-           error: AppHelpers.errorHandler(e),
-          statusCode: NetworkExceptions.getDioStatus(e));
+        error: AppHelpers.errorHandler(e),
+        statusCode: NetworkExceptions.getDioStatus(e),
+      );
     }
   }
 
@@ -154,8 +151,9 @@ class SettingsRepository implements SettingsInterface {
     } catch (e) {
       debugPrint('==> get translations failure: $e');
       return ApiResult.failure(
-           error: AppHelpers.errorHandler(e),
-          statusCode: NetworkExceptions.getDioStatus(e));
+        error: AppHelpers.errorHandler(e),
+        statusCode: NetworkExceptions.getDioStatus(e),
+      );
     }
   }
 
@@ -164,44 +162,53 @@ class SettingsRepository implements SettingsInterface {
     try {
       final client = dioHttp.client(requireAuth: false);
       final response = await client.get('/api/v1/rest/languages/active');
+      final languagesResponse = LanguagesResponse.fromJson(response.data);
       if (LocalStorage.getLanguage() != null &&
-          !(LanguagesResponse.fromJson(response.data)
-                  .data
+          !(languagesResponse.data
                   ?.map((e) => e.id)
                   .contains(LocalStorage.getLanguage()?.id) ??
               true)) {
-        LanguagesResponse.fromJson(response.data).data?.forEach((element) {
+        languagesResponse.data?.forEach((element) {
           if (element.isDefault ?? false) {
             LocalStorage.setLanguageData(element);
           }
         });
       }
-      return ApiResult.success(
-        data: LanguagesResponse.fromJson(response.data),
-      );
+
+      if (languagesResponse.data?.isNotEmpty ?? false) {
+        LocalStorage.setActiveLanguages(languagesResponse.data!);
+      }
+      return ApiResult.success(data: languagesResponse);
     } catch (e) {
       debugPrint('==> get languages failure: $e');
       return ApiResult.failure(
-           error: AppHelpers.errorHandler(e),
-          statusCode: NetworkExceptions.getDioStatus(e));
+        error: AppHelpers.errorHandler(e),
+        statusCode: NetworkExceptions.getDioStatus(e),
+      );
     }
   }
 
   @override
-  Future<ApiResult<GenerateImageModel>> getGenerateImage(String name) async {
+  Future<ApiResult<AiTranslationResponse>> getAiTranslation({
+    required AiTranslationRequest model,
+  }) async {
+    debugPrint('==> get ai translation request: ${jsonEncode(model.toJson())}');
+
+    final client = dioHttp.client(requireAuth: true);
     try {
-      final client =
-          dioHttp.client(chatGpt: true, requireAuth: true);
-      final response = await client.post('/v1/images/generations',
-          data: {"prompt": name, "n": 10, "size": "512x512"});
+      final response = await client.post(
+        '/api/v1/dashboard/seller/ai-translations',
+        data: model.toJson(),
+      );
       return ApiResult.success(
-        data: GenerateImageModel.fromJson(response.data),
+        data: AiTranslationResponse.fromJson(response.data),
       );
     } catch (e) {
-      debugPrint('==> get GenerateImage failure: $e');
+      debugPrint('==> get ai translation failure: $e');
       return ApiResult.failure(
-           error: AppHelpers.errorHandler(e),
-          statusCode: NetworkExceptions.getDioStatus(e));
+        error: AppHelpers.errorHandler(e),
+        statusCode: NetworkExceptions.getDioStatus(e),
+      );
     }
   }
 }

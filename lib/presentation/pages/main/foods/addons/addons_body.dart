@@ -12,8 +12,7 @@ import 'package:venderfoodyman/infrastructure/services/services.dart';
 class AddonsBody extends StatelessWidget {
   final RefreshController addonsController;
 
-  const AddonsBody({super.key, required this.addonsController})
-      ;
+  const AddonsBody({super.key, required this.addonsController});
 
   @override
   Widget build(BuildContext context) {

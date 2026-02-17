@@ -18,11 +18,11 @@ class ShopTabBarItem extends StatelessWidget {
     return AnimatedContainer(
       duration: const Duration(milliseconds: 300),
       decoration: BoxDecoration(
-        color: isActive ? Style.primary : Style.white,
+        color: isActive ? AppStyle.primary : AppStyle.white,
         borderRadius: BorderRadius.circular(10.r),
         boxShadow: [
           BoxShadow(
-            color: Style.white.withOpacity(0.07),
+            color: AppStyle.white.withOpacity(0.07),
             spreadRadius: 0,
             blurRadius: 2,
             offset: const Offset(0, 1),
@@ -33,10 +33,7 @@ class ShopTabBarItem extends StatelessWidget {
       margin: EdgeInsets.only(right: 9.w),
       child: Text(
         title,
-        style: Style.interNormal(
-          size: 14.sp,
-          color: Style.blackColor,
-        ),
+        style: AppStyle.interNormal(size: 14, color: AppStyle.blackColor),
       ),
     );
   }

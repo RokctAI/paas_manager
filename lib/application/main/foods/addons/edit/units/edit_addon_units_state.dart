@@ -6,7 +6,7 @@ import '../../../../../../../infrastructure/models/models.dart';
 part 'edit_addon_units_state.freezed.dart';
 
 @freezed
-class EditAddonUnitsState with _$EditAddonUnitsState {
+abstract class EditAddonUnitsState with _$EditAddonUnitsState {
   const factory EditAddonUnitsState({
     @Default(false) bool isLoading,
     @Default([]) List<UnitData> units,

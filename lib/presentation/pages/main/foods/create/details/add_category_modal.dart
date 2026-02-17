@@ -12,7 +12,7 @@ import 'package:venderfoodyman/infrastructure/services/services.dart';
 import 'food_categories_modal.dart';
 
 class AddCategoryModal extends StatefulWidget {
-  const AddCategoryModal({super.key}) ;
+  const AddCategoryModal({super.key});
 
   @override
   State<AddCategoryModal> createState() => _AddCategoryModalState();
@@ -36,29 +36,29 @@ class _AddCategoryModalState extends State<AddCategoryModal> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   const ModalDrag(),
-                  TitleAndIcon(title: AppHelpers.getTranslation(TrKeys.addNewCategory)),
+                  TitleAndIcon(
+                    title: AppHelpers.getTranslation(TrKeys.addNewCategory),
+                  ),
                   24.verticalSpace,
                   Consumer(
                     builder: (context, ref, child) {
                       return UnderlinedTextField(
                         textController: ref
-                            .watch(addFoodCategoriesProvider)
+                            .watch(allCategoriesProvider)
                             .categorySubController,
-                        label: '${AppHelpers.getTranslation(TrKeys.subShopCategory)}*',
+                        label:
+                            '${AppHelpers.getTranslation(TrKeys.subShopCategory)}*',
                         suffixIcon: Icon(
                           FlutterRemix.arrow_down_s_line,
-                          color: Style.blackColor,
+                          color: AppStyle.blackColor,
                           size: 18.r,
                         ),
                         readOnly: true,
                         validator: AppValidators.emptyCheck,
                         onTap: () => AppHelpers.showCustomModalBottomSheet(
-                          paddingTop:
-                              MediaQuery.paddingOf(context).top + 100.h,
+                          paddingTop: MediaQuery.paddingOf(context).top + 100.h,
                           context: context,
-                          modal: const FoodCategoriesModal(
-                            isSubCategory: true,
-                          ),
+                          modal: const FoodCategoriesModal(isSubCategory: true),
                           isDarkMode: false,
                         ),
                       );
@@ -91,33 +91,36 @@ class _AddCategoryModalState extends State<AddCategoryModal> {
                           context,
                           success: () {
                             ref
-                                .read(addFoodCategoriesProvider.notifier)
+                                .read(allCategoriesProvider.notifier)
                                 .updateCategories(context);
                             Navigator.pop(context);
                             AppHelpers.showAlertDialog(
-                                context: context,
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Text(
-                                      AppHelpers.getTranslation(
-                                          TrKeys.thanksForCategory),
-                                      style: Style.interNormal(),
-                                      textAlign: TextAlign.center,
+                              context: context,
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(
+                                    AppHelpers.getTranslation(
+                                      TrKeys.thanksForCategory,
                                     ),
-                                    16.verticalSpace,
-                                    if (AppHelpers.getAppPhone() != null)
-                                      CustomButton(
-                                          title: AppHelpers.getAppPhone() ?? "",
-                                          onPressed: () {
-                                            final Uri launchUri = Uri(
-                                              scheme: 'tel',
-                                              path: AppHelpers.getAppPhone(),
-                                            );
-                                            launchUrl(launchUri);
-                                          })
-                                  ],
-                                ));
+                                    style: AppStyle.interNormal(),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  16.verticalSpace,
+                                  if (AppHelpers.getAppPhone() != null)
+                                    CustomButton(
+                                      title: AppHelpers.getAppPhone() ?? "",
+                                      onPressed: () {
+                                        final Uri launchUri = Uri(
+                                          scheme: 'tel',
+                                          path: AppHelpers.getAppPhone(),
+                                        );
+                                        launchUrl(launchUri);
+                                      },
+                                    ),
+                                ],
+                              ),
+                            );
                           },
                         );
                       }

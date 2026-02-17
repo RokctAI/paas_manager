@@ -8,7 +8,7 @@ import 'package:venderfoodyman/application/providers.dart';
 import 'package:venderfoodyman/infrastructure/services/services.dart';
 
 class CreateExtrasGroupModal extends StatefulWidget {
-  const CreateExtrasGroupModal({super.key}) ;
+  const CreateExtrasGroupModal({super.key});
 
   @override
   State<CreateExtrasGroupModal> createState() => _CreateExtrasGroupModalState();

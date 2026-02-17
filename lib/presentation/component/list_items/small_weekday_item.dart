@@ -9,7 +9,7 @@ class SmallWeekdayItem extends StatelessWidget {
   final bool isSelected;
   final ShopWorkingDays day;
   final int size;
-  final int fontSize;
+  final double fontSize;
   final int borderRadius;
 
   const SmallWeekdayItem({
@@ -27,15 +27,15 @@ class SmallWeekdayItem extends StatelessWidget {
       height: size.r,
       width: size.r,
       decoration: BoxDecoration(
-        color: isSelected ? Style.primary : Style.white,
+        color: isSelected ? AppStyle.primary : AppStyle.white,
         borderRadius: BorderRadius.circular(borderRadius.r),
       ),
       alignment: Alignment.center,
       child: Text(
         '${toBeginningOfSentenceCase(day.day?.substring(0, 2))}',
-        style: Style.interNormal(
-          size: fontSize.sp,
-          color: Style.blackColor,
+        style: AppStyle.interNormal(
+          size: fontSize,
+          color: AppStyle.blackColor,
         ),
       ),
     );

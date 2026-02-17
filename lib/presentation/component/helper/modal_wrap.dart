@@ -7,7 +7,7 @@ import 'blur_wrap.dart';
 class ModalWrap extends StatelessWidget {
   final Widget body;
 
-  const ModalWrap({super.key, required this.body}) ;
+  const ModalWrap({super.key, required this.body});
 
   @override
   Widget build(BuildContext context) {
@@ -22,10 +22,10 @@ class ModalWrap extends StatelessWidget {
             topLeft: Radius.circular(16.r),
             topRight: Radius.circular(16.r),
           ),
-          color: Style.white.withOpacity(0.9),
+          color: AppStyle.white.withOpacity(0.9),
           boxShadow: [
             BoxShadow(
-              color: Style.blackColor.withOpacity(0.25),
+              color: AppStyle.blackColor.withOpacity(0.25),
               offset: const Offset(0, -2),
               blurRadius: 40,
               spreadRadius: 0,

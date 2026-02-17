@@ -9,9 +9,9 @@ class CustomButton extends StatelessWidget {
   final String title;
   final bool isLoading;
   final Function()? onPressed;
-  final Color background;
+  final Color? background;
   final Color borderColor;
-  final Color textColor;
+  final Color? textColor;
   final double weight;
   final double radius;
 
@@ -20,12 +20,12 @@ class CustomButton extends StatelessWidget {
     required this.title,
     required this.onPressed,
     this.isLoading = false,
-    this.background = Style.primary,
-    this.textColor = Style.black,
+    this.background,
+    this.textColor,
     this.weight = double.infinity,
     this.radius = 8,
     this.icon,
-    this.borderColor = Style.transparent,
+    this.borderColor = AppStyle.transparent,
   });
 
   @override
@@ -34,16 +34,18 @@ class CustomButton extends StatelessWidget {
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           side: BorderSide(
-              color:
-                  borderColor == Style.transparent ? background : borderColor,
-              width: 2.r),
+            color: borderColor == AppStyle.transparent
+                ? (background ?? AppStyle.primary)
+                : borderColor,
+            width: 2.r,
+          ),
           elevation: 0,
-          shadowColor: Style.transparent,
+          shadowColor: AppStyle.transparent,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(radius.r),
           ),
           minimumSize: Size(weight, 50.h),
-          backgroundColor: background,
+          backgroundColor: (background ?? AppStyle.primary),
         ),
         onPressed: isLoading ? null : onPressed,
         child: isLoading
@@ -60,17 +62,12 @@ class CustomButton extends StatelessWidget {
                 children: [
                   icon == null
                       ? const SizedBox()
-                      : Row(
-                          children: [
-                            icon!,
-                            10.horizontalSpace,
-                          ],
-                        ),
+                      : Row(children: [icon!, 10.horizontalSpace]),
                   Text(
                     title,
-                    style: Style.interNormal(
+                    style: AppStyle.interNormal(
                       size: 15,
-                      color: textColor,
+                      color: textColor ?? AppStyle.buttonFontColor,
                       letterSpacing: -14 * 0.01,
                     ),
                   ),

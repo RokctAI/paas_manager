@@ -22,7 +22,7 @@ class FoodDetailsModal extends ConsumerStatefulWidget {
     super.key,
     required this.product,
     required this.controller,
-  }) ;
+  });
 
   @override
   ConsumerState<FoodDetailsModal> createState() => _FoodDetailsModalState();
@@ -32,7 +32,9 @@ class _FoodDetailsModalState extends ConsumerState<FoodDetailsModal> {
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback(
-      (_) => ref.read(productsProvider.notifier).setProductDetails(
+      (_) => ref
+          .read(productsProvider.notifier)
+          .setProductDetails(
             product: widget.product,
             cartStocks: ref.watch(orderCartProvider).stocks,
           ),
@@ -75,9 +77,9 @@ class _FoodDetailsModalState extends ConsumerState<FoodDetailsModal> {
                           Expanded(
                             child: Text(
                               widget.product.translation?.title ?? '',
-                              style: Style.interNormal(
-                                size: 14.sp,
-                                color: Style.blackColor,
+                              style: AppStyle.interNormal(
+                                size: 14,
+                                color: AppStyle.blackColor,
                                 letterSpacing: -0.3,
                               ),
                             ),
@@ -91,9 +93,9 @@ class _FoodDetailsModalState extends ConsumerState<FoodDetailsModal> {
                       6.verticalSpace,
                       Text(
                         '${widget.product.translation?.description}',
-                        style: Style.interNormal(
-                          size: 12.sp,
-                          color: Style.textColor,
+                        style: AppStyle.interNormal(
+                          size: 12,
+                          color: AppStyle.textColor,
                           letterSpacing: -0.3,
                         ),
                       ),
@@ -120,7 +122,7 @@ class _FoodDetailsModalState extends ConsumerState<FoodDetailsModal> {
                   ),
                 ),
                 Container(
-                  color: Style.white,
+                  color: AppStyle.white,
                   padding: REdgeInsets.only(
                     bottom: Platform.isIOS ? 40 : 20,
                     top: 20,
@@ -133,7 +135,7 @@ class _FoodDetailsModalState extends ConsumerState<FoodDetailsModal> {
                               width: 56.w,
                               height: 50.r,
                               decoration: BoxDecoration(
-                                color: Style.primary,
+                                color: AppStyle.primary,
                                 borderRadius: BorderRadius.only(
                                   topRight: Radius.circular(16.r),
                                   bottomRight: Radius.circular(16.r),
@@ -142,9 +144,9 @@ class _FoodDetailsModalState extends ConsumerState<FoodDetailsModal> {
                               alignment: Alignment.center,
                               child: Text(
                                 '${state.stockCount * (state.productData?.interval ?? 1)} ${state.productData?.unit?.translation?.title ?? ""}',
-                                style: Style.interSemi(
-                                  size: 15.sp,
-                                  color: Style.blackColor,
+                                style: AppStyle.interSemi(
+                                  size: 15,
+                                  color: AppStyle.blackColor,
                                 ),
                               ),
                             ),
@@ -155,20 +157,20 @@ class _FoodDetailsModalState extends ConsumerState<FoodDetailsModal> {
                                     onTap: () => event.decreaseStockCount(
                                       updateCart: (count) =>
                                           cartEvent.addStockToCart(
-                                        count: count,
-                                        product: state.productData,
-                                        stock: state.selectedStock,
-                                        updateProducts: (stocks) =>
-                                            productsEvent.updateProducts(
-                                          cartStocks: stocks,
-                                        ),
-                                      ),
+                                            count: count,
+                                            product: state.productData,
+                                            stock: state.selectedStock,
+                                            updateProducts: (stocks) =>
+                                                productsEvent.updateProducts(
+                                                  cartStocks: stocks,
+                                                ),
+                                          ),
                                     ),
                                     child: Container(
                                       height: 50.r,
                                       width: 100.r,
                                       decoration: BoxDecoration(
-                                        color: Style.discountColor,
+                                        color: AppStyle.discountColor,
                                         borderRadius: BorderRadius.only(
                                           topLeft: Radius.circular(16.r),
                                           bottomLeft: Radius.circular(16.r),
@@ -178,7 +180,7 @@ class _FoodDetailsModalState extends ConsumerState<FoodDetailsModal> {
                                       child: Icon(
                                         FlutterRemix.subtract_line,
                                         size: 24.r,
-                                        color: Style.blackColor,
+                                        color: AppStyle.blackColor,
                                       ),
                                     ),
                                   ),
@@ -189,20 +191,20 @@ class _FoodDetailsModalState extends ConsumerState<FoodDetailsModal> {
                                     onTap: () => event.increaseStockCount(
                                       updateCart: (count) =>
                                           cartEvent.addStockToCart(
-                                        count: count,
-                                        product: state.productData,
-                                        stock: state.selectedStock,
-                                        updateProducts: (stocks) =>
-                                            productsEvent.updateProducts(
-                                          cartStocks: stocks,
-                                        ),
-                                      ),
+                                            count: count,
+                                            product: state.productData,
+                                            stock: state.selectedStock,
+                                            updateProducts: (stocks) =>
+                                                productsEvent.updateProducts(
+                                                  cartStocks: stocks,
+                                                ),
+                                          ),
                                     ),
                                     child: Container(
                                       height: 50.r,
                                       width: 100.r,
                                       decoration: BoxDecoration(
-                                        color: Style.addCountColor,
+                                        color: AppStyle.addCountColor,
                                         borderRadius: BorderRadius.only(
                                           topRight: Radius.circular(16.r),
                                           bottomRight: Radius.circular(16.r),
@@ -212,7 +214,7 @@ class _FoodDetailsModalState extends ConsumerState<FoodDetailsModal> {
                                       child: Icon(
                                         FlutterRemix.add_line,
                                         size: 24.r,
-                                        color: Style.blackColor,
+                                        color: AppStyle.blackColor,
                                       ),
                                     ),
                                   ),
@@ -228,18 +230,16 @@ class _FoodDetailsModalState extends ConsumerState<FoodDetailsModal> {
                             title: AppHelpers.getTranslation(TrKeys.toBuy),
                             onPressed: () {
                               event.increaseStockCount(
-                              updateCart: (count) {
-                                cartEvent.addStockToCart(
-                                count: count,
-                                product: state.productData,
-                                stock: state.selectedStock,
-                                updateProducts: (stocks) =>
-                                    productsEvent.updateProducts(
-                                  cartStocks: stocks,
-                                ),
+                                updateCart: (count) {
+                                  cartEvent.addStockToCart(
+                                    count: count,
+                                    product: state.productData,
+                                    stock: state.selectedStock,
+                                    updateProducts: (stocks) => productsEvent
+                                        .updateProducts(cartStocks: stocks),
+                                  );
+                                },
                               );
-                              },
-                            );
                             },
                           ),
                         ),

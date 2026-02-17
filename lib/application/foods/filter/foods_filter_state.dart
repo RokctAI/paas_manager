@@ -4,7 +4,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'foods_filter_state.freezed.dart';
 
 @freezed
-class FoodsFilterState with _$FoodsFilterState {
+abstract class FoodsFilterState with _$FoodsFilterState {
   const factory FoodsFilterState({
     // @Default(null) FilterModel? filterModel,
     @Default(false) bool checked,

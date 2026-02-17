@@ -6,14 +6,13 @@ abstract class CatalogInterface {
 
   Future<ApiResult<KitchensPaginateResponse>> getKitchens();
 
-  Future<ApiResult<void>> createCategory({
-    required String title,
-    int? input,
-  });
+  Future<ApiResult<void>> createCategory({required String title, int? input});
 
   Future<ApiResult<CategoriesPaginateResponse>> getCategories({
     int? page,
     String? query,
+    String? type,
+    bool hasProducts = false,
   });
 
   Future<ApiResult<CategoriesPaginateResponse>> getShopCategories({

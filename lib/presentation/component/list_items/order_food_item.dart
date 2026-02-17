@@ -25,12 +25,12 @@ class OrderFoodItem extends StatelessWidget {
     final bool hasDiscount = isOutOfStock
         ? false
         : (product.stocks!.first.discount != null &&
-            (product.stocks!.first.discount ?? 0) > 0);
+              (product.stocks!.first.discount ?? 0) > 0);
     return ButtonsBouncingEffect(
       child: GestureDetector(
         onTap: onTap,
         child: Container(
-          color: Style.white,
+          color: AppStyle.white,
           margin: EdgeInsets.only(bottom: spacing.r),
           padding: REdgeInsets.symmetric(vertical: 12),
           child: Column(
@@ -48,11 +48,11 @@ class OrderFoodItem extends StatelessWidget {
                           topRight: Radius.circular(16.r),
                           bottomRight: Radius.circular(16.r),
                         ),
-                        color: Style.primary,
+                        color: AppStyle.primary,
                       ),
                       child: Text(
                         '${(product.cartCount ?? 1) * (product.interval ?? 1)} ${product.unit?.translation?.title ?? ""}',
-                        style: Style.interSemi(size: 15.sp),
+                        style: AppStyle.interSemi(size: 15),
                       ),
                     ),
                   16.horizontalSpace,
@@ -62,9 +62,9 @@ class OrderFoodItem extends StatelessWidget {
                       children: [
                         Text(
                           '${product.translation?.title}',
-                          style: Style.interNormal(
-                            size: 14.sp,
-                            color: Style.blackColor,
+                          style: AppStyle.interNormal(
+                            size: 14,
+                            color: AppStyle.blackColor,
                             letterSpacing: -0.3,
                           ),
                         ),
@@ -73,9 +73,9 @@ class OrderFoodItem extends StatelessWidget {
                           '${product.translation?.description}',
                           maxLines: 4,
                           overflow: TextOverflow.ellipsis,
-                          style: Style.interNormal(
-                            size: 12.sp,
-                            color: Style.textColor,
+                          style: AppStyle.interNormal(
+                            size: 12,
+                            color: AppStyle.textColor,
                             letterSpacing: -0.3,
                           ),
                         ),
@@ -83,87 +83,89 @@ class OrderFoodItem extends StatelessWidget {
                         isOutOfStock
                             ? Text(
                                 AppHelpers.getTranslation(TrKeys.outOfStock),
-                                style: Style.interSemi(
-                                  size: 11.sp,
-                                  color: Style.red,
+                                style: AppStyle.interSemi(
+                                  size: 11,
+                                  color: AppStyle.red,
                                   letterSpacing: -0.3,
                                 ),
                               )
                             : (hasDiscount
-                                ? Row(
-                                    children: [
-                                      Text(
-                                        AppHelpers.numberFormat(
-                                           (product
-                                                      .stocks?.first.price ??
-                                                  0) +
-                                              (product.stocks?.first.tax ?? 0),
+                                  ? Row(
+                                      children: [
+                                        Text(
+                                          AppHelpers.numberFormat(
+                                            (product.stocks?.first.price ?? 0) +
+                                                (product.stocks?.first.tax ??
+                                                    0),
+                                          ),
+                                          style: AppStyle.interSemi(
+                                            size: 14,
+                                            color: AppStyle.blackColor,
+                                            letterSpacing: -0.3,
+                                            decoration:
+                                                TextDecoration.lineThrough,
+                                          ),
                                         ),
-                                        style: Style.interSemi(
-                                          size: 14.sp,
-                                          color: Style.blackColor,
-                                          letterSpacing: -0.3,
-                                          decoration:
-                                              TextDecoration.lineThrough,
-                                        ),
-                                      ),
-                                      10.horizontalSpace,
-                                      Container(
-                                        padding: REdgeInsets.only(
-                                          top: 4,
-                                          bottom: 4,
-                                          left: 4,
-                                          right: 10,
-                                        ),
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(30.r),
-                                          color: Style.bgColor,
-                                        ),
-                                        alignment: Alignment.center,
-                                        child: Row(
-                                          children: [
-                                            Container(
-                                              width: 20.r,
-                                              height: 20.r,
-                                              decoration: const BoxDecoration(
-                                                shape: BoxShape.circle,
-                                                color: Style.red,
-                                              ),
-                                              child: Icon(
-                                                FlutterRemix.percent_fill,
-                                                size: 12.r,
-                                                color: Style.white,
-                                              ),
+                                        10.horizontalSpace,
+                                        Container(
+                                          padding: REdgeInsets.only(
+                                            top: 4,
+                                            bottom: 4,
+                                            left: 4,
+                                            right: 10,
+                                          ),
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(
+                                              30.r,
                                             ),
-                                            8.horizontalSpace,
-                                            Text(
-                                              AppHelpers.numberFormat(
-                                                   product.stocks?.first
+                                            color: AppStyle.bgColor,
+                                          ),
+                                          alignment: Alignment.center,
+                                          child: Row(
+                                            children: [
+                                              Container(
+                                                width: 20.r,
+                                                height: 20.r,
+                                                decoration: const BoxDecoration(
+                                                  shape: BoxShape.circle,
+                                                  color: AppStyle.red,
+                                                ),
+                                                child: Icon(
+                                                  FlutterRemix.percent_fill,
+                                                  size: 12.r,
+                                                  color: AppStyle.white,
+                                                ),
+                                              ),
+                                              8.horizontalSpace,
+                                              Text(
+                                                AppHelpers.numberFormat(
+                                                  product
+                                                          .stocks
+                                                          ?.first
                                                           .totalPrice ??
-                                                      0),
-                                              style: Style.interSemi(
-                                                size: 14.sp,
-                                                color: Style.blackColor,
-                                                letterSpacing: -0.3,
+                                                      0,
+                                                ),
+                                                style: AppStyle.interSemi(
+                                                  size: 14,
+                                                  color: AppStyle.blackColor,
+                                                  letterSpacing: -0.3,
+                                                ),
                                               ),
-                                            ),
-                                          ],
+                                            ],
+                                          ),
                                         ),
+                                      ],
+                                    )
+                                  : Text(
+                                      AppHelpers.numberFormat(
+                                        product.stocks?.first.totalPrice ?? 0,
                                       ),
-                                    ],
-                                  )
-                                : Text(
-                                    AppHelpers.numberFormat(
-                                        
-                                            product.stocks?.first.totalPrice ??
-                                                0),
-                                    style: Style.interSemi(
-                                      size: 14.sp,
-                                      color: Style.blackColor,
-                                      letterSpacing: -0.3,
-                                    ),
-                                  )),
+                                      style: AppStyle.interSemi(
+                                        size: 14,
+                                        color: AppStyle.blackColor,
+                                        letterSpacing: -0.3,
+                                      ),
+                                    )),
                       ],
                     ),
                   ),

@@ -14,7 +14,7 @@ import 'package:venderfoodyman/infrastructure/services/services.dart';
 class EditAddonModal extends StatefulWidget {
   final ProductData addon;
 
-  const EditAddonModal({super.key, required this.addon}) ;
+  const EditAddonModal({super.key, required this.addon});
 
   @override
   State<EditAddonModal> createState() => _EditAddonModalState();
@@ -51,7 +51,8 @@ class _EditAddonModalState extends State<EditAddonModal> {
                                 children: [
                                   24.verticalSpace,
                                   UnderlinedTextField(
-                                    label: '${AppHelpers.getTranslation(TrKeys.title)}*',
+                                    label:
+                                        '${AppHelpers.getTranslation(TrKeys.title)}*',
                                     inputType: TextInputType.text,
                                     textCapitalization:
                                         TextCapitalization.sentences,
@@ -77,27 +78,31 @@ class _EditAddonModalState extends State<EditAddonModal> {
                                   24.verticalSpace,
                                   UnderlinedTextField(
                                     textController: unitState.unitController,
-                                    label: '${AppHelpers.getTranslation(TrKeys.units)}*',
+                                    label:
+                                        '${AppHelpers.getTranslation(TrKeys.units)}*',
                                     suffixIcon: Icon(
                                       FlutterRemix.arrow_down_s_line,
-                                      color: Style.blackColor,
+                                      color: AppStyle.blackColor,
                                       size: 18.r,
                                     ),
                                     readOnly: true,
                                     validator: AppValidators.emptyCheck,
                                     onTap: () =>
                                         AppHelpers.showCustomModalBottomSheet(
-                                      paddingTop:
-                                          MediaQuery.paddingOf(context).top +
+                                          paddingTop:
+                                              MediaQuery.paddingOf(
+                                                context,
+                                              ).top +
                                               300.h,
-                                      context: context,
-                                      modal: const EditAddonUnitsModal(),
-                                      isDarkMode: false,
-                                    ),
+                                          context: context,
+                                          modal: const EditAddonUnitsModal(),
+                                          isDarkMode: false,
+                                        ),
                                   ),
                                   24.verticalSpace,
                                   UnderlinedTextField(
-                                    label: '${AppHelpers.getTranslation(TrKeys.tax)}*',
+                                    label:
+                                        '${AppHelpers.getTranslation(TrKeys.tax)}*',
                                     inputType: TextInputType.number,
                                     textInputAction: TextInputAction.next,
                                     onChanged: event.setTax,
@@ -131,7 +136,8 @@ class _EditAddonModalState extends State<EditAddonModal> {
                                           validator: AppValidators.emptyCheck,
                                           initialText:
                                               AppHelpers.getInitialAddonPrice(
-                                                  widget.addon),
+                                                widget.addon,
+                                              ),
                                         ),
                                       ),
                                       10.horizontalSpace,
@@ -143,9 +149,10 @@ class _EditAddonModalState extends State<EditAddonModal> {
                                           textInputAction: TextInputAction.next,
                                           onChanged: event.setQuantity,
                                           validator: AppValidators.emptyCheck,
-                                          initialText: AppHelpers
-                                              .getInitialAddonQuantity(
-                                                  widget.addon),
+                                          initialText:
+                                              AppHelpers.getInitialAddonQuantity(
+                                                widget.addon,
+                                              ),
                                         ),
                                       ),
                                     ],
@@ -156,16 +163,19 @@ class _EditAddonModalState extends State<EditAddonModal> {
                                         MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text(
-                                        AppHelpers.getTranslation(TrKeys.active),
-                                        style: Style.interNormal(
-                                          size: 14.sp,
+                                        AppHelpers.getTranslation(
+                                          TrKeys.active,
+                                        ),
+                                        style: AppStyle.interNormal(
+                                          size: 14,
                                           letterSpacing: -0.3,
-                                          color: Style.blackColor,
+                                          color: AppStyle.blackColor,
                                         ),
                                       ),
                                       CustomToggle(
                                         controller: ValueNotifier<bool>(
-                                            widget.addon.active ?? false),
+                                          widget.addon.active ?? false,
+                                        ),
                                         onChange: event.setActive,
                                       ),
                                     ],
@@ -188,7 +198,8 @@ class _EditAddonModalState extends State<EditAddonModal> {
                                     AppHelpers.showCheckTopSnackBar(
                                       context,
                                       text: AppHelpers.getTranslation(
-                                          TrKeys.successfullyCreated),
+                                        TrKeys.successfullyCreated,
+                                      ),
                                       type: SnackBarType.success,
                                     );
                                     addonsEvent.refreshAddons();

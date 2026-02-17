@@ -15,7 +15,7 @@ class ImageExtras extends StatelessWidget {
     required this.groupIndex,
     required this.uiExtras,
     required this.onUpdate,
-  }) ;
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -56,9 +56,9 @@ class ImageExtras extends StatelessWidget {
                             height: 22.r,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(11.r),
-                              color: Style.green,
+                              color: AppStyle.green,
                               border: Border.all(
-                                color: Style.white,
+                                color: AppStyle.white,
                                 width: 8.r,
                               ),
                             ),

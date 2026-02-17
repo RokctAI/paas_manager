@@ -18,7 +18,7 @@ class EditFoodAddonsModal extends ConsumerStatefulWidget {
     super.key,
     required this.stock,
     required this.onSave,
-  }) ;
+  });
 
   @override
   ConsumerState<EditFoodAddonsModal> createState() =>
@@ -50,48 +50,52 @@ class _EditFoodAddonsModalState extends ConsumerState<EditFoodAddonsModal> {
     return ModalWrap(
       body: Padding(
         padding: REdgeInsets.symmetric(horizontal: 16),
-        child: Consumer(builder: (context, ref, child) {
-          final state = ref.watch(editFoodAddonsProvider);
-          final event = ref.read(editFoodAddonsProvider.notifier);
-          return Column(
-            children: [
-              const ModalDrag(),
-              Expanded(
-                child: state.isLoading
-                    ? Center(
-                        child: SizedBox(
-                          width: 30.r,
-                          height: 30.r,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 4.r,
-                            color: Style.blackColor,
+        child: Consumer(
+          builder: (context, ref, child) {
+            final state = ref.watch(editFoodAddonsProvider);
+            final event = ref.read(editFoodAddonsProvider.notifier);
+            return Column(
+              children: [
+                const ModalDrag(),
+                Expanded(
+                  child: state.isLoading
+                      ? Center(
+                          child: SizedBox(
+                            width: 30.r,
+                            height: 30.r,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 4.r,
+                              color: AppStyle.blackColor,
+                            ),
+                          ),
+                        )
+                      : SmartRefresher(
+                          enablePullDown: false,
+                          controller: _refreshController,
+                          child: ListView.builder(
+                            itemCount: state.addons.length,
+                            itemBuilder: (context, index) =>
+                                SelectableAddonItem(
+                                  addon: state.addons[index],
+                                  isLast: state.addons.length - 1 == index,
+                                  onTap: () =>
+                                      event.toggleAddonSelection(index),
+                                ),
                           ),
                         ),
-                      )
-                    : SmartRefresher(
-                        enablePullDown: false,
-                        controller: _refreshController,
-                        child: ListView.builder(
-                          itemCount: state.addons.length,
-                          itemBuilder: (context, index) => SelectableAddonItem(
-                            addon: state.addons[index],
-                            isLast: state.addons.length - 1 == index,
-                            onTap: () => event.toggleAddonSelection(index),
-                          ),
-                        ),
-                      ),
-              ),
-              CustomButton(
-                title: AppHelpers.getTranslation(TrKeys.save),
-                onPressed: () {
-                  widget.onSave(state.addons);
-                  context.maybePop();
-                },
-              ),
-              20.verticalSpace,
-            ],
-          );
-        }),
+                ),
+                CustomButton(
+                  title: AppHelpers.getTranslation(TrKeys.save),
+                  onPressed: () {
+                    widget.onSave(state.addons);
+                    context.maybePop();
+                  },
+                ),
+                20.verticalSpace,
+              ],
+            );
+          },
+        ),
       ),
     );
   }

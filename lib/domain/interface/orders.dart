@@ -47,5 +47,6 @@ abstract class OrdersInterface {
     int? page,
     String? from,
     String? to,
+    String? status,
   });
 }

@@ -9,6 +9,15 @@ class LocalStorage {
 
   LocalStorage._();
 
+  static bool getSubscription() {
+    // final List<SettingsData> settings = LocalStorage.getSettingsList();
+    // for (final setting in settings) {
+    //   if (setting.key == 'subscription') {
+    //     return (setting.value ?? "0") == "1";
+    //   }
+    // }
+    return false;
+  }
 
   static Future<void> init() async {
     _preferences = await SharedPreferences.getInstance();
@@ -23,7 +32,9 @@ class LocalStorage {
   static Future<void> setAddressSelected(AddressData data) async {
     if (_preferences != null) {
       await _preferences!.setString(
-          StorageKeys.keyAddressSelected, jsonEncode(data.toJson()));
+        StorageKeys.keyAddressSelected,
+        jsonEncode(data.toJson()),
+      );
     }
   }
 
@@ -45,7 +56,8 @@ class LocalStorage {
     }
   }
 
-  static String getToken() => _preferences?.getString(StorageKeys.keyToken) ?? '';
+  static String getToken() =>
+      _preferences?.getString(StorageKeys.keyToken) ?? '';
 
   static void _deleteToken() => _preferences?.remove(StorageKeys.keyToken);
 
@@ -60,10 +72,10 @@ class LocalStorage {
 
   static Future<void> setSettingsList(List<SettingsData> settings) async {
     if (_preferences != null) {
-      final List<String> strings =
-          settings.map((setting) => jsonEncode(setting.toJson())).toList();
-      await _preferences!
-          .setStringList(StorageKeys.keyGlobalSettings, strings);
+      final List<String> strings = settings
+          .map((setting) => jsonEncode(setting.toJson()))
+          .toList();
+      await _preferences!.setStringList(StorageKeys.keyGlobalSettings, strings);
     }
   }
 
@@ -71,23 +83,37 @@ class LocalStorage {
     final List<String> settings =
         _preferences?.getStringList(StorageKeys.keyGlobalSettings) ?? [];
     final List<SettingsData> settingsList = settings
-        .map(
-          (setting) => SettingsData.fromJson(jsonDecode(setting)),
-        )
+        .map((setting) => SettingsData.fromJson(jsonDecode(setting)))
         .toList();
     return settingsList;
   }
 
-  static Future<void> setTranslations(Map<String, dynamic>? translations) async {
+  static Future<void> setTranslations(
+    Map<String, dynamic>? translations,
+  ) async {
     if (_preferences != null) {
       final String encoded = jsonEncode(translations);
+      final currentLocale = getLanguage()?.locale ?? 'en';
+      // Har bir til uchun alohida cache qilish
+      await _preferences!.setString(
+        '${StorageKeys.keyTranslations}_$currentLocale',
+        encoded,
+      );
+      // Backward compatibility uchun
       await _preferences!.setString(StorageKeys.keyTranslations, encoded);
     }
   }
 
-  static Map<String, dynamic> getTranslations() {
-    final String encoded =
-        _preferences?.getString(StorageKeys.keyTranslations) ?? '';
+  static Map<String, dynamic> getTranslations({String? locale}) {
+    final currentLocale = locale ?? getLanguage()?.locale ?? 'en';
+    // Avval shu til uchun cache'dan olish
+    String encoded = _preferences?.getString(
+          '${StorageKeys.keyTranslations}_$currentLocale',
+        ) ??
+        '';
+    if (encoded.isEmpty) {
+      encoded = _preferences?.getString(StorageKeys.keyTranslations) ?? '';
+    }
     if (encoded.isEmpty) {
       return {};
     }
@@ -123,25 +149,51 @@ class LocalStorage {
     return LanguageData.fromJson(map);
   }
 
+  static Future<void> setActiveLanguages(List<LanguageData> languages) async {
+    if (_preferences != null) {
+      final List<String> strings =
+      languages.map((language) => jsonEncode(language.toJson())).toList();
+      await _preferences!
+          .setStringList(StorageKeys.keyActiveLanguages, strings);
+    }
+  }
+
+  static List<LanguageData> getActiveLanguages() {
+    final List<String> languages =
+        _preferences?.getStringList(StorageKeys.keyActiveLanguages) ?? [];
+    final List<LanguageData> localLanguages = languages
+        .map(
+          (language) => LanguageData.fromJson(jsonDecode(language)),
+    )
+        .toList(growable: true);
+    return localLanguages.isEmpty
+        ? [LanguageData().copyWith(title: 'English', locale: 'en')]
+        : localLanguages;
+  }
+
   static Future<void> setLangLtr(bool? backward) async {
     if (_preferences != null) {
       await _preferences!.setBool(StorageKeys.keyLangLtr, backward ?? false);
     }
   }
 
-  static bool getLangLtr() => !(_preferences?.getBool(StorageKeys.keyLangLtr) ?? false);
+  static bool getLangLtr() =>
+      !(_preferences?.getBool(StorageKeys.keyLangLtr) ?? false);
 
   static Future<void> setSelectedCurrency(CurrencyData? currency) async {
     if (_preferences != null) {
       final String currencyString = jsonEncode(currency?.toJson());
-      await _preferences!
-          .setString(StorageKeys.keySelectedCurrency, currencyString);
+      await _preferences!.setString(
+        StorageKeys.keySelectedCurrency,
+        currencyString,
+      );
     }
   }
 
   static CurrencyData? getSelectedCurrency() {
-    final savedString =
-        _preferences?.getString(StorageKeys.keySelectedCurrency);
+    final savedString = _preferences?.getString(
+      StorageKeys.keySelectedCurrency,
+    );
     if (savedString == null) {
       return null;
     }
@@ -175,8 +227,9 @@ class LocalStorage {
 
   static Future<void> setWallet(Wallet? wallet) async {
     if (_preferences != null) {
-      final String walletString =
-          wallet != null ? jsonEncode(wallet.toJson()) : '';
+      final String walletString = wallet != null
+          ? jsonEncode(wallet.toJson())
+          : '';
       await _preferences!.setString(StorageKeys.keyWallet, walletString);
     }
   }

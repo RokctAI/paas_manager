@@ -5,7 +5,7 @@ import 'package:venderfoodyman/infrastructure/models/models.dart';
 part 'restaurant_state.freezed.dart';
 
 @freezed
-class RestaurantState with _$RestaurantState {
+abstract class RestaurantState with _$RestaurantState {
   const factory RestaurantState({
     @Default(false) bool isLoading,
     String? backgroundImageFile,

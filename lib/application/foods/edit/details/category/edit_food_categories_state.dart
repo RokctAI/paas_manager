@@ -6,7 +6,7 @@ import 'package:venderfoodyman/infrastructure/models/models.dart';
 part 'edit_food_categories_state.freezed.dart';
 
 @freezed
-class EditFoodCategoriesState with _$EditFoodCategoriesState {
+abstract class EditFoodCategoriesState with _$EditFoodCategoriesState {
   const factory EditFoodCategoriesState({
     @Default(false) bool isLoading,
     @Default([]) List<CategoryData> categories,

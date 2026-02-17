@@ -39,8 +39,8 @@ class DeliveryZoneNotifier extends StateNotifier<DeliveryZoneState> {
         Polygon(
           polygonId: const PolygonId('1'),
           points: points,
-          fillColor: Style.primary.withOpacity(0.3),
-          strokeColor: Style.primary,
+          fillColor: AppStyle.primary.withOpacity(0.3),
+          strokeColor: AppStyle.primary,
           geodesic: false,
           strokeWidth: 4,
         ),
@@ -66,8 +66,8 @@ class DeliveryZoneNotifier extends StateNotifier<DeliveryZoneState> {
             Polygon(
               polygonId: const PolygonId('1'),
               points: points,
-              fillColor: Style.primary.withOpacity(0.3),
-              strokeColor: Style.primary,
+              fillColor: AppStyle.primary.withOpacity(0.3),
+              strokeColor: AppStyle.primary,
               geodesic: false,
               strokeWidth: 4,
             ),

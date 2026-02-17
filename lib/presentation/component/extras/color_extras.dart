@@ -44,8 +44,11 @@ class ColorExtras extends StatelessWidget {
                           height: 22.r,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(11.r),
-                            color: Style.green,
-                            border: Border.all(color: Style.white, width: 8.r),
+                            color: AppStyle.green,
+                            border: Border.all(
+                              color: AppStyle.white,
+                              width: 8.r,
+                            ),
                           ),
                         ),
                       )

@@ -26,15 +26,9 @@ class _IncomePageState extends ConsumerState<IncomePage>
   late TabController _tabController;
 
   final _tabs = [
-    Tab(
-      child: Text(AppHelpers.getTranslation(TrKeys.today)),
-    ),
-    Tab(
-      child: Text(AppHelpers.getTranslation(TrKeys.weekly)),
-    ),
-    Tab(
-      child: Text(AppHelpers.getTranslation(TrKeys.monthly)),
-    ),
+    Tab(child: Text(AppHelpers.getTranslation(TrKeys.today))),
+    Tab(child: Text(AppHelpers.getTranslation(TrKeys.weekly))),
+    Tab(child: Text(AppHelpers.getTranslation(TrKeys.monthly))),
   ];
 
   @override
@@ -42,26 +36,33 @@ class _IncomePageState extends ConsumerState<IncomePage>
     _tabController = TabController(length: 3, vsync: this);
     _tabController.addListener(() {
       if (_tabController.index == 0) {
-        ref.read(statisticsProvider.notifier).fetchStatistics(
-            startTime: DateTime.now(),
-            endTime: DateTime.now());
+        ref
+            .read(statisticsProvider.notifier)
+            .fetchStatistics(
+              startTime: DateTime.now(),
+              endTime: DateTime.now(),
+            );
       } else if (_tabController.index == 1) {
-        ref.read(statisticsProvider.notifier).fetchStatistics(
-            startTime: DateTime.now(),
-            endTime: DateTime.now().subtract(const Duration(days: 7)));
+        ref
+            .read(statisticsProvider.notifier)
+            .fetchStatistics(
+              startTime: DateTime.now(),
+              endTime: DateTime.now().subtract(const Duration(days: 7)),
+            );
       } else {
-        ref.read(statisticsProvider.notifier).fetchStatistics(
-            startTime: DateTime.now(),
-            endTime: DateTime.now().subtract(const Duration(days: 30)));
+        ref
+            .read(statisticsProvider.notifier)
+            .fetchStatistics(
+              startTime: DateTime.now(),
+              endTime: DateTime.now().subtract(const Duration(days: 30)),
+            );
       }
     });
-    WidgetsBinding.instance.addPostFrameCallback(
-      (_) {
-        ref.read(statisticsProvider.notifier).fetchStatistics(
-            startTime: DateTime.now(),
-            endTime: DateTime.now());
-      },
-    );
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref
+          .read(statisticsProvider.notifier)
+          .fetchStatistics(startTime: DateTime.now(), endTime: DateTime.now());
+    });
     super.initState();
   }
 
@@ -74,12 +75,10 @@ class _IncomePageState extends ConsumerState<IncomePage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Style.greyColor,
+      backgroundColor: AppStyle.greyColor,
       body: Column(
         children: [
-          AppbarScreen(
-            event: ref.read(statisticsProvider.notifier),
-          ),
+          AppbarScreen(event: ref.read(statisticsProvider.notifier)),
           16.verticalSpace,
           Expanded(
             child: SingleChildScrollView(
@@ -100,8 +99,8 @@ class _IncomePageState extends ConsumerState<IncomePage>
                         days: _tabController.index == 0
                             ? 0
                             : _tabController.index == 1
-                                ? 7
-                                : 30,
+                            ? 7
+                            : 30,
                       ),
                     ),
                   ),
@@ -127,9 +126,7 @@ class _IncomePageState extends ConsumerState<IncomePage>
         child: const Row(
           crossAxisAlignment: CrossAxisAlignment.end,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            PopButton(heroTag: AppConstants.heroTagIncomePage),
-          ],
+          children: [PopButton(heroTag: AppConstants.heroTagIncomePage)],
         ),
       ),
     );
@@ -143,7 +140,9 @@ class _IncomePageState extends ConsumerState<IncomePage>
         Container(
           padding: REdgeInsets.symmetric(horizontal: 16, vertical: 18),
           decoration: BoxDecoration(
-              color: Style.white, borderRadius: BorderRadius.circular(12.r)),
+            color: AppStyle.white,
+            borderRadius: BorderRadius.circular(12.r),
+          ),
           child: SalesChart(
             price: ref.watch(statisticsProvider).prices,
             chart: ref.watch(statisticsProvider).countData?.chart ?? [],

@@ -1,5 +1,5 @@
-// coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// coverage:ignore-file
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
@@ -9,242 +9,281 @@ part of 'table_state.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// dart format off
 T _$identity<T>(T value) => value;
-
-final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
-
 /// @nodoc
 mixin _$TableState {
-  List<TableData> get tables => throw _privateConstructorUsedError;
-  int get selectedIndex => throw _privateConstructorUsedError;
-  bool get isLoading => throw _privateConstructorUsedError;
-  TableData? get selectTable => throw _privateConstructorUsedError;
-  TextEditingController? get textController =>
-      throw _privateConstructorUsedError;
 
-  /// Create a copy of TableState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  $TableStateCopyWith<TableState> get copyWith =>
-      throw _privateConstructorUsedError;
+ List<TableData> get tables; int get selectedIndex; bool get isLoading; TableData? get selectTable; TextEditingController? get textController;
+/// Create a copy of TableState
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$TableStateCopyWith<TableState> get copyWith => _$TableStateCopyWithImpl<TableState>(this as TableState, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is TableState&&const DeepCollectionEquality().equals(other.tables, tables)&&(identical(other.selectedIndex, selectedIndex) || other.selectedIndex == selectedIndex)&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.selectTable, selectTable) || other.selectTable == selectTable)&&(identical(other.textController, textController) || other.textController == textController));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(tables),selectedIndex,isLoading,selectTable,textController);
+
+@override
+String toString() {
+  return 'TableState(tables: $tables, selectedIndex: $selectedIndex, isLoading: $isLoading, selectTable: $selectTable, textController: $textController)';
+}
+
+
 }
 
 /// @nodoc
-abstract class $TableStateCopyWith<$Res> {
-  factory $TableStateCopyWith(
-          TableState value, $Res Function(TableState) then) =
-      _$TableStateCopyWithImpl<$Res, TableState>;
-  @useResult
-  $Res call(
-      {List<TableData> tables,
-      int selectedIndex,
-      bool isLoading,
-      TableData? selectTable,
-      TextEditingController? textController});
-}
+abstract mixin class $TableStateCopyWith<$Res>  {
+  factory $TableStateCopyWith(TableState value, $Res Function(TableState) _then) = _$TableStateCopyWithImpl;
+@useResult
+$Res call({
+ List<TableData> tables, int selectedIndex, bool isLoading, TableData? selectTable, TextEditingController? textController
+});
 
+
+
+
+}
 /// @nodoc
-class _$TableStateCopyWithImpl<$Res, $Val extends TableState>
+class _$TableStateCopyWithImpl<$Res>
     implements $TableStateCopyWith<$Res> {
-  _$TableStateCopyWithImpl(this._value, this._then);
+  _$TableStateCopyWithImpl(this._self, this._then);
 
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
+  final TableState _self;
+  final $Res Function(TableState) _then;
 
-  /// Create a copy of TableState
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? tables = null,
-    Object? selectedIndex = null,
-    Object? isLoading = null,
-    Object? selectTable = freezed,
-    Object? textController = freezed,
-  }) {
-    return _then(_value.copyWith(
-      tables: null == tables
-          ? _value.tables
-          : tables // ignore: cast_nullable_to_non_nullable
-              as List<TableData>,
-      selectedIndex: null == selectedIndex
-          ? _value.selectedIndex
-          : selectedIndex // ignore: cast_nullable_to_non_nullable
-              as int,
-      isLoading: null == isLoading
-          ? _value.isLoading
-          : isLoading // ignore: cast_nullable_to_non_nullable
-              as bool,
-      selectTable: freezed == selectTable
-          ? _value.selectTable
-          : selectTable // ignore: cast_nullable_to_non_nullable
-              as TableData?,
-      textController: freezed == textController
-          ? _value.textController
-          : textController // ignore: cast_nullable_to_non_nullable
-              as TextEditingController?,
-    ) as $Val);
-  }
+/// Create a copy of TableState
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? tables = null,Object? selectedIndex = null,Object? isLoading = null,Object? selectTable = freezed,Object? textController = freezed,}) {
+  return _then(_self.copyWith(
+tables: null == tables ? _self.tables : tables // ignore: cast_nullable_to_non_nullable
+as List<TableData>,selectedIndex: null == selectedIndex ? _self.selectedIndex : selectedIndex // ignore: cast_nullable_to_non_nullable
+as int,isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
+as bool,selectTable: freezed == selectTable ? _self.selectTable : selectTable // ignore: cast_nullable_to_non_nullable
+as TableData?,textController: freezed == textController ? _self.textController : textController // ignore: cast_nullable_to_non_nullable
+as TextEditingController?,
+  ));
+}
+
+}
+
+
+/// Adds pattern-matching-related methods to [TableState].
+extension TableStatePatterns on TableState {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _TableState value)?  $default,{required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _TableState() when $default != null:
+return $default(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _TableState value)  $default,){
+final _that = this;
+switch (_that) {
+case _TableState():
+return $default(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _TableState value)?  $default,){
+final _that = this;
+switch (_that) {
+case _TableState() when $default != null:
+return $default(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( List<TableData> tables,  int selectedIndex,  bool isLoading,  TableData? selectTable,  TextEditingController? textController)?  $default,{required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _TableState() when $default != null:
+return $default(_that.tables,_that.selectedIndex,_that.isLoading,_that.selectTable,_that.textController);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( List<TableData> tables,  int selectedIndex,  bool isLoading,  TableData? selectTable,  TextEditingController? textController)  $default,) {final _that = this;
+switch (_that) {
+case _TableState():
+return $default(_that.tables,_that.selectedIndex,_that.isLoading,_that.selectTable,_that.textController);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( List<TableData> tables,  int selectedIndex,  bool isLoading,  TableData? selectTable,  TextEditingController? textController)?  $default,) {final _that = this;
+switch (_that) {
+case _TableState() when $default != null:
+return $default(_that.tables,_that.selectedIndex,_that.isLoading,_that.selectTable,_that.textController);case _:
+  return null;
+
+}
+}
+
 }
 
 /// @nodoc
-abstract class _$$TableStateImplCopyWith<$Res>
-    implements $TableStateCopyWith<$Res> {
-  factory _$$TableStateImplCopyWith(
-          _$TableStateImpl value, $Res Function(_$TableStateImpl) then) =
-      __$$TableStateImplCopyWithImpl<$Res>;
-  @override
-  @useResult
-  $Res call(
-      {List<TableData> tables,
-      int selectedIndex,
-      bool isLoading,
-      TableData? selectTable,
-      TextEditingController? textController});
+
+
+class _TableState extends TableState {
+  const _TableState({final  List<TableData> tables = const [], this.selectedIndex = 0, this.isLoading = false, this.selectTable, this.textController}): _tables = tables,super._();
+  
+
+ final  List<TableData> _tables;
+@override@JsonKey() List<TableData> get tables {
+  if (_tables is EqualUnmodifiableListView) return _tables;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_tables);
+}
+
+@override@JsonKey() final  int selectedIndex;
+@override@JsonKey() final  bool isLoading;
+@override final  TableData? selectTable;
+@override final  TextEditingController? textController;
+
+/// Create a copy of TableState
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$TableStateCopyWith<_TableState> get copyWith => __$TableStateCopyWithImpl<_TableState>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _TableState&&const DeepCollectionEquality().equals(other._tables, _tables)&&(identical(other.selectedIndex, selectedIndex) || other.selectedIndex == selectedIndex)&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.selectTable, selectTable) || other.selectTable == selectTable)&&(identical(other.textController, textController) || other.textController == textController));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_tables),selectedIndex,isLoading,selectTable,textController);
+
+@override
+String toString() {
+  return 'TableState(tables: $tables, selectedIndex: $selectedIndex, isLoading: $isLoading, selectTable: $selectTable, textController: $textController)';
+}
+
+
 }
 
 /// @nodoc
-class __$$TableStateImplCopyWithImpl<$Res>
-    extends _$TableStateCopyWithImpl<$Res, _$TableStateImpl>
-    implements _$$TableStateImplCopyWith<$Res> {
-  __$$TableStateImplCopyWithImpl(
-      _$TableStateImpl _value, $Res Function(_$TableStateImpl) _then)
-      : super(_value, _then);
+abstract mixin class _$TableStateCopyWith<$Res> implements $TableStateCopyWith<$Res> {
+  factory _$TableStateCopyWith(_TableState value, $Res Function(_TableState) _then) = __$TableStateCopyWithImpl;
+@override @useResult
+$Res call({
+ List<TableData> tables, int selectedIndex, bool isLoading, TableData? selectTable, TextEditingController? textController
+});
 
-  /// Create a copy of TableState
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? tables = null,
-    Object? selectedIndex = null,
-    Object? isLoading = null,
-    Object? selectTable = freezed,
-    Object? textController = freezed,
-  }) {
-    return _then(_$TableStateImpl(
-      tables: null == tables
-          ? _value._tables
-          : tables // ignore: cast_nullable_to_non_nullable
-              as List<TableData>,
-      selectedIndex: null == selectedIndex
-          ? _value.selectedIndex
-          : selectedIndex // ignore: cast_nullable_to_non_nullable
-              as int,
-      isLoading: null == isLoading
-          ? _value.isLoading
-          : isLoading // ignore: cast_nullable_to_non_nullable
-              as bool,
-      selectTable: freezed == selectTable
-          ? _value.selectTable
-          : selectTable // ignore: cast_nullable_to_non_nullable
-              as TableData?,
-      textController: freezed == textController
-          ? _value.textController
-          : textController // ignore: cast_nullable_to_non_nullable
-              as TextEditingController?,
-    ));
-  }
+
+
+
 }
-
 /// @nodoc
+class __$TableStateCopyWithImpl<$Res>
+    implements _$TableStateCopyWith<$Res> {
+  __$TableStateCopyWithImpl(this._self, this._then);
 
-class _$TableStateImpl extends _TableState {
-  const _$TableStateImpl(
-      {final List<TableData> tables = const [],
-      this.selectedIndex = 0,
-      this.isLoading = false,
-      this.selectTable,
-      this.textController})
-      : _tables = tables,
-        super._();
+  final _TableState _self;
+  final $Res Function(_TableState) _then;
 
-  final List<TableData> _tables;
-  @override
-  @JsonKey()
-  List<TableData> get tables {
-    if (_tables is EqualUnmodifiableListView) return _tables;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_tables);
-  }
-
-  @override
-  @JsonKey()
-  final int selectedIndex;
-  @override
-  @JsonKey()
-  final bool isLoading;
-  @override
-  final TableData? selectTable;
-  @override
-  final TextEditingController? textController;
-
-  @override
-  String toString() {
-    return 'TableState(tables: $tables, selectedIndex: $selectedIndex, isLoading: $isLoading, selectTable: $selectTable, textController: $textController)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$TableStateImpl &&
-            const DeepCollectionEquality().equals(other._tables, _tables) &&
-            (identical(other.selectedIndex, selectedIndex) ||
-                other.selectedIndex == selectedIndex) &&
-            (identical(other.isLoading, isLoading) ||
-                other.isLoading == isLoading) &&
-            (identical(other.selectTable, selectTable) ||
-                other.selectTable == selectTable) &&
-            (identical(other.textController, textController) ||
-                other.textController == textController));
-  }
-
-  @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(_tables),
-      selectedIndex,
-      isLoading,
-      selectTable,
-      textController);
-
-  /// Create a copy of TableState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$TableStateImplCopyWith<_$TableStateImpl> get copyWith =>
-      __$$TableStateImplCopyWithImpl<_$TableStateImpl>(this, _$identity);
+/// Create a copy of TableState
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? tables = null,Object? selectedIndex = null,Object? isLoading = null,Object? selectTable = freezed,Object? textController = freezed,}) {
+  return _then(_TableState(
+tables: null == tables ? _self._tables : tables // ignore: cast_nullable_to_non_nullable
+as List<TableData>,selectedIndex: null == selectedIndex ? _self.selectedIndex : selectedIndex // ignore: cast_nullable_to_non_nullable
+as int,isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
+as bool,selectTable: freezed == selectTable ? _self.selectTable : selectTable // ignore: cast_nullable_to_non_nullable
+as TableData?,textController: freezed == textController ? _self.textController : textController // ignore: cast_nullable_to_non_nullable
+as TextEditingController?,
+  ));
 }
 
-abstract class _TableState extends TableState {
-  const factory _TableState(
-      {final List<TableData> tables,
-      final int selectedIndex,
-      final bool isLoading,
-      final TableData? selectTable,
-      final TextEditingController? textController}) = _$TableStateImpl;
-  const _TableState._() : super._();
 
-  @override
-  List<TableData> get tables;
-  @override
-  int get selectedIndex;
-  @override
-  bool get isLoading;
-  @override
-  TableData? get selectTable;
-  @override
-  TextEditingController? get textController;
-
-  /// Create a copy of TableState
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$TableStateImplCopyWith<_$TableStateImpl> get copyWith =>
-      throw _privateConstructorUsedError;
 }
+
+// dart format on

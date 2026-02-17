@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:venderfoodyman/infrastructure/models/data/user.dart';
+import 'package:venderfoodyman/infrastructure/models/models.dart';
 import 'package:venderfoodyman/presentation/routes/app_router.dart';
 import 'sign_up_state.dart';
 import 'package:venderfoodyman/domain/interface/interfaces.dart';
@@ -61,7 +61,7 @@ class SignUpNotifier extends StateNotifier<SignUpState> {
     state = state.copyWith(isKeepLogin: !state.isKeepLogin);
   }
 
-  checkEmail() {
+  bool checkEmail() {
     return AppValidators.isValidEmail(state.email);
   }
 
@@ -146,13 +146,13 @@ class SignUpNotifier extends StateNotifier<SignUpState> {
     }
   }
 
-  Future<void> register(BuildContext context) async {
+  Future<void> register(BuildContext context,String? email) async {
     final connected = await AppConnectivity.connectivity();
     if (connected) {
-      if (AppValidators.emptyCheck(state.phone)?.isNotEmpty ?? false) {
-        state = state.copyWith(isPhoneInvalid: true);
-        return;
-      }
+      // if (AppValidators.emptyCheck(state.phone)?.isNotEmpty ?? false) {
+      //   state = state.copyWith(isPhoneInvalid: true);
+      //   return;
+      // }
       if (AppValidators.emptyCheck(state.firstName)?.isNotEmpty ?? false) {
         state = state.copyWith(isFirstNameInvalid: true);
         return;
@@ -173,13 +173,14 @@ class SignUpNotifier extends StateNotifier<SignUpState> {
       state = state.copyWith(isLoading: true);
       final response = await _authRepository.sigUpWithData(
           user: UserModel(
-              email: state.email,
-              firstname: state.firstName,
-              lastname: state.lastName,
-              phone: state.phone,
-              password: state.password,
-              confirmPassword: state.confirmPassword,
-              referral: state.referral));
+        email: email ?? state.email,
+        firstname: state.firstName,
+        lastname: state.lastName,
+        phone: state.phone,
+        password: state.password,
+        confirmPassword: state.confirmPassword,
+        referral: state.referral,
+      ));
 
       response.when(
         success: (data) async {
@@ -237,10 +238,10 @@ class SignUpNotifier extends StateNotifier<SignUpState> {
     final connected = await AppConnectivity.connectivity();
     state = state.copyWith(isPasswordInvalid: false);
     if (connected) {
-      if (AppValidators.emailCheck(state.email)?.isNotEmpty ?? false) {
-        state = state.copyWith(isEmailInvalid: true);
-        return;
-      }
+      // if (AppValidators.emailCheck(state.email)?.isNotEmpty ?? false) {
+      //   state = state.copyWith(isEmailInvalid: true);
+      //   return;
+      // }
       if (AppValidators.emptyCheck(state.firstName)?.isNotEmpty ?? false) {
         state = state.copyWith(isFirstNameInvalid: true);
         return;
@@ -261,10 +262,12 @@ class SignUpNotifier extends StateNotifier<SignUpState> {
       state = state.copyWith(isLoading: true);
       final response = await _authRepository.sigUpWithPhone(
           user: UserModel(
-              email: state.email,
+              email:
+                  AppValidators.checkEmail(phone ?? '') ? phone : state.email,
               firstname: state.firstName,
               lastname: state.lastName,
-              phone: phone ?? state.phone,
+              phone:
+                  !AppValidators.checkEmail(phone ?? '') ? phone : state.phone,
               password: state.password,
               confirmPassword: state.confirmPassword,
               referral: state.referral));

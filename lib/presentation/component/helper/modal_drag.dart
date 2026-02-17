@@ -18,7 +18,7 @@ class ModalDrag extends StatelessWidget {
             height: 4.r,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(40.r),
-              color: Style.bottomSheetIconColor,
+              color: AppStyle.bottomSheetIconColor,
             ),
           ),
           18.verticalSpace,

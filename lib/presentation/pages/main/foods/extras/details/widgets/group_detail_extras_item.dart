@@ -17,7 +17,7 @@ class GroupDetailExtrasItem extends StatelessWidget {
     required this.extras,
     required this.onEditTap,
     required this.onDeleteTap,
-  }) ;
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +26,7 @@ class GroupDetailExtrasItem extends StatelessWidget {
       child: Container(
         width: double.infinity,
         decoration: BoxDecoration(
-          color: Style.white,
+          color: AppStyle.white,
           borderRadius: BorderRadius.circular(10.r),
         ),
         padding: REdgeInsets.all(18),
@@ -35,9 +35,9 @@ class GroupDetailExtrasItem extends StatelessWidget {
           children: [
             Text(
               extras.value ?? '',
-              style: Style.interRegular(
-                size: 15.sp,
-                color: Style.blackColor,
+              style: AppStyle.interRegular(
+                size: 15,
+                color: AppStyle.blackColor,
                 letterSpacing: -0.3,
               ),
             ),
@@ -50,7 +50,7 @@ class GroupDetailExtrasItem extends StatelessWidget {
                       child: Icon(
                         FlutterRemix.pencil_fill,
                         size: 20.r,
-                        color: Style.blackColor,
+                        color: AppStyle.blackColor,
                       ),
                     ),
                   ),
@@ -61,7 +61,7 @@ class GroupDetailExtrasItem extends StatelessWidget {
                       child: Icon(
                         FlutterRemix.delete_bin_line,
                         size: 20.r,
-                        color: Style.blackColor,
+                        color: AppStyle.blackColor,
                       ),
                     ),
                   ),

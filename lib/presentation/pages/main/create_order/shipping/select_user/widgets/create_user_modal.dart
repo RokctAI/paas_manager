@@ -8,7 +8,7 @@ import 'package:venderfoodyman/application/providers.dart';
 import '../../../../../../../infrastructure/services/services.dart';
 
 class CreateUserModal extends StatefulWidget {
-  const CreateUserModal({super.key}) ;
+  const CreateUserModal({super.key});
 
   @override
   State<CreateUserModal> createState() => _CreateUserModalState();
@@ -57,7 +57,8 @@ class _CreateUserModalState extends State<CreateUserModal> {
                     ),
                     24.verticalSpace,
                     UnderlinedTextField(
-                      label: '${AppHelpers.getTranslation(TrKeys.phoneNumber)}*',
+                      label:
+                          '${AppHelpers.getTranslation(TrKeys.phoneNumber)}*',
                       inputType: TextInputType.phone,
                       textInputAction: TextInputAction.next,
                       onChanged: event.setPhone,

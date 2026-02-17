@@ -8,7 +8,7 @@ import 'package:venderfoodyman/application/providers.dart';
 import 'package:venderfoodyman/infrastructure/services/services.dart';
 
 class AddFoodCategoryModal extends StatelessWidget {
-  const AddFoodCategoryModal({super.key}) ;
+  const AddFoodCategoryModal({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +20,9 @@ class AddFoodCategoryModal extends StatelessWidget {
           final event = ref.read(addCategoryProvider.notifier);
           return Column(
             children: [
-              TitleAndIcon(title: AppHelpers.getTranslation(TrKeys.addNewCategory)),
+              TitleAndIcon(
+                title: AppHelpers.getTranslation(TrKeys.addNewCategory),
+              ),
               24.verticalSpace,
               UnderlinedTextField(
                 label: AppHelpers.getTranslation(TrKeys.categoryName),
@@ -37,7 +39,7 @@ class AddFoodCategoryModal extends StatelessWidget {
                   context,
                   success: () {
                     ref
-                        .read(addFoodCategoriesProvider.notifier)
+                        .read(allCategoriesProvider.notifier)
                         .updateCategories(context);
                     context.maybePop();
                   },

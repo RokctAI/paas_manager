@@ -10,7 +10,8 @@ abstract class AppValidators {
     }
     if (text.length < 6) {
       return AppHelpers.getTranslation(
-          TrKeys.passwordShouldContainMinimum6Characters);
+        TrKeys.passwordShouldContainMinimum6Characters,
+      );
     }
     return null;
   }
@@ -32,7 +33,8 @@ abstract class AppValidators {
     if (min != null) {
       if ((num.tryParse(min) ?? 0) > (num.tryParse(max) ?? 0)) {
         return AppHelpers.getTranslation(
-            TrKeys.maxQtyShouldBeGreaterThanMinQty);
+          TrKeys.maxQtyShouldBeGreaterThanMinQty,
+        );
       }
     }
     return null;
@@ -56,12 +58,12 @@ abstract class AppValidators {
   }
 
   static bool _isValidEmail(String email) => RegExp(
-        "^[a-zA-Z0-9.!#\$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*\$",
-      ).hasMatch(email);
+    "^[a-zA-Z0-9.!#\$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*\$",
+  ).hasMatch(email);
 
   static bool isValidEmail(String email) => RegExp(
-        "^[a-zA-Z0-9.!#\$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*\$",
-      ).hasMatch(email);
+    "^[a-zA-Z0-9.!#\$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*\$",
+  ).hasMatch(email);
 
   static bool checkEmail(String email) =>
       RegExp("/^[0-9 ()+-]+\$/").hasMatch(email);
@@ -73,4 +75,7 @@ abstract class AppValidators {
 
   static bool arePasswordsTheSame(String password, String confirmPassword) =>
       password == confirmPassword;
+
+  static bool isValidPhone(String input) =>
+      RegExp(r"^\+?[0-9]{7,15}$").hasMatch(input);
 }

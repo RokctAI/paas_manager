@@ -15,7 +15,7 @@ class UserItem extends StatelessWidget {
     required this.user,
     required this.onTap,
     required this.isSelected,
-  }) ;
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -26,12 +26,13 @@ class UserItem extends StatelessWidget {
         margin: REdgeInsets.only(bottom: 8),
         padding: REdgeInsets.symmetric(horizontal: 16),
         decoration: BoxDecoration(
-          color:
-              isSelected ? Style.primary.withOpacity(0.06) : Style.white,
+          color: isSelected
+              ? AppStyle.primary.withOpacity(0.06)
+              : AppStyle.white,
           borderRadius: isSelected ? null : BorderRadius.circular(10.r),
           border: isSelected
               ? Border(
-                  left: BorderSide(color: Style.primary, width: 1.r),
+                  left: BorderSide(color: AppStyle.primary, width: 1.r),
                 )
               : null,
         ),
@@ -42,7 +43,7 @@ class UserItem extends StatelessWidget {
               height: 50.r,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10.r),
-                color: Style.blackColor.withOpacity(0.06),
+                color: AppStyle.blackColor.withOpacity(0.06),
               ),
               alignment: Alignment.center,
               child: CommonImage(
@@ -61,12 +62,12 @@ class UserItem extends StatelessWidget {
                 children: [
                   Text(
                     '${user.firstname} ${user.lastname ?? ''}',
-                    style: Style.interSemi(size: 15.sp),
+                    style: AppStyle.interSemi(size: 15),
                   ),
                   4.verticalSpace,
                   Text(
                     user.email ?? '',
-                    style: Style.interNormal(size: 12.sp),
+                    style: AppStyle.interNormal(size: 12),
                   ),
                 ],
               ),

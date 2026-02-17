@@ -14,7 +14,7 @@ import 'package:venderfoodyman/infrastructure/services/services.dart';
 
 @RoutePage()
 class CreateOrderPage extends ConsumerStatefulWidget {
-  const CreateOrderPage({super.key}) ;
+  const CreateOrderPage({super.key});
 
   @override
   ConsumerState<CreateOrderPage> createState() => _CreateOrderPageState();
@@ -29,19 +29,21 @@ class _CreateOrderPageState extends ConsumerState<CreateOrderPage> {
     super.initState();
     _categoryController = RefreshController();
     _productController = RefreshController();
-    WidgetsBinding.instance.addPostFrameCallback(
-      (_) {
-        ref.read(orderProductsProvider.notifier).fetchProducts(
-              categoryId: null,
-              isRefresh: ref.watch(productCategoriesProvider).activeIndex != 1
-                  ? true
-                  : false,
-              isOpeningPage: true,
-              cartStocks: ref.watch(orderCartProvider).stocks,
-            );
-        ref.read(productCategoriesProvider.notifier).initialFetchCategories();
-      },
-    );
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref
+          .read(orderProductsProvider.notifier)
+          .fetchProducts(
+            categoryId: null,
+            isRefresh: ref.watch(categoriesProvider).activeIndex != 1
+                ? true
+                : false,
+            isOpeningPage: true,
+            cartStocks: ref.watch(orderCartProvider).stocks,
+          );
+      ref
+          .read(categoriesProvider.notifier)
+          .fetchCategories(context, isRefresh: true);
+    });
   }
 
   @override
@@ -59,29 +61,30 @@ class _CreateOrderPageState extends ConsumerState<CreateOrderPage> {
       child: KeyboardDisable(
         child: Scaffold(
           resizeToAvoidBottomInset: false,
-          backgroundColor: Style.greyColor,
+          backgroundColor: AppStyle.greyColor,
           body: Column(
             children: [
               CustomAppBar(
                 bottomPadding: 4.h,
                 child: Consumer(
                   builder: (context, ref, child) {
-                    final productsEvent =
-                        ref.read(orderProductsProvider.notifier);
-                    final categoriesState =
-                        ref.watch(productCategoriesProvider);
+                    final productsEvent = ref.read(
+                      orderProductsProvider.notifier,
+                    );
+                    final categoriesState = ref.watch(categoriesProvider);
                     return SearchTextField(
                       onChanged: (value) => productsEvent.setQuery(
                         query: value,
                         categoryId: categoriesState.activeIndex == 1
                             ? null
                             : categoriesState
-                                .categories[categoriesState.activeIndex - 2].id,
+                                  .categories[categoriesState.activeIndex - 2]
+                                  .id,
                         cartStocks: ref.watch(orderCartProvider).stocks,
                       ),
                       suffixIcon: Icon(
                         FlutterRemix.equalizer_fill,
-                        color: Style.blackColor,
+                        color: AppStyle.blackColor,
                         size: 20.r,
                       ),
                     );
@@ -94,39 +97,175 @@ class _CreateOrderPageState extends ConsumerState<CreateOrderPage> {
                     24.verticalSpace,
                     Consumer(
                       builder: (context, ref, child) {
-                        final categoriesState =
-                            ref.watch(productCategoriesProvider);
-                        final categoriesEvent =
-                            ref.read(productCategoriesProvider.notifier);
-                        final productsEvent =
-                            ref.read(orderProductsProvider.notifier);
-                        return categoriesState.isLoading
+                        final productsState = ref.watch(orderProductsProvider);
+                        final productsEvent = ref.read(
+                          orderProductsProvider.notifier,
+                        );
+                        final categoriesEvent = ref.read(
+                          categoriesProvider.notifier,
+                        );
+                        return Padding(
+                          padding: REdgeInsets.symmetric(horizontal: 16),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: GestureDetector(
+                                  onTap: () {
+                                    productsEvent.setProductType(
+                                      'single',
+                                      cartStocks: ref
+                                          .watch(orderCartProvider)
+                                          .stocks,
+                                      refreshController: _productController,
+                                    );
+                                    categoriesEvent.fetchCategories(context);
+                                  },
+                                  child: Container(
+                                    padding: EdgeInsets.symmetric(
+                                      vertical: 8.h,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color:
+                                          productsState.productType == 'single'
+                                          ? AppStyle.blackColor
+                                          : AppStyle.white,
+                                      borderRadius: BorderRadius.circular(10.r),
+                                      border: Border.all(
+                                        color:
+                                            productsState.productType ==
+                                                'single'
+                                            ? AppStyle.blackColor
+                                            : AppStyle.borderColor,
+                                      ),
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                        AppHelpers.getTranslation(
+                                          TrKeys.product,
+                                        ),
+                                        style: AppStyle.interSemi(
+                                          size: 14,
+                                          color:
+                                              productsState.productType ==
+                                                  'single'
+                                              ? AppStyle.white
+                                              : AppStyle.blackColor,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              16.horizontalSpace,
+                              Expanded(
+                                child: GestureDetector(
+                                  onTap: () {
+                                    productsEvent.setProductType(
+                                      'combo',
+                                      cartStocks: ref
+                                          .watch(orderCartProvider)
+                                          .stocks,
+                                      refreshController: _productController,
+                                    );
+                                    categoriesEvent.fetchComboCategories(
+                                      context,
+                                    );
+                                  },
+                                  child: Container(
+                                    padding: EdgeInsets.symmetric(
+                                      vertical: 8.h,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color:
+                                          productsState.productType == 'combo'
+                                          ? AppStyle.blackColor
+                                          : AppStyle.white,
+                                      borderRadius: BorderRadius.circular(10.r),
+                                      border: Border.all(
+                                        color:
+                                            productsState.productType == 'combo'
+                                            ? AppStyle.blackColor
+                                            : AppStyle.borderColor,
+                                      ),
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                        AppHelpers.getTranslation(TrKeys.combo),
+                                        style: AppStyle.interSemi(
+                                          size: 14,
+                                          color:
+                                              productsState.productType ==
+                                                  'combo'
+                                              ? AppStyle.white
+                                              : AppStyle.blackColor,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    ),
+                    16.verticalSpace,
+                    Consumer(
+                      builder: (context, ref, child) {
+                        final categoriesState = ref.watch(categoriesProvider);
+                        final productsState = ref.watch(orderProductsProvider);
+                        final categoriesEvent = ref.read(
+                          categoriesProvider.notifier,
+                        );
+                        final productsEvent = ref.read(
+                          orderProductsProvider.notifier,
+                        );
+                        final isCombo = productsState.productType == 'combo';
+                        final currentCategories = isCombo
+                            ? categoriesState.comboCategories
+                            : categoriesState.categories;
+                        final currentActiveIndex = isCombo
+                            ? categoriesState.activeComboIndex
+                            : categoriesState.activeIndex;
+                        final isLoadingCategories = isCombo
+                            ? categoriesState.isComboLoading
+                            : categoriesState.isLoading;
+                        return isLoadingCategories
                             ? const TabBarLoading()
                             : SizedBox(
                                 height: 36.h,
                                 child: CategoriesTabBar(
-                                  categories: categoriesState.categories,
-                                  activeIndex: categoriesState.activeIndex,
+                                  categories: currentCategories,
+                                  activeIndex: currentActiveIndex,
                                   refreshController: _categoryController,
                                   onChangeTab: (index) {
-                                    categoriesEvent.setActiveIndex(index);
-                                    if (index != categoriesState.activeIndex) {
+                                    categoriesEvent.setActiveIndex(
+                                      index,
+                                      isCombo: isCombo,
+                                    );
+                                    if (index != currentActiveIndex) {
                                       productsEvent.fetchProducts(
                                         refreshController: _productController,
                                         categoryId: index == 1
                                             ? null
-                                            : categoriesState
-                                                .categories[index - 2].id,
+                                            : currentCategories[index - 2]
+                                                  .id,
                                         isRefresh: true,
-                                        cartStocks:
-                                            ref.watch(orderCartProvider).stocks,
+                                        cartStocks: ref
+                                            .watch(orderCartProvider)
+                                            .stocks,
                                       );
                                     }
                                   },
-                                  onLoading: () =>
-                                      categoriesEvent.fetchMoreCategories(
-                                    refreshController: _categoryController,
-                                  ),
+                                  onLoading: () => isCombo
+                                      ? categoriesEvent.fetchComboCategories(
+                                          context,
+                                          controller: _categoryController,
+                                        )
+                                      : categoriesEvent.fetchCategories(
+                                          context,
+                                          controller: _categoryController,
+                                        ),
                                 ),
                               );
                       },
@@ -135,12 +274,13 @@ class _CreateOrderPageState extends ConsumerState<CreateOrderPage> {
                     Expanded(
                       child: Consumer(
                         builder: (context, ref, child) {
-                          final productsState =
-                              ref.watch(orderProductsProvider);
-                          final categoriesState =
-                              ref.watch(productCategoriesProvider);
-                          final productsEvent =
-                              ref.read(orderProductsProvider.notifier);
+                          final productsState = ref.watch(
+                            orderProductsProvider,
+                          );
+                          final categoriesState = ref.watch(categoriesProvider);
+                          final productsEvent = ref.read(
+                            orderProductsProvider.notifier,
+                          );
                           return ProductsBody(
                             loadingHeight: 130,
                             isOrderFoods: true,
@@ -154,9 +294,10 @@ class _CreateOrderPageState extends ConsumerState<CreateOrderPage> {
                               categoryId: categoriesState.activeIndex == 1
                                   ? null
                                   : categoriesState
-                                      .categories[
-                                          categoriesState.activeIndex - 2]
-                                      .id,
+                                        .categories[categoriesState
+                                                .activeIndex -
+                                            2]
+                                        .id,
                             ),
                             onLoading: () => productsEvent.fetchProducts(
                               refreshController: _productController,
@@ -164,21 +305,22 @@ class _CreateOrderPageState extends ConsumerState<CreateOrderPage> {
                               categoryId: categoriesState.activeIndex == 1
                                   ? null
                                   : categoriesState
-                                      .categories[
-                                          categoriesState.activeIndex - 2]
-                                      .id,
+                                        .categories[categoriesState
+                                                .activeIndex -
+                                            2]
+                                        .id,
                             ),
                             onProductTap: (index) =>
                                 AppHelpers.showCustomModalBottomDragSheet(
-                              paddingTop: 60,
-                              context: context,
-                              maxChildSize: 0.8,
-                              initSize: 0.6,
-                              modal: (c) => FoodDetailsModal(
-                                controller: c,
-                                product: productsState.products[index],
-                              ),
-                            ),
+                                  paddingTop: 60,
+                                  context: context,
+                                  maxChildSize: 0.8,
+                                  initSize: 0.6,
+                                  modal: (c) => FoodDetailsModal(
+                                    controller: c,
+                                    product: productsState.products[index],
+                                  ),
+                                ),
                           );
                         },
                       ),
@@ -207,7 +349,7 @@ class _CreateOrderPageState extends ConsumerState<CreateOrderPage> {
                               child: Container(
                                 height: 48.r,
                                 decoration: BoxDecoration(
-                                  color: Style.primary,
+                                  color: AppStyle.primary,
                                   borderRadius: BorderRadius.circular(10.r),
                                 ),
                                 padding: REdgeInsets.symmetric(horizontal: 16),
@@ -215,29 +357,34 @@ class _CreateOrderPageState extends ConsumerState<CreateOrderPage> {
                                 child: Row(
                                   children: [
                                     Text(
-                                      AppHelpers.getTranslation(TrKeys.ordering),
-                                      style: Style.interSemi(
-                                        size: 16.sp,
-                                        color: Style.blackColor,
+                                      AppHelpers.getTranslation(
+                                        TrKeys.ordering,
+                                      ),
+                                      style: AppStyle.interSemi(
+                                        size: 16,
+                                        color: AppStyle.blackColor,
                                       ),
                                     ),
                                     10.horizontalSpace,
                                     Container(
                                       height: 32.r,
-                                      padding:
-                                          REdgeInsets.symmetric(horizontal: 14),
+                                      padding: REdgeInsets.symmetric(
+                                        horizontal: 14,
+                                      ),
                                       alignment: Alignment.center,
                                       decoration: BoxDecoration(
-                                        color: Style.blackColor,
-                                        borderRadius:
-                                            BorderRadius.circular(18.r),
+                                        color: AppStyle.blackColor,
+                                        borderRadius: BorderRadius.circular(
+                                          18.r,
+                                        ),
                                       ),
                                       child: Text(
                                         AppHelpers.numberFormat(
-                                            cartState.totalPrice),
-                                        style: Style.interSemi(
-                                          size: 16.sp,
-                                          color: Style.white,
+                                          cartState.totalPrice,
+                                        ),
+                                        style: AppStyle.interSemi(
+                                          size: 16,
+                                          color: AppStyle.white,
                                         ),
                                       ),
                                     ),

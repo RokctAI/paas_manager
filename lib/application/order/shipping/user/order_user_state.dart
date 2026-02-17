@@ -6,7 +6,7 @@ import 'package:venderfoodyman/infrastructure/models/models.dart';
 part 'order_user_state.freezed.dart';
 
 @freezed
-class OrderUserState with _$OrderUserState {
+abstract class OrderUserState with _$OrderUserState {
   const factory OrderUserState({
     @Default([]) List<UserData> users,
     @Default(0) int selectedIndex,

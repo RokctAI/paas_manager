@@ -2,9 +2,9 @@
 class Assets {
   Assets._();
 
+  static const String audioNotification = 'assets/audio/notification.wav';
   static const String imageAppLogo = 'assets/image/app_logo.png';
-  static const String imageKfc = 'assets/image/kfc.png';
-  static const String imageLogo = 'assets/image/logo.png';
+  static const String imageBackground = 'assets/image/background.png';
   static const String imageManager = 'assets/image/manager.png';
   static const String imageMarker = 'assets/image/marker.png';
   static const String imageNoNotification = 'assets/image/noNotification.png';
@@ -20,5 +20,4 @@ class Assets {
   static const String svgLogoWhite = 'assets/svg/logoWhite.svg';
   static const String svgMenu = 'assets/svg/menu.svg';
   static const String svgNoHome = 'assets/svg/noHome.svg';
-
 }

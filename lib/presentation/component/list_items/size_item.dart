@@ -13,7 +13,7 @@ class SizeItem extends StatelessWidget {
     required this.onTap,
     required this.isActive,
     required this.title,
-  }) ;
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +24,7 @@ class SizeItem extends StatelessWidget {
         child: Container(
           width: double.infinity,
           decoration: BoxDecoration(
-            color: Style.white,
+            color: AppStyle.white,
             borderRadius: BorderRadius.circular(10.r),
           ),
           child: Column(
@@ -37,10 +37,12 @@ class SizeItem extends StatelessWidget {
                     width: 18.w,
                     height: 18.h,
                     decoration: BoxDecoration(
-                      color: isActive ? Style.green : Style.transparent,
+                      color: isActive ? AppStyle.green : AppStyle.transparent,
                       shape: BoxShape.circle,
                       border: Border.all(
-                        color: isActive ? Style.blackColor : Style.greyColor,
+                        color: isActive
+                            ? AppStyle.blackColor
+                            : AppStyle.greyColor,
                         width: isActive ? 4.r : 2.r,
                       ),
                     ),
@@ -48,15 +50,15 @@ class SizeItem extends StatelessWidget {
                   16.horizontalSpace,
                   Text(
                     title,
-                    style: Style.interNormal(
-                      size: 16.sp,
-                      color: Style.blackColor,
+                    style: AppStyle.interNormal(
+                      size: 16,
+                      color: AppStyle.blackColor,
                     ),
                   ),
                 ],
               ),
               16.verticalSpace,
-              Divider(color: Style.greyColor.withOpacity(0.2))
+              Divider(color: AppStyle.greyColor.withOpacity(0.2)),
             ],
           ),
         ),

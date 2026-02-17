@@ -10,7 +10,7 @@ import 'package:venderfoodyman/application/providers.dart';
 import 'package:venderfoodyman/infrastructure/services/services.dart';
 
 class CreateProductModal extends ConsumerStatefulWidget {
-  const CreateProductModal({super.key}) ;
+  const CreateProductModal({super.key});
 
   @override
   ConsumerState<CreateProductModal> createState() => _CreateProductModalState();
@@ -46,9 +46,9 @@ class _CreateProductModalState extends ConsumerState<CreateProductModal>
               padding: REdgeInsets.all(6),
               height: 48.h,
               decoration: BoxDecoration(
-                color: Style.transparent,
+                color: AppStyle.transparent,
                 borderRadius: BorderRadius.circular(10.r),
-                border: Border.all(color: Style.tabBarBorderColor),
+                border: Border.all(color: AppStyle.tabBarBorderColor),
               ),
               margin: REdgeInsets.symmetric(horizontal: 16),
               child: TabBar(
@@ -56,19 +56,17 @@ class _CreateProductModalState extends ConsumerState<CreateProductModal>
                 controller: _tabController,
                 indicator: BoxDecoration(
                   borderRadius: BorderRadius.circular(10.r),
-                  color: Style.blackColor,
+                  color: AppStyle.blackColor,
                 ),
-                labelColor: Style.white,
-                unselectedLabelColor: Style.textColor,
-                unselectedLabelStyle: Style.interRegular(size: 14.sp),
-                labelStyle: Style.interSemi(size: 14.sp),
+                labelColor: AppStyle.white,
+                unselectedLabelColor: AppStyle.textColor,
+                unselectedLabelStyle: AppStyle.interRegular(size: 14),
+                labelStyle: AppStyle.interSemi(size: 14),
                 tabs: [
                   Tab(
                     child: Text(AppHelpers.getTranslation(TrKeys.addProduct)),
                   ),
-                  Tab(
-                    child: Text(AppHelpers.getTranslation(TrKeys.stocks)),
-                  ),
+                  Tab(child: Text(AppHelpers.getTranslation(TrKeys.stocks))),
                 ],
               ),
             ),

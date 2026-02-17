@@ -11,8 +11,9 @@ import 'package:venderfoodyman/infrastructure/services/services.dart';
 
 class FoodCategoriesModal extends ConsumerStatefulWidget {
   final bool isSubCategory;
+  final String? type;
 
-  const FoodCategoriesModal({super.key, this.isSubCategory = false});
+  const FoodCategoriesModal({super.key, this.isSubCategory = false, this.type});
 
   @override
   ConsumerState<FoodCategoriesModal> createState() =>
@@ -23,18 +24,15 @@ class _FoodCategoriesModalState extends ConsumerState<FoodCategoriesModal> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback(
-      (_) {
-        if (widget.isSubCategory) {
-          ref
-              .read(addFoodCategoriesProvider.notifier)
-              .updateCategoriesSub(context);
-        }
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (widget.isSubCategory) {
+        ref.read(allCategoriesProvider.notifier).updateCategoriesSub(context);
+      } else {
         ref
-            .read(addFoodCategoriesProvider.notifier)
-            .setCategories(ref.watch(foodCategoriesProvider).categories);
-      },
-    );
+            .read(allCategoriesProvider.notifier)
+            .updateCategories(context, type: widget.type);
+      }
+    });
   }
 
   @override
@@ -56,15 +54,15 @@ class _FoodCategoriesModalState extends ConsumerState<FoodCategoriesModal> {
                 children: [
                   Icon(
                     FlutterRemix.play_list_add_line,
-                    color: Style.blue,
+                    color: AppStyle.blue,
                     size: 18.r,
                   ),
                   10.horizontalSpace,
                   Text(
                     AppHelpers.getTranslation(TrKeys.addNewCategory),
-                    style: Style.interSemi(
+                    style: AppStyle.interSemi(
                       size: 14,
-                      color: Style.blue,
+                      color: AppStyle.blue,
                       letterSpacing: -0.3,
                     ),
                   ),
@@ -72,7 +70,7 @@ class _FoodCategoriesModalState extends ConsumerState<FoodCategoriesModal> {
               ),
             ),
           16.verticalSpace,
-          Divider(color: Style.toggleColor, height: 1.r, thickness: 1.r),
+          Divider(color: AppStyle.toggleColor, height: 1.r, thickness: 1.r),
           24.verticalSpace,
           Expanded(
             child: Padding(
@@ -87,47 +85,51 @@ class _FoodCategoriesModalState extends ConsumerState<FoodCategoriesModal> {
                     ),
                     Consumer(
                       builder: (context, ref, child) {
-                        final state = ref.watch(addFoodCategoriesProvider);
+                        final state = ref.watch(allCategoriesProvider);
+                        final isCombo = widget.type == 'combo';
+                        final currentCategories = widget.isSubCategory
+                            ? state.categoriesSub
+                            : (isCombo
+                                ? state.comboCategories
+                                : state.categories);
+                        final currentActiveIndex = widget.isSubCategory
+                            ? state.activeSubIndex
+                            : (isCombo
+                                ? state.activeComboIndex
+                                : state.activeIndex);
+
                         return ListView.builder(
                           physics: const NeverScrollableScrollPhysics(),
                           padding: EdgeInsets.zero,
                           shrinkWrap: true,
-                          itemCount: widget.isSubCategory
-                              ? state.categoriesSub.length
-                              : state.categories.length,
+                          itemCount: currentCategories.length,
                           itemBuilder: (context, index) {
                             return FoodCategoryItem(
-                              category: widget.isSubCategory
-                                  ? state.categoriesSub[index]
-                                  : state.categories[index],
+                              category: currentCategories[index],
                               onTap: () {
-                                widget.isSubCategory
-                                    ? ref
-                                        .read(
-                                            addFoodCategoriesProvider.notifier)
-                                        .setActiveIndexSub(index)
-                                    : ref
-                                        .read(
-                                            addFoodCategoriesProvider.notifier)
-                                        .setActiveIndex(index);
+                                if (widget.isSubCategory) {
+                                  ref
+                                      .read(allCategoriesProvider.notifier)
+                                      .setActiveIndexSub(index);
+                                } else {
+                                  ref
+                                      .read(allCategoriesProvider.notifier)
+                                      .setActiveIndex(index, isCombo: isCombo);
+                                }
                                 Navigator.pop(context);
                               },
-                              isSelected: (widget.isSubCategory
-                                      ? state.activeSubIndex
-                                      : state.activeIndex) ==
-                                  index,
-                              onDelete: (widget.isSubCategory
-                                          ? state.categoriesSub[index].shopId
-                                          : state.categories[index].shopId) ==
-                                      LocalStorage.getShop()?.id
-                                  ? () {
-                                      ref
-                                          .read(addFoodCategoriesProvider
-                                              .notifier)
-                                          .deleteCategories(
-                                              state.categories[index]);
-                                    }
-                                  : null,
+                              isSelected: currentActiveIndex == index,
+                              onDelete:
+                                  currentCategories[index].shopId ==
+                                          LocalStorage.getShop()?.id
+                                      ? () {
+                                          ref
+                                              .read(allCategoriesProvider.notifier)
+                                              .deleteCategories(
+                                                currentCategories[index],
+                                              );
+                                        }
+                                      : null,
                             );
                           },
                         );

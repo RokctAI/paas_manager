@@ -14,7 +14,7 @@ import 'package:venderfoodyman/application/providers.dart';
 import 'package:venderfoodyman/infrastructure/services/services.dart';
 
 class FoodsPage extends ConsumerStatefulWidget {
-  const FoodsPage({super.key}) ;
+  const FoodsPage({super.key});
 
   @override
   ConsumerState<FoodsPage> createState() => _FoodsPageState();
@@ -28,54 +28,52 @@ class _FoodsPageState extends ConsumerState<FoodsPage>
   late RefreshController _productController;
   late RefreshController _addonsController;
   late RefreshController _extrasController;
+  late RefreshController _comboController;
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 3, vsync: this);
-    _tabController.addListener(
-      () {
-        if (!_tabController.indexIsChanging) {
-          switch (_tabController.index) {
-            case 0:
-              ref.read(foodTabsProvider.notifier).setSelectedIndex(0);
-              break;
-            case 1:
-              ref.read(foodTabsProvider.notifier).setSelectedIndex(1);
-              break;
-            case 2:
-              ref.read(foodTabsProvider.notifier).setSelectedIndex(2);
-              break;
-            default:
-              ref.read(foodTabsProvider.notifier).setSelectedIndex(0);
-              break;
-          }
+    _tabController.addListener(() {
+      if (!_tabController.indexIsChanging) {
+        switch (_tabController.index) {
+          case 0:
+            ref.read(foodTabsProvider.notifier).setSelectedIndex(0);
+            break;
+          case 1:
+            ref.read(foodTabsProvider.notifier).setSelectedIndex(1);
+            break;
+          case 2:
+            ref.read(foodTabsProvider.notifier).setSelectedIndex(2);
+            break;
+          default:
+            ref.read(foodTabsProvider.notifier).setSelectedIndex(0);
+            break;
         }
-      },
-    );
+      }
+    });
     _scrollController = ScrollController();
     _categoryController = RefreshController();
     _productController = RefreshController();
+    _comboController = RefreshController();
     _addonsController = RefreshController();
     _extrasController = RefreshController();
-    _scrollController.addListener(
-      () {
-        final direction = _scrollController.position.userScrollDirection;
-        if (direction == ScrollDirection.reverse) {
-          ref.read(mainProvider.notifier).changeScrolling(true);
-        } else {
-          ref.read(mainProvider.notifier).changeScrolling(false);
-        }
-      },
-    );
-    WidgetsBinding.instance.addPostFrameCallback(
-      (_) {
-        ref.read(foodCategoriesProvider.notifier).initialFetchCategories();
-        ref.read(foodsProvider.notifier).initialFetchFoods();
-        ref.read(addonsProvider.notifier).initialFetchAddons();
-        ref.read(extrasProvider.notifier).fetchGroups();
-      },
-    );
+    _scrollController.addListener(() {
+      final direction = _scrollController.position.userScrollDirection;
+      if (direction == ScrollDirection.reverse) {
+        ref.read(mainProvider.notifier).changeScrolling(true);
+      } else {
+        ref.read(mainProvider.notifier).changeScrolling(false);
+      }
+    });
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref
+          .read(categoriesProvider.notifier)
+          .fetchCategories(context, isRefresh: true);
+      ref.read(foodsProvider.notifier).initialFetchFoods();
+      ref.read(addonsProvider.notifier).initialFetchAddons();
+      ref.read(extrasProvider.notifier).fetchGroups();
+    });
   }
 
   @override
@@ -85,6 +83,7 @@ class _FoodsPageState extends ConsumerState<FoodsPage>
     _scrollController.dispose();
     _categoryController.dispose();
     _productController.dispose();
+    _comboController.dispose();
     _addonsController.dispose();
     _extrasController.dispose();
   }
@@ -93,7 +92,7 @@ class _FoodsPageState extends ConsumerState<FoodsPage>
   Widget build(BuildContext context) {
     return KeyboardDisable(
       child: Scaffold(
-        backgroundColor: Style.greyColor,
+        backgroundColor: AppStyle.greyColor,
         body: Column(
           children: [
             CustomAppBar(
@@ -101,21 +100,22 @@ class _FoodsPageState extends ConsumerState<FoodsPage>
               child: Consumer(
                 builder: (context, ref, child) {
                   final foodsEvent = ref.read(foodsProvider.notifier);
-                  final categoriesState = ref.watch(foodCategoriesProvider);
+                  final categoriesState = ref.watch(allCategoriesProvider);
                   return SearchTextField(
                     onChanged: (value) => foodsEvent.setQuery(
                       query: value,
                       categoryId: categoriesState.activeIndex == 1
                           ? null
                           : categoriesState
-                              .categories[categoriesState.activeIndex - 2].id,
+                                .categories[categoriesState.activeIndex - 2]
+                                .id,
                     ),
                     suffixIcon: ButtonsBouncingEffect(
                       child: GestureDetector(
                         onTap: () {},
                         child: Icon(
                           FlutterRemix.equalizer_fill,
-                          color: Style.blackColor,
+                          color: AppStyle.blackColor,
                           size: 20.r,
                         ),
                       ),
@@ -127,53 +127,61 @@ class _FoodsPageState extends ConsumerState<FoodsPage>
             Expanded(
               child: NestedScrollView(
                 controller: _scrollController,
-                headerSliverBuilder: (
-                  BuildContext context,
-                  bool innerBoxIsScrolled,
-                ) {
-                  return [
-                    SliverAppBar(
-                      floating: true,
-                      backgroundColor: Style.transparent,
-                      elevation: 0,
-                      titleSpacing: 0,
-                      toolbarHeight: 48.h,
-                      title: Container(
-                        padding: REdgeInsets.all(6),
-                        margin: REdgeInsets.symmetric(horizontal: 16),
-                        height: 48.h,
-                        decoration: BoxDecoration(
-                          color: Style.transparent,
-                          borderRadius: BorderRadius.circular(10.r),
-                          border: Border.all(color: Style.tabBarBorderColor),
-                        ),
-                        child: TabBar(
-                          onTap: (index) {},
-                          controller: _tabController,
-                          indicator: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10.r),
-                            color: Style.blackColor,
+                headerSliverBuilder:
+                    (BuildContext context, bool innerBoxIsScrolled) {
+                      return [
+                        SliverAppBar(
+                          floating: true,
+                          backgroundColor: AppStyle.transparent,
+                          elevation: 0,
+                          titleSpacing: 0,
+                          toolbarHeight: 48.h,
+                          title: Container(
+                            padding: REdgeInsets.all(6),
+                            margin: REdgeInsets.symmetric(horizontal: 16),
+                            height: 48.h,
+                            decoration: BoxDecoration(
+                              color: AppStyle.transparent,
+                              borderRadius: BorderRadius.circular(10.r),
+                              border: Border.all(
+                                color: AppStyle.tabBarBorderColor,
+                              ),
+                            ),
+                            child: TabBar(
+                              onTap: (index) {},
+                              controller: _tabController,
+                              indicator: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10.r),
+                                color: AppStyle.blackColor,
+                              ),
+                              labelColor: AppStyle.white,
+                              unselectedLabelColor: AppStyle.textColor,
+                              unselectedLabelStyle: AppStyle.interRegular(
+                                size: 14,
+                              ),
+                              labelStyle: AppStyle.interSemi(size: 14),
+                              tabs: [
+                                Tab(
+                                  child: Text(
+                                    AppHelpers.getTranslation(TrKeys.foods),
+                                  ),
+                                ),
+                                Tab(
+                                  child: Text(
+                                    AppHelpers.getTranslation(TrKeys.addons),
+                                  ),
+                                ),
+                                Tab(
+                                  child: Text(
+                                    AppHelpers.getTranslation(TrKeys.extras),
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
-                          labelColor: Style.white,
-                          unselectedLabelColor: Style.textColor,
-                          unselectedLabelStyle: Style.interRegular(size: 14.sp),
-                          labelStyle: Style.interSemi(size: 14.sp),
-                          tabs: [
-                            Tab(
-                              child: Text(AppHelpers.getTranslation(TrKeys.foods)),
-                            ),
-                            Tab(
-                              child: Text(AppHelpers.getTranslation(TrKeys.addons)),
-                            ),
-                            Tab(
-                              child: Text(AppHelpers.getTranslation(TrKeys.extras)),
-                            ),
-                          ],
                         ),
-                      ),
-                    ),
-                  ];
-                },
+                      ];
+                    },
                 body: TabBarView(
                   physics: const BouncingScrollPhysics(),
                   controller: _tabController,

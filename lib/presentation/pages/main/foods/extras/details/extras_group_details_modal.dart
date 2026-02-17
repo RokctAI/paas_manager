@@ -18,8 +18,7 @@ import 'package:venderfoodyman/infrastructure/services/services.dart';
 class ExtrasGroupDetailsModal extends ConsumerStatefulWidget {
   final Group group;
 
-  const ExtrasGroupDetailsModal({super.key, required this.group})
-      ;
+  const ExtrasGroupDetailsModal({super.key, required this.group});
 
   @override
   ConsumerState<ExtrasGroupDetailsModal> createState() =>
@@ -58,15 +57,15 @@ class _ExtrasGroupDetailsModalState
                   children: [
                     Icon(
                       FlutterRemix.play_list_add_line,
-                      color: Style.blue,
+                      color: AppStyle.blue,
                       size: 18.r,
                     ),
                     10.horizontalSpace,
                     Text(
                       AppHelpers.getTranslation(TrKeys.addNewExtras),
-                      style: Style.interSemi(
+                      style: AppStyle.interSemi(
                         size: 14,
-                        color: Style.blue,
+                        color: AppStyle.blue,
                         letterSpacing: -0.3,
                       ),
                     ),
@@ -93,7 +92,7 @@ class _ExtrasGroupDetailsModalState
                       child: Icon(
                         FlutterRemix.delete_bin_fill,
                         size: 24.r,
-                        color: Style.red,
+                        color: AppStyle.red,
                       ),
                     )
                   : const SizedBox.shrink(),
@@ -109,7 +108,7 @@ class _ExtrasGroupDetailsModalState
                             height: 30.r,
                             child: CircularProgressIndicator(
                               strokeWidth: 4.r,
-                              color: Style.blackColor,
+                              color: AppStyle.blackColor,
                             ),
                           ),
                         )
@@ -120,25 +119,25 @@ class _ExtrasGroupDetailsModalState
                           itemCount: state.extras.length,
                           itemBuilder: (context, index) =>
                               GroupDetailExtrasItem(
-                            extras: state.extras[index],
-                            onEditTap: () =>
-                                AppHelpers.showCustomModalBottomSheet(
-                              context: context,
-                              modal: EditExtrasItemModal(
-                                group: widget.group,
                                 extras: state.extras[index],
+                                onEditTap: () =>
+                                    AppHelpers.showCustomModalBottomSheet(
+                                      context: context,
+                                      modal: EditExtrasItemModal(
+                                        group: widget.group,
+                                        extras: state.extras[index],
+                                      ),
+                                      isDarkMode: false,
+                                    ),
+                                onDeleteTap: () =>
+                                    AppHelpers.showCustomModalBottomSheet(
+                                      context: context,
+                                      modal: DeleteExtrasItemModal(
+                                        extras: state.extras[index],
+                                      ),
+                                      isDarkMode: false,
+                                    ),
                               ),
-                              isDarkMode: false,
-                            ),
-                            onDeleteTap: () =>
-                                AppHelpers.showCustomModalBottomSheet(
-                              context: context,
-                              modal: DeleteExtrasItemModal(
-                                extras: state.extras[index],
-                              ),
-                              isDarkMode: false,
-                            ),
-                          ),
                         );
                 },
               ),

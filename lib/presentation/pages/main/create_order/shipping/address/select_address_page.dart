@@ -9,9 +9,11 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import 'package:venderfoodyman/application/providers.dart';
 import 'package:venderfoodyman/infrastructure/services/services.dart';
+import 'package:venderfoodyman/presentation/app_assets.dart';
 import '../../../../../component/components.dart';
 import 'package:venderfoodyman/presentation/styles/style.dart';
 import 'searched_location_item.dart';
+
 @RoutePage()
 class SelectAddressPage extends StatefulWidget {
   const SelectAddressPage({super.key});
@@ -41,7 +43,7 @@ class _SelectAddressPageState extends State<SelectAddressPage>
   Widget build(BuildContext context) {
     return KeyboardDisable(
       child: Scaffold(
-        backgroundColor: Style.greyColor,
+        backgroundColor: AppStyle.greyColor,
         resizeToAvoidBottomInset: false,
         body: Consumer(
           builder: (context, ref, child) {
@@ -71,7 +73,8 @@ class _SelectAddressPageState extends State<SelectAddressPage>
                     _animationController.repeat(
                       min: AppConstants.pinLoadingMin,
                       max: AppConstants.pinLoadingMax,
-                      period: _animationController.duration! *
+                      period:
+                          _animationController.duration! *
                           (AppConstants.pinLoadingMax -
                               AppConstants.pinLoadingMin),
                     );
@@ -91,11 +94,9 @@ class _SelectAddressPageState extends State<SelectAddressPage>
                 IgnorePointer(
                   child: Center(
                     child: Padding(
-                      padding: const EdgeInsets.only(
-                        bottom: 78.0,
-                      ),
+                      padding: const EdgeInsets.only(bottom: 78.0),
                       child: lottie.Lottie.asset(
-                        AppAssets.lottiePin,
+                        Assets.lottiePin,
                         onLoaded: (composition) {
                           _animationController.duration = composition.duration;
                         },
@@ -117,13 +118,13 @@ class _SelectAddressPageState extends State<SelectAddressPage>
                       decoration: BoxDecoration(
                         boxShadow: const <BoxShadow>[
                           BoxShadow(
-                            color: Style.bgColor,
+                            color: AppStyle.bgColor,
                             offset: Offset(0, 2),
                             blurRadius: 2,
                             spreadRadius: 0,
                           ),
                         ],
-                        color: Style.white,
+                        color: AppStyle.white,
                         borderRadius: BorderRadius.circular(25.r),
                       ),
                       child: Row(
@@ -131,7 +132,7 @@ class _SelectAddressPageState extends State<SelectAddressPage>
                           Icon(
                             FlutterRemix.search_line,
                             size: 20.r,
-                            color: Style.iconsColor,
+                            color: AppStyle.iconsColor,
                           ),
                           12.horizontalSpace,
                           Expanded(
@@ -139,22 +140,23 @@ class _SelectAddressPageState extends State<SelectAddressPage>
                               controller: state.textController,
                               style: GoogleFonts.inter(
                                 fontWeight: FontWeight.w400,
-                                fontSize: 14.sp,
-                                color: Style.iconsColor,
+                                fontSize: 14,
+                                color: AppStyle.iconsColor,
                                 letterSpacing: -0.5,
                               ),
                               onChanged: (value) {
                                 event.setQuery(context);
                               },
                               cursorWidth: 1.r,
-                              cursorColor: Style.blackColor,
+                              cursorColor: AppStyle.blackColor,
                               decoration: InputDecoration.collapsed(
-                                hintText:
-                                    AppHelpers.getTranslation(TrKeys.searchLocation),
+                                hintText: AppHelpers.getTranslation(
+                                  TrKeys.searchLocation,
+                                ),
                                 hintStyle: GoogleFonts.inter(
                                   fontWeight: FontWeight.w400,
-                                  fontSize: 14.sp,
-                                  color: Style.iconColor,
+                                  fontSize: 14,
+                                  color: AppStyle.iconColor,
                                   letterSpacing: -0.5,
                                 ),
                               ),
@@ -167,7 +169,7 @@ class _SelectAddressPageState extends State<SelectAddressPage>
                             icon: Icon(
                               FlutterRemix.close_line,
                               size: 20.r,
-                              color: Style.iconsColor,
+                              color: AppStyle.iconsColor,
                             ),
                           ),
                         ],
@@ -177,31 +179,34 @@ class _SelectAddressPageState extends State<SelectAddressPage>
                       Container(
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(15.r),
-                          color: Style.white,
+                          color: AppStyle.white,
                         ),
-                        margin:
-                            REdgeInsets.symmetric(horizontal: 16, vertical: 6),
-                        padding:
-                            REdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                        child:  ListView.builder(
-                                physics: const BouncingScrollPhysics(),
-                                shrinkWrap: true,
-                                itemCount: state.searchedPlaces.length,
-                                padding: EdgeInsets.zero,
-                                itemBuilder: (context, index) {
-                                  return SearchedLocationItem(
-                                    place: state.searchedPlaces[index],
-                                    isLast:
-                                        state.searchedPlaces.length - 1 == index,
-                                    onTap: () {
-                                      FocusManager.instance.primaryFocus?.unfocus();
-                                      event.goToLocation(
-                                        place: state.searchedPlaces[index],
-                                      );
-                                    },
-                                  );
-                                },
-                              ),
+                        margin: REdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 6,
+                        ),
+                        padding: REdgeInsets.symmetric(
+                          horizontal: 20,
+                          vertical: 10,
+                        ),
+                        child: ListView.builder(
+                          physics: const BouncingScrollPhysics(),
+                          shrinkWrap: true,
+                          itemCount: state.searchedPlaces.length,
+                          padding: EdgeInsets.zero,
+                          itemBuilder: (context, index) {
+                            return SearchedLocationItem(
+                              place: state.searchedPlaces[index],
+                              isLast: state.searchedPlaces.length - 1 == index,
+                              onTap: () {
+                                FocusManager.instance.primaryFocus?.unfocus();
+                                event.goToLocation(
+                                  place: state.searchedPlaces[index],
+                                );
+                              },
+                            );
+                          },
+                        ),
                       ),
                   ],
                 ),
@@ -220,14 +225,17 @@ class _SelectAddressPageState extends State<SelectAddressPage>
                         child: Consumer(
                           builder: (context, ref, child) {
                             return CustomButton(
-                              title: AppHelpers.getTranslation(TrKeys.confirmLocation),
+                              title: AppHelpers.getTranslation(
+                                TrKeys.confirmLocation,
+                              ),
                               onPressed: state.location == null
                                   ? null
                                   : () {
                                       ref
                                           .read(orderAddressProvider.notifier)
                                           .setLocation(
-                                            title: state.textController?.text ??
+                                            title:
+                                                state.textController?.text ??
                                                 '',
                                             location: state.location,
                                           );

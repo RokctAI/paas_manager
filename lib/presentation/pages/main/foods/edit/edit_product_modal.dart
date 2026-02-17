@@ -12,9 +12,11 @@ class EditProductModal extends StatefulWidget {
   final ProductData product;
   final ScrollController controller;
 
-  const EditProductModal(
-      {super.key, required this.product, required this.controller})
-      ;
+  const EditProductModal({
+    super.key,
+    required this.product,
+    required this.controller,
+  });
 
   @override
   State<EditProductModal> createState() => _EditProductModalState();
@@ -46,21 +48,21 @@ class _EditProductModalState extends State<EditProductModal>
             padding: REdgeInsets.all(6),
             height: 48.h,
             decoration: BoxDecoration(
-              color: Style.transparent,
+              color: AppStyle.transparent,
               borderRadius: BorderRadius.circular(10.r),
-              border: Border.all(color: Style.tabBarBorderColor),
+              border: Border.all(color: AppStyle.tabBarBorderColor),
             ),
             margin: REdgeInsets.symmetric(horizontal: 16),
             child: TabBar(
               controller: _tabController,
               indicator: BoxDecoration(
                 borderRadius: BorderRadius.circular(10.r),
-                color: Style.blackColor,
+                color: AppStyle.blackColor,
               ),
-              labelColor: Style.white,
-              unselectedLabelColor: Style.textColor,
-              unselectedLabelStyle: Style.interRegular(size: 14.sp),
-              labelStyle: Style.interSemi(size: 14.sp),
+              labelColor: AppStyle.white,
+              unselectedLabelColor: AppStyle.textColor,
+              unselectedLabelStyle: AppStyle.interRegular(size: 14),
+              labelStyle: AppStyle.interSemi(size: 14),
               tabs: [
                 Tab(child: Text(AppHelpers.getTranslation(TrKeys.editProduct))),
                 Tab(child: Text(AppHelpers.getTranslation(TrKeys.stocks))),

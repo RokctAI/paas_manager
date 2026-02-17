@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:venderfoodyman/presentation/app_assets.dart';
 
 import 'package:venderfoodyman/presentation/styles/style.dart';
-import 'package:venderfoodyman/infrastructure/services/services.dart';
 
 class TabBarLoading extends StatelessWidget {
   final int itemCount;
@@ -23,7 +23,7 @@ class TabBarLoading extends StatelessWidget {
               ? Padding(
                   padding: EdgeInsetsDirectional.only(start: 16.r, end: 8.r),
                   child: SvgPicture.asset(
-                    AppAssets.svgMenu,
+                    Assets.svgMenu,
                     width: 22.r,
                     height: 22.r,
                   ),
@@ -31,11 +31,11 @@ class TabBarLoading extends StatelessWidget {
               : Container(
                   width: 84.r,
                   decoration: BoxDecoration(
-                    color: Style.white,
+                    color: AppStyle.white,
                     borderRadius: BorderRadius.circular(10.r),
                     boxShadow: [
                       BoxShadow(
-                        color: Style.white.withOpacity(0.07),
+                        color: AppStyle.white.withOpacity(0.07),
                         spreadRadius: 0,
                         blurRadius: 2,
                         offset: const Offset(0, 1),

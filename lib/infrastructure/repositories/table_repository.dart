@@ -4,13 +4,14 @@ import 'package:venderfoodyman/domain/di/dependency_manager.dart';
 import 'package:venderfoodyman/domain/handlers/handlers.dart';
 import 'package:venderfoodyman/domain/interface/table.dart';
 import 'package:venderfoodyman/infrastructure/services/services.dart';
-import 'package:venderfoodyman/infrastructure/services/time_service.dart';
 import 'package:venderfoodyman/infrastructure/models/models.dart';
 
 class TableRepository extends TableInterface {
   @override
-  Future<ApiResult<ShopSection>> createNewSection(
-      {required String name, required num area}) async {
+  Future<ApiResult<ShopSection>> createNewSection({
+    required String name,
+    required num area,
+  }) async {
     try {
       final client = dioHttp.client(requireAuth: true);
       final response = await client.post(
@@ -18,16 +19,18 @@ class TableRepository extends TableInterface {
         queryParameters: {
           "area": area,
           "images": [],
-          "title": {LocalStorage.getLanguage()?.locale ?? 'en': name}
+          "title": {LocalStorage.getLanguage()?.locale ?? 'en': name},
         },
       );
       return ApiResult.success(
-          data: ShopSection.fromJson(response.data["data"]));
+        data: ShopSection.fromJson(response.data["data"]),
+      );
     } catch (e) {
       debugPrint('==> get createNewSection failure: $e');
       return ApiResult.failure(
-          error: AppHelpers.errorHandler(e),
-          statusCode: NetworkExceptions.getDioStatus(e));
+        error: AppHelpers.errorHandler(e),
+        statusCode: NetworkExceptions.getDioStatus(e),
+      );
     }
   }
 
@@ -55,14 +58,16 @@ class TableRepository extends TableInterface {
     } catch (e) {
       debugPrint('==> get getSection failure: $e');
       return ApiResult.failure(
-          error: AppHelpers.errorHandler(e),
-          statusCode: NetworkExceptions.getDioStatus(e));
+        error: AppHelpers.errorHandler(e),
+        statusCode: NetworkExceptions.getDioStatus(e),
+      );
     }
   }
 
   @override
-  Future<ApiResult<dynamic>> createNewTable(
-      {required TableModel tableModel}) async {
+  Future<ApiResult<dynamic>> createNewTable({
+    required TableModel tableModel,
+  }) async {
     try {
       final client = dioHttp.client(requireAuth: true);
       await client.post(
@@ -73,8 +78,9 @@ class TableRepository extends TableInterface {
     } catch (e) {
       debugPrint('==> get createNewTable failure: $e');
       return ApiResult.failure(
-          error: AppHelpers.errorHandler(e),
-          statusCode: NetworkExceptions.getDioStatus(e));
+        error: AppHelpers.errorHandler(e),
+        statusCode: NetworkExceptions.getDioStatus(e),
+      );
     }
   }
 
@@ -106,14 +112,13 @@ class TableRepository extends TableInterface {
         '/api/v1/dashboard/${LocalStorage.getUser()?.role}/tables',
         queryParameters: data,
       );
-      return ApiResult.success(
-        data: TableResponse.fromJson(response.data),
-      );
+      return ApiResult.success(data: TableResponse.fromJson(response.data));
     } catch (e) {
       debugPrint('==> get getTableInfo failure: $e');
       return ApiResult.failure(
-          error: AppHelpers.errorHandler(e),
-          statusCode: NetworkExceptions.getDioStatus(e));
+        error: AppHelpers.errorHandler(e),
+        statusCode: NetworkExceptions.getDioStatus(e),
+      );
     }
   }
 
@@ -132,8 +137,10 @@ class TableRepository extends TableInterface {
       'lang': LocalStorage.getLanguage()?.locale ?? 'en',
       if (type != null) 'status': type,
       if (from != null)
-        "start_from":
-            from.toString().substring(0, from.toString().indexOf(" ")),
+        "start_from": from.toString().substring(
+          0,
+          from.toString().indexOf(" "),
+        ),
       if (to != null)
         "start_to": to.toString().substring(0, to.toString().indexOf(" ")),
     };
@@ -150,8 +157,9 @@ class TableRepository extends TableInterface {
     } catch (e, s) {
       debugPrint('==> get getTableOrders failure: $e,$s');
       return ApiResult.failure(
-          error: AppHelpers.errorHandler(e),
-          statusCode: NetworkExceptions.getDioStatus(e));
+        error: AppHelpers.errorHandler(e),
+        statusCode: NetworkExceptions.getDioStatus(e),
+      );
     }
   }
 
@@ -163,14 +171,13 @@ class TableRepository extends TableInterface {
         '/api/v1/dashboard/${LocalStorage.getUser()?.role}/shop-sections/delete',
         queryParameters: {"ids[0]": id},
       );
-      return ApiResult.success(
-        data: TableResponse.fromJson(response.data),
-      );
+      return ApiResult.success(data: TableResponse.fromJson(response.data));
     } catch (e) {
       debugPrint('==> get deleteSection failure: $e');
       return ApiResult.failure(
-          error: AppHelpers.errorHandler(e),
-          statusCode: NetworkExceptions.getDioStatus(e));
+        error: AppHelpers.errorHandler(e),
+        statusCode: NetworkExceptions.getDioStatus(e),
+      );
     }
   }
 
@@ -182,14 +189,13 @@ class TableRepository extends TableInterface {
         '/api/v1/dashboard/${LocalStorage.getUser()?.role}/tables/delete',
         queryParameters: {"ids[0]": id},
       );
-      return ApiResult.success(
-        data: TableResponse.fromJson(response.data),
-      );
+      return ApiResult.success(data: TableResponse.fromJson(response.data));
     } catch (e) {
       debugPrint('==> get deleteTable failure: $e');
       return ApiResult.failure(
-          error: AppHelpers.errorHandler(e),
-          statusCode: NetworkExceptions.getDioStatus(e));
+        error: AppHelpers.errorHandler(e),
+        statusCode: NetworkExceptions.getDioStatus(e),
+      );
     }
   }
 
@@ -211,8 +217,9 @@ class TableRepository extends TableInterface {
     } catch (e) {
       debugPrint('==> get disableDates failure: $e');
       return ApiResult.failure(
-          error: AppHelpers.errorHandler(e),
-          statusCode: NetworkExceptions.getDioStatus(e));
+        error: AppHelpers.errorHandler(e),
+        statusCode: NetworkExceptions.getDioStatus(e),
+      );
     }
   }
 
@@ -225,15 +232,16 @@ class TableRepository extends TableInterface {
         queryParameters: {
           'lang': LocalStorage.getLanguage()?.locale ?? 'en',
           'page': page,
-          'perPage': 100
+          'perPage': 100,
         },
       );
       return ApiResult.success(data: BookingsResponse.fromJson(response.data));
     } catch (e) {
       debugPrint('==> get getBookings failure: $e');
       return ApiResult.failure(
-          error: AppHelpers.errorHandler(e),
-          statusCode: NetworkExceptions.getDioStatus(e));
+        error: AppHelpers.errorHandler(e),
+        statusCode: NetworkExceptions.getDioStatus(e),
+      );
     }
   }
 
@@ -251,17 +259,19 @@ class TableRepository extends TableInterface {
         data: {
           'booking_id': bookingId,
           'end_date': TimeService.dateFormatYMDHm(endDate ?? DateTime.now()),
-          'start_date':
-              TimeService.dateFormatYMDHm(startDate ?? DateTime.now()),
-          "table_id": tableId
+          'start_date': TimeService.dateFormatYMDHm(
+            startDate ?? DateTime.now(),
+          ),
+          "table_id": tableId,
         },
       );
       return const ApiResult.success(data: null);
     } catch (e) {
       debugPrint('==> get setBookings failure: $e');
       return ApiResult.failure(
-          error: AppHelpers.errorHandler(e),
-          statusCode: NetworkExceptions.getDioStatus(e));
+        error: AppHelpers.errorHandler(e),
+        statusCode: NetworkExceptions.getDioStatus(e),
+      );
     }
   }
 
@@ -274,12 +284,14 @@ class TableRepository extends TableInterface {
         queryParameters: {'lang': LocalStorage.getLanguage()?.locale ?? 'en'},
       );
       return ApiResult.success(
-          data: WorkingDayResponse.fromJson(response.data));
+        data: WorkingDayResponse.fromJson(response.data),
+      );
     } catch (e) {
       debugPrint('==> get getWorkingDay failure: $e');
       return ApiResult.failure(
-          error: AppHelpers.errorHandler(e),
-          statusCode: NetworkExceptions.getDioStatus(e));
+        error: AppHelpers.errorHandler(e),
+        statusCode: NetworkExceptions.getDioStatus(e),
+      );
     }
   }
 
@@ -295,8 +307,9 @@ class TableRepository extends TableInterface {
     } catch (e) {
       debugPrint('==> getCloseDay failure: $e');
       return ApiResult.failure(
-          error: AppHelpers.errorHandler(e),
-          statusCode: NetworkExceptions.getDioStatus(e));
+        error: AppHelpers.errorHandler(e),
+        statusCode: NetworkExceptions.getDioStatus(e),
+      );
     }
   }
 
@@ -312,14 +325,17 @@ class TableRepository extends TableInterface {
     } catch (e) {
       debugPrint('==> getTableInfo failure: $e');
       return ApiResult.failure(
-          error: AppHelpers.errorHandler(e),
-          statusCode: NetworkExceptions.getDioStatus(e));
+        error: AppHelpers.errorHandler(e),
+        statusCode: NetworkExceptions.getDioStatus(e),
+      );
     }
   }
 
   @override
-  Future<ApiResult> changeOrderStatus(
-      {required String status, required int id}) async {
+  Future<ApiResult> changeOrderStatus({
+    required String status,
+    required int id,
+  }) async {
     try {
       final client = dioHttp.client(requireAuth: true);
       await client.post(
@@ -330,8 +346,9 @@ class TableRepository extends TableInterface {
     } catch (e) {
       debugPrint('==> changeOrderStatus failure: $e');
       return ApiResult.failure(
-          error: AppHelpers.errorHandler(e),
-          statusCode: NetworkExceptions.getDioStatus(e));
+        error: AppHelpers.errorHandler(e),
+        statusCode: NetworkExceptions.getDioStatus(e),
+      );
     }
   }
 
@@ -347,18 +364,21 @@ class TableRepository extends TableInterface {
     try {
       final client = dioHttp.client(requireAuth: true);
       final response = await client.get(
-          '/api/v1/dashboard/${LocalStorage.getUser()?.role}/table/statistic',
-          queryParameters: {
-            "date_from": TimeService.dateFormatYMDHm(from),
-            "date_to": TimeService.dateFormatYMDHm(to),
-          });
+        '/api/v1/dashboard/${LocalStorage.getUser()?.role}/table/statistic',
+        queryParameters: {
+          "date_from": TimeService.dateFormatYMDHm(from),
+          "date_to": TimeService.dateFormatYMDHm(to),
+        },
+      );
       return ApiResult.success(
-          data: TableStatisticResponse.fromJson(response.data));
+        data: TableStatisticResponse.fromJson(response.data),
+      );
     } catch (e) {
       debugPrint('==> get statistic failure: $e');
       return ApiResult.failure(
-          error: AppHelpers.errorHandler(e),
-          statusCode: NetworkExceptions.getDioStatus(e));
+        error: AppHelpers.errorHandler(e),
+        statusCode: NetworkExceptions.getDioStatus(e),
+      );
     }
   }
 }

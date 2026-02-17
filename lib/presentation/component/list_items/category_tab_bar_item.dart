@@ -25,11 +25,11 @@ class CategoryTabBarItem extends StatelessWidget {
           duration: const Duration(milliseconds: 300),
           height: 36.r,
           decoration: BoxDecoration(
-            color: isActive ? Style.primary : Style.white,
+            color: isActive ? AppStyle.primary : AppStyle.white,
             borderRadius: BorderRadius.circular(10.r),
             boxShadow: [
               BoxShadow(
-                color: Style.white.withOpacity(0.07),
+                color: AppStyle.white.withOpacity(0.07),
                 spreadRadius: 0,
                 blurRadius: 2,
                 offset: const Offset(0, 1),
@@ -43,9 +43,11 @@ class CategoryTabBarItem extends StatelessWidget {
             children: [
               Text(
                 '$title',
-                style: Style.interNormal(
-                  size: 13.sp,
-                  color: Style.blackColor,
+                style: AppStyle.interNormal(
+                  size: 13,
+                  color: isActive
+                      ? AppStyle.buttonFontColor
+                      : AppStyle.blackColor,
                 ),
               ),
             ],

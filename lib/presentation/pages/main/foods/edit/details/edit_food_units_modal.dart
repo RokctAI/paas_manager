@@ -9,7 +9,7 @@ import 'package:venderfoodyman/application/providers.dart';
 import 'package:venderfoodyman/infrastructure/services/services.dart';
 
 class EditFoodUnitsModal extends ConsumerStatefulWidget {
-  const EditFoodUnitsModal({super.key}) ;
+  const EditFoodUnitsModal({super.key});
 
   @override
   ConsumerState<EditFoodUnitsModal> createState() => _EditFoodUnitsModalState();
@@ -46,7 +46,7 @@ class _EditFoodUnitsModalState extends ConsumerState<EditFoodUnitsModal> {
                     ? Center(
                         child: CircularProgressIndicator(
                           strokeWidth: 3.r,
-                          color: Style.primary,
+                          color: AppStyle.primary,
                         ),
                       )
                     : Expanded(

@@ -13,8 +13,7 @@ import '../../../../../../../infrastructure/services/services.dart';
 class DeleteExtrasItemModal extends StatelessWidget {
   final Extras extras;
 
-  const DeleteExtrasItemModal({super.key, required this.extras})
-      ;
+  const DeleteExtrasItemModal({super.key, required this.extras});
 
   @override
   Widget build(BuildContext context) {
@@ -30,8 +29,8 @@ class DeleteExtrasItemModal extends StatelessWidget {
               '${AppHelpers.getTranslation(TrKeys.areYouSureToDelete)} ${extras.value}?',
               textAlign: TextAlign.center,
               style: GoogleFonts.inter(
-                fontSize: 18.sp,
-                color: Style.blackColor,
+                fontSize: 18,
+                color: AppStyle.blackColor,
                 fontWeight: FontWeight.w500,
                 letterSpacing: -14 * 0.02,
               ),
@@ -43,8 +42,8 @@ class DeleteExtrasItemModal extends StatelessWidget {
                   child: CustomButton(
                     title: AppHelpers.getTranslation(TrKeys.cancel),
                     onPressed: context.maybePop,
-                    background: Style.transparent,
-                    borderColor: Style.blackColor,
+                    background: AppStyle.transparent,
+                    borderColor: AppStyle.blackColor,
                   ),
                 ),
                 16.horizontalSpace,
@@ -53,23 +52,26 @@ class DeleteExtrasItemModal extends StatelessWidget {
                     builder: (context, ref, child) {
                       return CustomButton(
                         title: AppHelpers.getTranslation(TrKeys.yes),
-                        isLoading:
-                            ref.watch(deleteExtrasItemProvider).isLoading,
+                        isLoading: ref
+                            .watch(deleteExtrasItemProvider)
+                            .isLoading,
                         onPressed: () => ref
                             .read(deleteExtrasItemProvider.notifier)
                             .deleteExtrasItem(
-                          context,
-                          extrasId: extras.id,
-                          success: () {
-                            ref
-                                .read(extrasGroupDetailsProvider.notifier)
-                                .fetchGroupExtras(groupId: extras.extraGroupId);
-                            context.maybePop();
-                          },
-                        ),
-                        background: Style.red,
-                        borderColor: Style.red,
-                        textColor: Style.white,
+                              context,
+                              extrasId: extras.id,
+                              success: () {
+                                ref
+                                    .read(extrasGroupDetailsProvider.notifier)
+                                    .fetchGroupExtras(
+                                      groupId: extras.extraGroupId,
+                                    );
+                                context.maybePop();
+                              },
+                            ),
+                        background: AppStyle.red,
+                        borderColor: AppStyle.red,
+                        textColor: AppStyle.white,
                       );
                     },
                   ),

@@ -9,7 +9,7 @@ import 'package:venderfoodyman/application/providers.dart';
 import 'package:venderfoodyman/infrastructure/services/services.dart';
 
 class FoodsFilterModal extends ConsumerStatefulWidget {
-  const FoodsFilterModal({super.key}) ;
+  const FoodsFilterModal({super.key});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
@@ -23,20 +23,16 @@ class _FoodsFilterModalState extends ConsumerState<FoodsFilterModal> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback(
-      (_) {
-        // ref.read(filterProvider.notifier).init(context);
-      },
-    );
-    _controller.addListener(
-      () {
-        if (_controller.value) {
-          // ref.read(filterProvider.notifier).setCheck(context, true);
-        } else {
-          // ref.read(filterProvider.notifier).setCheck(context, false);
-        }
-      },
-    );
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      // ref.read(filterProvider.notifier).init(context);
+    });
+    _controller.addListener(() {
+      if (_controller.value) {
+        // ref.read(filterProvider.notifier).setCheck(context, true);
+      } else {
+        // ref.read(filterProvider.notifier).setCheck(context, false);
+      }
+    });
   }
 
   @override
@@ -54,7 +50,7 @@ class _FoodsFilterModalState extends ConsumerState<FoodsFilterModal> {
       textDirection: isLtr ? TextDirection.ltr : TextDirection.rtl,
       child: Container(
         decoration: BoxDecoration(
-          color: Style.greyColor,
+          color: AppStyle.greyColor,
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(12.r),
             topRight: Radius.circular(12.r),
@@ -70,7 +66,7 @@ class _FoodsFilterModalState extends ConsumerState<FoodsFilterModal> {
               TitleAndIcon(
                 title:
                     '${AppHelpers.getTranslation(TrKeys.filter)} (${!state.isLoading ? state.shopCount : AppHelpers.getTranslation(TrKeys.loading)})',
-                rightTitleColor: Style.red,
+                rightTitleColor: AppStyle.red,
                 rightTitle: AppHelpers.getTranslation(TrKeys.clearAll),
                 onRightTap: event.clear,
               ),
@@ -121,8 +117,8 @@ class _FoodsFilterModalState extends ConsumerState<FoodsFilterModal> {
                         40.verticalSpace,
                         CustomButton(
                           isLoading: state.isLoading,
-                          background: Style.blackColor,
-                          textColor: Style.white,
+                          background: AppStyle.blackColor,
+                          textColor: AppStyle.white,
                           title:
                               '${AppHelpers.getTranslation(TrKeys.show)} ${state.shopCount} ${AppHelpers.getTranslation(TrKeys.shopAndRestaurants)} ',
                           onPressed: () {
@@ -138,122 +134,122 @@ class _FoodsFilterModalState extends ConsumerState<FoodsFilterModal> {
     );
   }
 
-// Container _priceRange(FilterState state, FilterNotifier event) {
-//   return Container(
-//     width: double.infinity,
-//     padding:
-//         EdgeInsets.only(left: 10.w, right: 10.w, top: 18.h, bottom: 10.h),
-//     decoration: BoxDecoration(
-//       color: Style.white.withOpacity(0.9),
-//       borderRadius: BorderRadius.all(
-//         Radius.circular(10.r),
-//       ),
-//     ),
-//     child: Column(
-//       children: [
-//         Text(
-//           AppHelpers.getTranslation(TrKeys.priceRange),
-//           style: Style.interNoSemi(
-//             size: 16,
-//             color: Style.black,
-//           ),
-//         ),
-//         18.verticalSpace,
-//         Row(
-//           crossAxisAlignment: CrossAxisAlignment.end,
-//           children: [
-//             Padding(
-//               padding: EdgeInsets.only(bottom: 2.h),
-//               child: SizedBox(
-//                 width: 46.w,
-//                 child: Text(
-//                   intl.AppHelpers.numberFormat(
-//                           symbol: LocalStorage
-//                               .getSelectedCurrency()
-//                               .symbol,
-//                           decimalDigits: 0)
-//                       .format(double.tryParse(
-//                           state.rangeValues.start.toString())),
-//                   style: Style.interNormal(
-//                     size: 14,
-//                     color: Style.black,
-//                   ),
-//                 ),
-//               ),
-//             ),
-//             Expanded(
-//               child: Column(
-//                 children: [
-//                   Padding(
-//                     padding: EdgeInsets.only(
-//                       right: 24.r,
-//                     ),
-//                     child: Row(
-//                       crossAxisAlignment: CrossAxisAlignment.end,
-//                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                       children: [
-//                         for (int i = 0; i < state.prices.length; i++)
-//                           Container(
-//                             width: 10.w,
-//                             height: 100.h / state.prices[i],
-//                             decoration: BoxDecoration(
-//                                 color: ((state.rangeValues.start /
-//                                                     (state.endPrice / 20))
-//                                                 .round() <=
-//                                             i) &&
-//                                         ((state.rangeValues.end /
-//                                                     (state.endPrice / 20))
-//                                                 .round() >=
-//                                             i)
-//                                     ? Style.brandGreen
-//                                     : Style.bgGrey,
-//                                 borderRadius: BorderRadius.circular(48.r)),
-//                           )
-//                       ],
-//                     ),
-//                   ),
-//                   8.verticalSpace,
-//                   Padding(
-//                     padding: EdgeInsets.only(
-//                       right: 24.r,
-//                     ),
-//                     child: RangeSlider(
-//                         activeColor: Style.brandGreen,
-//                         inactiveColor: Style.bgGrey,
-//                         min: 1,
-//                         max: state.endPrice,
-//                         values: state.rangeValues,
-//                         onChanged: (value) {
-//                           event.setRange(
-//                               RangeValues(value.start, value.end), context);
-//                         }),
-//                   ),
-//                 ],
-//               ),
-//             ),
-//             Padding(
-//               padding: EdgeInsets.only(bottom: 2.h),
-//               child: SizedBox(
-//                 width: 50.w,
-//                 child: Text(
-//                   intl.AppHelpers.numberFormat(
-//                           symbol: LocalStorage
-//                               .getSelectedCurrency()
-//                               .symbol,
-//                           decimalDigits: 0)
-//                       .format(
-//                           double.tryParse(state.rangeValues.end.toString())),
-//                   style: Style.interNormal(
-//                     size: 14.sp,
-//                     color: Style.black,
-//                   ),
-//                 ),
-//               ),
-//             ),
-//           ],
-//         ),
-//       ],
-//     ),
-//   );
-// }
+  // Container _priceRange(FilterState state, FilterNotifier event) {
+  //   return Container(
+  //     width: double.infinity,
+  //     padding:
+  //         EdgeInsets.only(left: 10.w, right: 10.w, top: 18.h, bottom: 10.h),
+  //     decoration: BoxDecoration(
+  //       color: Style.white.withOpacity(0.9),
+  //       borderRadius: BorderRadius.all(
+  //         Radius.circular(10.r),
+  //       ),
+  //     ),
+  //     child: Column(
+  //       children: [
+  //         Text(
+  //           AppHelpers.getTranslation(TrKeys.priceRange),
+  //           style: Style.interNoSemi(
+  //             size: 16,
+  //             color: Style.black,
+  //           ),
+  //         ),
+  //         18.verticalSpace,
+  //         Row(
+  //           crossAxisAlignment: CrossAxisAlignment.end,
+  //           children: [
+  //             Padding(
+  //               padding: EdgeInsets.only(bottom: 2.h),
+  //               child: SizedBox(
+  //                 width: 46.w,
+  //                 child: Text(
+  //                   intl.AppHelpers.numberFormat(
+  //                           symbol: LocalStorage
+  //                               .getSelectedCurrency()
+  //                               .symbol,
+  //                           decimalDigits: 0)
+  //                       .format(double.tryParse(
+  //                           state.rangeValues.start.toString())),
+  //                   style: Style.interNormal(
+  //                     size: 14,
+  //                     color: Style.black,
+  //                   ),
+  //                 ),
+  //               ),
+  //             ),
+  //             Expanded(
+  //               child: Column(
+  //                 children: [
+  //                   Padding(
+  //                     padding: EdgeInsets.only(
+  //                       right: 24.r,
+  //                     ),
+  //                     child: Row(
+  //                       crossAxisAlignment: CrossAxisAlignment.end,
+  //                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //                       children: [
+  //                         for (int i = 0; i < state.prices.length; i++)
+  //                           Container(
+  //                             width: 10.w,
+  //                             height: 100.h / state.prices[i],
+  //                             decoration: BoxDecoration(
+  //                                 color: ((state.rangeValues.start /
+  //                                                     (state.endPrice / 20))
+  //                                                 .round() <=
+  //                                             i) &&
+  //                                         ((state.rangeValues.end /
+  //                                                     (state.endPrice / 20))
+  //                                                 .round() >=
+  //                                             i)
+  //                                     ? Style.brandGreen
+  //                                     : Style.bgGrey,
+  //                                 borderRadius: BorderRadius.circular(48.r)),
+  //                           )
+  //                       ],
+  //                     ),
+  //                   ),
+  //                   8.verticalSpace,
+  //                   Padding(
+  //                     padding: EdgeInsets.only(
+  //                       right: 24.r,
+  //                     ),
+  //                     child: RangeSlider(
+  //                         activeColor: Style.brandGreen,
+  //                         inactiveColor: Style.bgGrey,
+  //                         min: 1,
+  //                         max: state.endPrice,
+  //                         values: state.rangeValues,
+  //                         onChanged: (value) {
+  //                           event.setRange(
+  //                               RangeValues(value.start, value.end), context);
+  //                         }),
+  //                   ),
+  //                 ],
+  //               ),
+  //             ),
+  //             Padding(
+  //               padding: EdgeInsets.only(bottom: 2.h),
+  //               child: SizedBox(
+  //                 width: 50.w,
+  //                 child: Text(
+  //                   intl.AppHelpers.numberFormat(
+  //                           symbol: LocalStorage
+  //                               .getSelectedCurrency()
+  //                               .symbol,
+  //                           decimalDigits: 0)
+  //                       .format(
+  //                           double.tryParse(state.rangeValues.end.toString())),
+  //                   style: Style.interNormal(
+  //                     size: 14,
+  //                     color: Style.black,
+  //                   ),
+  //                 ),
+  //               ),
+  //             ),
+  //           ],
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 }

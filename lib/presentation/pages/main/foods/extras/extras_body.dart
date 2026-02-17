@@ -13,8 +13,7 @@ import 'package:venderfoodyman/infrastructure/services/services.dart';
 class ExtrasBody extends StatelessWidget {
   final RefreshController refreshController;
 
-  const ExtrasBody({super.key, required this.refreshController})
-      ;
+  const ExtrasBody({super.key, required this.refreshController});
 
   @override
   Widget build(BuildContext context) {
@@ -34,29 +33,33 @@ class ExtrasBody extends StatelessWidget {
                     height: 30.r,
                     child: CircularProgressIndicator(
                       strokeWidth: 4.r,
-                      color: Style.blackColor,
+                      color: AppStyle.blackColor,
                     ),
                   ),
                 )
               : state.groups.isEmpty
-                  ? NoDataInfo(title: AppHelpers.getTranslation(TrKeys.noData))
-                  : ListView.builder(
-                      physics: const NeverScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      itemCount: state.groups.length,
-                      padding: REdgeInsets.only(
-                          right: 16, top: 20, left: 16, bottom: 100),
-                      itemBuilder: (context, index) => MainGroupItem(
+              ? NoDataInfo(title: AppHelpers.getTranslation(TrKeys.noData))
+              : ListView.builder(
+                  physics: const NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  itemCount: state.groups.length,
+                  padding: REdgeInsets.only(
+                    right: 16,
+                    top: 20,
+                    left: 16,
+                    bottom: 100,
+                  ),
+                  itemBuilder: (context, index) => MainGroupItem(
+                    group: state.groups[index],
+                    onTap: () => AppHelpers.showCustomModalBottomSheet(
+                      context: context,
+                      modal: ExtrasGroupDetailsModal(
                         group: state.groups[index],
-                        onTap: () => AppHelpers.showCustomModalBottomSheet(
-                          context: context,
-                          modal: ExtrasGroupDetailsModal(
-                            group: state.groups[index],
-                          ),
-                          isDarkMode: true,
-                        ),
                       ),
+                      isDarkMode: true,
                     ),
+                  ),
+                ),
         );
       },
     );

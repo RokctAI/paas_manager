@@ -23,20 +23,20 @@ class _OrderPageState extends ConsumerState<OrderPage> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback(
-      (_) {
-        ref.read(orderPaymentProvider.notifier).getCalculate(
-              stocks: ref.watch(orderCartProvider).stocks,
-              type: 'pickup',
-            );
-      },
-    );
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref
+          .read(orderPaymentProvider.notifier)
+          .getCalculate(
+            stocks: ref.watch(orderCartProvider).stocks,
+            type: 'pickup',
+          );
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Style.greyColor,
+      backgroundColor: AppStyle.greyColor,
       body: Consumer(
         builder: (context, ref, child) {
           final state = ref.watch(orderCartProvider);
@@ -65,13 +65,13 @@ class _OrderPageState extends ConsumerState<OrderPage> {
                         children: [
                           Text(
                             LocalStorage.getShop()?.translation?.title ?? '',
-                            style: Style.interSemi(size: 18.sp),
+                            style: AppStyle.interSemi(size: 18),
                           ),
                           Text(
                             LocalStorage.getShop()?.translation?.description ??
                                 '',
-                            style: Style.interRegular(
-                              size: 12.sp,
+                            style: AppStyle.interRegular(
+                              size: 12,
                               letterSpacing: -0.3,
                             ),
                             maxLines: 1,
@@ -91,7 +91,7 @@ class _OrderPageState extends ConsumerState<OrderPage> {
                 ),
                 child: TitleAndIcon(
                   title: AppHelpers.getTranslation(TrKeys.orders),
-                  rightTitleColor: Style.red,
+                  rightTitleColor: AppStyle.red,
                   rightTitle: state.stocks.isEmpty
                       ? null
                       : AppHelpers.getTranslation(TrKeys.clearAllOrders),
@@ -121,7 +121,7 @@ class _OrderPageState extends ConsumerState<OrderPage> {
                             onDelete: () => event.deleteStockFromCart(
                               stock:
                                   paymentState.orderCalculate?.stocks?[index] ??
-                                      Stock(),
+                                  Stock(),
                               updateProducts: (stocks) => productsEvent
                                   .updateProducts(cartStocks: stocks),
                             ),

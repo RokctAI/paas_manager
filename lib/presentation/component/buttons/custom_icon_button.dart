@@ -22,16 +22,12 @@ class CustomIconButton extends StatelessWidget {
       child: Container(
         width: size.r,
         height: size.r,
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           shape: BoxShape.circle,
-          color: Style.primary,
+          color: AppStyle.primary,
         ),
         alignment: Alignment.center,
-        child: Icon(
-          iconData,
-          size: 24.r,
-          color: Style.blackColor,
-        ),
+        child: Icon(iconData, size: 24.r, color: AppStyle.buttonFontColor),
       ),
     );
   }

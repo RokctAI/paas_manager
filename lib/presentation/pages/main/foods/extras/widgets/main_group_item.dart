@@ -10,8 +10,7 @@ class MainGroupItem extends StatelessWidget {
   final Group group;
   final Function() onTap;
 
-  const MainGroupItem({super.key, required this.group, required this.onTap})
-      ;
+  const MainGroupItem({super.key, required this.group, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +20,7 @@ class MainGroupItem extends StatelessWidget {
         child: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10.r),
-            color: Style.white,
+            color: AppStyle.white,
           ),
           padding: REdgeInsets.all(18),
           margin: REdgeInsets.only(bottom: 8),
@@ -30,12 +29,12 @@ class MainGroupItem extends StatelessWidget {
             children: [
               Text(
                 '${group.translation?.title}',
-                style: Style.interNormal(),
+                style: AppStyle.interNormal(),
               ),
               Icon(
                 FlutterRemix.arrow_right_s_line,
                 size: 22.r,
-                color: Style.blackColor,
+                color: AppStyle.blackColor,
               ),
             ],
           ),

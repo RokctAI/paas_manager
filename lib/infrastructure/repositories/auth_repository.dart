@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:venderfoodyman/domain/di/dependency_manager.dart';
 import 'package:venderfoodyman/infrastructure/services/services.dart';
@@ -12,18 +11,15 @@ class AuthRepository implements AuthInterface {
     required String email,
     required String password,
   }) async {
-    final data =
-        LoginModel(email: email.replaceAll('+', ""), password: password)
-            .toJson();
+    final data = {
+      if (AppValidators.isValidEmail(email)) 'email': email,
+      if (!AppValidators.isValidEmail(email)) 'phone': email,
+      'password': password,
+    };
     try {
       final client = dioHttp.client(requireAuth: false);
-      final response = await client.post(
-        '/api/v1/auth/login',
-        data: data,
-      );
-      return ApiResult.success(
-        data: LoginResponse.fromJson(response.data),
-      );
+      final response = await client.post('/api/v1/auth/login', data: data);
+      return ApiResult.success(data: LoginResponse.fromJson(response.data));
     } catch (e) {
       debugPrint('==> login failure: $e');
       return ApiResult.failure(
@@ -34,16 +30,17 @@ class AuthRepository implements AuthInterface {
   }
 
   @override
-  Future<ApiResult<LoginResponse>> loginWithGoogle(
-      {required String email,
-      required String displayName,
-      required String id,
-      required String avatar}) async {
+  Future<ApiResult<LoginResponse>> loginWithGoogle({
+    required String email,
+    required String displayName,
+    required String id,
+    required String avatar,
+  }) async {
     final data = {
       'email': email,
       'name': displayName,
       'id': id,
-      "avatar": avatar
+      "avatar": avatar,
     };
     debugPrint('===> login request $data');
     try {
@@ -67,10 +64,7 @@ class AuthRepository implements AuthInterface {
     final data = {'phone': phone.replaceAll('+', "")};
     try {
       final client = dioHttp.client(requireAuth: false);
-      final response = await client.post(
-        '/api/v1/auth/register',
-        data: data,
-      );
+      final response = await client.post('/api/v1/auth/register', data: data);
       return ApiResult.success(data: RegisterResponse.fromJson(response.data));
     } catch (e) {
       debugPrint('==> send otp failure: $e');
@@ -87,11 +81,10 @@ class AuthRepository implements AuthInterface {
   }) async {
     try {
       final client = dioHttp.client(requireAuth: false);
-      final response = await client.get(
-        '/api/v1/auth/verify/$verifyCode',
-      );
+      final response = await client.get('/api/v1/auth/verify/$verifyCode');
       return ApiResult.success(
-          data: VerifyPhoneResponse.fromJson(response.data));
+        data: VerifyPhoneResponse.fromJson(response.data),
+      );
     } catch (e) {
       debugPrint('==> verify email failure: $e');
       return ApiResult.failure(
@@ -110,13 +103,11 @@ class AuthRepository implements AuthInterface {
       final client = dioHttp.client(requireAuth: false);
       final response = await client.post(
         '/api/v1/auth/verify/phone',
-        queryParameters: {
-          "verifyId": verifyId,
-          "verifyCode": verifyCode,
-        },
+        queryParameters: {"verifyId": verifyId, "verifyCode": verifyCode},
       );
       return ApiResult.success(
-          data: VerifyPhoneResponse.fromJson(response.data));
+        data: VerifyPhoneResponse.fromJson(response.data),
+      );
     } catch (e) {
       debugPrint('==> verify email failure: $e');
       return ApiResult.failure(
@@ -182,8 +173,10 @@ class AuthRepository implements AuthInterface {
   }) async {
     try {
       final client = dioHttp.client(requireAuth: false);
-      final response = await client.post('/api/v1/auth/forgot/password/confirm',
-          data: {"phone": phone.replaceAll('+', ""), "type": "firebase"});
+      final response = await client.post(
+        '/api/v1/auth/forgot/password/confirm',
+        data: {"phone": phone.replaceAll('+', ""), "type": "firebase"},
+      );
 
       return ApiResult.success(
         data: VerifyData.fromJson(response.data["data"]),
@@ -198,12 +191,8 @@ class AuthRepository implements AuthInterface {
   }
 
   @override
-  Future<ApiResult<dynamic>> signUp({
-    required String email,
-  }) async {
-    final data = SignUpRequest(
-      email: email.replaceAll('+', ""),
-    );
+  Future<ApiResult<dynamic>> signUp({required String email}) async {
+    final data = SignUpRequest(email: email);
     try {
       final client = dioHttp.client(requireAuth: false);
       await client.post(
@@ -227,9 +216,7 @@ class AuthRepository implements AuthInterface {
         '/api/v1/auth/after-verify',
         data: user.toJsonForSignUp(),
       );
-      return ApiResult.success(
-        data: VerifyData.fromJson(res.data["data"]),
-      );
+      return ApiResult.success(data: VerifyData.fromJson(res.data["data"]));
     } catch (e) {
       return ApiResult.failure(
         error: AppHelpers.errorHandler(e),
@@ -239,17 +226,16 @@ class AuthRepository implements AuthInterface {
   }
 
   @override
-  Future<ApiResult<VerifyData>> sigUpWithPhone(
-      {required UserModel user}) async {
+  Future<ApiResult<VerifyData>> sigUpWithPhone({
+    required UserModel user,
+  }) async {
     try {
       final client = dioHttp.client(requireAuth: false);
       var res = await client.post(
         '/api/v1/auth/verify/phone',
         data: user.toJsonForSignUp(typeFirebase: true),
       );
-      return ApiResult.success(
-        data: VerifyData.fromJson(res.data["data"]),
-      );
+      return ApiResult.success(data: VerifyData.fromJson(res.data["data"]));
     } catch (e) {
       return ApiResult.failure(
         error: AppHelpers.errorHandler(e),
@@ -259,8 +245,9 @@ class AuthRepository implements AuthInterface {
   }
 
   @override
-  Future<ApiResult<CheckPhoneResponse>> checkPhone(
-      {required String phone}) async {
+  Future<ApiResult<CheckPhoneResponse>> checkPhone({
+    required String phone,
+  }) async {
     final data = {'phone': phone.replaceAll("+", "")};
     debugPrint('===> login request $data');
     try {
@@ -270,7 +257,8 @@ class AuthRepository implements AuthInterface {
         queryParameters: data,
       );
       return ApiResult.success(
-          data: CheckPhoneResponse.fromJson(response.data));
+        data: CheckPhoneResponse.fromJson(response.data),
+      );
     } catch (e, s) {
       debugPrint('==> check phone failure: $e, $s');
       return ApiResult.failure(

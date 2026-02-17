@@ -6,7 +6,7 @@ import 'package:venderfoodyman/infrastructure/models/models.dart';
 part 'create_food_kitchens_state.freezed.dart';
 
 @freezed
-class CreateFoodKitchensState with _$CreateFoodKitchensState {
+abstract class CreateFoodKitchensState with _$CreateFoodKitchensState {
   const factory CreateFoodKitchensState({
     @Default(false) bool isLoading,
     @Default([]) List<KitchenModel> kitchens,

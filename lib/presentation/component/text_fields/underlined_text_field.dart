@@ -42,8 +42,9 @@ class UnderlinedTextField extends StatelessWidget {
     this.textInputAction,
     this.hint,
     this.onTap,
-    this.validator, this.inputFormatters,
-  }) ;
+    this.validator,
+    this.inputFormatters,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -59,13 +60,13 @@ class UnderlinedTextField extends StatelessWidget {
           obscureText: !(obscure ?? true),
           obscuringCharacter: '*',
           controller: textController,
-          style: Style.interNormal(
-            size: 15.sp,
-            color: isDarkMode ? Style.white : Style.blackColor,
+          style: AppStyle.interNormal(
+            size: 15,
+            color: isDarkMode ? AppStyle.white : AppStyle.blackColor,
           ),
           cursorWidth: 1,
           inputFormatters: inputFormatters,
-          cursorColor: isDarkMode ? Style.white : Style.blackColor,
+          cursorColor: isDarkMode ? AppStyle.white : AppStyle.blackColor,
           keyboardType: inputType,
           initialValue: initialText,
           readOnly: readOnly,
@@ -82,26 +83,26 @@ class UnderlinedTextField extends StatelessWidget {
             hintText: hint,
             hintStyle: GoogleFonts.inter(
               fontWeight: FontWeight.w500,
-              fontSize: 13.sp,
-              color: isDarkMode ? Style.white : Style.textColor,
+              fontSize: 13,
+              color: isDarkMode ? AppStyle.white : AppStyle.textColor,
             ),
             labelText: label.toUpperCase(),
-            labelStyle: Style.interNormal(
-              size: 14.sp,
-              color: Style.blackColor,
+            labelStyle: AppStyle.interNormal(
+              size: 14,
+              color: AppStyle.blackColor,
             ),
             contentPadding: REdgeInsets.symmetric(horizontal: 0, vertical: 8),
             floatingLabelBehavior: FloatingLabelBehavior.always,
             enabledBorder: const UnderlineInputBorder(
-              borderSide: BorderSide(color: Style.shimmerBase),
+              borderSide: BorderSide(color: AppStyle.shimmerBase),
             ),
             errorBorder: const UnderlineInputBorder(
-              borderSide: BorderSide(color: Style.red),
+              borderSide: BorderSide(color: AppStyle.red),
             ),
             border: const UnderlineInputBorder(),
             focusedErrorBorder: const UnderlineInputBorder(),
             disabledBorder: const UnderlineInputBorder(
-              borderSide: BorderSide(color: Style.shimmerBase),
+              borderSide: BorderSide(color: AppStyle.shimmerBase),
             ),
             focusedBorder: const UnderlineInputBorder(),
           ),
@@ -117,16 +118,16 @@ class UnderlinedTextField extends StatelessWidget {
                 style: GoogleFonts.inter(
                   fontWeight: FontWeight.w400,
                   letterSpacing: -0.3,
-                  fontSize: 12.sp,
+                  fontSize: 12,
                   color: isError
-                      ? Style.red
+                      ? AppStyle.red
                       : isSuccess
-                          ? Style.textColor
-                          : Style.blackColor,
+                      ? AppStyle.textColor
+                      : AppStyle.blackColor,
                 ),
               ),
             ],
-          )
+          ),
       ],
     );
   }

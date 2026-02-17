@@ -12,14 +12,14 @@ class ImageShimmer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Shimmer.fromColors(
-      baseColor: Style.shimmerBase,
-      highlightColor: Style.shimmerHighlight,
+      baseColor: AppStyle.shimmerBase,
+      highlightColor: AppStyle.shimmerHighlight,
       child: Container(
         height: size,
         width: size,
         decoration: BoxDecoration(
           shape: isCircle ? BoxShape.circle : BoxShape.rectangle,
-          color: Style.white,
+          color: AppStyle.white,
         ),
       ),
     );
