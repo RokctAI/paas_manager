@@ -1,0 +1,88 @@
+name: venderfoodyman
+description: A new Flutter project.
+
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+version: 1.0.2+42
+
+environment:
+  sdk: '>=3.5.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  dio: ^5.7.0
+  jiffy: ^6.3.1
+  intl: ^0.19.0
+  lottie: ^3.0.0
+  get_it: ^8.0.0
+  shimmer: ^3.0.0
+  auto_route: ^9.2.0
+  flutter_svg: ^2.0.9
+  url_launcher: ^6.3.0
+  google_fonts: ^6.2.1
+  sms_autofill: ^2.4.0
+  image_picker: ^1.1.2
+  flutter_remix: ^0.0.3
+  pull_to_refresh: ^2.0.0
+  flutter_slidable: ^3.0.1
+  flutter_riverpod: ^2.5.1
+  connectivity_plus: ^6.0.5
+  sliding_up_panel: ^2.0.0+1
+  freezed_annotation: ^2.4.2
+  flutter_screenutil: ^5.9.3
+  shared_preferences: ^2.2.3
+  proste_indexed_stack: ^0.2.4
+  cached_network_image: ^3.3.0
+  calendar_date_picker2: ^1.1.5
+  top_snackbar_flutter: ^3.0.0+1
+  flutter_native_splash: ^2.3.10
+  flutter_advanced_switch: ^3.0.1
+  flutter_time_picker_spinner: ^2.0.0
+  dotted_border: ^2.1.0
+  intl_phone_field: ^3.2.0
+  fl_chart: ^0.69.0
+  auto_size_text: ^3.0.0
+  file_picker: ^8.0.7
+
+  #maps:
+  location: ^7.0.0
+  geocoding: ^3.0.0
+  geolocator: ^12.0.0
+  osm_nominatim: ^3.0.1
+  google_maps_flutter: ^2.9.0
+  google_place:
+    git:
+     url: https://github.com/muhammadyunusxon/google_place.git
+
+  #firebase:
+  firebase_core: ^3.4.0
+  firebase_auth: ^5.2.0
+  firebase_messaging: ^15.0.4
+
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  freezed: ^2.5.2
+  build_runner: ^2.4.8
+  flutter_lints: ^5.0.0
+  auto_route_generator: ^9.0.0
+  flutter_launcher_icons: ^0.14.1
+
+flutter_native_splash:
+  background_image: 'assets/image/splash.png'
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/svg/
+    - assets/image/
+    - assets/lottie/
+
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  min_sdk_android: 23
+  remove_alpha_ios: true
+  image_path: 'assets/image/manager.png'
