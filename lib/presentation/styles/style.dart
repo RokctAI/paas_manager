@@ -44,7 +44,7 @@ abstract class AppStyle {
   static const deepPurple = Color(0xFF673AB7);
 
   static Color get primary =>
-      _getColorFromSettings('primary_color', const Color(0xFF83EA00));
+      _getColorFromSettings('primary_color', const Color(0xFFE23744));
 
   static Color get buttonFontColor =>
       _getColorFromSettings('primary_button_font_color', black);
