@@ -69,6 +69,22 @@ class DemoCredentials extends StatelessWidget {
                   ],
                 ),
               ),
+              6.verticalSpace,
+              RichText(
+                text: TextSpan(
+                  text: 'Base URL:',
+                  style: AppStyle.interNormal(letterSpacing: -0.3),
+                  children: [
+                    TextSpan(
+                      text: ' ${AppConstants.baseUrl}',
+                      style: AppStyle.interRegular(
+                        letterSpacing: -0.3,
+                        fontStyle: FontStyle.italic,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ],
           ),
         ),
