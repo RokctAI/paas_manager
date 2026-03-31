@@ -18,10 +18,7 @@ class AuthRepository implements AuthInterface {
     };
     try {
       final client = dioHttp.client(requireAuth: false);
-      final response = await client.post(
-        '/api/v1/auth/login',
-        queryParameters: data,
-      );
+      final response = await client.post('/api/v1/auth/login', data: data);
       return ApiResult.success(data: LoginResponse.fromJson(response.data));
     } catch (e) {
       debugPrint('==> login failure: $e');
@@ -67,10 +64,7 @@ class AuthRepository implements AuthInterface {
     final data = {'phone': phone.replaceAll('+', "")};
     try {
       final client = dioHttp.client(requireAuth: false);
-      final response = await client.post(
-        '/api/v1/auth/register',
-        queryParameters: data,
-      );
+      final response = await client.post('/api/v1/auth/register', data: data);
       return ApiResult.success(data: RegisterResponse.fromJson(response.data));
     } catch (e) {
       debugPrint('==> send otp failure: $e');
@@ -181,7 +175,7 @@ class AuthRepository implements AuthInterface {
       final client = dioHttp.client(requireAuth: false);
       final response = await client.post(
         '/api/v1/auth/forgot/password/confirm',
-        queryParameters: {"phone": phone.replaceAll('+', ""), "type": "firebase"},
+        data: {"phone": phone.replaceAll('+', ""), "type": "firebase"},
       );
 
       return ApiResult.success(
@@ -220,7 +214,7 @@ class AuthRepository implements AuthInterface {
       final client = dioHttp.client(requireAuth: false);
       var res = await client.post(
         '/api/v1/auth/after-verify',
-        queryParameters: user.toJsonForSignUp(),
+        data: user.toJsonForSignUp(),
       );
       return ApiResult.success(data: VerifyData.fromJson(res.data["data"]));
     } catch (e) {
@@ -239,7 +233,7 @@ class AuthRepository implements AuthInterface {
       final client = dioHttp.client(requireAuth: false);
       var res = await client.post(
         '/api/v1/auth/verify/phone',
-        queryParameters: user.toJsonForSignUp(typeFirebase: true),
+        data: user.toJsonForSignUp(typeFirebase: true),
       );
       return ApiResult.success(data: VerifyData.fromJson(res.data["data"]));
     } catch (e) {
