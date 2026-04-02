@@ -33,10 +33,7 @@ class SmallWeekdayItem extends StatelessWidget {
       alignment: Alignment.center,
       child: Text(
         '${toBeginningOfSentenceCase(day.day?.substring(0, 2))}',
-        style: AppStyle.interNormal(
-          size: fontSize,
-          color: AppStyle.blackColor,
-        ),
+        style: AppStyle.interNormal(size: fontSize, color: AppStyle.blackColor),
       ),
     );
   }

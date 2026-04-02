@@ -15,16 +15,20 @@ class CreateFoodAddonsNotifier extends StateNotifier<CreateFoodAddonsState> {
   bool _hasMore = true;
 
   CreateFoodAddonsNotifier(this._productsRepository)
-      : super(const CreateFoodAddonsState());
+    : super(const CreateFoodAddonsState());
 
   void toggleAddonSelection(int index) {
     List<ProductData> addons = List.from(state.addons);
-    addons[index] = addons[index]
-        .copyWith(isSelectedAddon: !(addons[index].isSelectedAddon ?? false));
+    addons[index] = addons[index].copyWith(
+      isSelectedAddon: !(addons[index].isSelectedAddon ?? false),
+    );
     state = state.copyWith(addons: addons);
   }
 
-  Future<void> fetchMoreAddons(BuildContext context,{RefreshController? refreshController}) async {
+  Future<void> fetchMoreAddons(
+    BuildContext context, {
+    RefreshController? refreshController,
+  }) async {
     if (!_hasMore) {
       refreshController?.loadNoData();
       return;
@@ -43,19 +47,19 @@ class CreateFoodAddonsNotifier extends StateNotifier<CreateFoodAddonsState> {
         refreshController?.loadComplete();
         state = state.copyWith(addons: addons);
       },
-      failure: (fail,status) {
+      failure: (fail, status) {
         debugPrint('===> fetch more addons fail $fail');
         AppHelpers.showCheckTopSnackBar(
-            context,
-            text: fail,
-            type: SnackBarType.error
+          context,
+          text: fail,
+          type: SnackBarType.error,
         );
         refreshController?.loadFailed();
       },
     );
   }
 
-  Future<void> initialFetchAddons(BuildContext context,Stock stock) async {
+  Future<void> initialFetchAddons(BuildContext context, Stock stock) async {
     if (state.addons.isNotEmpty) {
       List<ProductData> addons = List.from(state.addons);
       for (int i = 0; i < addons.length; i++) {
@@ -97,12 +101,12 @@ class CreateFoodAddonsNotifier extends StateNotifier<CreateFoodAddonsState> {
         }
         state = state.copyWith(isLoading: false, addons: addons);
       },
-      failure: (fail,status) {
+      failure: (fail, status) {
         debugPrint('===> fetch addons fail $fail');
         AppHelpers.showCheckTopSnackBar(
-            context,
-            text: fail,
-            type: SnackBarType.error
+          context,
+          text: fail,
+          type: SnackBarType.error,
         );
         state = state.copyWith(isLoading: false, addons: []);
       },

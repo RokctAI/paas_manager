@@ -24,10 +24,7 @@ class DocumentUploadSection extends StatelessWidget {
           padding: EdgeInsets.only(left: 4.w, bottom: 12.h),
           child: Text(
             'Documents',
-            style: AppStyle.interSemi(
-              size: 14,
-              color: AppStyle.black,
-            ),
+            style: AppStyle.interSemi(size: 14, color: AppStyle.black),
           ),
         ),
         Material(

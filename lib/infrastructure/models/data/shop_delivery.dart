@@ -52,17 +52,16 @@ class ShopDelivery {
     String? note,
     bool? active,
     Translation? translation,
-  }) =>
-      ShopDelivery(
-        id: id ?? _id,
-        shopId: shopId ?? _shopId,
-        type: type ?? _type,
-        price: price ?? _price,
-        times: times ?? _times,
-        note: note ?? _note,
-        active: active ?? _active,
-        translation: translation ?? _translation,
-      );
+  }) => ShopDelivery(
+    id: id ?? _id,
+    shopId: shopId ?? _shopId,
+    type: type ?? _type,
+    price: price ?? _price,
+    times: times ?? _times,
+    note: note ?? _note,
+    active: active ?? _active,
+    translation: translation ?? _translation,
+  );
 
   int? get id => _id;
 

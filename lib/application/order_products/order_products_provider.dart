@@ -6,5 +6,5 @@ import 'package:venderfoodyman/domain/di/dependency_manager.dart';
 
 final orderProductsProvider =
     StateNotifierProvider<OrderProductsNotifier, OrderProductsState>(
-  (ref) => OrderProductsNotifier(productRepository),
-);
+      (ref) => OrderProductsNotifier(productRepository),
+    );

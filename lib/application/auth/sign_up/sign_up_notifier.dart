@@ -14,7 +14,7 @@ class SignUpNotifier extends StateNotifier<SignUpState> {
   final UsersInterface _userRepository;
 
   SignUpNotifier(this._authRepository, this._userRepository)
-      : super(const SignUpState());
+    : super(const SignUpState());
 
   Future<void> getProfileDetails() async {
     final response = await _userRepository.getProfileDetails();
@@ -43,10 +43,7 @@ class SignUpNotifier extends StateNotifier<SignUpState> {
   }
 
   void setFirstName(String name) {
-    state = state.copyWith(
-      firstName: name.trim(),
-      isFirstNameInvalid: false,
-    );
+    state = state.copyWith(firstName: name.trim(), isFirstNameInvalid: false);
   }
 
   void setEmail(String value) {
@@ -73,9 +70,7 @@ class SignUpNotifier extends StateNotifier<SignUpState> {
         return;
       }
       state = state.copyWith(isLoading: true, isSuccess: false);
-      final response = await _authRepository.signUp(
-        email: state.email,
-      );
+      final response = await _authRepository.signUp(email: state.email);
       response.when(
         success: (data) async {
           state = state.copyWith(isLoading: false, isSuccess: true);
@@ -89,10 +84,7 @@ class SignUpNotifier extends StateNotifier<SignUpState> {
               text: AppHelpers.getTranslation(TrKeys.emailIsNotValid),
             );
           } else {
-            AppHelpers.showCheckTopSnackBar(
-              context,
-              text: failure,
-            );
+            AppHelpers.showCheckTopSnackBar(context, text: failure);
           }
         },
       );
@@ -104,7 +96,9 @@ class SignUpNotifier extends StateNotifier<SignUpState> {
   }
 
   Future<void> sendCodeToNumber(
-      BuildContext context, ValueChanged<String> onSuccess) async {
+    BuildContext context,
+    ValueChanged<String> onSuccess,
+  ) async {
     final connected = await AppConnectivity.connectivity();
     if (connected) {
       if (state.phone.isEmpty) {
@@ -113,32 +107,35 @@ class SignUpNotifier extends StateNotifier<SignUpState> {
       }
       state = state.copyWith(isLoading: true, isSuccess: false);
       final res = await _authRepository.checkPhone(phone: state.phone);
-      res.when(success: (success) async {
-        state = state.copyWith(isLoading: false, isSuccess: false);
-        AppHelpers.showCheckTopSnackBar(
-          context,
-          text: AppHelpers.getTranslation(TrKeys.userAlready),
-        );
-      }, failure: (failure, status) async {
-        await FirebaseAuth.instance.verifyPhoneNumber(
-          phoneNumber: state.phone,
-          verificationCompleted: (PhoneAuthCredential credential) {},
-          verificationFailed: (FirebaseAuthException e) {
-            AppHelpers.showCheckTopSnackBar(context, text: e.message);
-            state = state.copyWith(isLoading: false, isSuccess: false);
-          },
-          codeSent: (String verificationId, int? resendToken) {
-            state = state.copyWith(
-              verificationId: verificationId,
-              phone: state.email,
-              isLoading: false,
-              isSuccess: true,
-            );
-            onSuccess(verificationId);
-          },
-          codeAutoRetrievalTimeout: (String verificationId) {},
-        );
-      });
+      res.when(
+        success: (success) async {
+          state = state.copyWith(isLoading: false, isSuccess: false);
+          AppHelpers.showCheckTopSnackBar(
+            context,
+            text: AppHelpers.getTranslation(TrKeys.userAlready),
+          );
+        },
+        failure: (failure, status) async {
+          await FirebaseAuth.instance.verifyPhoneNumber(
+            phoneNumber: state.phone,
+            verificationCompleted: (PhoneAuthCredential credential) {},
+            verificationFailed: (FirebaseAuthException e) {
+              AppHelpers.showCheckTopSnackBar(context, text: e.message);
+              state = state.copyWith(isLoading: false, isSuccess: false);
+            },
+            codeSent: (String verificationId, int? resendToken) {
+              state = state.copyWith(
+                verificationId: verificationId,
+                phone: state.email,
+                isLoading: false,
+                isSuccess: true,
+              );
+              onSuccess(verificationId);
+            },
+            codeAutoRetrievalTimeout: (String verificationId) {},
+          );
+        },
+      );
     } else {
       if (context.mounted) {
         AppHelpers.showNoConnectionSnackBar(context);
@@ -146,7 +143,7 @@ class SignUpNotifier extends StateNotifier<SignUpState> {
     }
   }
 
-  Future<void> register(BuildContext context,String? email) async {
+  Future<void> register(BuildContext context, String? email) async {
     final connected = await AppConnectivity.connectivity();
     if (connected) {
       // if (AppValidators.emptyCheck(state.phone)?.isNotEmpty ?? false) {
@@ -166,27 +163,28 @@ class SignUpNotifier extends StateNotifier<SignUpState> {
         return;
       }
       if (!AppValidators.isValidConfirmPassword(
-          state.password, state.confirmPassword)) {
+        state.password,
+        state.confirmPassword,
+      )) {
         state = state.copyWith(isConfirmPasswordInvalid: true);
         return;
       }
       state = state.copyWith(isLoading: true);
       final response = await _authRepository.sigUpWithData(
-          user: UserModel(
-        email: email ?? state.email,
-        firstname: state.firstName,
-        lastname: state.lastName,
-        phone: state.phone,
-        password: state.password,
-        confirmPassword: state.confirmPassword,
-        referral: state.referral,
-      ));
+        user: UserModel(
+          email: email ?? state.email,
+          firstname: state.firstName,
+          lastname: state.lastName,
+          phone: state.phone,
+          password: state.password,
+          confirmPassword: state.confirmPassword,
+          referral: state.referral,
+        ),
+      );
 
       response.when(
         success: (data) async {
-          state = state.copyWith(
-            isLoading: false,
-          );
+          state = state.copyWith(isLoading: false);
           LocalStorage.setToken(data.token);
           context.replaceRoute(const MainRoute());
           String? fcmToken = await FirebaseMessaging.instance.getToken();
@@ -195,13 +193,12 @@ class SignUpNotifier extends StateNotifier<SignUpState> {
         failure: (failure, status) {
           state = state.copyWith(isLoading: false);
           if (status == 400) {
-            AppHelpers.showCheckTopSnackBar(context,
-                text: AppHelpers.getTranslation(TrKeys.referral));
-          } else {
             AppHelpers.showCheckTopSnackBar(
               context,
-              text: failure,
+              text: AppHelpers.getTranslation(TrKeys.referral),
             );
+          } else {
+            AppHelpers.showCheckTopSnackBar(context, text: failure);
           }
         },
       );
@@ -213,17 +210,11 @@ class SignUpNotifier extends StateNotifier<SignUpState> {
   }
 
   void setPhone(String value) {
-    state = state.copyWith(
-      phone: value.trim(),
-      isPhoneInvalid: false,
-    );
+    state = state.copyWith(phone: value.trim(), isPhoneInvalid: false);
   }
 
   void setLatName(String name) {
-    state = state.copyWith(
-      lastName: name.trim(),
-      isSurNameInvalid: false,
-    );
+    state = state.copyWith(lastName: name.trim(), isSurNameInvalid: false);
   }
 
   void setReferral(String name) {
@@ -255,28 +246,28 @@ class SignUpNotifier extends StateNotifier<SignUpState> {
         return;
       }
       if (!AppValidators.isValidConfirmPassword(
-          state.password, state.confirmPassword)) {
+        state.password,
+        state.confirmPassword,
+      )) {
         state = state.copyWith(isConfirmPasswordInvalid: true);
         return;
       }
       state = state.copyWith(isLoading: true);
       final response = await _authRepository.sigUpWithPhone(
-          user: UserModel(
-              email:
-                  AppValidators.checkEmail(phone ?? '') ? phone : state.email,
-              firstname: state.firstName,
-              lastname: state.lastName,
-              phone:
-                  !AppValidators.checkEmail(phone ?? '') ? phone : state.phone,
-              password: state.password,
-              confirmPassword: state.confirmPassword,
-              referral: state.referral));
+        user: UserModel(
+          email: AppValidators.checkEmail(phone ?? '') ? phone : state.email,
+          firstname: state.firstName,
+          lastname: state.lastName,
+          phone: !AppValidators.checkEmail(phone ?? '') ? phone : state.phone,
+          password: state.password,
+          confirmPassword: state.confirmPassword,
+          referral: state.referral,
+        ),
+      );
 
       response.when(
         success: (data) async {
-          state = state.copyWith(
-            isLoading: false,
-          );
+          state = state.copyWith(isLoading: false);
           LocalStorage.setToken(data.token);
           context.replaceRoute(const CreateShopRoute());
           String? fcmToken = await FirebaseMessaging.instance.getToken();
@@ -285,15 +276,9 @@ class SignUpNotifier extends StateNotifier<SignUpState> {
         failure: (failure, status) {
           state = state.copyWith(isLoading: false);
           if (status == 400) {
-            AppHelpers.showCheckTopSnackBar(
-              context,
-              text: "error",
-            );
+            AppHelpers.showCheckTopSnackBar(context, text: "error");
           } else {
-            AppHelpers.showCheckTopSnackBar(
-              context,
-              text: "error",
-            );
+            AppHelpers.showCheckTopSnackBar(context, text: "error");
           }
         },
       );

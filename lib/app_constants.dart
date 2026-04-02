@@ -17,21 +17,33 @@ class AppConstants {
   static bool keepPlayingOnNewOrder = false;
 
   /// auth phone fields
-  static const bool isSpecificNumberEnabled = bool.fromEnvironment('IS_SPECIFIC_NUMBER_ENABLED');
-  static const bool isNumberLengthAlwaysSame = bool.fromEnvironment('IS_NUMBER_LENGTH_ALWAYS_SAME');
+  static const bool isSpecificNumberEnabled = bool.fromEnvironment(
+    'IS_SPECIFIC_NUMBER_ENABLED',
+  );
+  static const bool isNumberLengthAlwaysSame = bool.fromEnvironment(
+    'IS_NUMBER_LENGTH_ALWAYS_SAME',
+  );
   static const String countryCodeISO = String.fromEnvironment('COUNTRY_ISO');
   static const bool showFlag = bool.fromEnvironment('SHOW_FLAG');
   static const bool showArrowIcon = bool.fromEnvironment('SHOW_ARROW_ICON');
 
   /// location
-  static final double demoLatitude = double.parse(const String.fromEnvironment('DEMO_LATITUDE'));
-  static final double demoLongitude = double.parse(const String.fromEnvironment('DEMO_LONGITUDE'));
+  static final double demoLatitude = double.parse(
+    const String.fromEnvironment('DEMO_LATITUDE'),
+  );
+  static final double demoLongitude = double.parse(
+    const String.fromEnvironment('DEMO_LONGITUDE'),
+  );
   static const double pinLoadingMin = 0.116666667;
   static const double pinLoadingMax = 0.611111111;
 
   /// demo app info
-  static const String demoSellerLogin = String.fromEnvironment('DEMO_SELLER_LOGIN');
-  static const String demoSellerPassword = String.fromEnvironment('DEMO_SELLER_PASSWORD');
+  static const String demoSellerLogin = String.fromEnvironment(
+    'DEMO_SELLER_LOGIN',
+  );
+  static const String demoSellerPassword = String.fromEnvironment(
+    'DEMO_SELLER_PASSWORD',
+  );
 
   /// hero tags
   static const String heroTagAddOrderButton = 'heroTagAddOrderButton';

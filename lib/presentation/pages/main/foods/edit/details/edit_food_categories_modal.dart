@@ -19,19 +19,17 @@ class _EditFoodCategoriesScreenState
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback(
-      (_) {
-        final product = ref.read(editFoodDetailsProvider).product;
-        final type = product?.type;
-        final allCategoriesState = ref.read(allCategoriesProvider);
-        final isCombo = type == 'combo';
-        final categories = isCombo
-            ? allCategoriesState.comboCategories
-            : allCategoriesState.categories;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final product = ref.read(editFoodDetailsProvider).product;
+      final type = product?.type;
+      final allCategoriesState = ref.read(allCategoriesProvider);
+      final isCombo = type == 'combo';
+      final categories = isCombo
+          ? allCategoriesState.comboCategories
+          : allCategoriesState.categories;
 
-        ref.read(editFoodCategoriesProvider.notifier).setCategories(categories);
-      },
-    );
+      ref.read(editFoodCategoriesProvider.notifier).setCategories(categories);
+    });
   }
 
   @override

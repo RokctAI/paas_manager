@@ -63,12 +63,9 @@ class TableNotifier extends StateNotifier<TableState> {
     }
     _query = text.trim();
     _timer?.cancel();
-    _timer = Timer(
-      const Duration(milliseconds: 300),
-      () {
-        _search(refreshController: refreshController,sectionId: sectionId);
-      },
-    );
+    _timer = Timer(const Duration(milliseconds: 300), () {
+      _search(refreshController: refreshController, sectionId: sectionId);
+    });
   }
 
   Future<void> fetchMoreTables({

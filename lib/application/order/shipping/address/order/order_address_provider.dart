@@ -5,5 +5,5 @@ import 'order_address_notifier.dart';
 
 final orderAddressProvider =
     StateNotifierProvider<OrderAddressNotifier, OrderAddressState>(
-  (ref) => OrderAddressNotifier(),
-);
+      (ref) => OrderAddressNotifier(),
+    );

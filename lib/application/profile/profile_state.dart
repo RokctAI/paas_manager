@@ -2,7 +2,6 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'package:venderfoodyman/infrastructure/models/models.dart';
 
-
 part 'profile_state.freezed.dart';
 
 @freezed

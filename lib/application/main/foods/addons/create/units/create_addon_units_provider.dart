@@ -6,5 +6,5 @@ import 'create_addon_units_state.dart';
 
 final createAddonUnitsProvider =
     StateNotifierProvider<CreateAddonUnitsNotifier, CreateAddonUnitsState>(
-  (ref) => CreateAddonUnitsNotifier(catalogRepository),
-);
+      (ref) => CreateAddonUnitsNotifier(catalogRepository),
+    );

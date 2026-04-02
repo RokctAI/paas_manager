@@ -42,15 +42,14 @@ class Extras {
     Group? group,
     StockPivot? pivot,
     bool? active,
-  }) =>
-      Extras(
-        id: id ?? _id,
-        extraGroupId: extraGroupId ?? _extraGroupId,
-        value: value ?? _value,
-        group: group ?? _group,
-        pivot: pivot ?? _pivot,
-        active: active ?? _active,
-      );
+  }) => Extras(
+    id: id ?? _id,
+    extraGroupId: extraGroupId ?? _extraGroupId,
+    value: value ?? _value,
+    group: group ?? _group,
+    pivot: pivot ?? _pivot,
+    active: active ?? _active,
+  );
 
   int? get id => _id;
 
@@ -95,9 +94,9 @@ class StockPivot {
   int? _extraValueId;
 
   StockPivot copyWith({int? stockId, int? extraValueId}) => StockPivot(
-        stockId: stockId ?? _stockId,
-        extraValueId: extraValueId ?? _extraValueId,
-      );
+    stockId: stockId ?? _stockId,
+    extraValueId: extraValueId ?? _extraValueId,
+  );
 
   int? get stockId => _stockId;
 

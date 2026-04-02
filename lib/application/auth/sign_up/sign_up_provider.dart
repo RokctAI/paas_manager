@@ -6,5 +6,5 @@ import 'package:venderfoodyman/domain/di/dependency_manager.dart';
 
 final signUpProvider =
     StateNotifierProvider.autoDispose<SignUpNotifier, SignUpState>(
-  (ref) => SignUpNotifier(authRepository, usersRepository),
-);
+      (ref) => SignUpNotifier(authRepository, usersRepository),
+    );

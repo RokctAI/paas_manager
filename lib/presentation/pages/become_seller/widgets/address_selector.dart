@@ -28,10 +28,7 @@ class AddressSelector extends StatelessWidget {
           padding: EdgeInsets.only(left: 4.w, bottom: 12.h),
           child: Text(
             AppHelpers.getTranslation(TrKeys.address),
-            style: AppStyle.interSemi(
-              size: 14,
-              color: AppStyle.black,
-            ),
+            style: AppStyle.interSemi(size: 14, color: AppStyle.black),
           ),
         ),
         Material(
@@ -40,10 +37,7 @@ class AddressSelector extends StatelessWidget {
           child: InkWell(
             onTap: () async {
               final data = await context.pushRoute(
-                ViewMapRoute(
-                  isShopLocation: true,
-                  onChanged: () {},
-                ),
+                ViewMapRoute(isShopLocation: true, onChanged: () {}),
               );
               onAddressSelected(data);
             },

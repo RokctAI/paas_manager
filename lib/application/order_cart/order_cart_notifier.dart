@@ -48,7 +48,9 @@ class OrderCartNotifier extends StateNotifier<OrderCartState> {
         List<AddonData> newAddons =
             stock?.addons?.where((e) => e.active ?? false).toList() ?? [];
         for (var element in lastAddons) {
-          if (!(newAddons.any((e) => e.id == element.id && e.quantity ==element.quantity) ) ) {
+          if (!(newAddons.any(
+            (e) => e.id == element.id && e.quantity == element.quantity,
+          ))) {
             next = false;
           }
         }

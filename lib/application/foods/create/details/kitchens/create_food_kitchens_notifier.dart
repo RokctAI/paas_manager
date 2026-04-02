@@ -5,11 +5,14 @@ import 'package:venderfoodyman/infrastructure/services/services.dart';
 import 'create_food_kitchens_state.dart';
 import 'package:venderfoodyman/domain/interface/interfaces.dart';
 
-class CreateFoodKitchensNotifier extends StateNotifier<CreateFoodKitchensState> {
+class CreateFoodKitchensNotifier
+    extends StateNotifier<CreateFoodKitchensState> {
   final CatalogInterface _catalogRepository;
 
   CreateFoodKitchensNotifier(this._catalogRepository)
-      : super(CreateFoodKitchensState(kitchenController: TextEditingController()));
+    : super(
+        CreateFoodKitchensState(kitchenController: TextEditingController()),
+      );
 
   Future<void> fetchKitchens(BuildContext context) async {
     if (state.kitchens.isNotEmpty) {
@@ -26,12 +29,12 @@ class CreateFoodKitchensNotifier extends StateNotifier<CreateFoodKitchensState> 
               kitchens[state.activeIndex].translation?.title ?? '';
         }
       },
-      failure: (failure,status) {
+      failure: (failure, status) {
         state = state.copyWith(isLoading: false);
         AppHelpers.showCheckTopSnackBar(
-            context,
-            text: failure,
-            type: SnackBarType.error
+          context,
+          text: failure,
+          type: SnackBarType.error,
         );
         debugPrint('====> fetch kitchens fail $failure');
       },
@@ -43,6 +46,7 @@ class CreateFoodKitchensNotifier extends StateNotifier<CreateFoodKitchensState> 
       return;
     }
     state = state.copyWith(activeIndex: index);
-    state.kitchenController?.text = state.kitchens[index].translation?.title ?? '';
+    state.kitchenController?.text =
+        state.kitchens[index].translation?.title ?? '';
   }
 }

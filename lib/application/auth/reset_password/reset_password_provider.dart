@@ -3,6 +3,7 @@ import 'reset_password_notifier.dart';
 import 'reset_password_state.dart';
 
 final resetPasswordProvider =
-    StateNotifierProvider.autoDispose<ResetPasswordNotifier, ResetPasswordState>(
-  (ref) => ResetPasswordNotifier(),
-);
+    StateNotifierProvider.autoDispose<
+      ResetPasswordNotifier,
+      ResetPasswordState
+    >((ref) => ResetPasswordNotifier());

@@ -61,10 +61,9 @@ class OrderCalculateDetail {
     serviceFee = json['service_fee'];
     rate = json['rate'];
     couponPrice = json['coupon_price'];
-    stocks=json["stocks"] == null
+    stocks = json["stocks"] == null
         ? []
-        : List<Stock>.from(
-        json["stocks"]!.map((x) => Stock.fromJson(x)));
+        : List<Stock>.from(json["stocks"]!.map((x) => Stock.fromJson(x)));
   }
 
   Map<String, dynamic> toJson() {

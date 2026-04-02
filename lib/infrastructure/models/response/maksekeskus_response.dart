@@ -1,4 +1,3 @@
-
 import 'package:venderfoodyman/infrastructure/models/data/maksekeskus_data.dart';
 
 class MaksekeskusResponse {
@@ -7,25 +6,19 @@ class MaksekeskusResponse {
   String? message;
   MaksekeskusData? data;
 
-  MaksekeskusResponse({
-    this.timestamp,
-    this.status,
-    this.message,
-    this.data,
-  });
+  MaksekeskusResponse({this.timestamp, this.status, this.message, this.data});
 
   MaksekeskusResponse copyWith({
     DateTime? timestamp,
     bool? status,
     String? message,
     MaksekeskusData? data,
-  }) =>
-      MaksekeskusResponse(
-        timestamp: timestamp ?? this.timestamp,
-        status: status ?? this.status,
-        message: message ?? this.message,
-        data: data ?? this.data,
-      );
+  }) => MaksekeskusResponse(
+    timestamp: timestamp ?? this.timestamp,
+    status: status ?? this.status,
+    message: message ?? this.message,
+    data: data ?? this.data,
+  );
 
   factory MaksekeskusResponse.fromJson(Map<String, dynamic> json) =>
       MaksekeskusResponse(
@@ -40,11 +33,9 @@ class MaksekeskusResponse {
       );
 
   Map<String, dynamic> toJson() => {
-        "timestamp": timestamp?.toIso8601String(),
-        "status": status,
-        "message": message,
-        "data": data?.toJson(),
-      };
+    "timestamp": timestamp?.toIso8601String(),
+    "status": status,
+    "message": message,
+    "data": data?.toJson(),
+  };
 }
-
-

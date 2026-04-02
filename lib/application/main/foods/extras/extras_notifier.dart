@@ -12,14 +12,15 @@ class ExtrasNotifier extends StateNotifier<ExtrasState> {
 
   Future<void> fetchGroups({RefreshController? refreshController}) async {
     state = state.copyWith(isLoading: true);
-    final response =
-        await _productsRepository.getExtrasGroups(needOnlyValid: false);
+    final response = await _productsRepository.getExtrasGroups(
+      needOnlyValid: false,
+    );
     response.when(
       success: (data) {
         state = state.copyWith(groups: data.data ?? [], isLoading: false);
         refreshController?.refreshCompleted();
       },
-      failure: (fail,status) {
+      failure: (fail, status) {
         debugPrint('===> fetch groups fail $fail');
         state = state.copyWith(isLoading: false);
         refreshController?.refreshFailed();

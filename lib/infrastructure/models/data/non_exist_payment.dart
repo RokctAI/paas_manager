@@ -22,15 +22,14 @@ class NonExistPayment {
     bool? active,
     DateTime? createdAt,
     DateTime? updatedAt,
-  }) =>
-      NonExistPayment(
-        id: id ?? this.id,
-        tag: tag ?? this.tag,
-        input: input ?? this.input,
-        active: active ?? this.active,
-        createdAt: createdAt ?? this.createdAt,
-        updatedAt: updatedAt ?? this.updatedAt,
-      );
+  }) => NonExistPayment(
+    id: id ?? this.id,
+    tag: tag ?? this.tag,
+    input: input ?? this.input,
+    active: active ?? this.active,
+    createdAt: createdAt ?? this.createdAt,
+    updatedAt: updatedAt ?? this.updatedAt,
+  );
 
   factory NonExistPayment.fromJson(Map<String, dynamic> json) =>
       NonExistPayment(
@@ -47,11 +46,11 @@ class NonExistPayment {
       );
 
   Map<String, dynamic> toJson() => {
-        "id": id,
-        "tag": tag,
-        "input": input,
-        "active": active,
-        "created_at": createdAt?.toIso8601String(),
-        "updated_at": updatedAt?.toIso8601String(),
-      };
+    "id": id,
+    "tag": tag,
+    "input": input,
+    "active": active,
+    "created_at": createdAt?.toIso8601String(),
+    "updated_at": updatedAt?.toIso8601String(),
+  };
 }

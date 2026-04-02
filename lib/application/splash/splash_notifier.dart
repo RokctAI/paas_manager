@@ -11,7 +11,7 @@ class SplashNotifier extends StateNotifier<SplashState> {
   final UsersInterface _userRepository;
 
   SplashNotifier(this._settingsRepository, this._userRepository)
-      : super(const SplashState());
+    : super(const SplashState());
 
   Future<void> fetchCurrencies() async {
     final response = await _settingsRepository.getCurrencies();
@@ -47,12 +47,12 @@ class SplashNotifier extends StateNotifier<SplashState> {
         }
         if (data.data?.role == "seller") {
           goMain?.call();
-        }else{
+        } else {
           goBecome?.call();
         }
       },
       failure: (failure, status) {
-        if(status==401){
+        if (status == 401) {
           goLogin?.call();
         }
         debugPrint('==> error with fetching profile $failure');
@@ -108,7 +108,11 @@ class SplashNotifier extends StateNotifier<SplashState> {
       }
 
       if (LocalStorage.getToken().isNotEmpty) {
-        fetchProfileDetails(goMain: goMain, goBecome: goBecome, goLogin: goLogin);
+        fetchProfileDetails(
+          goMain: goMain,
+          goBecome: goBecome,
+          goLogin: goLogin,
+        );
       } else {
         goLogin?.call();
       }

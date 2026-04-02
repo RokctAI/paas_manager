@@ -12,13 +12,17 @@ class StatisticsNotifier extends StateNotifier<StatisticsState> {
 
   StatisticsNotifier(this._usersRepository) : super(const StatisticsState());
 
-  Future<void> fetchStatistics(
-      {required DateTime endTime, required DateTime startTime}) async {
+  Future<void> fetchStatistics({
+    required DateTime endTime,
+    required DateTime startTime,
+  }) async {
     if (state.countData == null) {
       state = state.copyWith(isLoading: true);
     }
     final response = await _usersRepository.getStatistics(
-        startTime: startTime, endTime: endTime);
+      startTime: startTime,
+      endTime: endTime,
+    );
     response.when(
       success: (data) {
         if (state.countData == null) {
@@ -28,9 +32,10 @@ class StatisticsNotifier extends StateNotifier<StatisticsState> {
         }
         addListInfo();
         addChartInfo(
-            chart: data.data?.chart ?? [],
-            startTime: startTime,
-            endTime: endTime);
+          chart: data.data?.chart ?? [],
+          startTime: startTime,
+          endTime: endTime,
+        );
       },
       failure: (fail, status) {
         if (state.countData == null) {
@@ -48,7 +53,10 @@ class StatisticsNotifier extends StateNotifier<StatisticsState> {
     page = 1;
     state = state.copyWith(isLoading: true, isRefresh: true);
     final response = await _usersRepository.getStatisticsOrder(
-        startTime: startTime, endTime: endTime, page: 1);
+      startTime: startTime,
+      endTime: endTime,
+      page: 1,
+    );
     response.when(
       success: (data) {
         state = state.copyWith(listOfOrder: data.data ?? [], isLoading: false);
@@ -61,12 +69,18 @@ class StatisticsNotifier extends StateNotifier<StatisticsState> {
     );
   }
 
-  Future<void> fetchStatisticsOrderByDay(
-      {DateTime? endTime, DateTime? startTime}) async {
+  Future<void> fetchStatisticsOrderByDay({
+    DateTime? endTime,
+    DateTime? startTime,
+  }) async {
     page = 1;
     state = state.copyWith(isLoading: true, isRefresh: false);
     final response = await _usersRepository.getStatisticsOrder(
-        startTime: startTime, endTime: endTime, page: 1, perPage: 100);
+      startTime: startTime,
+      endTime: endTime,
+      page: 1,
+      perPage: 100,
+    );
     response.when(
       success: (data) {
         state = state.copyWith(listOfOrder: data.data ?? [], isLoading: false);
@@ -79,12 +93,16 @@ class StatisticsNotifier extends StateNotifier<StatisticsState> {
     );
   }
 
-  Future<void> fetchStatisticsOrderPage(
-      {DateTime? endTime,
-      DateTime? startTime,
-      RefreshController? refreshController}) async {
+  Future<void> fetchStatisticsOrderPage({
+    DateTime? endTime,
+    DateTime? startTime,
+    RefreshController? refreshController,
+  }) async {
     final response = await _usersRepository.getStatisticsOrder(
-        startTime: startTime, endTime: endTime, page: ++page);
+      startTime: startTime,
+      endTime: endTime,
+      page: ++page,
+    );
     response.when(
       success: (data) {
         List<StatisticsOrder> newList = List.from(state.listOfOrder);
@@ -145,13 +163,17 @@ class StatisticsNotifier extends StateNotifier<StatisticsState> {
             ? 24
             : startTime.difference(endTime).inDays,
         (index) => DateTime.now().subtract(
-            startTime.difference(endTime).inDays == 1
-                ? Duration(hours: index)
-                : Duration(days: index)),
+          startTime.difference(endTime).inDays == 1
+              ? Duration(hours: index)
+              : Duration(days: index),
+        ),
       );
     }
 
     state = state.copyWith(
-        prices: prices.reversed.toList(), time: times, isLoading: false);
+      prices: prices.reversed.toList(),
+      time: times,
+      isLoading: false,
+    );
   }
 }

@@ -11,9 +11,13 @@ class CreateNewGroupItemNotifier
   String _title = '';
 
   CreateNewGroupItemNotifier(this._productsRepository)
-      : super(const CreateNewGroupItemState());
+    : super(const CreateNewGroupItemState());
 
-  Future<void> createExtrasItem(BuildContext context,{VoidCallback? success, int? groupId}) async {
+  Future<void> createExtrasItem(
+    BuildContext context, {
+    VoidCallback? success,
+    int? groupId,
+  }) async {
     state = state.copyWith(isLoading: true);
     final response = await _productsRepository.createExtrasItem(
       title: _title,
@@ -24,13 +28,13 @@ class CreateNewGroupItemNotifier
         state = state.copyWith(isLoading: false);
         success?.call();
       },
-      failure: (fail,status) {
+      failure: (fail, status) {
         debugPrint('===> create extras item fail $fail');
         state = state.copyWith(isLoading: false);
         AppHelpers.showCheckTopSnackBar(
-            context,
-            text: fail,
-            type: SnackBarType.error
+          context,
+          text: fail,
+          type: SnackBarType.error,
         );
       },
     );

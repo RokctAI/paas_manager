@@ -9,7 +9,7 @@ class ExtrasGroupDetailsNotifier
   final ProductsInterface _productsRepository;
 
   ExtrasGroupDetailsNotifier(this._productsRepository)
-      : super(const ExtrasGroupDetailsState());
+    : super(const ExtrasGroupDetailsState());
 
   Future<void> fetchGroupExtras({int? groupId}) async {
     state = state.copyWith(isLoading: true);
@@ -21,7 +21,7 @@ class ExtrasGroupDetailsNotifier
           isLoading: false,
         );
       },
-      failure: (fail,status) {
+      failure: (fail, status) {
         debugPrint('===> fetch extras fail $fail');
         state = state.copyWith(isLoading: false);
       },

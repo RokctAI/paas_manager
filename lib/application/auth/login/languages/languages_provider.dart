@@ -6,5 +6,5 @@ import 'package:venderfoodyman/domain/di/dependency_manager.dart';
 
 final languagesProvider =
     StateNotifierProvider<LanguagesNotifier, LanguagesState>(
-  (ref) => LanguagesNotifier(settingsRepository),
-);
+      (ref) => LanguagesNotifier(settingsRepository),
+    );

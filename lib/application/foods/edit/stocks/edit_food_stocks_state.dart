@@ -13,7 +13,7 @@ abstract class EditFoodStocksState with _$EditFoodStocksState {
     @Default([]) List<Group> groups,
     @Default([]) List<Stock> stocks,
     @Default([]) List<Extras> activeGroupExtras,
-    @Default({}) Map<String,List<Extras?>> selectGroups,
+    @Default({}) Map<String, List<Extras?>> selectGroups,
   }) = _EditFoodStocksState;
 
   const EditFoodStocksState._();

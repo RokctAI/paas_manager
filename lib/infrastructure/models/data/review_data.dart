@@ -57,17 +57,16 @@ class ReviewData {
     String? updatedAt,
     List<ImageData>? galleries,
     UserData? user,
-  }) =>
-      ReviewData(
-        id: id ?? _id,
-        reviewableId: reviewableId ?? _reviewableId,
-        rating: rating ?? _rating,
-        comment: comment ?? _comment,
-        img: img ?? _img,
-        createdAt: createdAt ?? _createdAt,
-        galleries: galleries ?? _galleries,
-        user: user ?? _user,
-      );
+  }) => ReviewData(
+    id: id ?? _id,
+    reviewableId: reviewableId ?? _reviewableId,
+    rating: rating ?? _rating,
+    comment: comment ?? _comment,
+    img: img ?? _img,
+    createdAt: createdAt ?? _createdAt,
+    galleries: galleries ?? _galleries,
+    user: user ?? _user,
+  );
 
   int? get id => _id;
 

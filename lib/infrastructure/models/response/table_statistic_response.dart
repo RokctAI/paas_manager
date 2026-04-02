@@ -1,8 +1,6 @@
-
 import 'dart:convert';
 
 import '../data/table_statistics_data.dart';
-
 
 TableStatisticResponse tableStatisticResponseFromJson(String str) =>
     TableStatisticResponse.fromJson(json.decode(str));
@@ -32,11 +30,9 @@ class TableStatisticResponse {
       );
 
   Map<String, dynamic> toJson() => {
-        "timestamp": timestamp.toIso8601String(),
-        "status": status,
-        "message": message,
-        "data": data.toJson(),
-      };
+    "timestamp": timestamp.toIso8601String(),
+    "status": status,
+    "message": message,
+    "data": data.toJson(),
+  };
 }
-
-

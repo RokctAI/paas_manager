@@ -6,5 +6,5 @@ import 'package:venderfoodyman/domain/di/dependency_manager.dart';
 
 final editFoodDetailsProvider =
     StateNotifierProvider<EditFoodDetailsNotifier, EditFoodDetailsState>(
-  (ref) => EditFoodDetailsNotifier(productRepository, settingsRepository),
-);
+      (ref) => EditFoodDetailsNotifier(productRepository, settingsRepository),
+    );

@@ -12,7 +12,7 @@ class OnAWayOrdersNotifier extends StateNotifier<OnAWayOrdersState> {
   bool _hasMore = true;
 
   OnAWayOrdersNotifier(this._ordersRepository)
-      : super(const OnAWayOrdersState());
+    : super(const OnAWayOrdersState());
 
   Future<void> fetchOnAWayOrders({
     RefreshController? refreshController,
@@ -61,7 +61,7 @@ class OnAWayOrdersNotifier extends StateNotifier<OnAWayOrdersState> {
           refreshController?.loadComplete();
         }
       },
-      failure: (failure,status) {
+      failure: (failure, status) {
         _page--;
         if (_page == 0) {
           state = state.copyWith(isLoading: false);

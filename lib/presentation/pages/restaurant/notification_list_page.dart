@@ -53,100 +53,102 @@ class _NotificationListPageState extends ConsumerState<NotificationListPage> {
         body: state.isAllNotificationsLoading
             ? const Loading()
             : Column(
-          children: [
-            CommonAppBar(
-              child: Text(
-                AppHelpers.getTranslation(TrKeys.notifications),
-                style: AppStyle.interSemi(
-                  size: 18,
-                  color: AppStyle.black,
-                ),
-              ),
-            ),
-            Expanded(
-              child: SmartRefresher(
-                controller: refreshController,
-                enablePullDown: true,
-                enablePullUp: true,
-                onRefresh: () {
-                  event.fetchNotificationsPaginate(
-                      refreshController: refreshController,
-                      isRefresh: true);
-                },
-                onLoading: () {
-                  event.fetchNotificationsPaginate(
-                    refreshController: refreshController,
-                  );
-                },
-                child: ListView.builder(
-                    shrinkWrap: true,
-                    padding: EdgeInsets.only(
-                        top: 24.h,
-                        right: 16.w,
-                        left: 16.w,
-                        bottom:
-                        MediaQuery
-                            .paddingOf(context)
-                            .bottom + 72.h),
-                    itemCount: state.notifications.length,
-                    itemBuilder: (context, index) {
-                      return InkWell(
-                        onTap: () async {
-                          if (state.notifications[index].readAt == null) {
-                            event.readOne(
-                                index: index,
-                                context,
-                                id: state.notifications[index].id);
-                          }
-                          if (state.notifications[index].orderData !=
-                              null) {
-                            if (state.notifications[index].orderData !=
-                                null) {
-                              AppHelpers.showCustomModalBottomSheet(
-                                  context: context,
-                                  modal: OrderDetailsModal(
-                                      order: state.notifications[index]
-                                          .orderData!),
-                                  isDarkMode: false);
-                            }
-                          } else if (state
-                              .notifications[index].blogData !=
-                              null) {
-                            await launch(
-                              "${AppConstants.webUrl}/blog/${state
-                                  .notifications[index].blogData?.uuid}",
-                              forceSafariVC: true,
-                              forceWebView: true,
-                              enableJavaScript: true,
-                            );
-                          } else if (state.notifications[index].type ==
-                              "reservation") {
-                            await launch(
-                              "${AppConstants.webUrl}/reservations",
-                              forceSafariVC: true,
-                              forceWebView: true,
-                              enableJavaScript: true,
-                            );
-                          } else {
-                            AppHelpers.showAlertDialog(
-                                context: context,
-                                child: Text(
-                                    '${state.notifications[index].body ??
-                                        state.notifications[index].title}'));
-                          }
-                        },
-                        child: Column(
-                          children: [
-                            notificationItem(state.notifications[index]),
-                            const Divider()
-                          ],
+                children: [
+                  CommonAppBar(
+                    child: Text(
+                      AppHelpers.getTranslation(TrKeys.notifications),
+                      style: AppStyle.interSemi(
+                        size: 18,
+                        color: AppStyle.black,
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: SmartRefresher(
+                      controller: refreshController,
+                      enablePullDown: true,
+                      enablePullUp: true,
+                      onRefresh: () {
+                        event.fetchNotificationsPaginate(
+                          refreshController: refreshController,
+                          isRefresh: true,
+                        );
+                      },
+                      onLoading: () {
+                        event.fetchNotificationsPaginate(
+                          refreshController: refreshController,
+                        );
+                      },
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        padding: EdgeInsets.only(
+                          top: 24.h,
+                          right: 16.w,
+                          left: 16.w,
+                          bottom: MediaQuery.paddingOf(context).bottom + 72.h,
                         ),
-                      );
-                    }),
+                        itemCount: state.notifications.length,
+                        itemBuilder: (context, index) {
+                          return InkWell(
+                            onTap: () async {
+                              if (state.notifications[index].readAt == null) {
+                                event.readOne(
+                                  index: index,
+                                  context,
+                                  id: state.notifications[index].id,
+                                );
+                              }
+                              if (state.notifications[index].orderData !=
+                                  null) {
+                                if (state.notifications[index].orderData !=
+                                    null) {
+                                  AppHelpers.showCustomModalBottomSheet(
+                                    context: context,
+                                    modal: OrderDetailsModal(
+                                      order:
+                                          state.notifications[index].orderData!,
+                                    ),
+                                    isDarkMode: false,
+                                  );
+                                }
+                              } else if (state.notifications[index].blogData !=
+                                  null) {
+                                await launch(
+                                  "${AppConstants.webUrl}/blog/${state.notifications[index].blogData?.uuid}",
+                                  forceSafariVC: true,
+                                  forceWebView: true,
+                                  enableJavaScript: true,
+                                );
+                              } else if (state.notifications[index].type ==
+                                  "reservation") {
+                                await launch(
+                                  "${AppConstants.webUrl}/reservations",
+                                  forceSafariVC: true,
+                                  forceWebView: true,
+                                  enableJavaScript: true,
+                                );
+                              } else {
+                                AppHelpers.showAlertDialog(
+                                  context: context,
+                                  child: Text(
+                                    '${state.notifications[index].body ?? state.notifications[index].title}',
+                                  ),
+                                );
+                              }
+                            },
+                            child: Column(
+                              children: [
+                                notificationItem(state.notifications[index]),
+                                const Divider(),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            ),
-          ],
-        ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         floatingActionButton: Padding(
           padding: EdgeInsets.symmetric(horizontal: 16.w),
@@ -155,14 +157,15 @@ class _NotificationListPageState extends ConsumerState<NotificationListPage> {
               const PopButton(heroTag: ''),
               10.horizontalSpace,
               Expanded(
-                  child: CustomButton(
-                    background: AppStyle.black,
-                    textColor: AppStyle.white,
-                    title: AppHelpers.getTranslation(TrKeys.readAll),
-                    onPressed: () async {
-                      event.readAll(context);
-                    },
-                  ))
+                child: CustomButton(
+                  background: AppStyle.black,
+                  textColor: AppStyle.white,
+                  title: AppHelpers.getTranslation(TrKeys.readAll),
+                  onPressed: () async {
+                    event.readAll(context);
+                  },
+                ),
+              ),
             ],
           ),
         ),
@@ -189,21 +192,23 @@ class _NotificationListPageState extends ConsumerState<NotificationListPage> {
                 Row(
                   children: [
                     Text(
-                      '${notification.client?.firstname ?? ''} ${notification
-                          .client?.lastname?.substring(0, 1) ?? ''}.',
+                      '${notification.client?.firstname ?? ''} ${notification.client?.lastname?.substring(0, 1) ?? ''}.',
                       style: AppStyle.interSemi(
-                          size: 16, color: AppStyle.black),
+                        size: 16,
+                        color: AppStyle.black,
+                      ),
                     ),
                     15.horizontalSpace,
                     Container(
                       height: 8.r,
                       width: 8.r,
                       decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: notification.readAt == null
-                              ? AppStyle.primary
-                              : AppStyle.transparent),
-                    )
+                        shape: BoxShape.circle,
+                        color: notification.readAt == null
+                            ? AppStyle.primary
+                            : AppStyle.transparent,
+                      ),
+                    ),
                   ],
                 ),
               2.verticalSpace,
@@ -211,16 +216,16 @@ class _NotificationListPageState extends ConsumerState<NotificationListPage> {
                 children: [
                   SizedBox(
                     width: notification.client != null
-                        ? MediaQuery
-                        .sizeOf(context)
-                        .width / 2
+                        ? MediaQuery.sizeOf(context).width / 2
                         : null,
                     child: Text(
                       '${notification.body ?? notification.title}',
                       overflow: TextOverflow.ellipsis,
                       maxLines: 3,
                       style: AppStyle.interRegular(
-                          size: 14, color: AppStyle.black),
+                        size: 14,
+                        color: AppStyle.black,
+                      ),
                     ),
                   ),
                   if (notification.client == null)
@@ -229,19 +234,23 @@ class _NotificationListPageState extends ConsumerState<NotificationListPage> {
                       height: 8.r,
                       width: 8.r,
                       decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: notification.readAt == null
-                              ? AppStyle.primary
-                              : AppStyle.transparent),
-                    )
+                        shape: BoxShape.circle,
+                        color: notification.readAt == null
+                            ? AppStyle.primary
+                            : AppStyle.transparent,
+                      ),
+                    ),
                 ],
               ),
               4.verticalSpace,
               Text(
                 Jiffy.parseFromDateTime(
-                    notification.createdAt ?? DateTime.now()).fromNow(),
+                  notification.createdAt ?? DateTime.now(),
+                ).fromNow(),
                 style: AppStyle.interRegular(
-                    size: 12, color: AppStyle.textGrey),
+                  size: 12,
+                  color: AppStyle.textGrey,
+                ),
               ),
             ],
           ),

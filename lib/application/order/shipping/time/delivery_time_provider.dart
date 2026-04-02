@@ -5,5 +5,5 @@ import 'delivery_time_notifier.dart';
 
 final deliveryTimeProvider =
     StateNotifierProvider<DeliveryTimeNotifier, DeliveryTimeState>(
-  (ref) => DeliveryTimeNotifier(),
-);
+      (ref) => DeliveryTimeNotifier(),
+    );

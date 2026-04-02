@@ -6,5 +6,5 @@ import 'package:venderfoodyman/domain/di/dependency_manager.dart';
 
 final extrasGroupDetailsProvider =
     StateNotifierProvider<ExtrasGroupDetailsNotifier, ExtrasGroupDetailsState>(
-  (ref) => ExtrasGroupDetailsNotifier(productRepository),
-);
+      (ref) => ExtrasGroupDetailsNotifier(productRepository),
+    );

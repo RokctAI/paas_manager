@@ -6,5 +6,5 @@ import 'package:venderfoodyman/domain/di/dependency_manager.dart';
 
 final addCategoryProvider =
     StateNotifierProvider.autoDispose<AddCategoryNotifier, AddCategoryState>(
-  (ref) => AddCategoryNotifier(catalogRepository),
-);
+      (ref) => AddCategoryNotifier(catalogRepository),
+    );

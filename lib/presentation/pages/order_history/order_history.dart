@@ -78,10 +78,7 @@ class _OrderHistoryPageState extends ConsumerState<OrderHistoryPage>
                 ),
                 Text(
                   '${AppHelpers.getTranslation(TrKeys.thereAre)} ${state.totalCount} ${AppHelpers.getTranslation(TrKeys.orders)}',
-                  style: AppStyle.interRegular(
-                    size: 12,
-                    letterSpacing: -0.3,
-                  ),
+                  style: AppStyle.interRegular(size: 12, letterSpacing: -0.3),
                 ),
               ],
             ),

@@ -60,7 +60,7 @@ class ReadyOrdersNotifier extends StateNotifier<ReadyOrdersState> {
           refreshController?.loadComplete();
         }
       },
-      failure: (failure,status) {
+      failure: (failure, status) {
         _page--;
         if (_page == 0) {
           state = state.copyWith(isLoading: false);

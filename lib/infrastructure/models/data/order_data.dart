@@ -115,8 +115,9 @@ class OrderData {
     _transaction = json['transaction'] != null
         ? Transaction.fromJson(json['transaction'])
         : null;
-    _orderAddress =
-    json['address'] != null ? OrderAddress.fromJson(json['address']) : null;
+    _orderAddress = json['address'] != null
+        ? OrderAddress.fromJson(json['address'])
+        : null;
     _review = json['review'];
     _note = json['note'];
     _seen = false;
@@ -183,35 +184,34 @@ class OrderData {
     dynamic review,
     String? note,
     bool? seen,
-  }) =>
-      OrderData(
-        id: id ?? _id,
-        userId: userId ?? _userId,
-        tips: tips ?? _tips,
-        totalPrice: totalPrice ?? _totalPrice,
-        rate: rate ?? _rate,
-        tax: tax ?? _tax,
-        afterDeliveredImage: afterDeliveredImage ?? _afterDeliveredImage,
-        commissionFee: commissionFee ?? _commissionFee,
-        status: status ?? _status,
-        location: location ?? _location,
-        deliveryType: deliveryType ?? _deliveryType,
-        deliveryFee: deliveryFee ?? _deliveryFee,
-        otp: otp ?? _otp,
-        deliveryman: deliveryman ?? _deliveryman,
-        deliveryDate: deliveryDate ?? _deliveryDate,
-        deliveryTime: deliveryTime ?? _deliveryTime,
-        createdAt: createdAt ?? _createdAt,
-        updatedAt: updatedAt ?? _updatedAt,
-        shop: shop ?? _shop,
-        currency: currency ?? _currency,
-        user: user ?? _user,
-        details: details ?? _details,
-        transaction: transaction ?? _transaction,
-        review: review ?? _review,
-        note: note ?? _note,
-        seen: seen ?? _seen,
-      );
+  }) => OrderData(
+    id: id ?? _id,
+    userId: userId ?? _userId,
+    tips: tips ?? _tips,
+    totalPrice: totalPrice ?? _totalPrice,
+    rate: rate ?? _rate,
+    tax: tax ?? _tax,
+    afterDeliveredImage: afterDeliveredImage ?? _afterDeliveredImage,
+    commissionFee: commissionFee ?? _commissionFee,
+    status: status ?? _status,
+    location: location ?? _location,
+    deliveryType: deliveryType ?? _deliveryType,
+    deliveryFee: deliveryFee ?? _deliveryFee,
+    otp: otp ?? _otp,
+    deliveryman: deliveryman ?? _deliveryman,
+    deliveryDate: deliveryDate ?? _deliveryDate,
+    deliveryTime: deliveryTime ?? _deliveryTime,
+    createdAt: createdAt ?? _createdAt,
+    updatedAt: updatedAt ?? _updatedAt,
+    shop: shop ?? _shop,
+    currency: currency ?? _currency,
+    user: user ?? _user,
+    details: details ?? _details,
+    transaction: transaction ?? _transaction,
+    review: review ?? _review,
+    note: note ?? _note,
+    seen: seen ?? _seen,
+  );
 
   int? get id => _id;
 
@@ -378,8 +378,9 @@ class OrderDetail {
     _bonus = json['bonus']?.toString().toBool();
     _shopBonus = json['bonus_shop']?.toString().toBool();
     _stock = json['stock'] != null ? Stock.fromJson(json['stock']) : null;
-    _kitchen =
-    json['kitchen'] != null ? KitchenModel.fromJson(json['kitchen']) : null;
+    _kitchen = json['kitchen'] != null
+        ? KitchenModel.fromJson(json['kitchen'])
+        : null;
     if (json['addons'] != null) {
       _addons = [];
       json['addons'].forEach((v) {
@@ -428,27 +429,26 @@ class OrderDetail {
     KitchenModel? kitchen,
     List<AddonData>? addons,
     bool? isChecked,
-  }) =>
-      OrderDetail(
-        note: note ?? _note,
-        id: id ?? _id,
-        orderId: orderId ?? _orderId,
-        stockId: stockId ?? _stockId,
-        originPrice: originPrice ?? _originPrice,
-        totalPrice: totalPrice ?? _totalPrice,
-        tax: tax ?? _tax,
-        discount: discount ?? _discount,
-        quantity: quantity ?? _quantity,
-        bonus: bonus ?? _bonus,
-        kitchen: kitchen ?? _kitchen,
-        createdAt: createdAt ?? _createdAt,
-        updatedAt: updatedAt ?? _updatedAt,
-        stock: stock ?? _stock,
-        addons: addons ?? _addons,
-        status: status ?? _status,
-        isChecked: isChecked ?? _isChecked,
-        shopBonus: shopBonus ?? _shopBonus,
-      );
+  }) => OrderDetail(
+    note: note ?? _note,
+    id: id ?? _id,
+    orderId: orderId ?? _orderId,
+    stockId: stockId ?? _stockId,
+    originPrice: originPrice ?? _originPrice,
+    totalPrice: totalPrice ?? _totalPrice,
+    tax: tax ?? _tax,
+    discount: discount ?? _discount,
+    quantity: quantity ?? _quantity,
+    bonus: bonus ?? _bonus,
+    kitchen: kitchen ?? _kitchen,
+    createdAt: createdAt ?? _createdAt,
+    updatedAt: updatedAt ?? _updatedAt,
+    stock: stock ?? _stock,
+    addons: addons ?? _addons,
+    status: status ?? _status,
+    isChecked: isChecked ?? _isChecked,
+    shopBonus: shopBonus ?? _shopBonus,
+  );
 
   int? get id => _id;
 
@@ -576,20 +576,19 @@ class Transaction {
     String? createdAt,
     String? updatedAt,
     PaymentData? paymentSystem,
-  }) =>
-      Transaction(
-        id: id ?? _id,
-        payableId: payableId ?? _payableId,
-        price: price ?? _price,
-        paymentTrxId: paymentTrxId ?? _paymentTrxId,
-        note: note ?? _note,
-        performTime: performTime ?? _performTime,
-        status: status ?? _status,
-        statusDescription: statusDescription ?? _statusDescription,
-        createdAt: createdAt ?? _createdAt,
-        updatedAt: updatedAt ?? _updatedAt,
-        paymentSystem: paymentSystem ?? _paymentSystem,
-      );
+  }) => Transaction(
+    id: id ?? _id,
+    payableId: payableId ?? _payableId,
+    price: price ?? _price,
+    paymentTrxId: paymentTrxId ?? _paymentTrxId,
+    note: note ?? _note,
+    performTime: performTime ?? _performTime,
+    status: status ?? _status,
+    statusDescription: statusDescription ?? _statusDescription,
+    createdAt: createdAt ?? _createdAt,
+    updatedAt: updatedAt ?? _updatedAt,
+    paymentSystem: paymentSystem ?? _paymentSystem,
+  );
 
   int? get id => _id;
 
@@ -662,13 +661,12 @@ class OrderAddress {
     String? office,
     String? house,
     String? floor,
-  }) =>
-      OrderAddress(
-        address: address ?? _address,
-        office: office ?? _office,
-        house: house ?? _house,
-        floor: floor ?? _floor,
-      );
+  }) => OrderAddress(
+    address: address ?? _address,
+    office: office ?? _office,
+    house: house ?? _house,
+    floor: floor ?? _floor,
+  );
 
   String? get address => _address;
 

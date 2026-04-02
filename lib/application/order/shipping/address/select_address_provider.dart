@@ -5,5 +5,5 @@ import 'select_address_notifier.dart';
 
 final selectAddressProvider =
     StateNotifierProvider<SelectAddressNotifier, SelectAddressState>(
-  (ref) => SelectAddressNotifier(),
-);
+      (ref) => SelectAddressNotifier(),
+    );

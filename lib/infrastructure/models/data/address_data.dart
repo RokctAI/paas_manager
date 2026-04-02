@@ -42,15 +42,14 @@ class AddressData {
     LocationData? location,
     bool? isDefault,
     bool? active,
-  }) =>
-      AddressData(
-        id: id ?? _id,
-        title: title ?? _title,
-        address: address ?? _address,
-        location: location ?? _location,
-        isDefault: isDefault ?? _default,
-        active: active ?? _active,
-      );
+  }) => AddressData(
+    id: id ?? _id,
+    title: title ?? _title,
+    address: address ?? _address,
+    location: location ?? _location,
+    isDefault: isDefault ?? _default,
+    active: active ?? _active,
+  );
 
   int? get id => _id;
 

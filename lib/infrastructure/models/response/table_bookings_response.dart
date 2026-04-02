@@ -19,14 +19,12 @@ class TableBookingResponse {
 
   factory TableBookingResponse.fromJson(Map<String, dynamic> json) =>
       TableBookingResponse(
-        data: List<TableBookingData>.from(json["data"].map((x) => TableBookingData.fromJson(x))),
+        data: List<TableBookingData>.from(
+          json["data"].map((x) => TableBookingData.fromJson(x)),
+        ),
       );
 
   Map<String, dynamic> toJson() => {
-        "data": List<dynamic>.from(data.map((x) => x.toJson())),
-      };
+    "data": List<dynamic>.from(data.map((x) => x.toJson())),
+  };
 }
-
-
-
-

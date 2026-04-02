@@ -12,7 +12,7 @@ class AcceptedOrdersNotifier extends StateNotifier<AcceptedOrdersState> {
   bool _hasMore = true;
 
   AcceptedOrdersNotifier(this._ordersRepository)
-      : super(const AcceptedOrdersState());
+    : super(const AcceptedOrdersState());
 
   Future<void> fetchAcceptedOrders({
     RefreshController? refreshController,
@@ -61,7 +61,7 @@ class AcceptedOrdersNotifier extends StateNotifier<AcceptedOrdersState> {
           refreshController?.loadComplete();
         }
       },
-      failure: (failure,status) {
+      failure: (failure, status) {
         _page--;
         if (_page == 0) {
           state = state.copyWith(isLoading: false);

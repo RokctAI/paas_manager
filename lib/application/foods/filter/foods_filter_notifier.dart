@@ -8,12 +8,13 @@ class FoodsFilterNotifier extends StateNotifier<FoodsFilterState> {
   // final ShopsRepositoryFacade _shopsRepository;
 
   FoodsFilterNotifier(/*this._shopsRepository*/)
-      : super(const FoodsFilterState());
+    : super(const FoodsFilterState());
   int shopIndex = 1;
   int marketRefreshIndex = 1;
 
   Future<void> setFilterModel(
-      BuildContext context /*, FilterModel? data*/) async {
+    BuildContext context /*, FilterModel? data*/,
+  ) async {
     // state = state.copyWith(filterModel: data);
     // final connected = await AppConnectivity.connectivity();
     // if (connected) {

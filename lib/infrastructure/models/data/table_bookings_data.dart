@@ -1,4 +1,3 @@
-
 class TableBookingData {
   int? id;
   int? bookingId;
@@ -35,25 +34,26 @@ class TableBookingData {
     Booking? booking,
     User? user,
     Table? table,
-  }) =>
-      TableBookingData(
-        id: id ?? this.id,
-        bookingId: bookingId ?? this.bookingId,
-        userId: userId ?? this.userId,
-        tableId: tableId ?? this.tableId,
-        startDate: startDate ?? this.startDate,
-        endDate: endDate ?? this.endDate,
-        status: status ?? this.status,
-        booking: booking ?? this.booking,
-        user: user ?? this.user,
-        table: table ?? this.table,
-      );
-  factory TableBookingData.fromJson(Map<String, dynamic> json) => TableBookingData(
+  }) => TableBookingData(
+    id: id ?? this.id,
+    bookingId: bookingId ?? this.bookingId,
+    userId: userId ?? this.userId,
+    tableId: tableId ?? this.tableId,
+    startDate: startDate ?? this.startDate,
+    endDate: endDate ?? this.endDate,
+    status: status ?? this.status,
+    booking: booking ?? this.booking,
+    user: user ?? this.user,
+    table: table ?? this.table,
+  );
+  factory TableBookingData.fromJson(
+    Map<String, dynamic> json,
+  ) => TableBookingData(
     id: json["id"],
     bookingId: json["booking_id"],
     userId: json["user_id"],
     tableId: json["table_id"],
-    startDate: DateTime.tryParse(json["start_date"] ?? '')?? DateTime.now(),
+    startDate: DateTime.tryParse(json["start_date"] ?? '') ?? DateTime.now(),
     endDate: DateTime.tryParse(json["end_date"] ?? '') ?? DateTime.now(),
     status: json["status"],
     booking: json["booking"] == null ? null : Booking.fromJson(json["booking"]),
@@ -79,20 +79,12 @@ class Booking {
   int? id;
   int? maxTime;
 
-  Booking({
-    required this.id,
-    required this.maxTime,
-  });
+  Booking({required this.id, required this.maxTime});
 
-  factory Booking.fromJson(Map<String, dynamic> json) => Booking(
-    id: json["id"],
-    maxTime: json["max_time"],
-  );
+  factory Booking.fromJson(Map<String, dynamic> json) =>
+      Booking(id: json["id"], maxTime: json["max_time"]);
 
-  Map<String, dynamic> toJson() => {
-    "id": id,
-    "max_time": maxTime,
-  };
+  Map<String, dynamic> toJson() => {"id": id, "max_time": maxTime};
 }
 
 class Table {
@@ -157,17 +149,16 @@ class User {
     int? active,
     String? role,
     String? img,
-  }) =>
-      User(
-        id: id ?? this.id,
-        uuid: uuid ?? this.uuid,
-        firstname: firstname ?? this.firstname,
-        lastname: lastname ?? this.lastname,
-        emptyP: emptyP ?? this.emptyP,
-        active: active ?? this.active,
-        role: role ?? this.role,
-        img: img ?? this.img,
-      );
+  }) => User(
+    id: id ?? this.id,
+    uuid: uuid ?? this.uuid,
+    firstname: firstname ?? this.firstname,
+    lastname: lastname ?? this.lastname,
+    emptyP: emptyP ?? this.emptyP,
+    active: active ?? this.active,
+    role: role ?? this.role,
+    img: img ?? this.img,
+  );
 
   factory User.fromJson(Map json) => User(
     id: json["id"],
@@ -198,12 +189,7 @@ class Links {
   dynamic prev;
   dynamic next;
 
-  Links({
-    required this.first,
-    required this.last,
-    this.prev,
-    this.next,
-  });
+  Links({required this.first, required this.last, this.prev, this.next});
 
   factory Links.fromJson(Map<String, dynamic> json) => Links(
     first: json["first"],
@@ -269,17 +255,10 @@ class Link {
   String label;
   bool active;
 
-  Link({
-    this.url,
-    required this.label,
-    required this.active,
-  });
+  Link({this.url, required this.label, required this.active});
 
-  factory Link.fromJson(Map<String, dynamic> json) => Link(
-    url: json["url"],
-    label: json["label"],
-    active: json["active"],
-  );
+  factory Link.fromJson(Map<String, dynamic> json) =>
+      Link(url: json["url"], label: json["label"], active: json["active"]);
 
   Map<String, dynamic> toJson() => {
     "url": url,
