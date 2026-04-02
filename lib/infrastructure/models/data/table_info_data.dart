@@ -1,4 +1,3 @@
-
 class TableInfoData {
   int id;
   int bookingId;

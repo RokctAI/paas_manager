@@ -248,8 +248,7 @@ class _CreateOrderPageState extends ConsumerState<CreateOrderPage> {
                                         refreshController: _productController,
                                         categoryId: index == 1
                                             ? null
-                                            : currentCategories[index - 2]
-                                                  .id,
+                                            : currentCategories[index - 2].id,
                                         isRefresh: true,
                                         cartStocks: ref
                                             .watch(orderCartProvider)

@@ -1,5 +1,3 @@
-
-
 import 'address_data.dart';
 import 'notification_data.dart';
 import 'shop_data.dart';
@@ -71,7 +69,9 @@ class ProfileData {
     _gender = json['gender'];
     _emailVerifiedAt = json['email_verified_at'];
     _registeredAt = json['registered_at'];
-    _active = json['active'].runtimeType == int ? (json['active'] == 1) : json['active'];
+    _active = json['active'].runtimeType == int
+        ? (json['active'] == 1)
+        : json['active'];
     _role = json['role'];
     _img = json['img'];
     if (json['notifications'] != null) {
@@ -127,27 +127,26 @@ class ProfileData {
     List<AddressData>? addresses,
     ShopData? shop,
     Wallet? wallet,
-  }) =>
-      ProfileData(
-        id: id ?? _id,
-        uuid: uuid ?? _uuid,
-        firstname: firstname ?? _firstname,
-        lastname: lastname ?? _lastname,
-        referral: referral ?? _referral,
-        email: email ?? _email,
-        phone: phone ?? _phone,
-        secondPhone: secondPhone ?? _secondPhone,
-        birthday: birthday ?? _birthday,
-        gender: gender ?? _gender,
-        emailVerifiedAt: emailVerifiedAt ?? _emailVerifiedAt,
-        registeredAt: registeredAt ?? _registeredAt,
-        active: active ?? _active,
-        img: img ?? _img,
-        role: role ?? _role,
-        addresses: addresses ?? _addresses,
-        shop: shop ?? _shop,
-        wallet: wallet ?? _wallet,
-      );
+  }) => ProfileData(
+    id: id ?? _id,
+    uuid: uuid ?? _uuid,
+    firstname: firstname ?? _firstname,
+    lastname: lastname ?? _lastname,
+    referral: referral ?? _referral,
+    email: email ?? _email,
+    phone: phone ?? _phone,
+    secondPhone: secondPhone ?? _secondPhone,
+    birthday: birthday ?? _birthday,
+    gender: gender ?? _gender,
+    emailVerifiedAt: emailVerifiedAt ?? _emailVerifiedAt,
+    registeredAt: registeredAt ?? _registeredAt,
+    active: active ?? _active,
+    img: img ?? _img,
+    role: role ?? _role,
+    addresses: addresses ?? _addresses,
+    shop: shop ?? _shop,
+    wallet: wallet ?? _wallet,
+  );
 
   int? get id => _id;
 
@@ -271,16 +270,15 @@ class Wallet {
     String? createdAt,
     String? updatedAt,
     CurrencyData? currency,
-  }) =>
-      Wallet(
-        uuid: uuid ?? _uuid,
-        userId: userId ?? _userId,
-        currencyId: currencyId ?? _currencyId,
-        price: price ?? _price,
-        createdAt: createdAt ?? _createdAt,
-        updatedAt: updatedAt ?? _updatedAt,
-        currency: currency ?? _currency,
-      );
+  }) => Wallet(
+    uuid: uuid ?? _uuid,
+    userId: userId ?? _userId,
+    currencyId: currencyId ?? _currencyId,
+    price: price ?? _price,
+    createdAt: createdAt ?? _createdAt,
+    updatedAt: updatedAt ?? _updatedAt,
+    currency: currency ?? _currency,
+  );
 
   String? get uuid => _uuid;
 

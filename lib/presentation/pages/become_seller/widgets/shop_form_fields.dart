@@ -118,10 +118,7 @@ class ShopFormFields extends StatelessWidget {
       padding: EdgeInsets.only(left: 4.w),
       child: Text(
         title,
-        style: AppStyle.interSemi(
-          size: 14,
-          color: AppStyle.black,
-        ),
+        style: AppStyle.interSemi(size: 14, color: AppStyle.black),
       ),
     );
   }
@@ -139,8 +136,9 @@ class ShopFormFields extends StatelessWidget {
       },
       keyboardType: TextInputType.phone,
       initialCountryCode: AppConstants.countryCodeISO,
-      invalidNumberMessage:
-          AppHelpers.getTranslation(TrKeys.phoneNumberIsNotValid),
+      invalidNumberMessage: AppHelpers.getTranslation(
+        TrKeys.phoneNumberIsNotValid,
+      ),
       inputFormatters: [FilteringTextInputFormatter.digitsOnly],
       showCountryFlag: AppConstants.showFlag,
       showDropdownIcon: AppConstants.showArrowIcon,
@@ -179,12 +177,7 @@ class ShopFormFields extends StatelessWidget {
     return DropdownButtonFormField<String>(
       value: selectedDeliveryType,
       items: deliveryTypeList
-          .map(
-            (e) => DropdownMenuItem<String>(
-              value: e,
-              child: Text(e),
-            ),
-          )
+          .map((e) => DropdownMenuItem<String>(value: e, child: Text(e)))
           .toList(),
       onChanged: onDeliveryTypeChanged,
       decoration: InputDecoration(

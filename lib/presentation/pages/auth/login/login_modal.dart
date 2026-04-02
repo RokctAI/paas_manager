@@ -340,9 +340,7 @@ class _LoginModalState extends State<LoginModal>
                                       AppConstants.demoSellerLogin;
                                   _passwordController.text =
                                       AppConstants.demoSellerPassword;
-                                  event.setEmail(
-                                    AppConstants.demoSellerLogin,
-                                  );
+                                  event.setEmail(AppConstants.demoSellerLogin);
                                   event.setPassword(
                                     AppConstants.demoSellerPassword,
                                   );

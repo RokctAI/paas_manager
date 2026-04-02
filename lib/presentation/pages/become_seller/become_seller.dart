@@ -63,7 +63,9 @@ class _CreateShopPageState extends ConsumerState<CreateShopPage> {
   void _loadUserData() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(profileProvider.notifier).resetShopData();
-      ref.read(profileProvider.notifier).fetchUser(
+      ref
+          .read(profileProvider.notifier)
+          .fetchUser(
             context,
             onSuccess: (phone) {
               if (!AppConstants.isSpecificNumberEnabled) {
@@ -113,9 +115,7 @@ class _CreateShopPageState extends ConsumerState<CreateShopPage> {
               ),
             ),
             Expanded(
-              child: state.isLoading
-                  ? const Loading()
-                  : _buildContent(state),
+              child: state.isLoading ? const Loading() : _buildContent(state),
             ),
           ],
         ),
@@ -142,11 +142,7 @@ class _CreateShopPageState extends ConsumerState<CreateShopPage> {
       key: form,
       child: ListView(
         physics: const BouncingScrollPhysics(),
-        padding: REdgeInsets.only(
-          top: 12,
-          left: 16,
-          right: 16,
-        ),
+        padding: REdgeInsets.only(top: 12, left: 16, right: 16),
         shrinkWrap: true,
         children: [
           if (isRetry) ...[
@@ -171,10 +167,7 @@ class _CreateShopPageState extends ConsumerState<CreateShopPage> {
                   Expanded(
                     child: Text(
                       AppHelpers.getTranslation(TrKeys.pleaseTryAgain),
-                      style: AppStyle.interSemi(
-                        size: 14,
-                        color: AppStyle.red,
-                      ),
+                      style: AppStyle.interSemi(size: 14, color: AppStyle.red),
                     ),
                   ),
                 ],
@@ -182,10 +175,7 @@ class _CreateShopPageState extends ConsumerState<CreateShopPage> {
             ),
             24.verticalSpace,
           ],
-          BackgroundImagePicker(
-            bgImage: state.bgImage,
-            event: event,
-          ),
+          BackgroundImagePicker(bgImage: state.bgImage, event: event),
           24.verticalSpace,
           LogoAndNameSection(
             logoImage: state.logoImage,
@@ -214,10 +204,7 @@ class _CreateShopPageState extends ConsumerState<CreateShopPage> {
             },
           ),
           24.verticalSpace,
-          DocumentUploadSection(
-            filePaths: state.filepath,
-            event: event,
-          ),
+          DocumentUploadSection(filePaths: state.filepath, event: event),
           24.verticalSpace,
           AddressSelector(
             addressModel: state.addressModel,
@@ -251,10 +238,7 @@ class _CreateShopPageState extends ConsumerState<CreateShopPage> {
             ),
             child: Text(
               AppHelpers.getTranslation(TrKeys.logout),
-              style: AppStyle.interSemi(
-                size: 15,
-                color: AppStyle.red,
-              ),
+              style: AppStyle.interSemi(size: 15, color: AppStyle.red),
             ),
           ),
           36.verticalSpace,

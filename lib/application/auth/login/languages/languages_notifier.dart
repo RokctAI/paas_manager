@@ -25,9 +25,7 @@ class LanguagesNotifier extends StateNotifier<LanguagesState> {
             final List<LanguageData> languages = data.data ?? [];
             for (int i = 0; i < languages.length; i++) {
               if (languages[i].id == lang.id) {
-                state = state.copyWith(
-                  isSelectLanguage: true,
-                );
+                state = state.copyWith(isSelectLanguage: true);
                 break;
               }
             }
@@ -104,7 +102,9 @@ class LanguagesNotifier extends StateNotifier<LanguagesState> {
 
   Future<void> getTranslations({VoidCallback? afterUpdate}) async {
     final currentLocale = LocalStorage.getLanguage()?.locale ?? 'en';
-    final cachedTranslations = LocalStorage.getTranslations(locale: currentLocale);
+    final cachedTranslations = LocalStorage.getTranslations(
+      locale: currentLocale,
+    );
 
     // Agar cache'da mavjud bo'lsa, API'ga murojaat qilmasdan ishlatamiz
     if (cachedTranslations.isNotEmpty) {

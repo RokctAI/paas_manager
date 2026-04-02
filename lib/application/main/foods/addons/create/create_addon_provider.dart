@@ -6,5 +6,5 @@ import 'package:venderfoodyman/domain/di/dependency_manager.dart';
 
 final createAddonProvider =
     StateNotifierProvider.autoDispose<CreateAddonNotifier, CreateAddonState>(
-  (ref) => CreateAddonNotifier(productRepository),
-);
+      (ref) => CreateAddonNotifier(productRepository),
+    );

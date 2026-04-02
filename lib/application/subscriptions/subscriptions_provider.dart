@@ -6,5 +6,6 @@ import 'subscriptions_notifier.dart';
 
 final subscriptionProvider =
     StateNotifierProvider<SubscriptionNotifier, SubscriptionState>(
-  (ref) => SubscriptionNotifier(subscriptionRepository, paymentRepositoryNew),
-);
+      (ref) =>
+          SubscriptionNotifier(subscriptionRepository, paymentRepositoryNew),
+    );

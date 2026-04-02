@@ -5,5 +5,5 @@ import 'edit_food_categories_notifier.dart';
 
 final editFoodCategoriesProvider =
     StateNotifierProvider<EditFoodCategoriesNotifier, EditFoodCategoriesState>(
-  (ref) => EditFoodCategoriesNotifier(),
-);
+      (ref) => EditFoodCategoriesNotifier(),
+    );

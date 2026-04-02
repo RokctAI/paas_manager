@@ -1,4 +1,3 @@
-
 import 'package:venderfoodyman/infrastructure/models/data/non_exist_payment.dart';
 
 class NonExistPaymentResponse {
@@ -19,13 +18,12 @@ class NonExistPaymentResponse {
     bool? status,
     String? message,
     List<NonExistPayment>? data,
-  }) =>
-      NonExistPaymentResponse(
-        timestamp: timestamp ?? this.timestamp,
-        status: status ?? this.status,
-        message: message ?? this.message,
-        data: data ?? this.data,
-      );
+  }) => NonExistPaymentResponse(
+    timestamp: timestamp ?? this.timestamp,
+    status: status ?? this.status,
+    message: message ?? this.message,
+    data: data ?? this.data,
+  );
 
   factory NonExistPaymentResponse.fromJson(Map<String, dynamic> json) =>
       NonExistPaymentResponse(
@@ -37,15 +35,16 @@ class NonExistPaymentResponse {
         data: json["data"] == null
             ? []
             : List<NonExistPayment>.from(
-                json["data"]!.map((x) => NonExistPayment.fromJson(x))),
+                json["data"]!.map((x) => NonExistPayment.fromJson(x)),
+              ),
       );
 
   Map<String, dynamic> toJson() => {
-        "timestamp": timestamp?.toIso8601String(),
-        "status": status,
-        "message": message,
-        "data": data == null
-            ? []
-            : List<dynamic>.from(data!.map((x) => x.toJson())),
-      };
+    "timestamp": timestamp?.toIso8601String(),
+    "status": status,
+    "message": message,
+    "data": data == null
+        ? []
+        : List<dynamic>.from(data!.map((x) => x.toJson())),
+  };
 }

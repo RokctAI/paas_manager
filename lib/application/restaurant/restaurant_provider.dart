@@ -6,5 +6,5 @@ import 'package:venderfoodyman/domain/di/dependency_manager.dart';
 
 final restaurantProvider =
     StateNotifierProvider<RestaurantNotifier, RestaurantState>(
-  (ref) => RestaurantNotifier(usersRepository, settingsRepository),
-);
+      (ref) => RestaurantNotifier(usersRepository, settingsRepository),
+    );

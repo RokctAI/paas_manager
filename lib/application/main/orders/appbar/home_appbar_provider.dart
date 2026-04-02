@@ -5,5 +5,5 @@ import 'home_appbar_notifier.dart';
 
 final homeAppbarProvider =
     StateNotifierProvider<HomeAppbarNotifier, HomeAppbarState>(
-  (ref) => HomeAppbarNotifier(),
-);
+      (ref) => HomeAppbarNotifier(),
+    );

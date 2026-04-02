@@ -65,10 +65,7 @@ class UserItem extends StatelessWidget {
                     style: AppStyle.interSemi(size: 15),
                   ),
                   4.verticalSpace,
-                  Text(
-                    user.email ?? '',
-                    style: AppStyle.interNormal(size: 12),
-                  ),
+                  Text(user.email ?? '', style: AppStyle.interNormal(size: 12)),
                 ],
               ),
             ),

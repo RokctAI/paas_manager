@@ -2,10 +2,7 @@ class WorkingDayData {
   List<Date> dates;
   Shop shop;
 
-  WorkingDayData({
-    required this.dates,
-    required this.shop,
-  });
+  WorkingDayData({required this.dates, required this.shop});
 
   factory WorkingDayData.fromJson(Map<String, dynamic> json) => WorkingDayData(
     dates: List<Date>.from(json["dates"].map((x) => Date.fromJson(x))),
@@ -55,11 +52,7 @@ class Shop {
   DateTime createdAt;
   DateTime updatedAt;
 
-  Shop({
-    required this.id,
-    required this.createdAt,
-    required this.updatedAt,
-  });
+  Shop({required this.id, required this.createdAt, required this.updatedAt});
 
   factory Shop.fromJson(Map<String, dynamic> json) => Shop(
     id: json["id"],

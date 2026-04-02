@@ -53,16 +53,15 @@ class Group {
     Translation? translation,
     List<Extras>? fetchedExtras,
     List<Extras>? extraValues,
-  }) =>
-      Group(
-        id: id ?? _id,
-        shopId: shopId ?? _shopId,
-        type: type ?? _type,
-        isChecked: isChecked ?? _isChecked,
-        translation: translation ?? _translation,
-        fetchedExtras: fetchedExtras ?? _fetchedExtras,
-        extraValues: extraValues ?? _extraValues,
-      );
+  }) => Group(
+    id: id ?? _id,
+    shopId: shopId ?? _shopId,
+    type: type ?? _type,
+    isChecked: isChecked ?? _isChecked,
+    translation: translation ?? _translation,
+    fetchedExtras: fetchedExtras ?? _fetchedExtras,
+    extraValues: extraValues ?? _extraValues,
+  );
 
   int? get id => _id;
 

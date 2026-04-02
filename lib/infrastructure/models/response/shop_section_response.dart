@@ -1,4 +1,3 @@
-
 import '../data/table_data.dart';
 
 class ShopSectionResponse {

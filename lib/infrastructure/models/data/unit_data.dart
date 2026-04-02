@@ -37,14 +37,13 @@ class UnitData {
     String? position,
     Translation? translation,
     List<String>? locales,
-  }) =>
-      UnitData(
-        id: id ?? _id,
-        active: active ?? _active,
-        position: position ?? _position,
-        translation: translation ?? _translation,
-        locales: locales ?? _locales,
-      );
+  }) => UnitData(
+    id: id ?? _id,
+    active: active ?? _active,
+    position: position ?? _position,
+    translation: translation ?? _translation,
+    locales: locales ?? _locales,
+  );
 
   int? get id => _id;
 

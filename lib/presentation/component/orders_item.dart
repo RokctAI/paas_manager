@@ -58,10 +58,7 @@ class OrdersItem extends StatelessWidget {
                   children: [
                     Text(
                       paymentType,
-                      style: AppStyle.interSemi(
-                        size: 12,
-                        letterSpacing: -0.3,
-                      ),
+                      style: AppStyle.interSemi(size: 12, letterSpacing: -0.3),
                     ),
                     status == OrderStatus.delivered
                         ? const SizedBox.shrink()

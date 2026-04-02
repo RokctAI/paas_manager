@@ -6,5 +6,5 @@ import 'create_new_group_item_state.dart';
 
 final createNewGroupItemProvider =
     StateNotifierProvider<CreateNewGroupItemNotifier, CreateNewGroupItemState>(
-  (ref) => CreateNewGroupItemNotifier(productRepository),
-);
+      (ref) => CreateNewGroupItemNotifier(productRepository),
+    );

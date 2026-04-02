@@ -58,7 +58,8 @@ class ResetPasswordNotifier extends StateNotifier<ResetPasswordState> {
           AppHelpers.showCheckTopSnackBar(
             context,
             text: AppHelpers.getTranslation(
-                AppHelpers.getTranslation(e.message ?? "")),
+              AppHelpers.getTranslation(e.message ?? ""),
+            ),
           );
           state = state.copyWith(isLoading: false, isSuccess: false);
         },
@@ -83,8 +84,9 @@ class ResetPasswordNotifier extends StateNotifier<ResetPasswordState> {
     final connected = await AppConnectivity.connectivity();
     if (connected) {
       state = state.copyWith(isLoading: true, isSuccess: false);
-      final response =
-          await authRepository.forgotPassword(email: state.email.trim());
+      final response = await authRepository.forgotPassword(
+        email: state.email.trim(),
+      );
       response.when(
         success: (data) async {
           state = state.copyWith(
@@ -95,10 +97,13 @@ class ResetPasswordNotifier extends StateNotifier<ResetPasswordState> {
         },
         failure: (failure, status) {
           state = state.copyWith(
-              isLoading: false, isEmailError: true, isSuccess: false);
+            isLoading: false,
+            isEmailError: true,
+            isSuccess: false,
+          );
           AppHelpers.showCheckTopSnackBar(
             context,
-            text:AppHelpers.getTranslation(failure),
+            text: AppHelpers.getTranslation(failure),
           );
           debugPrint('==> send otp failure: $failure');
         },
@@ -121,7 +126,9 @@ class ResetPasswordNotifier extends StateNotifier<ResetPasswordState> {
         return;
       }
       if (!AppValidators.isValidConfirmPassword(
-          state.password, state.confirmPassword)) {
+        state.password,
+        state.confirmPassword,
+      )) {
         state = state.copyWith(isConfirmPasswordInvalid: true);
         return;
       }
@@ -141,7 +148,8 @@ class ResetPasswordNotifier extends StateNotifier<ResetPasswordState> {
             AppHelpers.showCheckTopSnackBar(
               context,
               text: AppHelpers.getTranslation(
-                  AppHelpers.getTranslation(TrKeys.emailIsNotValid)),
+                AppHelpers.getTranslation(TrKeys.emailIsNotValid),
+              ),
             );
           } else {
             AppHelpers.showCheckTopSnackBar(

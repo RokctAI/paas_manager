@@ -5,5 +5,5 @@ import 'all_categories_state.dart';
 
 final allCategoriesProvider =
     StateNotifierProvider<AllCategoriesNotifier, AllCategoriesState>(
-  (ref) => AllCategoriesNotifier(),
-);
+      (ref) => AllCategoriesNotifier(),
+    );

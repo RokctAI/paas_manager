@@ -5,5 +5,5 @@ import 'foods_filter_notifier.dart';
 
 final foodsFilterProvider =
     StateNotifierProvider<FoodsFilterNotifier, FoodsFilterState>(
-  (ref) => FoodsFilterNotifier(),
-);
+      (ref) => FoodsFilterNotifier(),
+    );

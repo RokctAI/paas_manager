@@ -39,10 +39,7 @@ class DriverAvatar extends StatelessWidget {
             4.verticalSpace,
             Text(
               desc,
-              style: AppStyle.interNormal(
-                size: 12,
-                color: AppStyle.blackColor,
-              ),
+              style: AppStyle.interNormal(size: 12, color: AppStyle.blackColor),
             ),
           ],
         ),

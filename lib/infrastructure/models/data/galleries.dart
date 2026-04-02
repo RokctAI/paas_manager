@@ -43,16 +43,15 @@ class Galleries {
     String? path,
     String? preview,
     String? basePath,
-  }) =>
-      Galleries(
-        id: id ?? _id,
-        title: title ?? _title,
-        type: type ?? _type,
-        loadableId: loadableId ?? _loadableId,
-        path: path ?? _path,
-        preview: preview ?? _preview,
-        basePath: basePath ?? _basePath,
-      );
+  }) => Galleries(
+    id: id ?? _id,
+    title: title ?? _title,
+    type: type ?? _type,
+    loadableId: loadableId ?? _loadableId,
+    path: path ?? _path,
+    preview: preview ?? _preview,
+    basePath: basePath ?? _basePath,
+  );
 
   int? get id => _id;
 

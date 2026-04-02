@@ -316,7 +316,7 @@ class UsersRepository implements UsersInterface {
       return ApiResult.success(
         data: SingleShopResponse.fromJson(response.data),
       );
-    } catch (e,s) {
+    } catch (e, s) {
       debugPrint('===> error fetching my shop $e, $s');
       return ApiResult.failure(
         error: AppHelpers.errorHandler(e),

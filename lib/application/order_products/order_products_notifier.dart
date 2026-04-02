@@ -18,7 +18,7 @@ class OrderProductsNotifier extends StateNotifier<OrderProductsState> {
   String _productType = 'single';
 
   OrderProductsNotifier(this._productsRepository)
-      : super(const OrderProductsState());
+    : super(const OrderProductsState());
 
   void setProductType(
     String type, {
@@ -69,30 +69,24 @@ class OrderProductsNotifier extends StateNotifier<OrderProductsState> {
       if (_timer?.isActive ?? false) {
         _timer?.cancel();
       }
-      _timer = Timer(
-        const Duration(milliseconds: 500),
-        () {
-          fetchProducts(
-            isRefresh: true,
-            categoryId: categoryId,
-            cartStocks: cartStocks,
-          );
-        },
-      );
+      _timer = Timer(const Duration(milliseconds: 500), () {
+        fetchProducts(
+          isRefresh: true,
+          categoryId: categoryId,
+          cartStocks: cartStocks,
+        );
+      });
     } else {
       if (_timer?.isActive ?? false) {
         _timer?.cancel();
       }
-      _timer = Timer(
-        const Duration(milliseconds: 500),
-        () {
-          fetchProducts(
-            isRefresh: true,
-            categoryId: categoryId,
-            cartStocks: cartStocks,
-          );
-        },
-      );
+      _timer = Timer(const Duration(milliseconds: 500), () {
+        fetchProducts(
+          isRefresh: true,
+          categoryId: categoryId,
+          cartStocks: cartStocks,
+        );
+      });
     }
   }
 
@@ -167,7 +161,7 @@ class OrderProductsNotifier extends StateNotifier<OrderProductsState> {
           refreshController?.loadComplete();
         }
       },
-      failure: (failure,status) {
+      failure: (failure, status) {
         debugPrint('====> fetch products fail $failure');
         _page--;
         if (_page == 0) {

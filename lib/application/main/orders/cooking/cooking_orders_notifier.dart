@@ -12,7 +12,7 @@ class CookingOrdersNotifier extends StateNotifier<CookingOrdersState> {
   bool _hasMore = true;
 
   CookingOrdersNotifier(this._ordersRepository)
-      : super(const CookingOrdersState());
+    : super(const CookingOrdersState());
 
   Future<void> fetchCookingOrders({
     RefreshController? refreshController,

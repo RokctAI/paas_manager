@@ -49,45 +49,46 @@ class MaksekeskusData {
     String? deliveryDate,
     int? addressId,
     int? deliveryPointId,
-  }) =>
-      MaksekeskusData(
-        methods: methods ?? this.methods,
-        paymentId: paymentId ?? this.paymentId,
-        modelType: modelType ?? this.modelType,
-        modelId: modelId ?? this.modelId,
-        totalPrice: totalPrice ?? this.totalPrice,
-        currency: currency ?? this.currency,
-        cartId: cartId ?? this.cartId,
-        userId: userId ?? this.userId,
-        status: status ?? this.status,
-        currencyId: currencyId ?? this.currencyId,
-        rate: rate ?? this.rate,
-        deliveryType: deliveryType ?? this.deliveryType,
-        deliveryDate: deliveryDate ?? this.deliveryDate,
-        addressId: addressId ?? this.addressId,
-        deliveryPointId: deliveryPointId ?? this.deliveryPointId,
-      );
-
-  factory MaksekeskusData.fromJson(Map<String, dynamic> json) => MaksekeskusData(
-    methods: json["methods"] == null
-        ? []
-        : List<Method>.from(
-        json["methods"]!.map((x) => Method.fromJson(x))),
-    paymentId: json["payment_id"],
-    modelType: json["model_type"],
-    modelId: json["model_id"],
-    totalPrice: json["total_price"],
-    currency: json["currency"],
-    cartId: json["cart_id"],
-    userId: json["user_id"],
-    status: json["status"],
-    currencyId: json["currency_id"],
-    rate: json["rate"],
-    deliveryType: json["delivery_type"],
-    deliveryDate: json["delivery_date"],
-    addressId: json["address_id"],
-    deliveryPointId: json["delivery_point_id"],
+  }) => MaksekeskusData(
+    methods: methods ?? this.methods,
+    paymentId: paymentId ?? this.paymentId,
+    modelType: modelType ?? this.modelType,
+    modelId: modelId ?? this.modelId,
+    totalPrice: totalPrice ?? this.totalPrice,
+    currency: currency ?? this.currency,
+    cartId: cartId ?? this.cartId,
+    userId: userId ?? this.userId,
+    status: status ?? this.status,
+    currencyId: currencyId ?? this.currencyId,
+    rate: rate ?? this.rate,
+    deliveryType: deliveryType ?? this.deliveryType,
+    deliveryDate: deliveryDate ?? this.deliveryDate,
+    addressId: addressId ?? this.addressId,
+    deliveryPointId: deliveryPointId ?? this.deliveryPointId,
   );
+
+  factory MaksekeskusData.fromJson(Map<String, dynamic> json) =>
+      MaksekeskusData(
+        methods: json["methods"] == null
+            ? []
+            : List<Method>.from(
+                json["methods"]!.map((x) => Method.fromJson(x)),
+              ),
+        paymentId: json["payment_id"],
+        modelType: json["model_type"],
+        modelId: json["model_id"],
+        totalPrice: json["total_price"],
+        currency: json["currency"],
+        cartId: json["cart_id"],
+        userId: json["user_id"],
+        status: json["status"],
+        currencyId: json["currency_id"],
+        rate: json["rate"],
+        deliveryType: json["delivery_type"],
+        deliveryDate: json["delivery_date"],
+        addressId: json["address_id"],
+        deliveryPointId: json["delivery_point_id"],
+      );
 
   Map<String, dynamic> toJson() => {
     "methods": methods == null
@@ -140,17 +141,16 @@ class Method {
     int? maxAmount,
     String? name,
     String? url,
-  }) =>
-      Method(
-        channel: channel ?? this.channel,
-        countries: countries ?? this.countries,
-        country: country ?? this.country,
-        displayName: displayName ?? this.displayName,
-        logoUrl: logoUrl ?? this.logoUrl,
-        maxAmount: maxAmount ?? this.maxAmount,
-        name: name ?? this.name,
-        url: url ?? this.url,
-      );
+  }) => Method(
+    channel: channel ?? this.channel,
+    countries: countries ?? this.countries,
+    country: country ?? this.country,
+    displayName: displayName ?? this.displayName,
+    logoUrl: logoUrl ?? this.logoUrl,
+    maxAmount: maxAmount ?? this.maxAmount,
+    name: name ?? this.name,
+    url: url ?? this.url,
+  );
 
   factory Method.fromJson(Map<String, dynamic> json) => Method(
     channel: json["channel"],
@@ -178,4 +178,3 @@ class Method {
     "url": url,
   };
 }
-

@@ -9,7 +9,7 @@ class EditFoodKitchensNotifier extends StateNotifier<EditFoodKitchensState> {
   final CatalogInterface _catalogRepository;
 
   EditFoodKitchensNotifier(this._catalogRepository)
-      : super(EditFoodKitchensState(kitchenController: TextEditingController()));
+    : super(EditFoodKitchensState(kitchenController: TextEditingController()));
 
   void setFoodKitchen(KitchenModel? unit) {
     state = state.copyWith(foodKitchen: unit);
@@ -29,8 +29,11 @@ class EditFoodKitchensNotifier extends StateNotifier<EditFoodKitchensState> {
         if (state.foodKitchen != null) {
           kitchens.insert(0, state.foodKitchen!);
         }
-        state =
-            state.copyWith(kitchens: kitchens, activeIndex: 0, foodKitchen: kitchens[0]);
+        state = state.copyWith(
+          kitchens: kitchens,
+          activeIndex: 0,
+          foodKitchen: kitchens[0],
+        );
         state.kitchenController?.text = kitchens[0].translation?.title ?? '';
       } else {
         state = state.copyWith(
@@ -38,7 +41,8 @@ class EditFoodKitchensNotifier extends StateNotifier<EditFoodKitchensState> {
           activeIndex: index,
           foodKitchen: kitchens[index],
         );
-        state.kitchenController?.text = kitchens[index].translation?.title ?? '';
+        state.kitchenController?.text =
+            kitchens[index].translation?.title ?? '';
       }
       return;
     }
@@ -78,8 +82,7 @@ class EditFoodKitchensNotifier extends StateNotifier<EditFoodKitchensState> {
               kitchens[state.activeIndex].translation?.title ?? '';
         }
       },
-      failure: (failure,status) {
-
+      failure: (failure, status) {
         state = state.copyWith(isLoading: false);
         debugPrint('====> fetch kitchens fail $failure');
       },

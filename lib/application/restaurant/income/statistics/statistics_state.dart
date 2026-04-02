@@ -13,7 +13,6 @@ abstract class StatisticsState with _$StatisticsState {
     @Default([]) List<num> prices,
     @Default([]) List<DateTime> time,
     StatisticsModel? countData,
-
   }) = _StatisticsState;
 
   const StatisticsState._();

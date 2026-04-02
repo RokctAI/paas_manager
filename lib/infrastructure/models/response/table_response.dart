@@ -21,10 +21,8 @@ class TableResponse {
     data['status'] = status;
     data['message'] = message;
     if (this.data != null) {
-      data['data'] =  List<dynamic>.from(this.data!.map((x) => x.toJson()));
+      data['data'] = List<dynamic>.from(this.data!.map((x) => x.toJson()));
     }
     return data;
   }
 }
-
-

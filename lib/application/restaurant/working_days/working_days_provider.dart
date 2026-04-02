@@ -6,5 +6,5 @@ import 'package:venderfoodyman/domain/di/dependency_manager.dart';
 
 final workingDaysProvider =
     StateNotifierProvider<WorkingDaysNotifier, WorkingDaysState>(
-  (ref) => WorkingDaysNotifier(usersRepository),
-);
+      (ref) => WorkingDaysNotifier(usersRepository),
+    );

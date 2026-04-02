@@ -6,5 +6,5 @@ import 'package:venderfoodyman/domain/di/dependency_manager.dart';
 
 final splashProvider =
     StateNotifierProvider.autoDispose<SplashNotifier, SplashState>(
-  (ref) => SplashNotifier(settingsRepository, usersRepository),
-);
+      (ref) => SplashNotifier(settingsRepository, usersRepository),
+    );

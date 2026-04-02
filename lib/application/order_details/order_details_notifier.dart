@@ -10,9 +10,10 @@ class OrderDetailsNotifier extends StateNotifier<OrderDetailsState> {
   final OrdersInterface _ordersRepository;
 
   OrderDetailsNotifier(this._ordersRepository)
-      : super(const OrderDetailsState());
+    : super(const OrderDetailsState());
 
-  Future<void> updateOrderStatus(BuildContext context,{
+  Future<void> updateOrderStatus(
+    BuildContext context, {
     required OrderStatus status,
     VoidCallback? success,
   }) async {
@@ -26,13 +27,13 @@ class OrderDetailsNotifier extends StateNotifier<OrderDetailsState> {
         state = state.copyWith(isUpdating: false);
         success?.call();
       },
-      failure: (failure,status) {
+      failure: (failure, status) {
         debugPrint('===> update order status fail $failure');
         state = state.copyWith(isUpdating: false);
         AppHelpers.showCheckTopSnackBar(
-            context,
-            text: failure,
-            type: SnackBarType.error
+          context,
+          text: failure,
+          type: SnackBarType.error,
         );
       },
     );
@@ -53,13 +54,14 @@ class OrderDetailsNotifier extends StateNotifier<OrderDetailsState> {
 
   Future<void> fetchOrderDetails({OrderData? order}) async {
     state = state.copyWith(isLoading: true, order: order);
-    final response =
-        await _ordersRepository.getOrderDetails(orderId: order?.id);
+    final response = await _ordersRepository.getOrderDetails(
+      orderId: order?.id,
+    );
     response.when(
       success: (data) {
         state = state.copyWith(isLoading: false, order: data.data);
       },
-      failure: (failure,status) {
+      failure: (failure, status) {
         debugPrint('===> fetch order details fail $failure');
         state = state.copyWith(isLoading: false);
       },

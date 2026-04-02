@@ -31,10 +31,7 @@ class TitleAndIcon extends StatelessWidget {
           Expanded(
             child: Text(
               title,
-              style: AppStyle.interSemi(
-                size: 18,
-                color: AppStyle.blackColor,
-              ),
+              style: AppStyle.interSemi(size: 18, color: AppStyle.blackColor),
             ),
           ),
           GestureDetector(

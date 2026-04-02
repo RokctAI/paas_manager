@@ -42,10 +42,7 @@ class SelectableAddonItem extends StatelessWidget {
                   children: [
                     Text(
                       '${addon.translation?.title}',
-                      style: AppStyle.interSemi(
-                        size: 14,
-                        letterSpacing: -0.3,
-                      ),
+                      style: AppStyle.interSemi(size: 14, letterSpacing: -0.3),
                     ),
                     4.verticalSpace,
                     Text(

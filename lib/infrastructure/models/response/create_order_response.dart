@@ -58,14 +58,13 @@ class CreatedOrder {
     num? price,
     num? currencyPrice,
     num? rate,
-  }) =>
-      CreatedOrder(
-        id: id ?? _id,
-        userId: userId ?? _userId,
-        price: price ?? _price,
-        currencyPrice: currencyPrice ?? _currencyPrice,
-        rate: rate ?? _rate,
-      );
+  }) => CreatedOrder(
+    id: id ?? _id,
+    userId: userId ?? _userId,
+    price: price ?? _price,
+    currencyPrice: currencyPrice ?? _currencyPrice,
+    rate: rate ?? _rate,
+  );
 
   int? get id => _id;
 

@@ -5,5 +5,5 @@ import 'order_cart_notifier.dart';
 
 final orderCartProvider =
     StateNotifierProvider<OrderCartNotifier, OrderCartState>(
-  (ref) => OrderCartNotifier(),
-);
+      (ref) => OrderCartNotifier(),
+    );

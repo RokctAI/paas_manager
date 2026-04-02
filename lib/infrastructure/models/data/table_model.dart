@@ -12,9 +12,9 @@ class TableModel {
   });
 
   Map<String, Object> toJson() => {
-        "name": name,
-        "chair_count": chairCount,
-        "tax": tax,
-        "shop_section_id": shopSectionId
-      };
+    "name": name,
+    "chair_count": chairCount,
+    "tax": tax,
+    "shop_section_id": shopSectionId,
+  };
 }

@@ -95,8 +95,9 @@ class ProductData {
       });
     }
     _unit = json['unit'] != null ? UnitData.fromJson(json['unit']) : null;
-    _kitchen =
-        json['kitchen'] != null ? KitchenModel.fromJson(json['kitchen']) : null;
+    _kitchen = json['kitchen'] != null
+        ? KitchenModel.fromJson(json['kitchen'])
+        : null;
     if (json['stocks'] != null) {
       _stocks = [];
       json['stocks'].forEach((v) {
@@ -109,7 +110,8 @@ class ProductData {
       json['discounts'].forEach((v) {
         _discounts?.add(ProductDiscounts.fromJson(v));
       });
-    }    if (json['translations'] != null) {
+    }
+    if (json['translations'] != null) {
       _translations = [];
       json['translations'].forEach((v) {
         _translations?.add(Translation.fromJson(v));
@@ -173,35 +175,34 @@ class ProductData {
     int? unitId,
     List<ProductDiscounts>? discounts,
     bool? isSelectedAddon,
-  }) =>
-      ProductData(
-        id: id ?? _id,
-        cartCount: cartCount ?? _cartCount,
-        uuid: uuid ?? _uuid,
-        shopId: shopId ?? _shopId,
-        categoryId: categoryId ?? _categoryId,
-        tax: tax ?? _tax,
-        galleries: galleries ?? galleries,
-        interval: interval ?? _interval,
-        barCode: barCode ?? _barCode,
-        status: status ?? _status,
-        type: type ?? _type,
-        active: active ?? _active,
-        addon: addon ?? _addon,
-        translations: translations ?? _translations,
-        img: img ?? _img,
-        minQty: minQty ?? _minQty,
-        maxQty: maxQty ?? _maxQty,
-        locales: locales ?? _locales,
-        translation: translation ?? _translation,
-        category: category ?? _category,
-        unit: unit ?? _unit,
-        stocks: stocks ?? _stocks,
-        stock: stock ?? _stock,
-        unitId: unitId ?? _unitId,
-        discounts: discounts ?? _discounts,
-        isSelectedAddon: isSelectedAddon ?? _isSelectedAddon,
-      );
+  }) => ProductData(
+    id: id ?? _id,
+    cartCount: cartCount ?? _cartCount,
+    uuid: uuid ?? _uuid,
+    shopId: shopId ?? _shopId,
+    categoryId: categoryId ?? _categoryId,
+    tax: tax ?? _tax,
+    galleries: galleries ?? galleries,
+    interval: interval ?? _interval,
+    barCode: barCode ?? _barCode,
+    status: status ?? _status,
+    type: type ?? _type,
+    active: active ?? _active,
+    addon: addon ?? _addon,
+    translations: translations ?? _translations,
+    img: img ?? _img,
+    minQty: minQty ?? _minQty,
+    maxQty: maxQty ?? _maxQty,
+    locales: locales ?? _locales,
+    translation: translation ?? _translation,
+    category: category ?? _category,
+    unit: unit ?? _unit,
+    stocks: stocks ?? _stocks,
+    stock: stock ?? _stock,
+    unitId: unitId ?? _unitId,
+    discounts: discounts ?? _discounts,
+    isSelectedAddon: isSelectedAddon ?? _isSelectedAddon,
+  );
 
   int? get id => _id;
 
@@ -315,8 +316,9 @@ class ProductDiscounts {
     _end = json['end'];
     _img = json['img'];
     _active = json['active'];
-    _pivot =
-        json['pivot'] != null ? ProductPivot.fromJson(json['pivot']) : null;
+    _pivot = json['pivot'] != null
+        ? ProductPivot.fromJson(json['pivot'])
+        : null;
   }
 
   int? _id;
@@ -339,18 +341,17 @@ class ProductDiscounts {
     String? img,
     int? active,
     ProductPivot? pivot,
-  }) =>
-      ProductDiscounts(
-        id: id ?? _id,
-        shopId: shopId ?? _shopId,
-        type: type ?? _type,
-        price: price ?? _price,
-        start: start ?? _start,
-        end: end ?? _end,
-        img: img ?? _img,
-        active: active ?? _active,
-        pivot: pivot ?? _pivot,
-      );
+  }) => ProductDiscounts(
+    id: id ?? _id,
+    shopId: shopId ?? _shopId,
+    type: type ?? _type,
+    price: price ?? _price,
+    start: start ?? _start,
+    end: end ?? _end,
+    img: img ?? _img,
+    active: active ?? _active,
+    pivot: pivot ?? _pivot,
+  );
 
   int? get id => _id;
 
@@ -402,9 +403,9 @@ class ProductPivot {
   int? _discountId;
 
   ProductPivot copyWith({int? productId, int? discountId}) => ProductPivot(
-        productId: productId ?? _productId,
-        discountId: discountId ?? _discountId,
-      );
+    productId: productId ?? _productId,
+    discountId: discountId ?? _discountId,
+  );
 
   int? get productId => _productId;
 

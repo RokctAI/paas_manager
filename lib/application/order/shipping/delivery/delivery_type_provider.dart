@@ -5,5 +5,5 @@ import 'delivery_type_notifier.dart';
 
 final deliveryTypeProvider =
     StateNotifierProvider<DeliveryTypeNotifier, DeliveryTypeState>(
-  (ref) => DeliveryTypeNotifier(),
-);
+      (ref) => DeliveryTypeNotifier(),
+    );

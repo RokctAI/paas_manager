@@ -1,4 +1,3 @@
-
 import 'package:venderfoodyman/infrastructure/services/extension.dart';
 
 class SubscriptionData {
@@ -52,24 +51,23 @@ class SubscriptionData {
     int? subscriptionId,
     DateTime? expiredAt,
     SubscriptionData? subscription,
-  }) =>
-      SubscriptionData(
-        id: id ?? this.id,
-        type: type ?? this.type,
-        price: price ?? this.price,
-        month: month ?? this.month,
-        active: active ?? this.active,
-        title: title ?? this.title,
-        productLimit: productLimit ?? this.productLimit,
-        orderLimit: orderLimit ?? this.orderLimit,
-        createdAt: createdAt ?? this.createdAt,
-        updatedAt: updatedAt ?? this.updatedAt,
-        withReport: withReport ?? this.withReport,
-        shopId: shopId ?? this.shopId,
-        expiredAt: expiredAt ?? this.expiredAt,
-        subscription: subscription ?? this.subscription,
-        subscriptionId: subscriptionId ?? this.subscriptionId,
-      );
+  }) => SubscriptionData(
+    id: id ?? this.id,
+    type: type ?? this.type,
+    price: price ?? this.price,
+    month: month ?? this.month,
+    active: active ?? this.active,
+    title: title ?? this.title,
+    productLimit: productLimit ?? this.productLimit,
+    orderLimit: orderLimit ?? this.orderLimit,
+    createdAt: createdAt ?? this.createdAt,
+    updatedAt: updatedAt ?? this.updatedAt,
+    withReport: withReport ?? this.withReport,
+    shopId: shopId ?? this.shopId,
+    expiredAt: expiredAt ?? this.expiredAt,
+    subscription: subscription ?? this.subscription,
+    subscriptionId: subscriptionId ?? this.subscriptionId,
+  );
 
   factory SubscriptionData.fromJson(Map<String, dynamic> json) =>
       SubscriptionData(
@@ -99,20 +97,20 @@ class SubscriptionData {
       );
 
   Map<String, dynamic> toJson() => {
-        "id": id,
-        "type": type,
-        "price": price,
-        "month": month,
-        "active": active,
-        "title": title,
-        "product_limit": productLimit,
-        "order_limit": orderLimit,
-        "created_at": createdAt?.toIso8601String(),
-        "updated_at": updatedAt?.toIso8601String(),
-        "with_report": withReport,
-        "subscription_id": subscriptionId,
-        "expired_at": expiredAt?.toIso8601String(),
-        "shop_id": shopId,
-        "subscription": subscription?.toJson(),
-      };
+    "id": id,
+    "type": type,
+    "price": price,
+    "month": month,
+    "active": active,
+    "title": title,
+    "product_limit": productLimit,
+    "order_limit": orderLimit,
+    "created_at": createdAt?.toIso8601String(),
+    "updated_at": updatedAt?.toIso8601String(),
+    "with_report": withReport,
+    "subscription_id": subscriptionId,
+    "expired_at": expiredAt?.toIso8601String(),
+    "shop_id": shopId,
+    "subscription": subscription?.toJson(),
+  };
 }

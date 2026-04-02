@@ -38,15 +38,14 @@ class ImageData {
     int? loadableId,
     String? path,
     String? basePath,
-  }) =>
-      ImageData(
-        id: id ?? _id,
-        title: title ?? _title,
-        type: type ?? _type,
-        loadableId: loadableId ?? _loadableId,
-        path: path ?? _path,
-        basePath: basePath ?? _basePath,
-      );
+  }) => ImageData(
+    id: id ?? _id,
+    title: title ?? _title,
+    type: type ?? _type,
+    loadableId: loadableId ?? _loadableId,
+    path: path ?? _path,
+    basePath: basePath ?? _basePath,
+  );
 
   int? get id => _id;
 

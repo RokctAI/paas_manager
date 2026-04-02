@@ -6,5 +6,5 @@ import 'package:venderfoodyman/domain/di/dependency_manager.dart';
 
 final deliveryZoneProvider =
     StateNotifierProvider<DeliveryZoneNotifier, DeliveryZoneState>(
-  (ref) => DeliveryZoneNotifier(usersRepository),
-);
+      (ref) => DeliveryZoneNotifier(usersRepository),
+    );

@@ -6,5 +6,5 @@ import 'package:venderfoodyman/domain/di/dependency_manager.dart';
 
 final orderProvider =
     StateNotifierProvider.autoDispose<OrderNotifier, OrderState>(
-  (ref) => OrderNotifier(ordersRepository),
-);
+      (ref) => OrderNotifier(ordersRepository),
+    );

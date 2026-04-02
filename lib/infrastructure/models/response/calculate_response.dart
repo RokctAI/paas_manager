@@ -110,18 +110,17 @@ class CalculatedData {
     num? deliveryFee,
     num? rate,
     num? couponPrice,
-  }) =>
-      CalculatedData(
-        stocks: stocks ?? _stocks,
-        totalTax: totalTax ?? _totalTax,
-        price: price ?? _price,
-        totalShopTax: totalShopTax ?? _totalShopTax,
-        totalPrice: totalPrice ?? _totalPrice,
-        totalDiscount: totalDiscount ?? _totalDiscount,
-        deliveryFee: deliveryFee ?? _deliveryFee,
-        rate: rate ?? _rate,
-        couponPrice: couponPrice ?? _couponPrice,
-      );
+  }) => CalculatedData(
+    stocks: stocks ?? _stocks,
+    totalTax: totalTax ?? _totalTax,
+    price: price ?? _price,
+    totalShopTax: totalShopTax ?? _totalShopTax,
+    totalPrice: totalPrice ?? _totalPrice,
+    totalDiscount: totalDiscount ?? _totalDiscount,
+    deliveryFee: deliveryFee ?? _deliveryFee,
+    rate: rate ?? _rate,
+    couponPrice: couponPrice ?? _couponPrice,
+  );
 
   List<Stock>? get stocks => _stocks;
 

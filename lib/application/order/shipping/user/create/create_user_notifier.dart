@@ -33,7 +33,8 @@ class CreateUserNotifier extends StateNotifier<CreateUserState> {
     _firstname = value.trim();
   }
 
-  Future<void> createUser(BuildContext context,{
+  Future<void> createUser(
+    BuildContext context, {
     Function(UserData?)? created,
     VoidCallback? failed,
   }) async {
@@ -49,14 +50,14 @@ class CreateUserNotifier extends StateNotifier<CreateUserState> {
         state = state.copyWith(isLoading: false);
         created?.call(data.data);
       },
-      failure: (error,status) {
+      failure: (error, status) {
         debugPrint('====> create user fail $error');
         failed?.call();
         state = state.copyWith(isLoading: false);
         AppHelpers.showCheckTopSnackBar(
-            context,
-            text: error,
-            type: SnackBarType.error
+          context,
+          text: error,
+          type: SnackBarType.error,
         );
       },
     );

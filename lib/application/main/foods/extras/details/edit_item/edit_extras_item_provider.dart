@@ -6,5 +6,5 @@ import 'edit_extras_item_state.dart';
 
 final editExtrasItemProvider =
     StateNotifierProvider<EditExtrasItemNotifier, EditExtrasItemState>(
-  (ref) => EditExtrasItemNotifier(productRepository),
-);
+      (ref) => EditExtrasItemNotifier(productRepository),
+    );

@@ -31,10 +31,7 @@ class AppbarScreen extends StatelessWidget {
                 ),
                 Text(
                   AppHelpers.getTranslation(TrKeys.earningsRestaurant),
-                  style: AppStyle.interRegular(
-                    size: 12,
-                    letterSpacing: -0.3,
-                  ),
+                  style: AppStyle.interRegular(size: 12, letterSpacing: -0.3),
                 ),
               ],
             ),

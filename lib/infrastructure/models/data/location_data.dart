@@ -15,9 +15,9 @@ class LocationData {
   double? _longitude;
 
   LocationData copyWith({double? latitude, double? longitude}) => LocationData(
-        latitude: latitude ?? _latitude,
-        longitude: longitude ?? _longitude,
-      );
+    latitude: latitude ?? _latitude,
+    longitude: longitude ?? _longitude,
+  );
 
   double? get latitude => _latitude;
 

@@ -19,16 +19,21 @@ class TableStatisticData {
     required this.allOccupied,
   });
 
-  factory TableStatisticData.fromJson(Map<String, dynamic> json) => TableStatisticData(
-    available: json["available"],
-    booked: json["booked"],
-    occupied: json["occupied"],
-    availableIds: List.from(json["available_ids"].map((x) => x)),
-    bookedIds: List.from(json["booked_ids"].map((x) => x)),
-    occupiedIds: List.from(json["occupied_ids"].map((x) => x)),
-    allBooked: List.from(json["all_booked"].map((x) => AllStatisticStatusData.fromJson(x))),
-    allOccupied: List.from(json["all_occupied"].map((x) =>  AllStatisticStatusData.fromJson(x))),
-  );
+  factory TableStatisticData.fromJson(Map<String, dynamic> json) =>
+      TableStatisticData(
+        available: json["available"],
+        booked: json["booked"],
+        occupied: json["occupied"],
+        availableIds: List.from(json["available_ids"].map((x) => x)),
+        bookedIds: List.from(json["booked_ids"].map((x) => x)),
+        occupiedIds: List.from(json["occupied_ids"].map((x) => x)),
+        allBooked: List.from(
+          json["all_booked"].map((x) => AllStatisticStatusData.fromJson(x)),
+        ),
+        allOccupied: List.from(
+          json["all_occupied"].map((x) => AllStatisticStatusData.fromJson(x)),
+        ),
+      );
 
   Map<String, dynamic> toJson() => {
     "available": available,
@@ -41,7 +46,6 @@ class TableStatisticData {
     "all_occupied": List.from(allOccupied.map((x) => x)),
   };
 }
-
 
 class AllStatisticStatusData {
   int? tableId;
@@ -61,20 +65,20 @@ class AllStatisticStatusData {
     String? tableName,
     DateTime? tableStartDate,
     String? username,
-  }) =>
-      AllStatisticStatusData(
-        tableId: tableId ?? this.tableId,
-        tableName: tableName ?? this.tableName,
-        tableStartDate: tableStartDate ?? this.tableStartDate,
-        username: username ?? this.username,
-      );
-
-  factory AllStatisticStatusData.fromJson(Map<String, dynamic> json) => AllStatisticStatusData(
-    tableId: json["table_id"],
-    tableName: json["table_name"],
-    tableStartDate: DateTime.parse(json["table_start_date"]),
-    username: json["username"],
+  }) => AllStatisticStatusData(
+    tableId: tableId ?? this.tableId,
+    tableName: tableName ?? this.tableName,
+    tableStartDate: tableStartDate ?? this.tableStartDate,
+    username: username ?? this.username,
   );
+
+  factory AllStatisticStatusData.fromJson(Map<String, dynamic> json) =>
+      AllStatisticStatusData(
+        tableId: json["table_id"],
+        tableName: json["table_name"],
+        tableStartDate: DateTime.parse(json["table_start_date"]),
+        username: json["username"],
+      );
 
   Map<String, dynamic> toJson() => {
     "table_id": tableId,

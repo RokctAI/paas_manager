@@ -38,7 +38,7 @@ class TodayOrdersNotifier extends StateNotifier<TodayOrdersState> {
           );
         }
       },
-      failure: (fail,status) {
+      failure: (fail, status) {
         if (state.ordersStatistic == null) {
           state = state.copyWith(isLoading: false);
         }

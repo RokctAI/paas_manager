@@ -12,7 +12,7 @@ class EditFoodDetailsNotifier extends StateNotifier<EditFoodDetailsState> {
   String? _oldBarcode;
 
   EditFoodDetailsNotifier(this._productsRepository, this._settingsRepository)
-      : super(const EditFoodDetailsState());
+    : super(const EditFoodDetailsState());
 
   void setTax(String value) {
     state = state.copyWith(tax: value.trim());
@@ -31,8 +31,9 @@ class EditFoodDetailsNotifier extends StateNotifier<EditFoodDetailsState> {
   }
 
   void setActive(bool? value) {
-    final product =
-        state.product?.copyWith(active: !(state.product?.active ?? false));
+    final product = state.product?.copyWith(
+      active: !(state.product?.active ?? false),
+    );
 
     state = state.copyWith(product: product);
   }
@@ -64,8 +65,9 @@ class EditFoodDetailsNotifier extends StateNotifier<EditFoodDetailsState> {
         },
       );
     }
-    List<Galleries> tempList = List.from(List.from(state.listOfUrls)
-        .where((element) => element.preview != null));
+    List<Galleries> tempList = List.from(
+      List.from(state.listOfUrls).where((element) => element.preview != null),
+    );
     List<String> previews = [];
     for (var element in tempList) {
       if (element.preview?.isNotEmpty ?? false) {
@@ -110,31 +112,36 @@ class EditFoodDetailsNotifier extends StateNotifier<EditFoodDetailsState> {
         updated?.call(updatedProduct);
       },
       failure: (fail, status) {
-        AppHelpers.showCheckTopSnackBar(context,
-            text: fail, type: SnackBarType.error);
+        AppHelpers.showCheckTopSnackBar(
+          context,
+          text: fail,
+          type: SnackBarType.error,
+        );
         state = state.copyWith(isLoading: false);
         debugPrint('===> product update fail $fail');
         failed?.call();
       },
     );
   }
+
   void setDesc() {
     Map<String, List<String>> temp = Map.from(state.mapOfDesc);
     if (temp.containsKey(state.language?.locale)) {
       List<String> list = [state.title, state.description];
       temp.update(
-          state.language?.locale ?? LocalStorage.getLanguage()?.locale ?? 'en',
-              (value) => list);
+        state.language?.locale ?? LocalStorage.getLanguage()?.locale ?? 'en',
+        (value) => list,
+      );
     } else {
       List<String> list = [state.title, state.description];
       temp[state.language?.locale ??
-          LocalStorage.getLanguage()?.locale ??
-          "en"] = list;
+              LocalStorage.getLanguage()?.locale ??
+              "en"] =
+          list;
     }
-    state = state.copyWith(
-      mapOfDesc: temp,
-    );
+    state = state.copyWith(mapOfDesc: temp);
   }
+
   void setBarcode(String value) {
     state = state.copyWith(barcode: value.trim());
   }
@@ -195,8 +202,9 @@ class EditFoodDetailsNotifier extends StateNotifier<EditFoodDetailsState> {
       minQty: product?.minQty.toString() ?? '',
       maxQty: product?.maxQty.toString() ?? '',
       tax: product?.tax == null ? '' : (product?.tax.toString() ?? ''),
-      interval:
-          product?.interval == null ? '' : (product?.interval.toString() ?? ''),
+      interval: product?.interval == null
+          ? ''
+          : (product?.interval.toString() ?? ''),
       title: product?.translation?.title ?? '',
       description: product?.translation?.description ?? '',
       barcode: product?.barCode ?? '',
@@ -225,10 +233,7 @@ class EditFoodDetailsNotifier extends StateNotifier<EditFoodDetailsState> {
           var items = data.data?.translations;
           for (int i = 0; i < data.data!.translations!.length; i++) {
             final locale = items?[i].locale ?? "en";
-            temp[locale] = [
-              items?[i].title ?? '',
-              items?[i].description ?? ''
-            ];
+            temp[locale] = [items?[i].title ?? '', items?[i].description ?? ''];
             titleTranslations[locale] = items?[i].title ?? '';
             descriptionTranslations[locale] = items?[i].description ?? '';
           }
