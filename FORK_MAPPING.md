@@ -370,3 +370,18 @@ not depend on the composer answer and can start on a green light:
 - **kitchen_sdk** — the empty package gets its first content.
 
 Blocked until the owner rules: income, delivery zone, become_seller, and the composer list.
+
+---
+
+## 8. SDK-consumption pattern — decided
+
+paas_manager consumes the same shared SDKs as paas_driver: composer-vendored path deps
+under `.rokct/cache/`, written by The-Rokct-Protocol's `sdk_composer.py`, with the
+composition defined in `core/utils/flutter/composer/manager.json` (18 SDKs). Role code
+follows the established `common/` vs role-sibling convention inside each SDK
+(`lib/src/common` + `lib/src/manager`); the composer's role-stripping keeps
+`lib/src/manager` because `.rokct/config/app_type` = `manager` (declared in aa57be2).
+No manager-only SDK packages. Migration itself follows the driver playbook — pubspec
+seam to cache path deps, part-style `app_router` with `@generated` markers, per-feature
+moves — and is NOT part of this commit. This supersedes nothing in §1–7: the §6/§7
+contradictions still block those code moves and stay open.
