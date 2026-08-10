@@ -282,7 +282,7 @@ class _RestaurantPageState extends ConsumerState<RestaurantPage> {
               },
             );
           }),
-
+        ],
       ),
     );
   }

@@ -271,5 +271,5 @@ abstract class TrKeys {
   static const String pleaseTryAgain = 'your_request_rejected_please_try_again';
   static const String note = 'note';
   static const String calculator = 'calculator';
-
+}
 
