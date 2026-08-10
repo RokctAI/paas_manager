@@ -1,5 +1,7 @@
 name: Auto Release (Weekly)
 
+permissions: write-all
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}-release
   cancel-in-progress: true
