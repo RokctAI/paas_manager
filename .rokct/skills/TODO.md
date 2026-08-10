@@ -20,4 +20,3 @@ Recommended future additions.
 
 ## Specialized
 - [ ] **flutter-dev**: Best practices for mobile.
-
