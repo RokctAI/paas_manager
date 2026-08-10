@@ -14,21 +14,13 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-export 'main/main_page.dart';
-export 'become_seller/become_seller.dart';
+// Host-owned pages only. Everything that migrated into an SDK is installed
+// by the composer under lib/presentation/pages/{orders,create_order,foods,
+// restaurant,main,income,order_history,merchant,...} and routed through
+// app_router.dart's @generated markers - see composer.json.
+export 'initial/splash_page.dart';
+export 'initial/no_connection_page.dart';
+export 'auth/login/login_page.dart';
 export 'view_map/view_map_page.dart';
 export 'view_map/map_search_page.dart';
-export 'income/income_page.dart';
-export 'initial/splash_page.dart';
-export 'main/foods/foods_page.dart';
-export 'auth/login/login_page.dart';
-export 'initial/no_connection_page.dart';
-export 'order_history/order_history.dart';
 export 'restaurant/notification_list_page.dart';
-export 'main/create_order/order/order_page.dart';
-export 'main/create_order/create_order_page.dart';
-export 'restaurant/delivery_zone/delivery_zone_page.dart';
-export 'main/create_order/shipping/shipping_address_page.dart';
-export 'main/create_order/shipping/details/delivery_time_page.dart';
-export 'main/create_order/shipping/address/select_address_page.dart';
-export 'main/create_order/shipping/select_user/select_user_page.dart';

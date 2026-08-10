@@ -86,5 +86,4 @@ export 'request/sign_up_request.dart';
 export 'data/generate_image_model.dart';
 export 'data/address_data.dart';
 export 'response/statistics_order_response.dart';
-export 'package:venderfoodyman/water/models/meter_reading.dart';
 
