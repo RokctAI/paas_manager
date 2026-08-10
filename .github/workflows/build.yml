@@ -4,13 +4,6 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
-permissions:
-  contents: write
-  packages: write
-  id-token: write
-  issues: write
-  pull-requests: write
-
 on:
   push:
     branches: [ main, develop ]
