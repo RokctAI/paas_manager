@@ -43,7 +43,8 @@ class Item {
         discount: (json["discount"] as num?)?.toDouble(),
         price: (json["price"] as num?)?.toDouble(),
         description: json["description"],
-        product: json["product"] == null ? null : Product.fromJson(json["product"]),
+        product:
+            json["product"] == null ? null : Product.fromJson(json["product"]),
       );
 
   Map<String, dynamic> toJson() => {

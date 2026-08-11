@@ -25,8 +25,7 @@ class InvoiceResponse {
       InvoiceResponse(
         data: json["data"] == null
             ? []
-            : List<Invoice>.from(
-                json["data"]!.map((x) => Invoice.fromJson(x))),
+            : List<Invoice>.from(json["data"]!.map((x) => Invoice.fromJson(x))),
       );
 }
 
@@ -64,7 +63,6 @@ class Invoice {
         status: json["status"],
         items: json["items"] == null
             ? []
-            : List<Item>.from(
-                json["items"]!.map((x) => Item.fromJson(x))),
+            : List<Item>.from(json["items"]!.map((x) => Item.fromJson(x))),
       );
 }

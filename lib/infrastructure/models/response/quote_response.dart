@@ -64,7 +64,6 @@ class Quote {
         status: json["status"],
         items: json["items"] == null
             ? []
-            : List<Item>.from(
-                json["items"]!.map((x) => Item.fromJson(x))),
+            : List<Item>.from(json["items"]!.map((x) => Item.fromJson(x))),
       );
 }

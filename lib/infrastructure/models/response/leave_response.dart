@@ -19,12 +19,10 @@ class LeaveResponse {
 
   LeaveResponse({this.data});
 
-  factory LeaveResponse.fromJson(Map<String, dynamic> json) =>
-      LeaveResponse(
+  factory LeaveResponse.fromJson(Map<String, dynamic> json) => LeaveResponse(
         data: json["data"] == null
             ? []
-            : List<Leave>.from(
-                json["data"]!.map((x) => Leave.fromJson(x))),
+            : List<Leave>.from(json["data"]!.map((x) => Leave.fromJson(x))),
       );
 }
 
@@ -74,27 +72,27 @@ class Leave {
 }
 
 class LeaveType {
-    final int? id;
-    final String? title;
+  final int? id;
+  final String? title;
 
-    LeaveType({this.id, this.title});
+  LeaveType({this.id, this.title});
 
-    factory LeaveType.fromJson(Map<String, dynamic> json) => LeaveType(
+  factory LeaveType.fromJson(Map<String, dynamic> json) => LeaveType(
         id: json["id"],
         title: json["title"],
-    );
+      );
 }
 
 class LeaveFormDataResponse {
-    final List<LeaveType>? leaveTypes;
+  final List<LeaveType>? leaveTypes;
 
-    LeaveFormDataResponse({this.leaveTypes});
+  LeaveFormDataResponse({this.leaveTypes});
 
-    factory LeaveFormDataResponse.fromJson(Map<String, dynamic> json) =>
-        LeaveFormDataResponse(
-            leaveTypes: json["leaveTypes"] == null
-                ? []
-                : List<LeaveType>.from(
-                    json["leaveTypes"]!.map((x) => LeaveType.fromJson(x))),
-        );
+  factory LeaveFormDataResponse.fromJson(Map<String, dynamic> json) =>
+      LeaveFormDataResponse(
+        leaveTypes: json["leaveTypes"] == null
+            ? []
+            : List<LeaveType>.from(
+                json["leaveTypes"]!.map((x) => LeaveType.fromJson(x))),
+      );
 }

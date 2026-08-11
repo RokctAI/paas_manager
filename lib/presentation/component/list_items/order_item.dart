@@ -134,7 +134,8 @@ class OrderItem extends StatelessWidget {
                           ),
                         ),
                         TextSpan(
-                          text: '${order.deliveryDate ?? ''} ${order.deliveryTime ?? ''}',
+                          text:
+                              '${order.deliveryDate ?? ''} ${order.deliveryTime ?? ''}',
                           style: Style.interNormal(
                             color: Style.blackColor,
                             size: 14.sp,
@@ -146,7 +147,7 @@ class OrderItem extends StatelessWidget {
                   ),
                   Text(
                     AppHelpers.numberFormat(
-                         order.totalPrice?.isNegative ?? true
+                        order.totalPrice?.isNegative ?? true
                             ? 0
                             : order.totalPrice ?? 0,
                         symbol: order.currency?.symbol),

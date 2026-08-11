@@ -132,7 +132,7 @@ class OrderData {
         ? Transaction.fromJson(json['transaction'])
         : null;
     _orderAddress =
-    json['address'] != null ? OrderAddress.fromJson(json['address']) : null;
+        json['address'] != null ? OrderAddress.fromJson(json['address']) : null;
     _review = json['review'];
     _note = json['note'];
     _seen = false;
@@ -395,7 +395,7 @@ class OrderDetail {
     _shopBonus = json['bonus_shop']?.toString().toBool();
     _stock = json['stock'] != null ? Stock.fromJson(json['stock']) : null;
     _kitchen =
-    json['kitchen'] != null ? KitchenModel.fromJson(json['kitchen']) : null;
+        json['kitchen'] != null ? KitchenModel.fromJson(json['kitchen']) : null;
     if (json['addons'] != null) {
       _addons = [];
       json['addons'].forEach((v) {

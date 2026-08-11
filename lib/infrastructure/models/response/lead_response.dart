@@ -19,12 +19,10 @@ class LeadResponse {
 
   LeadResponse({this.data});
 
-  factory LeadResponse.fromJson(Map<String, dynamic> json) =>
-      LeadResponse(
+  factory LeadResponse.fromJson(Map<String, dynamic> json) => LeadResponse(
         data: json["data"] == null
             ? []
-            : List<Lead>.from(
-                json["data"]!.map((x) => Lead.fromJson(x))),
+            : List<Lead>.from(json["data"]!.map((x) => Lead.fromJson(x))),
       );
 }
 
@@ -56,28 +54,28 @@ class Lead {
 }
 
 class LeadStage {
-    final int? id;
-    final String? name;
+  final int? id;
+  final String? name;
 
-    LeadStage({this.id, this.name});
+  LeadStage({this.id, this.name});
 
-    factory LeadStage.fromJson(Map<String, dynamic> json) => LeadStage(
+  factory LeadStage.fromJson(Map<String, dynamic> json) => LeadStage(
         id: json["id"],
         name: json["name"],
-    );
+      );
 }
 
 class LeadFormDataResponse {
-    final List<LeadStage>? stages;
-    // Add other form data fields as needed, e.g., users, pipelines, sources
+  final List<LeadStage>? stages;
+  // Add other form data fields as needed, e.g., users, pipelines, sources
 
-    LeadFormDataResponse({this.stages});
+  LeadFormDataResponse({this.stages});
 
-    factory LeadFormDataResponse.fromJson(Map<String, dynamic> json) =>
-        LeadFormDataResponse(
-            stages: json["stages"] == null
-                ? []
-                : List<LeadStage>.from(
-                    json["stages"]!.map((x) => LeadStage.fromJson(x))),
-        );
+  factory LeadFormDataResponse.fromJson(Map<String, dynamic> json) =>
+      LeadFormDataResponse(
+        stages: json["stages"] == null
+            ? []
+            : List<LeadStage>.from(
+                json["stages"]!.map((x) => LeadStage.fromJson(x))),
+      );
 }

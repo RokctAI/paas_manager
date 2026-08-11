@@ -77,8 +77,12 @@ class Employee {
         designationId: json["designation_id"],
         companyDoj: json["company_doj"],
         branch: json["branch"] == null ? null : Branch.fromJson(json["branch"]),
-        department: json["department"] == null ? null : Branch.fromJson(json["department"]),
-        designation: json["designation"] == null ? null : Branch.fromJson(json["designation"]),
+        department: json["department"] == null
+            ? null
+            : Branch.fromJson(json["department"]),
+        designation: json["designation"] == null
+            ? null
+            : Branch.fromJson(json["designation"]),
       );
 }
 

@@ -27,7 +27,7 @@ import '../component/components.dart';
 import 'package:manager/presentation/styles/style.dart';
 
 class AddAddress extends StatelessWidget {
-  const AddAddress({super.key}) ;
+  const AddAddress({super.key});
 
   @override
   Widget build(BuildContext context) {

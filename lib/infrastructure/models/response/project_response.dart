@@ -23,8 +23,7 @@ class ProjectResponse {
       ProjectResponse(
         data: json["data"] == null
             ? []
-            : List<Project>.from(
-                json["data"]!.map((x) => Project.fromJson(x))),
+            : List<Project>.from(json["data"]!.map((x) => Project.fromJson(x))),
       );
 }
 
@@ -56,18 +55,18 @@ class Project {
 }
 
 class ProjectTask {
-    // Basic model for now
-    final int? id;
-    final String? name;
-    final String? priority;
-    final int? stageId;
+  // Basic model for now
+  final int? id;
+  final String? name;
+  final String? priority;
+  final int? stageId;
 
-    ProjectTask({this.id, this.name, this.priority, this.stageId});
+  ProjectTask({this.id, this.name, this.priority, this.stageId});
 
-    factory ProjectTask.fromJson(Map<String, dynamic> json) => ProjectTask(
+  factory ProjectTask.fromJson(Map<String, dynamic> json) => ProjectTask(
         id: json["id"],
         name: json["name"],
         priority: json["priority"],
         stageId: json["stage_id"],
-    );
+      );
 }

@@ -76,16 +76,16 @@ class SettingsRepository implements SettingsInterface {
     } catch (e) {
       debugPrint('==> upload image failure: $e');
       return ApiResult.failure(
-         error: AppHelpers.errorHandler(e),
+          error: AppHelpers.errorHandler(e),
           statusCode: NetworkExceptions.getDioStatus(e));
     }
   }
 
   @override
   Future<ApiResult<MultiGalleryUploadResponse>> uploadMultiImage(
-      List<String?> filePaths,
-      UploadType uploadType,
-      ) async {
+    List<String?> filePaths,
+    UploadType uploadType,
+  ) async {
     String type = '';
     switch (uploadType) {
       case UploadType.shopsLogo:
@@ -134,7 +134,7 @@ class SettingsRepository implements SettingsInterface {
     } catch (e) {
       debugPrint('==> get currencies failure: $e');
       return ApiResult.failure(
-           error: AppHelpers.errorHandler(e),
+          error: AppHelpers.errorHandler(e),
           statusCode: NetworkExceptions.getDioStatus(e));
     }
   }
@@ -150,7 +150,7 @@ class SettingsRepository implements SettingsInterface {
     } catch (e) {
       debugPrint('==> get settings failure: $e');
       return ApiResult.failure(
-           error: AppHelpers.errorHandler(e),
+          error: AppHelpers.errorHandler(e),
           statusCode: NetworkExceptions.getDioStatus(e));
     }
   }
@@ -170,7 +170,7 @@ class SettingsRepository implements SettingsInterface {
     } catch (e) {
       debugPrint('==> get translations failure: $e');
       return ApiResult.failure(
-           error: AppHelpers.errorHandler(e),
+          error: AppHelpers.errorHandler(e),
           statusCode: NetworkExceptions.getDioStatus(e));
     }
   }
@@ -198,7 +198,7 @@ class SettingsRepository implements SettingsInterface {
     } catch (e) {
       debugPrint('==> get languages failure: $e');
       return ApiResult.failure(
-           error: AppHelpers.errorHandler(e),
+          error: AppHelpers.errorHandler(e),
           statusCode: NetworkExceptions.getDioStatus(e));
     }
   }
@@ -206,8 +206,7 @@ class SettingsRepository implements SettingsInterface {
   @override
   Future<ApiResult<GenerateImageModel>> getGenerateImage(String name) async {
     try {
-      final client =
-          dioHttp.client(chatGpt: true, requireAuth: true);
+      final client = dioHttp.client(chatGpt: true, requireAuth: true);
       final response = await client.post('/v1/images/generations',
           data: {"prompt": name, "n": 10, "size": "512x512"});
       return ApiResult.success(
@@ -216,7 +215,7 @@ class SettingsRepository implements SettingsInterface {
     } catch (e) {
       debugPrint('==> get GenerateImage failure: $e');
       return ApiResult.failure(
-           error: AppHelpers.errorHandler(e),
+          error: AppHelpers.errorHandler(e),
           statusCode: NetworkExceptions.getDioStatus(e));
     }
   }

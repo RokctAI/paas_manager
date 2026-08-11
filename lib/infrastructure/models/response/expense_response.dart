@@ -23,8 +23,7 @@ class ExpenseResponse {
       ExpenseResponse(
         data: json["data"] == null
             ? []
-            : List<Expense>.from(
-                json["data"]!.map((x) => Expense.fromJson(x))),
+            : List<Expense>.from(json["data"]!.map((x) => Expense.fromJson(x))),
       );
 }
 

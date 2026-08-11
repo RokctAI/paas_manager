@@ -38,7 +38,7 @@ class RegisterConfirmationPage extends ConsumerStatefulWidget {
     required this.userModel,
     this.isResetPassword = false,
     required this.verificationId,
-  }) ;
+  });
 
   @override
   ConsumerState<RegisterConfirmationPage> createState() =>
@@ -193,7 +193,8 @@ class _RegisterConfirmationPageState
                           ),
                           CustomButton(
                             isLoading: state.isLoading,
-                            title: AppHelpers.getTranslation(TrKeys.confirmation),
+                            title:
+                                AppHelpers.getTranslation(TrKeys.confirmation),
                             onPressed: () {
                               if (state.confirmCode.length == 6) {
                                 if (widget.isResetPassword) {
@@ -217,9 +218,8 @@ class _RegisterConfirmationPageState
                             },
                             weight:
                                 2 * (MediaQuery.sizeOf(context).width - 40) / 3,
-                            background: state.isConfirm
-                                ? Style.primary
-                                : Style.white,
+                            background:
+                                state.isConfirm ? Style.primary : Style.white,
                             textColor:
                                 state.isConfirm ? Style.black : Style.black,
                           ),
