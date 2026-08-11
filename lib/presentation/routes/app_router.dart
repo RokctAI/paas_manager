@@ -38,6 +38,7 @@ import 'package:manager/presentation/pages/create_order/shipping/shipping_addres
 import 'package:manager/presentation/pages/income/income_page.dart';
 import 'package:manager/presentation/pages/main/main_page.dart';
 import 'package:manager/presentation/pages/merchant/delivery_zone/delivery_zone_page.dart';
+import 'package:manager/presentation/pages/notification/notification_list_page.dart';
 import 'package:manager/presentation/pages/order_history/order_history.dart';
 import 'package:manager/presentation/pages/subscriptions/subscriptions_page.dart';
 import 'package:manager/presentation/pages/tasks/tasks_page.dart';
@@ -68,6 +69,7 @@ class AppRouter extends RootStackRouter {
     MaterialRoute(path: '/select-section', page: ManagerSelectSectionRoute.page),
     MaterialRoute(path: '/select-table', page: ManagerSelectTableRoute.page),
     MaterialRoute(path: '/subscriptions', page: ManagerSubscriptionsRoute.page),
+    CupertinoRoute(path: '/list-notification', page: NotificationListRoute.page),
     CupertinoRoute(path: '/tasks', page: TasksRoute.page),
     CupertinoRoute(path: '/calc', page: CalculatorRoute.page),
     CupertinoRoute(path: '/income', page: ManagerIncomeRoute.page),

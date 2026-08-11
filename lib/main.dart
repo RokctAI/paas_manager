@@ -75,6 +75,7 @@ import 'package:zones_sdk/zones_sdk.dart';
 // without any hand-written imports in this file.
 // @generated-wiring-imports-start
 import 'package:auto_route/auto_route.dart';
+import 'package:comms_sdk/src/common/presentation/pages/setting/language_page.dart';
 import 'package:manager/presentation/components/weather/weather_widget.dart';
 import 'package:manager/presentation/routes/app_router.dart';
 // @generated-wiring-imports-end
@@ -204,6 +205,11 @@ void main() async {
 
 class _HostEmbeddedWidgets implements EmbeddedWidgets {
   // @generated-embeddedwidgets-start
+  @override
+  Widget languageScreen({required VoidCallback onSave}) {
+    return LanguageScreen(onSave: onSave);
+  }
+
   @override
   Widget policyPage() {
     return const PolicyPage();
