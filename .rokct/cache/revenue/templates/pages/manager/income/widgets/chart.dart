@@ -3,14 +3,6 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:base_sdk/src/presentation/theme/app_style.dart';
-
-// base_sdk's AppStyle has no primaryGradient token yet (core follow-up:
-// promote it); same colors the deleted host Style.primaryGradient carried.
-final List<Color> _primaryGradient = [
-  AppStyle.primary.withOpacity(0.5),
-  AppStyle.transparent,
-];
 import 'package:${package}/presentation/theme/theme.dart';
 import 'package:base_sdk/src/services/app_helpers.dart';
 import 'package:base_sdk/src/services/tr_keys.dart';
@@ -19,6 +11,13 @@ import 'package:base_sdk/src/presentation/components/loading.dart';
 // Chart model plus the findPriceIndex/findPrice/findPriceWithHour lookup
 // extensions the spot mapping below uses.
 import 'package:revenue_sdk/src/common/infrastructure/models/response/statistics_response.dart';
+
+// base_sdk's AppStyle has no primaryGradient token yet (core follow-up:
+// promote it); same colors the deleted host Style.primaryGradient carried.
+final List<Color> _primaryGradient = [
+  AppStyle.primary.withOpacity(0.5),
+  AppStyle.transparent,
+];
 
 class SalesChart extends StatelessWidget {
   final List<num> price;
