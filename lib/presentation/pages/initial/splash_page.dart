@@ -46,7 +46,10 @@ class _SplashPageState extends ConsumerState<SplashPage> {
                 });
               },
               goLogin: () => context.replaceRoute(const LoginRoute()),
-              goBecome: () => context.replaceRoute(const CreateShopRoute()),
+              // become_seller was dropped from the manager shell (Ray ruling
+              // in the fork plan): users without a shop go to login instead
+              // of the retired create-shop funnel.
+              goBecome: () => context.replaceRoute(const LoginRoute()),
             );
       },
     );

@@ -426,10 +426,13 @@ class _LoginModalState extends State<LoginModal> {
                                           type: SnackBarType.success,
                                         ),
                                     accessDenied: () {
+                                      // become_seller dropped (Ray ruling):
+                                      // land back on a clean login instead
+                                      // of the retired create-shop funnel.
                                       Navigator.pop(context);
                                       context.router.popUntilRoot();
                                       context.replaceRoute(
-                                          const CreateShopRoute());
+                                          const LoginRoute());
                                     },
                                   );
                                 }
@@ -500,10 +503,11 @@ class _LoginModalState extends State<LoginModal> {
                                                 type: SnackBarType.success,
                                               ),
                                           accessDenied: () {
+                                            // become_seller dropped (Ray).
                                             Navigator.pop(context);
                                             context.router.popUntilRoot();
                                             context.replaceRoute(
-                                                const CreateShopRoute());
+                                                const LoginRoute());
                                           },
                                         );
                                       },
@@ -555,10 +559,11 @@ class _LoginModalState extends State<LoginModal> {
                                               type: SnackBarType.success,
                                             ),
                                         accessDenied: () {
+                                          // become_seller dropped (Ray).
                                           Navigator.pop(context);
                                           context.router.popUntilRoot();
                                           context.replaceRoute(
-                                              const CreateShopRoute());
+                                              const LoginRoute());
                                         },
                                       );
                                     },
@@ -600,10 +605,11 @@ class _LoginModalState extends State<LoginModal> {
                                               type: SnackBarType.success,
                                             ),
                                         accessDenied: () {
+                                          // become_seller dropped (Ray).
                                           Navigator.pop(context);
                                           context.router.popUntilRoot();
                                           context.replaceRoute(
-                                              const CreateShopRoute());
+                                              const LoginRoute());
                                         },
                                       );
                                     },

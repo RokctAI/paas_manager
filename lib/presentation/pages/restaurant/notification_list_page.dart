@@ -28,7 +28,12 @@ import 'package:manager/infrastructure/models/models.dart';
 import 'package:manager/infrastructure/services/services.dart';
 import 'package:manager/presentation/component/common_app_bar.dart';
 import 'package:manager/presentation/component/components.dart';
-import 'package:manager/presentation/pages/main/orders/details/order_details_modal.dart';
+// The order-details modal now installs from orders_sdk (commerce#3); the
+// legacy pages/main/orders copy is deleted. Prefixed because the SDK's
+// manager OrderData shares its name with the host's legacy model above.
+import 'package:manager/presentation/pages/orders/details/order_details_modal.dart';
+import 'package:orders_sdk/src/manager/infrastructure/models/data/order_data.dart'
+    as sdk;
 import 'package:manager/presentation/styles/style.dart';
 
 @RoutePage()
@@ -117,11 +122,16 @@ class _NotificationListPageState extends ConsumerState<NotificationListPage> {
                                     null) {
                                   if (state.notifications[index].orderData !=
                                       null) {
+                                    // The installed modal is typed on
+                                    // orders_sdk's manager OrderData and
+                                    // refetches details by id, so only the
+                                    // id needs to cross the model seam.
                                     AppHelpers.showCustomModalBottomSheet(
                                         context: context,
                                         modal: OrderDetailsModal(
-                                            order: state.notifications[index]
-                                                .orderData!),
+                                            order: sdk.OrderData(
+                                                id: state.notifications[index]
+                                                    .orderData!.id)),
                                         isDarkMode: false);
                                   }
                                 } else if (state

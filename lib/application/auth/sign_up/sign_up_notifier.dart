@@ -291,7 +291,10 @@ class SignUpNotifier extends StateNotifier<SignUpState> {
             isLoading: false,
           );
           LocalStorage.setToken(data.token);
-          context.replaceRoute(const CreateShopRoute());
+          // become_seller was dropped from the manager shell (Ray ruling in
+          // the fork plan) - a fresh sign-up lands on the main shell; shop
+          // provisioning happens outside this app.
+          context.replaceRoute(const MainRoute());
           String? fcmToken = await FirebaseMessaging.instance.getToken();
           _userRepository.updateFirebaseToken(fcmToken);
         },

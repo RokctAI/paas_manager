@@ -20,11 +20,16 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../components.dart';
-import 'package:manager/infrastructure/models/models.dart';
 import 'package:manager/infrastructure/services/services.dart';
 
 class CategoriesTabBar extends StatelessWidget {
-  final List<CategoryData> categories;
+  // Deliberately untyped (was List<CategoryData>): this host tab bar is the
+  // shared seam both composed verticals feed - orders_sdk's POS passes its
+  // own CategoryData and products_sdk's foods tab passes SellerCategoryData
+  // (ADR-005 keeps those model twins apart). Only `.translation?.title` is
+  // read, so a dynamic element type settles both call sites at once
+  // (commerce#3 host-consume note, H-6/H-7).
+  final List<dynamic> categories;
   final int activeIndex;
   final Function(int) onChangeTab;
   final Function() onLoading;
