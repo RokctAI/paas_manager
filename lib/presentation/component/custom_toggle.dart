@@ -77,21 +77,21 @@ class _CustomToggleState extends State<CustomToggle> {
       disabledOpacity: 0.5,
       activeChild: widget.isText
           ? Padding(
-        padding: REdgeInsets.only(left: 4.r),
-        child: Text(
-          AppHelpers.getTranslation(TrKeys.open),
-          style: Style.interNormal(size: 12.sp),
-        ),
-      )
+              padding: REdgeInsets.only(left: 4.r),
+              child: Text(
+                AppHelpers.getTranslation(TrKeys.open),
+                style: Style.interNormal(size: 12.sp),
+              ),
+            )
           : const SizedBox.shrink(),
       inactiveChild: widget.isText
           ? Padding(
-        padding: REdgeInsets.only(right: 4.r),
-        child: Text(
-          AppHelpers.getTranslation(TrKeys.close),
-          style: Style.interNormal(size: 12.sp),
-        ),
-      )
+              padding: REdgeInsets.only(right: 4.r),
+              child: Text(
+                AppHelpers.getTranslation(TrKeys.close),
+                style: Style.interNormal(size: 12.sp),
+              ),
+            )
           : const SizedBox.shrink(),
       thumb: Container(
         margin: REdgeInsets.all(3),

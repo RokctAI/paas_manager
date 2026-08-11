@@ -34,9 +34,9 @@ class RegisterConfirmationNotifier
   final UsersInterface _userRepositoryFacade;
 
   RegisterConfirmationNotifier(
-      this._authRepository,
-      this._userRepositoryFacade,
-      ) : super(const RegisterConfirmationState());
+    this._authRepository,
+    this._userRepositoryFacade,
+  ) : super(const RegisterConfirmationState());
 
   Timer? _timer;
   int _initialTime = 30;
@@ -55,8 +55,9 @@ class RegisterConfirmationNotifier
       state = state.copyWith(isLoading: true, isSuccess: false);
       try {
         PhoneAuthCredential credential = PhoneAuthProvider.credential(
-          verificationId:
-          state.verificationCode.isNotEmpty ? state.verificationCode : verificationId,
+          verificationId: state.verificationCode.isNotEmpty
+              ? state.verificationCode
+              : verificationId,
           smsCode: state.confirmCode,
         );
 
@@ -65,7 +66,8 @@ class RegisterConfirmationNotifier
       } catch (e) {
         AppHelpers.showCheckTopSnackBar(
           context,
-          text: AppHelpers.getTranslation((e as FirebaseAuthException).message ?? ""),
+          text: AppHelpers.getTranslation(
+              (e as FirebaseAuthException).message ?? ""),
         );
         state = state.copyWith(
             isLoading: false, isCodeError: true, isSuccess: false);
@@ -106,7 +108,7 @@ class RegisterConfirmationNotifier
       if (context.mounted) {
         AppHelpers.showCheckTopSnackBar(
           context,
-          text:AppHelpers.getTranslation(TrKeys.checkYourNetworkConnection),
+          text: AppHelpers.getTranslation(TrKeys.checkYourNetworkConnection),
         );
       }
     }
@@ -147,19 +149,22 @@ class RegisterConfirmationNotifier
   }
 
   Future<void> confirmCodeResetPasswordWithPhone(
-      BuildContext context, String phone,String verificationId) async {
+      BuildContext context, String phone, String verificationId) async {
     final connected = await AppConnectivity.connectivity();
     if (connected) {
       state = state.copyWith(isLoading: true, isResetPasswordSuccess: false);
-      try{
+      try {
         PhoneAuthCredential credential = PhoneAuthProvider.credential(
-          verificationId: state.verificationCode.isNotEmpty ? state.verificationCode : verificationId,
+          verificationId: state.verificationCode.isNotEmpty
+              ? state.verificationCode
+              : verificationId,
           smsCode: state.confirmCode,
         );
 
         await FirebaseAuth.instance.signInWithCredential(credential);
 
-        final response = await _authRepository.forgotPasswordConfirmWithPhone(phone: phone);
+        final response =
+            await _authRepository.forgotPasswordConfirmWithPhone(phone: phone);
         response.when(
           success: (data) async {
             await LocalStorage.setToken(data.token);
@@ -177,10 +182,11 @@ class RegisterConfirmationNotifier
             debugPrint('==> confirm reset code failure: $failure');
           },
         );
-      }catch(e){
+      } catch (e) {
         AppHelpers.showCheckTopSnackBar(
           context,
-          text: AppHelpers.getTranslation((e as FirebaseAuthException).message ?? ""),
+          text: AppHelpers.getTranslation(
+              (e as FirebaseAuthException).message ?? ""),
         );
         state = state.copyWith(isLoading: false, isCodeError: true);
       }
@@ -275,7 +281,7 @@ class RegisterConfirmationNotifier
     }
     _timer = Timer.periodic(
       const Duration(seconds: 1),
-          (timer) {
+      (timer) {
         if (_initialTime < 1) {
           _timer?.cancel();
           state = state.copyWith(

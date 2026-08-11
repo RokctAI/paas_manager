@@ -48,7 +48,7 @@ class ViewMapPage extends ConsumerStatefulWidget {
     super.key,
     this.isShopLocation = false,
     this.shopId,
-  }) ;
+  });
 
   @override
   ConsumerState<ViewMapPage> createState() => _ViewMapPageState();
@@ -338,7 +338,8 @@ class _ViewMapPageState extends ConsumerState<ViewMapPage> {
           ),
         ),
         16.verticalSpace,
-        TitleAndIcon(title: AppHelpers.getTranslation(TrKeys.enterADeliveryAddress)),
+        TitleAndIcon(
+            title: AppHelpers.getTranslation(TrKeys.enterADeliveryAddress)),
         24.verticalSpace,
         SearchTextField(
           isRead: true,

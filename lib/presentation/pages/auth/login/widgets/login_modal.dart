@@ -103,12 +103,16 @@ class _LoginModalState extends State<LoginModal> {
                                 child: CupertinoSegmentedControl<SignUpType>(
                                   children: {
                                     SignUpType.phone: Padding(
-                                      padding: EdgeInsets.symmetric(horizontal: 20.w),
-                                      child: Text(AppHelpers.getTranslation(TrKeys.phone)),
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 20.w),
+                                      child: Text(AppHelpers.getTranslation(
+                                          TrKeys.phone)),
                                     ),
                                     SignUpType.email: Padding(
-                                      padding: EdgeInsets.symmetric(horizontal: 20.w),
-                                      child: Text(AppHelpers.getTranslation(TrKeys.email)),
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 20.w),
+                                      child: Text(AppHelpers.getTranslation(
+                                          TrKeys.email)),
                                     ),
                                   },
                                   onValueChanged: (SignUpType value) {
@@ -129,7 +133,8 @@ class _LoginModalState extends State<LoginModal> {
                                     ? TextDirection.ltr
                                     : TextDirection.rtl,
                                 child: IntlPhoneField(
-                                  disableLengthCheck: !AppConstants.isNumberLengthAlwaysSame,
+                                  disableLengthCheck:
+                                      !AppConstants.isNumberLengthAlwaysSame,
                                   onChanged: (phoneNum) {
                                     event.setEmail(phoneNum.completeNumber);
                                   },
@@ -147,12 +152,12 @@ class _LoginModalState extends State<LoginModal> {
                                   },
                                   keyboardType: TextInputType.phone,
                                   initialCountryCode:
-                                  AppConstants.countryCodeISO,
+                                      AppConstants.countryCodeISO,
                                   invalidNumberMessage:
-                                  AppHelpers.getTranslation(state
-                                      .isLoginError
-                                      ? TrKeys.loginCredentialsAreNotValid
-                                      : TrKeys.phoneNumberIsNotValid),
+                                      AppHelpers.getTranslation(state
+                                              .isLoginError
+                                          ? TrKeys.loginCredentialsAreNotValid
+                                          : TrKeys.phoneNumberIsNotValid),
                                   inputFormatters: [
                                     FilteringTextInputFormatter.digitsOnly
                                   ],
@@ -161,8 +166,8 @@ class _LoginModalState extends State<LoginModal> {
                                   autovalidateMode: state.isLoginError
                                       ? AutovalidateMode.always
                                       : AppConstants.isNumberLengthAlwaysSame
-                                      ? AutovalidateMode.onUserInteraction
-                                      : AutovalidateMode.disabled,
+                                          ? AutovalidateMode.onUserInteraction
+                                          : AutovalidateMode.disabled,
                                   textAlignVertical: TextAlignVertical.center,
                                   decoration: InputDecoration(
                                     counterText: '',
@@ -172,24 +177,24 @@ class _LoginModalState extends State<LoginModal> {
                                                 color: Style.differBorderColor),
                                             const BorderSide(
                                                 color:
-                                                Style.differBorderColor))),
+                                                    Style.differBorderColor))),
                                     errorBorder: UnderlineInputBorder(
                                         borderSide: BorderSide.merge(
                                             const BorderSide(
                                                 color: Style.differBorderColor),
                                             const BorderSide(
                                                 color:
-                                                Style.differBorderColor))),
+                                                    Style.differBorderColor))),
                                     border: const UnderlineInputBorder(),
                                     focusedErrorBorder:
-                                    const UnderlineInputBorder(),
+                                        const UnderlineInputBorder(),
                                     disabledBorder: UnderlineInputBorder(
                                         borderSide: BorderSide.merge(
                                             const BorderSide(
                                                 color: Style.differBorderColor),
                                             const BorderSide(
                                                 color:
-                                                Style.differBorderColor))),
+                                                    Style.differBorderColor))),
                                     focusedBorder: const UnderlineInputBorder(),
                                   ),
                                 ),
@@ -202,13 +207,14 @@ class _LoginModalState extends State<LoginModal> {
                                 textInputAction: TextInputAction.next,
                                 textCapitalization: TextCapitalization.none,
                                 textController: emailController,
-                                label: AppHelpers.getTranslation(TrKeys.email).toUpperCase(),
+                                label: AppHelpers.getTranslation(TrKeys.email)
+                                    .toUpperCase(),
                                 onChanged: event.setEmail,
                                 validator: AppValidators.emptyCheck,
                                 isError: state.isLoginError,
                                 descriptionText: state.isLoginError
                                     ? AppHelpers.getTranslation(
-                                    TrKeys.loginCredentialsAreNotValid)
+                                        TrKeys.loginCredentialsAreNotValid)
                                     : null,
                               ),
 
@@ -220,25 +226,28 @@ class _LoginModalState extends State<LoginModal> {
                                 textCapitalization: TextCapitalization.none,
                                 textController: emailController,
                                 label: AppHelpers.getTranslation(
-                                    TrKeys.emailOrPhone)
+                                        TrKeys.emailOrPhone)
                                     .toUpperCase(),
                                 onChanged: event.setEmail,
                                 validator: AppValidators.emptyCheck,
                                 isError: state.isLoginError,
                                 descriptionText: state.isLoginError
                                     ? AppHelpers.getTranslation(
-                                    TrKeys.loginCredentialsAreNotValid)
+                                        TrKeys.loginCredentialsAreNotValid)
                                     : null,
                               ),
 
                             // Fallback for when AppConstants.isSpecificNumberEnabled is true
-                            if (AppConstants.isSpecificNumberEnabled && currentSignUpType != SignUpType.email && currentSignUpType != SignUpType.both)
+                            if (AppConstants.isSpecificNumberEnabled &&
+                                currentSignUpType != SignUpType.email &&
+                                currentSignUpType != SignUpType.both)
                               Directionality(
                                 textDirection: isLtr
                                     ? TextDirection.ltr
                                     : TextDirection.rtl,
                                 child: IntlPhoneField(
-                                  disableLengthCheck: !AppConstants.isNumberLengthAlwaysSame,
+                                  disableLengthCheck:
+                                      !AppConstants.isNumberLengthAlwaysSame,
                                   onChanged: (phoneNum) {
                                     event.setEmail(phoneNum.completeNumber);
                                   },
@@ -256,12 +265,12 @@ class _LoginModalState extends State<LoginModal> {
                                   },
                                   keyboardType: TextInputType.phone,
                                   initialCountryCode:
-                                  AppConstants.countryCodeISO,
+                                      AppConstants.countryCodeISO,
                                   invalidNumberMessage:
-                                  AppHelpers.getTranslation(state
-                                      .isLoginError
-                                      ? TrKeys.loginCredentialsAreNotValid
-                                      : TrKeys.phoneNumberIsNotValid),
+                                      AppHelpers.getTranslation(state
+                                              .isLoginError
+                                          ? TrKeys.loginCredentialsAreNotValid
+                                          : TrKeys.phoneNumberIsNotValid),
                                   inputFormatters: [
                                     FilteringTextInputFormatter.digitsOnly
                                   ],
@@ -270,8 +279,8 @@ class _LoginModalState extends State<LoginModal> {
                                   autovalidateMode: state.isLoginError
                                       ? AutovalidateMode.always
                                       : AppConstants.isNumberLengthAlwaysSame
-                                      ? AutovalidateMode.onUserInteraction
-                                      : AutovalidateMode.disabled,
+                                          ? AutovalidateMode.onUserInteraction
+                                          : AutovalidateMode.disabled,
                                   textAlignVertical: TextAlignVertical.center,
                                   decoration: InputDecoration(
                                     counterText: '',
@@ -281,24 +290,24 @@ class _LoginModalState extends State<LoginModal> {
                                                 color: Style.differBorderColor),
                                             const BorderSide(
                                                 color:
-                                                Style.differBorderColor))),
+                                                    Style.differBorderColor))),
                                     errorBorder: UnderlineInputBorder(
                                         borderSide: BorderSide.merge(
                                             const BorderSide(
                                                 color: Style.differBorderColor),
                                             const BorderSide(
                                                 color:
-                                                Style.differBorderColor))),
+                                                    Style.differBorderColor))),
                                     border: const UnderlineInputBorder(),
                                     focusedErrorBorder:
-                                    const UnderlineInputBorder(),
+                                        const UnderlineInputBorder(),
                                     disabledBorder: UnderlineInputBorder(
                                         borderSide: BorderSide.merge(
                                             const BorderSide(
                                                 color: Style.differBorderColor),
                                             const BorderSide(
                                                 color:
-                                                Style.differBorderColor))),
+                                                    Style.differBorderColor))),
                                     focusedBorder: const UnderlineInputBorder(),
                                   ),
                                 ),
@@ -316,7 +325,7 @@ class _LoginModalState extends State<LoginModal> {
                               isError: state.isLoginError,
                               descriptionText: state.isLoginError
                                   ? AppHelpers.getTranslation(
-                                  TrKeys.loginCredentialsAreNotValid)
+                                      TrKeys.loginCredentialsAreNotValid)
                                   : null,
                               suffixIcon: ButtonsBouncingEffect(
                                 child: GestureDetector(
@@ -395,10 +404,10 @@ class _LoginModalState extends State<LoginModal> {
                                   event.login(
                                     checkYourNetwork: () =>
                                         AppHelpers.showCheckTopSnackBar(
-                                          context,
-                                          text: AppHelpers.getTranslation(
-                                              TrKeys.checkYourNetworkConnection),
-                                        ),
+                                      context,
+                                      text: AppHelpers.getTranslation(
+                                          TrKeys.checkYourNetworkConnection),
+                                    ),
                                     loginSuccess: () {
                                       ref
                                           .read(restaurantProvider.notifier)
@@ -413,26 +422,25 @@ class _LoginModalState extends State<LoginModal> {
                                     },
                                     seller: () =>
                                         AppHelpers.showCheckTopSnackBar(
-                                          context,
-                                          text: AppHelpers.getTranslation(
-                                              TrKeys.youAreASeller),
-                                          type: SnackBarType.success,
-                                        ),
+                                      context,
+                                      text: AppHelpers.getTranslation(
+                                          TrKeys.youAreASeller),
+                                      type: SnackBarType.success,
+                                    ),
                                     admin: () =>
                                         AppHelpers.showCheckTopSnackBar(
-                                          context,
-                                          text: AppHelpers.getTranslation(
-                                              TrKeys.youAreAnAdmin),
-                                          type: SnackBarType.success,
-                                        ),
+                                      context,
+                                      text: AppHelpers.getTranslation(
+                                          TrKeys.youAreAnAdmin),
+                                      type: SnackBarType.success,
+                                    ),
                                     accessDenied: () {
                                       // become_seller dropped (Ray ruling):
                                       // land back on a clean login instead
                                       // of the retired create-shop funnel.
                                       Navigator.pop(context);
                                       context.router.popUntilRoot();
-                                      context.replaceRoute(
-                                          const LoginRoute());
+                                      context.replaceRoute(const LoginRoute());
                                     },
                                   );
                                 }
@@ -444,12 +452,14 @@ class _LoginModalState extends State<LoginModal> {
                             Row(children: <Widget>[
                               Expanded(
                                   child: Divider(
-                                    color: Style.blackColor.withOpacity(0.5),
-                                  )),
+                                color: Style.blackColor.withOpacity(0.5),
+                              )),
                               Padding(
-                                padding: const EdgeInsets.only(right: 12, left: 12),
+                                padding:
+                                    const EdgeInsets.only(right: 12, left: 12),
                                 child: Text(
-                                  AppHelpers.getTranslation(TrKeys.orAccessQuickly),
+                                  AppHelpers.getTranslation(
+                                      TrKeys.orAccessQuickly),
                                   style: Style.interNormal(
                                     size: 12.sp,
                                     color: Style.textColor,
@@ -458,8 +468,8 @@ class _LoginModalState extends State<LoginModal> {
                               ),
                               Expanded(
                                   child: Divider(
-                                    color: Style.blackColor.withOpacity(0.5),
-                                  )),
+                                color: Style.blackColor.withOpacity(0.5),
+                              )),
                             ]),
                             22.verticalSpace,
                             Row(
@@ -472,36 +482,38 @@ class _LoginModalState extends State<LoginModal> {
                                         event.loginWithApple(
                                           checkYourNetwork: () =>
                                               AppHelpers.showCheckTopSnackBar(
-                                                context,
-                                                text: AppHelpers.getTranslation(
-                                                    TrKeys.checkYourNetworkConnection),
-                                              ),
+                                            context,
+                                            text: AppHelpers.getTranslation(
+                                                TrKeys
+                                                    .checkYourNetworkConnection),
+                                          ),
                                           loginSuccess: () {
                                             ref
-                                                .read(restaurantProvider.notifier)
+                                                .read(
+                                                    restaurantProvider.notifier)
                                                 .fetchMyShop(
                                               afterFetched: () {
                                                 Navigator.pop(context);
                                                 context.router.popUntilRoot();
-                                                context
-                                                    .replaceRoute(const MainRoute());
+                                                context.replaceRoute(
+                                                    const MainRoute());
                                               },
                                             );
                                           },
                                           seller: () =>
                                               AppHelpers.showCheckTopSnackBar(
-                                                context,
-                                                text: AppHelpers.getTranslation(
-                                                    TrKeys.youAreASeller),
-                                                type: SnackBarType.success,
-                                              ),
+                                            context,
+                                            text: AppHelpers.getTranslation(
+                                                TrKeys.youAreASeller),
+                                            type: SnackBarType.success,
+                                          ),
                                           admin: () =>
                                               AppHelpers.showCheckTopSnackBar(
-                                                context,
-                                                text: AppHelpers.getTranslation(
-                                                    TrKeys.youAreAnAdmin),
-                                                type: SnackBarType.success,
-                                              ),
+                                            context,
+                                            text: AppHelpers.getTranslation(
+                                                TrKeys.youAreAnAdmin),
+                                            type: SnackBarType.success,
+                                          ),
                                           accessDenied: () {
                                             // become_seller dropped (Ray).
                                             Navigator.pop(context);
@@ -515,23 +527,25 @@ class _LoginModalState extends State<LoginModal> {
                                 // Add toggle button for email/phone when on Android
                                 if (!isIOS)
                                   SocialButton(
-                                      iconData: currentSignUpType == SignUpType.phone
-                                          ? FlutterRemix.mail_fill
-                                          : FlutterRemix.phone_fill,
+                                      iconData:
+                                          currentSignUpType == SignUpType.phone
+                                              ? FlutterRemix.mail_fill
+                                              : FlutterRemix.phone_fill,
                                       onPressed: toggleSignUpType,
-                                      title: currentSignUpType == SignUpType.phone
-                                          ? "Email"
-                                          : "Phone"),
+                                      title:
+                                          currentSignUpType == SignUpType.phone
+                                              ? "Email"
+                                              : "Phone"),
                                 SocialButton(
                                     iconData: FlutterRemix.facebook_fill,
                                     onPressed: () {
                                       event.loginWithFacebook(
                                         checkYourNetwork: () =>
                                             AppHelpers.showCheckTopSnackBar(
-                                              context,
-                                              text: AppHelpers.getTranslation(
-                                                  TrKeys.checkYourNetworkConnection),
-                                            ),
+                                          context,
+                                          text: AppHelpers.getTranslation(TrKeys
+                                              .checkYourNetworkConnection),
+                                        ),
                                         loginSuccess: () {
                                           ref
                                               .read(restaurantProvider.notifier)
@@ -539,31 +553,31 @@ class _LoginModalState extends State<LoginModal> {
                                             afterFetched: () {
                                               Navigator.pop(context);
                                               context.router.popUntilRoot();
-                                              context
-                                                  .replaceRoute(const MainRoute());
+                                              context.replaceRoute(
+                                                  const MainRoute());
                                             },
                                           );
                                         },
                                         seller: () =>
                                             AppHelpers.showCheckTopSnackBar(
-                                              context,
-                                              text: AppHelpers.getTranslation(
-                                                  TrKeys.youAreASeller),
-                                              type: SnackBarType.success,
-                                            ),
+                                          context,
+                                          text: AppHelpers.getTranslation(
+                                              TrKeys.youAreASeller),
+                                          type: SnackBarType.success,
+                                        ),
                                         admin: () =>
                                             AppHelpers.showCheckTopSnackBar(
-                                              context,
-                                              text: AppHelpers.getTranslation(
-                                                  TrKeys.youAreAnAdmin),
-                                              type: SnackBarType.success,
-                                            ),
+                                          context,
+                                          text: AppHelpers.getTranslation(
+                                              TrKeys.youAreAnAdmin),
+                                          type: SnackBarType.success,
+                                        ),
                                         accessDenied: () {
                                           // become_seller dropped (Ray).
                                           Navigator.pop(context);
                                           context.router.popUntilRoot();
-                                          context.replaceRoute(
-                                              const LoginRoute());
+                                          context
+                                              .replaceRoute(const LoginRoute());
                                         },
                                       );
                                     },
@@ -574,10 +588,10 @@ class _LoginModalState extends State<LoginModal> {
                                       event.loginWithGoogle(
                                         checkYourNetwork: () =>
                                             AppHelpers.showCheckTopSnackBar(
-                                              context,
-                                              text: AppHelpers.getTranslation(
-                                                  TrKeys.checkYourNetworkConnection),
-                                            ),
+                                          context,
+                                          text: AppHelpers.getTranslation(TrKeys
+                                              .checkYourNetworkConnection),
+                                        ),
                                         loginSuccess: () {
                                           ref
                                               .read(restaurantProvider.notifier)
@@ -585,31 +599,31 @@ class _LoginModalState extends State<LoginModal> {
                                             afterFetched: () {
                                               Navigator.pop(context);
                                               context.router.popUntilRoot();
-                                              context
-                                                  .replaceRoute(const MainRoute());
+                                              context.replaceRoute(
+                                                  const MainRoute());
                                             },
                                           );
                                         },
                                         seller: () =>
                                             AppHelpers.showCheckTopSnackBar(
-                                              context,
-                                              text: AppHelpers.getTranslation(
-                                                  TrKeys.youAreASeller),
-                                              type: SnackBarType.success,
-                                            ),
+                                          context,
+                                          text: AppHelpers.getTranslation(
+                                              TrKeys.youAreASeller),
+                                          type: SnackBarType.success,
+                                        ),
                                         admin: () =>
                                             AppHelpers.showCheckTopSnackBar(
-                                              context,
-                                              text: AppHelpers.getTranslation(
-                                                  TrKeys.youAreAnAdmin),
-                                              type: SnackBarType.success,
-                                            ),
+                                          context,
+                                          text: AppHelpers.getTranslation(
+                                              TrKeys.youAreAnAdmin),
+                                          type: SnackBarType.success,
+                                        ),
                                         accessDenied: () {
                                           // become_seller dropped (Ray).
                                           Navigator.pop(context);
                                           context.router.popUntilRoot();
-                                          context.replaceRoute(
-                                              const LoginRoute());
+                                          context
+                                              .replaceRoute(const LoginRoute());
                                         },
                                       );
                                     },

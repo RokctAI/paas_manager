@@ -93,8 +93,8 @@ class OrdersRepository implements OrdersInterface {
         'stock_id': stock.id,
         'quantity': stock.quantity ?? 1,
         if (addons.isNotEmpty) 'addons': addons,
-        if (stock.bonus ??  false) 'bonus': true,
-        if (stock.shopBonus ??  false) 'bonus_shop': true,
+        if (stock.bonus ?? false) 'bonus': true,
+        if (stock.shopBonus ?? false) 'bonus_shop': true,
       });
     }
     final data = {

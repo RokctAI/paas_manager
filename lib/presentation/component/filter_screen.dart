@@ -118,7 +118,8 @@ class _FilterScreenState extends State<FilterScreen>
           const ModalDrag(),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 16.w),
-            child: TitleAndIcon(title: AppHelpers.getTranslation(TrKeys.filter)),
+            child:
+                TitleAndIcon(title: AppHelpers.getTranslation(TrKeys.filter)),
           ),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 16.w),

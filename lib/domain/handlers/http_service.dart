@@ -20,7 +20,7 @@ import 'token_interceptor.dart';
 import 'package:manager/infrastructure/services/services.dart';
 
 class HttpService {
-  Dio client({bool requireAuth = false,bool chatGpt = false}) => Dio(
+  Dio client({bool requireAuth = false, bool chatGpt = false}) => Dio(
         BaseOptions(
           baseUrl: chatGpt ? "https://api.openai.com" : AppConstants.baseUrl,
           connectTimeout: const Duration(seconds: 30),
@@ -32,7 +32,8 @@ class HttpService {
           },
         ),
       )
-        ..interceptors.add(TokenInterceptor(requireAuth: requireAuth,chatGPT: chatGpt))
+        ..interceptors
+            .add(TokenInterceptor(requireAuth: requireAuth, chatGPT: chatGpt))
         ..interceptors
             .add(LogInterceptor(requestBody: true, responseBody: true));
 }

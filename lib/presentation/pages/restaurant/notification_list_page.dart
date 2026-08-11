@@ -38,7 +38,7 @@ import 'package:manager/presentation/styles/style.dart';
 
 @RoutePage()
 class NotificationListPage extends ConsumerStatefulWidget {
-  const NotificationListPage({super.key}) ;
+  const NotificationListPage({super.key});
 
   @override
   ConsumerState<NotificationListPage> createState() =>
@@ -256,7 +256,9 @@ class _NotificationListPageState extends ConsumerState<NotificationListPage> {
               ),
               4.verticalSpace,
               Text(
-                Jiffy.parseFromDateTime(notification.createdAt ?? DateTime.now()).fromNow(),
+                Jiffy.parseFromDateTime(
+                        notification.createdAt ?? DateTime.now())
+                    .fromNow(),
                 style: Style.interRegular(size: 12, color: Style.textGrey),
               ),
             ],

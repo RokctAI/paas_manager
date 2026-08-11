@@ -26,7 +26,7 @@ import '../../../../component/components.dart';
 class LanguageScreen extends ConsumerStatefulWidget {
   final Function(LanguageData?)? afterUpdate;
 
-  const LanguageScreen({super.key, required this.afterUpdate}) ;
+  const LanguageScreen({super.key, required this.afterUpdate});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _LanguagePageState();
@@ -54,46 +54,46 @@ class _LanguagePageState extends ConsumerState<LanguageScreen> {
             child: state.isLoading
                 ? const Loading()
                 : SingleChildScrollView(
-                  padding: EdgeInsets.symmetric(horizontal: 16.w),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const ModalDrag(),
-                      TitleAndIcon(
-                        title: AppHelpers.getTranslation(TrKeys.language),
-                        titleSize: 18,
-                      ),
-                      24.verticalSpace,
-                      ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: state.languages.length,
-                        padding: EdgeInsets.zero,
-                        physics: const BouncingScrollPhysics(),
-                        itemBuilder: (context, index) {
-                          return SelectItem(
-                            onTap: () => event.change(index),
-                            isActive: state.index == index,
-                            title: state.languages[index].title ?? '',
-                          );
-                        },
-                      ),
-                      16.verticalSpace,
-                      CustomButton(
-                        title: AppHelpers.getTranslation(TrKeys.save),
-                        onPressed: () {
-                          ref
-                              .read(languagesProvider.notifier)
-                              .makeSelectedLang(
-                              afterUpdate: widget.afterUpdate,
-                              );
-                          Navigator.pop(context);
-                        },
-                      ),
-                      36.verticalSpace,
-                    ],
+                    padding: EdgeInsets.symmetric(horizontal: 16.w),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const ModalDrag(),
+                        TitleAndIcon(
+                          title: AppHelpers.getTranslation(TrKeys.language),
+                          titleSize: 18,
+                        ),
+                        24.verticalSpace,
+                        ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: state.languages.length,
+                          padding: EdgeInsets.zero,
+                          physics: const BouncingScrollPhysics(),
+                          itemBuilder: (context, index) {
+                            return SelectItem(
+                              onTap: () => event.change(index),
+                              isActive: state.index == index,
+                              title: state.languages[index].title ?? '',
+                            );
+                          },
+                        ),
+                        16.verticalSpace,
+                        CustomButton(
+                          title: AppHelpers.getTranslation(TrKeys.save),
+                          onPressed: () {
+                            ref
+                                .read(languagesProvider.notifier)
+                                .makeSelectedLang(
+                                  afterUpdate: widget.afterUpdate,
+                                );
+                            Navigator.pop(context);
+                          },
+                        ),
+                        36.verticalSpace,
+                      ],
+                    ),
                   ),
-                ),
           ),
         ),
       ),

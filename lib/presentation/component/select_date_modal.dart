@@ -29,8 +29,8 @@ class SelectDateModal extends StatefulWidget {
   final String? initialDate;
   final Function(DateTime? date) onDateSaved;
 
-  const SelectDateModal({super.key, this.initialDate, required this.onDateSaved})
-      ;
+  const SelectDateModal(
+      {super.key, this.initialDate, required this.onDateSaved});
 
   @override
   State<SelectDateModal> createState() => _SelectDateModalState();

@@ -51,25 +51,34 @@ class AppRouter extends RootStackRouter {
   @override
   List<AutoRoute> get routes => [
 // @generated-routes-start
-    MaterialRoute(path: '/', page: SplashRoute.page),
-    MaterialRoute(path: '/no-connection', page: NoConnectionRoute.page),
-    MaterialRoute(path: '/closed', page: ClosedRoute.page),
-    MaterialRoute(path: '/ui-type', page: UiTypeRoute.page),
-    CupertinoRoute(path: '/main', page: MainRoute.page),
-    CupertinoRoute(path: '/order-products', page: ManagerCreateOrderRoute.page),
-    CupertinoRoute(path: '/order', page: ManagerOrderRoute.page),
-    CupertinoRoute(path: '/order-history', page: ManagerOrderHistoryRoute.page),
-    CupertinoRoute(path: '/shipping-address', page: ManagerShippingAddressRoute.page),
-    CupertinoRoute(path: '/select-address', page: ManagerSelectAddressRoute.page),
-    CupertinoRoute(path: '/select-user', page: ManagerSelectUserRoute.page),
-    CupertinoRoute(path: '/delivery-time', page: ManagerDeliveryTimeRoute.page),
-    MaterialRoute(path: '/select-section', page: ManagerSelectSectionRoute.page),
-    MaterialRoute(path: '/select-table', page: ManagerSelectTableRoute.page),
-    MaterialRoute(path: '/subscriptions', page: ManagerSubscriptionsRoute.page),
-    CupertinoRoute(path: '/tasks', page: TasksRoute.page),
-    CupertinoRoute(path: '/calc', page: CalculatorRoute.page),
-    CupertinoRoute(path: '/income', page: ManagerIncomeRoute.page),
-    CupertinoRoute(path: '/delivery-zone', page: ManagerDeliveryZoneRoute.page),
+        MaterialRoute(path: '/', page: SplashRoute.page),
+        MaterialRoute(path: '/no-connection', page: NoConnectionRoute.page),
+        MaterialRoute(path: '/closed', page: ClosedRoute.page),
+        MaterialRoute(path: '/ui-type', page: UiTypeRoute.page),
+        CupertinoRoute(path: '/main', page: MainRoute.page),
+        CupertinoRoute(
+            path: '/order-products', page: ManagerCreateOrderRoute.page),
+        CupertinoRoute(path: '/order', page: ManagerOrderRoute.page),
+        CupertinoRoute(
+            path: '/order-history', page: ManagerOrderHistoryRoute.page),
+        CupertinoRoute(
+            path: '/shipping-address', page: ManagerShippingAddressRoute.page),
+        CupertinoRoute(
+            path: '/select-address', page: ManagerSelectAddressRoute.page),
+        CupertinoRoute(path: '/select-user', page: ManagerSelectUserRoute.page),
+        CupertinoRoute(
+            path: '/delivery-time', page: ManagerDeliveryTimeRoute.page),
+        MaterialRoute(
+            path: '/select-section', page: ManagerSelectSectionRoute.page),
+        MaterialRoute(
+            path: '/select-table', page: ManagerSelectTableRoute.page),
+        MaterialRoute(
+            path: '/subscriptions', page: ManagerSubscriptionsRoute.page),
+        CupertinoRoute(path: '/tasks', page: TasksRoute.page),
+        CupertinoRoute(path: '/calc', page: CalculatorRoute.page),
+        CupertinoRoute(path: '/income', page: ManagerIncomeRoute.page),
+        CupertinoRoute(
+            path: '/delivery-zone', page: ManagerDeliveryZoneRoute.page),
 // @generated-routes-end
         // Host-owned routes, deliberately OUTSIDE the generated markers:
         // update_router_table() rewrites everything between them on every
