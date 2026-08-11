@@ -101,6 +101,7 @@ void main() async {
   // "boot_hooks" list - id-keyed, order-sequenced; see the installer's
   // update_boot_hooks()). Empty until an installed SDK declares one.
   // @generated-boot-hooks-start
+
   // @generated-boot-hooks-end
 
   // Brand hook: at most ONE installed SDK (normally the home SDK) declares
@@ -162,6 +163,7 @@ void main() async {
   // merchants_sdk / zones_sdk declare them (see
   // scratchpad/di-hooks-declarations.md in the migration PR).
   // @generated-di-hooks-start
+
   // @generated-di-hooks-end
 
   // ---- Host-owned DI ----

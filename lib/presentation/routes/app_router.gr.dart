@@ -155,38 +155,6 @@ class ManagerSubscriptionsRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [MapSearchPage]
-class MapSearchRoute extends PageRouteInfo<void> {
-  const MapSearchRoute({List<PageRouteInfo>? children})
-    : super(MapSearchRoute.name, initialChildren: children);
-
-  static const String name = 'MapSearchRoute';
-
-  static PageInfo page = PageInfo(
-    name,
-    builder: (data) {
-      return const MapSearchPage();
-    },
-  );
-}
-
-/// generated route for
-/// [NoConnectionPage]
-class NoConnectionRoute extends PageRouteInfo<void> {
-  const NoConnectionRoute({List<PageRouteInfo>? children})
-    : super(NoConnectionRoute.name, initialChildren: children);
-
-  static const String name = 'NoConnectionRoute';
-
-  static PageInfo page = PageInfo(
-    name,
-    builder: (data) {
-      return const NoConnectionPage();
-    },
-  );
-}
-
-/// generated route for
 /// [NotificationListPage]
 class NotificationListRoute extends PageRouteInfo<void> {
   const NotificationListRoute({List<PageRouteInfo>? children})
@@ -467,22 +435,6 @@ class ManagerShippingAddressRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [SplashPage]
-class SplashRoute extends PageRouteInfo<void> {
-  const SplashRoute({List<PageRouteInfo>? children})
-    : super(SplashRoute.name, initialChildren: children);
-
-  static const String name = 'SplashRoute';
-
-  static PageInfo page = PageInfo(
-    name,
-    builder: (data) {
-      return const SplashPage();
-    },
-  );
-}
-
-/// generated route for
 /// [TasksPage]
 class TasksRoute extends PageRouteInfo<void> {
   const TasksRoute({List<PageRouteInfo>? children})
@@ -531,63 +483,5 @@ class UiTypeRouteArgs {
   @override
   String toString() {
     return 'UiTypeRouteArgs{key: $key, isBack: $isBack}';
-  }
-}
-
-/// generated route for
-/// [ViewMapPage]
-class ViewMapRoute extends PageRouteInfo<ViewMapRouteArgs> {
-  ViewMapRoute({
-    required VoidCallback onChanged,
-    Key? key,
-    bool isShopLocation = false,
-    int? shopId,
-    List<PageRouteInfo>? children,
-  }) : super(
-         ViewMapRoute.name,
-         args: ViewMapRouteArgs(
-           onChanged: onChanged,
-           key: key,
-           isShopLocation: isShopLocation,
-           shopId: shopId,
-         ),
-         initialChildren: children,
-       );
-
-  static const String name = 'ViewMapRoute';
-
-  static PageInfo page = PageInfo(
-    name,
-    builder: (data) {
-      final args = data.argsAs<ViewMapRouteArgs>();
-      return ViewMapPage(
-        args.onChanged,
-        key: args.key,
-        isShopLocation: args.isShopLocation,
-        shopId: args.shopId,
-      );
-    },
-  );
-}
-
-class ViewMapRouteArgs {
-  const ViewMapRouteArgs({
-    required this.onChanged,
-    this.key,
-    this.isShopLocation = false,
-    this.shopId,
-  });
-
-  final VoidCallback onChanged;
-
-  final Key? key;
-
-  final bool isShopLocation;
-
-  final int? shopId;
-
-  @override
-  String toString() {
-    return 'ViewMapRouteArgs{onChanged: $onChanged, key: $key, isShopLocation: $isShopLocation, shopId: $shopId}';
   }
 }
