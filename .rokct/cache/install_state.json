@@ -950,7 +950,7 @@
     },
     "orders": {
       "version": "1.2.0",
-      "hash": "e461d6b655d13bab"
+      "hash": "8455a570c4887bc4"
     },
     "kitchen": {
       "version": "1.0.0",
@@ -1002,7 +1002,7 @@
     },
     "zones": {
       "version": "1.1.1",
-      "hash": "80b9e122660728b4"
+      "hash": "a6ec98e892b9a9b7"
     },
     "desktop": {
       "version": "1.1.0",
