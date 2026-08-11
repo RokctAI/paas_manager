@@ -72,6 +72,15 @@
       "ref": "main"
     },
     {
+      "name": "desktop_sdk",
+      "enabled": true,
+      "source": "git",
+      "git": "https://github.com/RokctAI/hardware",
+      "path": "../hardware/desktop/dart",
+      "ref": "main",
+      "_comment": "Native desktop runner scaffolding (manager inherits pos's desktop role). Its app_type.manager block installs windows/ into this repo at compose time with ${package}-parameterized CMake naming; the build_windows flag in build.yml/release.yml stays host-side because workflows cannot be SDK-installed (CI guard blocks workflow deploys). Mirrors protocol pos.json/manager.json."
+    },
+    {
       "name": "payments_sdk",
       "enabled": true,
       "source": "git",

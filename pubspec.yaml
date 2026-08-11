@@ -25,6 +25,8 @@ dependencies:
     path: .rokct/cache/kitchen
   hardware_sdk:
     path: .rokct/cache/hardware
+  desktop_sdk:
+    path: .rokct/cache/desktop
   payments_sdk:
     path: .rokct/cache/payments
   subscriptions_sdk:
@@ -49,7 +51,7 @@ dependencies:
     path: .rokct/cache/revenue
   zones_sdk:
     path: .rokct/cache/zones
-  # Composed SDKs (20) - vendored by the composer into .rokct/cache/* from
+  # Composed SDKs (21) - vendored by the composer into .rokct/cache/* from
   # composer.json (The-Rokct-Protocol manager.json incl. protocol#149's
   # calc_sdk + weather_sdk). agent_sdk is disabled there and auth_sdk is
   # composed with skip_install (host-owned auth pages).
