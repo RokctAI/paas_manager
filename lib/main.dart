@@ -75,6 +75,7 @@ import 'package:zones_sdk/zones_sdk.dart';
 // without any hand-written imports in this file.
 // @generated-wiring-imports-start
 import 'package:auto_route/auto_route.dart';
+import 'package:comms_sdk/src/common/presentation/pages/setting/language_page.dart';
 import 'package:manager/presentation/components/weather/weather_widget.dart';
 import 'package:manager/presentation/routes/app_router.dart';
 // @generated-wiring-imports-end
@@ -205,6 +206,11 @@ void main() async {
 class _HostEmbeddedWidgets implements EmbeddedWidgets {
   // @generated-embeddedwidgets-start
   @override
+  Widget languageScreen({required VoidCallback onSave}) {
+    return LanguageScreen(onSave: onSave);
+  }
+
+  @override
   Widget policyPage() {
     return const PolicyPage();
   }
@@ -231,19 +237,24 @@ class _HostEmbeddedWidgets implements EmbeddedWidgets {
 class _HostAppRoutes implements AppRoutes {
   // @generated-approutes-start
   @override
-  Future<Object?> replaceSplashRoute(BuildContext context) => context.router.replace(SplashRoute());
+  Future<Object?> replaceSplashRoute(BuildContext context) =>
+      context.router.replace(SplashRoute());
 
   @override
-  Future<Object?> replaceNoConnectionRoute(BuildContext context) => context.router.replace(NoConnectionRoute());
+  Future<Object?> replaceNoConnectionRoute(BuildContext context) =>
+      context.router.replace(NoConnectionRoute());
 
   @override
-  Future<Object?> replaceClosedRoute(BuildContext context) => context.router.replace(ClosedRoute());
+  Future<Object?> replaceClosedRoute(BuildContext context) =>
+      context.router.replace(ClosedRoute());
 
   @override
-  Future<Object?> replaceUiTypeRoute(BuildContext context) => context.router.replace(UiTypeRoute());
+  Future<Object?> replaceUiTypeRoute(BuildContext context) =>
+      context.router.replace(UiTypeRoute());
 
   @override
-  Future<Object?> replaceLoginRoute(BuildContext context) => context.router.replace(LoginRoute());
+  Future<Object?> replaceLoginRoute(BuildContext context) =>
+      context.router.replace(LoginRoute());
 
   // @generated-approutes-end
 

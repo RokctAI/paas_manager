@@ -87,7 +87,9 @@ class ProductData {
 
     // FIXED: Read tax from product level first (this is where user input is stored)
     if (json['tax'] != null) {
-      _tax = json['tax'] is num ? json['tax'] : num.tryParse(json['tax'].toString());
+      _tax = json['tax'] is num
+          ? json['tax']
+          : num.tryParse(json['tax'].toString());
     } else if (json['stocks'] != null && json['stocks'].isNotEmpty) {
       // Fallback to stocks only if product level tax is null
       final taxValue = json['stocks'][0]['tax'];
@@ -109,8 +111,11 @@ class ProductData {
     _status = json['status'];
 
     // FIXED: Active field parsing
-    _active = json['active'] is bool ? json['active'] :
-    (json['active'] == 1 || json['active'] == '1' || json['active'] == true);
+    _active = json['active'] is bool
+        ? json['active']
+        : (json['active'] == 1 ||
+            json['active'] == '1' ||
+            json['active'] == true);
 
     _addon = json['addon'];
     _img = json['img'];
@@ -134,7 +139,8 @@ class ProductData {
     }
 
     _unit = json['unit'] != null ? UnitData.fromJson(json['unit']) : null;
-    _kitchen = json['kitchen'] != null ? KitchenModel.fromJson(json['kitchen']) : null;
+    _kitchen =
+        json['kitchen'] != null ? KitchenModel.fromJson(json['kitchen']) : null;
 
     if (json['stocks'] != null) {
       _stocks = [];
@@ -349,7 +355,8 @@ class ProductDiscounts {
     _end = json['end'];
     _img = json['img'];
     _active = json['active'];
-    _pivot = json['pivot'] != null ? ProductPivot.fromJson(json['pivot']) : null;
+    _pivot =
+        json['pivot'] != null ? ProductPivot.fromJson(json['pivot']) : null;
   }
 
   int? _id;
@@ -427,9 +434,9 @@ class ProductPivot {
   int? _discountId;
 
   ProductPivot copyWith({int? productId, int? discountId}) => ProductPivot(
-    productId: productId ?? _productId,
-    discountId: discountId ?? _discountId,
-  );
+        productId: productId ?? _productId,
+        discountId: discountId ?? _discountId,
+      );
 
   int? get productId => _productId;
   int? get discountId => _discountId;

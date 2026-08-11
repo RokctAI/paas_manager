@@ -56,7 +56,8 @@ abstract class TrKeys {
   static const String readAll = 'read_all';
   static const String orderImage = 'order.image';
   static const String id = 'id';
-  static const String thisImageWasUploadDriver = 'this.image.was.uploaded.by.driver';
+  static const String thisImageWasUploadDriver =
+      'this.image.was.uploaded.by.driver';
   static const String areYouSure = 'are.you.sure';
   static const String deleteAccount = 'delete.account';
   static const String userAlready = 'user.already';
@@ -117,14 +118,12 @@ abstract class TrKeys {
   static const String checkYourNetworkConnection =
       'check_your_network_connection';
   static const String send = "send";
-  static const String resetPasswordText =
-      "reset_password_text";
+  static const String resetPasswordText = "reset_password_text";
   static const String orAccessQuickly = 'or_access_quickly';
   static const String forgotPassword = 'forgot_password';
   static const String keepMeLoggedIn = 'keep_me_logged_in';
   static const String login = 'login';
-  static const String noProducts =
-      "no_products";
+  static const String noProducts = "no_products";
   static const String noNotices = "no_notices";
   static const String fm = "fm";
   static const String restaurant = "restaurant";
@@ -283,9 +282,9 @@ abstract class TrKeys {
   static const String goToAdminPanel = 'go_to_admin_panel';
   static const String apply = 'apply';
   static const String enterADeliveryAddress = 'enter_a_delivery_address';
-  static const String confirmPasswordIsNotTheSame = 'confirm_password_is_not_the_same';
+  static const String confirmPasswordIsNotTheSame =
+      'confirm_password_is_not_the_same';
   static const String pleaseTryAgain = 'your_request_rejected_please_try_again';
   static const String note = 'note';
   static const String calculator = 'calculator';
 }
-

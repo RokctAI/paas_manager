@@ -23,7 +23,6 @@ import 'package:manager/presentation/pages/add_address.dart';
 import 'view_map_state.dart';
 
 class ViewMapNotifier extends StateNotifier<ViewMapState> {
-
   ViewMapNotifier() : super(const ViewMapState());
 
   void changePlace(AddressData place) {
@@ -43,5 +42,4 @@ class ViewMapNotifier extends StateNotifier<ViewMapState> {
   updateActive() {
     state = state.copyWith(isLoading: true);
   }
-
 }

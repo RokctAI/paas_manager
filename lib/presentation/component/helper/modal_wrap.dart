@@ -23,7 +23,7 @@ import 'blur_wrap.dart';
 class ModalWrap extends StatelessWidget {
   final Widget body;
 
-  const ModalWrap({super.key, required this.body}) ;
+  const ModalWrap({super.key, required this.body});
 
   @override
   Widget build(BuildContext context) {
