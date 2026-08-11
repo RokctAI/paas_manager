@@ -41,6 +41,8 @@ import 'package:manager/presentation/pages/merchant/delivery_zone/delivery_zone_
 import 'package:manager/presentation/pages/order_history/order_history.dart';
 import 'package:manager/presentation/pages/subscriptions/subscriptions_page.dart';
 import 'package:manager/presentation/pages/tasks/tasks_page.dart';
+import 'package:manager/presentation/routes/auth_route_pages.dart';
+import 'package:manager/presentation/routes/registration_step_pages.dart';
 import 'package:manager/presentation/routes/route_pages.dart';
 // @generated-imports-end
 
@@ -70,6 +72,11 @@ class AppRouter extends RootStackRouter {
     CupertinoRoute(path: '/calc', page: CalculatorRoute.page),
     CupertinoRoute(path: '/income', page: ManagerIncomeRoute.page),
     CupertinoRoute(path: '/delivery-zone', page: ManagerDeliveryZoneRoute.page),
+    MaterialRoute(path: '/login', page: LoginRoute.page),
+    MaterialRoute(path: '/register', page: RegisterRoute.page),
+    MaterialRoute(path: '/register-confirmation', page: RegisterConfirmationRoute.page),
+    MaterialRoute(path: '/reset-password', page: ResetPasswordRoute.page),
+    MaterialRoute(path: '/registration-steps', page: RegistrationStepsRoute.page),
 // @generated-routes-end
         // Host-owned routes, deliberately OUTSIDE the generated markers:
         // update_router_table() rewrites everything between them on every

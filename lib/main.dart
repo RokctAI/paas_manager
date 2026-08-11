@@ -47,9 +47,11 @@ import 'package:orders_sdk/src/manager/domain/interface/pos_sections_tables.dart
 
 // @generated-sdk-imports-start
 import 'package:base_sdk/base_sdk.dart';
+import 'package:auth_sdk/auth_sdk.dart';
 import 'package:calc_sdk/calc_sdk.dart';
 import 'package:comms_sdk/comms_sdk.dart';
 import 'package:corporate_sdk/corporate_sdk.dart';
+import 'package:desktop_sdk/desktop_sdk.dart';
 import 'package:hardware_sdk/hardware_sdk.dart';
 import 'package:kitchen_sdk/kitchen_sdk.dart';
 import 'package:map_sdk/map_sdk.dart';
@@ -122,9 +124,11 @@ void main() async {
   // every feature SDK). Do NOT also import/register it by hand up here.
   // @generated-sdk-di-start
   BaseSdkDependencies.register(GetIt.instance);
+  AuthSdkDependencies.register(GetIt.instance);
   CalcSdkDependencies.register(GetIt.instance);
   CommsSdkDependencies.register(GetIt.instance);
   CorporateSdkDependencies.register(GetIt.instance);
+  DesktopSdkDependencies.register(GetIt.instance);
   HardwareSdkDependencies.register(GetIt.instance);
   KitchenSdkDependencies.register(GetIt.instance);
   MapSdkDependencies.register(GetIt.instance);
@@ -237,6 +241,9 @@ class _HostAppRoutes implements AppRoutes {
 
   @override
   Future<Object?> replaceUiTypeRoute(BuildContext context) => context.router.replace(UiTypeRoute());
+
+  @override
+  Future<Object?> replaceLoginRoute(BuildContext context) => context.router.replace(LoginRoute());
 
   // @generated-approutes-end
 
