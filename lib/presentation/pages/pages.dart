@@ -20,7 +20,6 @@
 // app_router.dart's @generated markers - see composer.json.
 export 'initial/splash_page.dart';
 export 'initial/no_connection_page.dart';
-export 'auth/login/login_page.dart';
 export 'view_map/view_map_page.dart';
 export 'view_map/map_search_page.dart';
 export 'restaurant/notification_list_page.dart';

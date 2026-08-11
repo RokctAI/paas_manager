@@ -77,18 +77,16 @@ class AppRouter extends RootStackRouter {
         // app's own (lib/presentation/pages/). Each should migrate into its
         // owning SDK's manifest as its feature moves out of the app.
         //
-        // /login stays host-owned: this app still owns its login page, whose
-        // @RoutePage already generates LoginRoute - auth_sdk's route shells
-        // would duplicate the name, so auth_sdk is composed with its
-        // installer skipped ("skip_install" in composer.json), the same
-        // stance paas_driver took.
+        // /login is NO LONGER host-owned (plan M3): auth_sdk installs with
+        // skip_install lifted, its route shells generate LoginRoute et al.,
+        // and its manifest routes land in the @generated block above on
+        // recompose. The host auth pages are deleted.
         //
         // /list-notification stays host-owned until comms_sdk's notification
         // parameterisation (fork plan S-3) lands.
         //
         // /view_map + /search_map: host map pages, still referenced by the
         // kept application/map slice (fork plan H-10 dedup follow-up).
-        CupertinoRoute(path: '/login', page: LoginRoute.page),
         CupertinoRoute(
             path: '/list-notification', page: NotificationListRoute.page),
         CupertinoRoute(path: '/view_map', page: ViewMapRoute.page),

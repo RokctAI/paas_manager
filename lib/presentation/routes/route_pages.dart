@@ -21,14 +21,15 @@
 // own shells through their manifest installs when they own routed pages.
 //
 // DELIBERATE DEVIATION from base_sdk's template (which also shells
-// SplashRoute and NoConnectionRoute), mirroring paas_driver: this app still
-// owns its splash, no-connection and login pages under
-// lib/presentation/pages/, and those pages' own @RoutePage annotations
-// already generate SplashRoute, NoConnectionRoute and LoginRoute. Shelling
-// them here too would make auto_route emit two classes per name into
-// app_router.gr.dart. Only the two base_sdk pages the app has no local
-// equivalent for are shelled - the full template lands when the app's
-// initial pages migrate into base_sdk.
+// SplashRoute and NoConnectionRoute): this app still owns its splash and
+// no-connection pages under lib/presentation/pages/, and those pages' own
+// @RoutePage annotations already generate SplashRoute and NoConnectionRoute.
+// Shelling them here too would make auto_route emit two classes per name
+// into app_router.gr.dart. (LoginRoute et al. now come from auth_sdk's
+// installed auth_route_pages.dart shells - the host auth pages were deleted
+// when skip_install was lifted, plan M3.) Only the two base_sdk pages the
+// app has no local equivalent for are shelled - the full template lands
+// when the app's initial pages migrate into base_sdk.
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 

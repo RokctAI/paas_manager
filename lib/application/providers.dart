@@ -20,11 +20,6 @@
 // zones_sdk (see composer.json).
 export 'splash/splash_provider.dart';
 export 'profile/profile_provider.dart';
-export 'auth/login/login_provider.dart';
-export 'auth/sign_up/sign_up_provider.dart';
-export 'auth/reset_password/reset_password_provider.dart';
-export 'auth/login/languages/languages_provider.dart';
-export 'auth/confirmation/register_confirmation_provider.dart';
 
 // restaurantProvider moved to merchants_sdk's manager slice (commerce#3).
 // Re-exported here so the host splash/login flows keep reading
