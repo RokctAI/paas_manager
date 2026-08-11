@@ -29,7 +29,6 @@ import 'dart:math';
 
 import 'package:manager/presentation/styles/style.dart';
 
-
 class ImageCropperForMarker {
   Future<BitmapDescriptor> resizeAndCircle(String? imageURL, int size) async {
     final File imageFile = await urlToFile(imageURL);

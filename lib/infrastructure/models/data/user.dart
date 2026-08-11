@@ -52,7 +52,7 @@ class UserModel {
   }
 
   UserModel.fromJson(dynamic json) {
-    _id = json['id']  ?? 0;
+    _id = json['id'] ?? 0;
     _uuid = json['uuid'];
     _firstname = json['firstname'];
     _lastname = json['lastname'];
@@ -62,7 +62,9 @@ class UserModel {
     _gender = json['gender'];
     _emailVerifiedAt = json['email_verified_at'];
     _registeredAt = json['registered_at'];
-    _active = json['active'].runtimeType == int ? (json['active']!=0) : json['active'];
+    _active = json['active'].runtimeType == int
+        ? (json['active'] != 0)
+        : json['active'];
     _img = json['img'];
     _role = json['role'];
   }
@@ -84,7 +86,6 @@ class UserModel {
   String? _password;
   String? _confirmPassword;
 
-
   UserModel copyWith({
     int? id,
     String? uuid,
@@ -104,23 +105,22 @@ class UserModel {
     String? conPassword,
   }) =>
       UserModel(
-        id: id ?? _id,
-        uuid: uuid ?? _uuid,
-        firstname: firstname ?? _firstname,
-        lastname: lastname ?? _lastname,
-        referral: referral ?? _referral,
-        email: email ?? _email,
-        phone: phone ?? _phone,
-        birthday: birthday ?? _birthday,
-        gender: gender ?? _gender,
-        emailVerifiedAt: emailVerifiedAt ?? _emailVerifiedAt,
-        registeredAt: registeredAt ?? _registeredAt,
-        active: active ?? _active,
-        img: img ?? _img,
-        role: role ?? _role,
-        confirmPassword:  conPassword ?? _confirmPassword,
-        password:  password ?? _password
-      );
+          id: id ?? _id,
+          uuid: uuid ?? _uuid,
+          firstname: firstname ?? _firstname,
+          lastname: lastname ?? _lastname,
+          referral: referral ?? _referral,
+          email: email ?? _email,
+          phone: phone ?? _phone,
+          birthday: birthday ?? _birthday,
+          gender: gender ?? _gender,
+          emailVerifiedAt: emailVerifiedAt ?? _emailVerifiedAt,
+          registeredAt: registeredAt ?? _registeredAt,
+          active: active ?? _active,
+          img: img ?? _img,
+          role: role ?? _role,
+          confirmPassword: conPassword ?? _confirmPassword,
+          password: password ?? _password);
 
   int? get id => _id;
 
@@ -160,7 +160,7 @@ class UserModel {
     map['uuid'] = _uuid;
     map['firstname'] = _firstname;
     map['lastname'] = _lastname;
-     map['referral'] = _referral;
+    map['referral'] = _referral;
     map['email'] = _email;
     map['phone'] = _phone;
     map['birthday'] = _birthday;
@@ -174,14 +174,14 @@ class UserModel {
   }
 
   Map<String, dynamic> toJsonForSignUp({typeFirebase = false}) => {
-    "firstname": _firstname,
-    if (_lastname?.isNotEmpty ?? false) "lastname": _lastname,
-    if (_phone?.isNotEmpty ?? false) "phone": _phone?.replaceAll('+', ""),
-    if (_email?.isNotEmpty ?? false) "email": _email,
-    if (_password?.isNotEmpty ?? false) "password": _password,
-    if (_confirmPassword?.isNotEmpty ?? false)
-      "password_conformation": _confirmPassword,
-    if (_referral?.isNotEmpty ?? false) 'referral': _referral,
-    if (typeFirebase) "type": "firebase",
-  };
+        "firstname": _firstname,
+        if (_lastname?.isNotEmpty ?? false) "lastname": _lastname,
+        if (_phone?.isNotEmpty ?? false) "phone": _phone?.replaceAll('+', ""),
+        if (_email?.isNotEmpty ?? false) "email": _email,
+        if (_password?.isNotEmpty ?? false) "password": _password,
+        if (_confirmPassword?.isNotEmpty ?? false)
+          "password_conformation": _confirmPassword,
+        if (_referral?.isNotEmpty ?? false) 'referral': _referral,
+        if (typeFirebase) "type": "firebase",
+      };
 }

@@ -14,11 +14,9 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-
 import 'dart:convert';
 
 import '../data/table_statistics_data.dart';
-
 
 TableStatisticResponse tableStatisticResponseFromJson(String str) =>
     TableStatisticResponse.fromJson(json.decode(str));
@@ -54,5 +52,3 @@ class TableStatisticResponse {
         "data": data.toJson(),
       };
 }
-
-

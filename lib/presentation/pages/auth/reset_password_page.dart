@@ -27,7 +27,7 @@ import 'package:manager/application/providers.dart';
 import 'package:manager/infrastructure/services/services.dart';
 
 class ResetPasswordPage extends ConsumerWidget {
-  const ResetPasswordPage({super.key}) ;
+  const ResetPasswordPage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -59,7 +59,8 @@ class ResetPasswordPage extends ConsumerWidget {
                     Column(
                       children: [
                         AppBarBottomSheet(
-                          title: AppHelpers.getTranslation(TrKeys.resetPassword),
+                          title:
+                              AppHelpers.getTranslation(TrKeys.resetPassword),
                         ),
                         Text(
                           AppHelpers.getTranslation(TrKeys.resetPasswordText),
@@ -68,7 +69,8 @@ class ResetPasswordPage extends ConsumerWidget {
                         ),
                         40.verticalSpace,
                         UnderlinedTextField(
-                          label: AppHelpers.getTranslation(TrKeys.email).toUpperCase(),
+                          label: AppHelpers.getTranslation(TrKeys.email)
+                              .toUpperCase(),
                           onChanged: notifier.setEmail,
                         ),
                       ],

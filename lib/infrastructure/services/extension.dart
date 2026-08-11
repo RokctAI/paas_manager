@@ -18,8 +18,6 @@ import 'package:manager/infrastructure/models/models.dart';
 
 import 'enums.dart';
 
-
-
 extension Time on DateTime {
   bool toEqualTime(DateTime time) {
     if (time.year != year) {
@@ -206,7 +204,6 @@ extension ExtendedIterable<E> on Iterable<E> {
     return map((e) => f(e, i++));
   }
 }
-
 
 extension BoolParsing on String {
   bool toBool() {

@@ -86,7 +86,7 @@ class LoginNotifier extends StateNotifier<LoginState> {
     if (await AppConnectivity.connectivity()) {
       state = state.copyWith(isLoading: true);
       final response =
-      await _authRepository.login(email: _email, password: _password);
+          await _authRepository.login(email: _email, password: _password);
       response.when(
         success: (data) async {
           if (data.data?.user?.role == 'seller') {
@@ -208,23 +208,24 @@ class LoginNotifier extends StateNotifier<LoginState> {
           loginBehavior: LoginBehavior.nativeWithFallback,
         );
 
-        debugPrint('===> login with facebook token ${user.accessToken?.tokenString}');
+        debugPrint(
+            '===> login with facebook token ${user.accessToken?.tokenString}');
         debugPrint('===> login with facebook status ${user.status}');
 
         final rawNonce = AppHelpers.generateNonce();
         final OAuthCredential credential =
-        user.accessToken?.type == AccessTokenType.limited
-            ? OAuthCredential(
-          providerId: 'facebook.com',
-          signInMethod: 'oauth',
-          idToken: user.accessToken!.tokenString,
-          rawNonce: rawNonce,
-        )
-            : FacebookAuthProvider.credential(
-            user.accessToken?.tokenString ?? "");
+            user.accessToken?.type == AccessTokenType.limited
+                ? OAuthCredential(
+                    providerId: 'facebook.com',
+                    signInMethod: 'oauth',
+                    idToken: user.accessToken!.tokenString,
+                    rawNonce: rawNonce,
+                  )
+                : FacebookAuthProvider.credential(
+                    user.accessToken?.tokenString ?? "");
 
         final userObj =
-        await FirebaseAuth.instance.signInWithCredential(credential);
+            await FirebaseAuth.instance.signInWithCredential(credential);
 
         if (user.status == LoginStatus.success) {
           final response = await _authRepository.loginWithGoogle(
@@ -299,7 +300,7 @@ class LoginNotifier extends StateNotifier<LoginState> {
         );
 
         final userObj =
-        await FirebaseAuth.instance.signInWithCredential(credentialApple);
+            await FirebaseAuth.instance.signInWithCredential(credentialApple);
 
         final response = await _authRepository.loginWithGoogle(
           email: credential.email ?? userObj.user?.email ?? "",

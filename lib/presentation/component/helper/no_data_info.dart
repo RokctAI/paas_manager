@@ -23,7 +23,7 @@ import 'package:manager/infrastructure/services/services.dart';
 class NoDataInfo extends StatelessWidget {
   final String title;
 
-  const NoDataInfo({super.key, required this.title}) ;
+  const NoDataInfo({super.key, required this.title});
 
   @override
   Widget build(BuildContext context) {

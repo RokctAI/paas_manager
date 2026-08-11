@@ -19,8 +19,6 @@ import 'package:manager/domain/di/dependency_manager.dart';
 import 'notification_notifier.dart';
 import 'notification_state.dart';
 
-
-
-final notificationProvider = StateNotifierProvider<NotificationNotifier, NotificationState>(
-  (ref) => NotificationNotifier(notificationRepository)
-);
+final notificationProvider =
+    StateNotifierProvider<NotificationNotifier, NotificationState>(
+        (ref) => NotificationNotifier(notificationRepository));

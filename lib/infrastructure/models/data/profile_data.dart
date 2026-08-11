@@ -14,8 +14,6 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-
-
 import 'address_data.dart';
 import 'notification_data.dart';
 import 'shop_data.dart';
@@ -87,7 +85,9 @@ class ProfileData {
     _gender = json['gender'];
     _emailVerifiedAt = json['email_verified_at'];
     _registeredAt = json['registered_at'];
-    _active = json['active'].runtimeType == int ? (json['active'] == 1) : json['active'];
+    _active = json['active'].runtimeType == int
+        ? (json['active'] == 1)
+        : json['active'];
     _role = json['role'];
     _img = json['img'];
     if (json['notifications'] != null) {
