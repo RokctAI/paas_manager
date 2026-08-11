@@ -43,7 +43,7 @@ class OrdersItem extends StatelessWidget {
     required this.status,
     required this.onTap,
     this.paymentType = '',
-  }) ;
+  });
 
   @override
   Widget build(BuildContext context) {

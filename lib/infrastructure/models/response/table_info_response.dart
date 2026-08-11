@@ -14,8 +14,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-
 import '../data/table_info_data.dart';
+
 class TableInfoResponse {
   DateTime timestamp;
   bool status;
@@ -29,19 +29,18 @@ class TableInfoResponse {
     required this.data,
   });
 
-  factory TableInfoResponse.fromJson(Map<String, dynamic> json) => TableInfoResponse(
-    timestamp: DateTime.parse(json["timestamp"]),
-    status: json["status"],
-    message: json["message"],
-    data: TableInfoData.fromJson(json["data"]),
-  );
+  factory TableInfoResponse.fromJson(Map<String, dynamic> json) =>
+      TableInfoResponse(
+        timestamp: DateTime.parse(json["timestamp"]),
+        status: json["status"],
+        message: json["message"],
+        data: TableInfoData.fromJson(json["data"]),
+      );
 
   Map<String, dynamic> toJson() => {
-    "timestamp": timestamp.toIso8601String(),
-    "status": status,
-    "message": message,
-    "data": data.toJson(),
-  };
+        "timestamp": timestamp.toIso8601String(),
+        "status": status,
+        "message": message,
+        "data": data.toJson(),
+      };
 }
-
-

@@ -91,9 +91,8 @@ class CommonImage extends StatelessWidget {
                       return Container(
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(radius.r),
-                          color: name == null
-                              ? Style.shimmerBase
-                              : Style.primary,
+                          color:
+                              name == null ? Style.shimmerBase : Style.primary,
                         ),
                         alignment: Alignment.center,
                         child: name == null

@@ -14,32 +14,32 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-
 class CountNotificationModel {
-    int? notification;
-    int? transaction;
+  int? notification;
+  int? transaction;
 
-    CountNotificationModel({
-        this.notification,
-        this.transaction,
-    });
+  CountNotificationModel({
+    this.notification,
+    this.transaction,
+  });
 
-    CountNotificationModel copyWith({
-        int? notification,
-        int? transaction,
-    }) => 
-        CountNotificationModel(
-            notification: notification ?? this.notification,
-            transaction: transaction ?? this.transaction,
-        );
+  CountNotificationModel copyWith({
+    int? notification,
+    int? transaction,
+  }) =>
+      CountNotificationModel(
+        notification: notification ?? this.notification,
+        transaction: transaction ?? this.transaction,
+      );
 
-    factory CountNotificationModel.fromJson(Map<String, dynamic> json) => CountNotificationModel(
+  factory CountNotificationModel.fromJson(Map<String, dynamic> json) =>
+      CountNotificationModel(
         notification: json["notification"],
         transaction: json["transaction"],
-    );
+      );
 
-    Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() => {
         "notification": notification,
         "transaction": transaction,
-    };
+      };
 }

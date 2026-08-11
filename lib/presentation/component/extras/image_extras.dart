@@ -31,7 +31,7 @@ class ImageExtras extends StatelessWidget {
     required this.groupIndex,
     required this.uiExtras,
     required this.onUpdate,
-  }) ;
+  });
 
   @override
   Widget build(BuildContext context) {

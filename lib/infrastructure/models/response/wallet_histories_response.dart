@@ -50,7 +50,6 @@ class WalletHistoriesResponse {
 
   List<WalletData>? get data => _data;
 
-
   Meta? get meta => _meta;
 
   Map<String, dynamic> toJson() {
@@ -106,7 +105,8 @@ class WalletData {
     _status = json['status'];
     _createdAt = json['created_at'];
     _updatedAt = json['updated_at'];
-    _author = json['author'] != null ? UserModel.fromJson(json['author']) : null;
+    _author =
+        json['author'] != null ? UserModel.fromJson(json['author']) : null;
     _user = json['user'] != null ? UserModel.fromJson(json['user']) : null;
   }
 

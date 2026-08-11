@@ -110,9 +110,7 @@ class OrderFoodItem extends StatelessWidget {
                                     children: [
                                       Text(
                                         AppHelpers.numberFormat(
-                                           (product
-                                                      .stocks?.first.price ??
-                                                  0) +
+                                          (product.stocks?.first.price ?? 0) +
                                               (product.stocks?.first.tax ?? 0),
                                         ),
                                         style: Style.interSemi(
@@ -154,10 +152,11 @@ class OrderFoodItem extends StatelessWidget {
                                             ),
                                             8.horizontalSpace,
                                             Text(
-                                              AppHelpers.numberFormat(
-                                                   product.stocks?.first
-                                                          .totalPrice ??
-                                                      0),
+                                              AppHelpers.numberFormat(product
+                                                      .stocks
+                                                      ?.first
+                                                      .totalPrice ??
+                                                  0),
                                               style: Style.interSemi(
                                                 size: 14.sp,
                                                 color: Style.blackColor,
@@ -171,9 +170,7 @@ class OrderFoodItem extends StatelessWidget {
                                   )
                                 : Text(
                                     AppHelpers.numberFormat(
-                                        
-                                            product.stocks?.first.totalPrice ??
-                                                0),
+                                        product.stocks?.first.totalPrice ?? 0),
                                     style: Style.interSemi(
                                       size: 14.sp,
                                       color: Style.blackColor,

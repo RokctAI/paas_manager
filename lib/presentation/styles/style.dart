@@ -21,7 +21,7 @@ abstract class Style {
   Style._();
 
   /// ###################### Colors ##########################
-  static const primary = Color(0xFFFF4300);//changed
+  static const primary = Color(0xFFFF4300); //changed
   static const white = Color(0xFFFFFFFF);
   static const hintColor = Color(0xFFA7A7A7);
   static const black = Color(0xFF232B2F);
