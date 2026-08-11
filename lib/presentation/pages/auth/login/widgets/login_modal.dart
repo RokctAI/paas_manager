@@ -1,3 +1,19 @@
+// This file is part of paas_manager.
+// Copyright (C) 2024 RokctAI
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
 import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/services.dart';
@@ -9,7 +25,7 @@ import 'package:intl_phone_field/intl_phone_field.dart';
 
 import '../../../../styles/style.dart';
 import '../../../../component/components.dart';
-import 'package:venderfoodyman/presentation/routes/app_router.dart';
+import 'package:manager/presentation/routes/app_router.dart';
 import '../../../../../application/providers.dart';
 import '../../../../../infrastructure/services/services.dart';
 import '../../reset_password_page.dart';
@@ -410,10 +426,13 @@ class _LoginModalState extends State<LoginModal> {
                                           type: SnackBarType.success,
                                         ),
                                     accessDenied: () {
+                                      // become_seller dropped (Ray ruling):
+                                      // land back on a clean login instead
+                                      // of the retired create-shop funnel.
                                       Navigator.pop(context);
                                       context.router.popUntilRoot();
                                       context.replaceRoute(
-                                          const CreateShopRoute());
+                                          const LoginRoute());
                                     },
                                   );
                                 }
@@ -484,10 +503,11 @@ class _LoginModalState extends State<LoginModal> {
                                                 type: SnackBarType.success,
                                               ),
                                           accessDenied: () {
+                                            // become_seller dropped (Ray).
                                             Navigator.pop(context);
                                             context.router.popUntilRoot();
                                             context.replaceRoute(
-                                                const CreateShopRoute());
+                                                const LoginRoute());
                                           },
                                         );
                                       },
@@ -539,10 +559,11 @@ class _LoginModalState extends State<LoginModal> {
                                               type: SnackBarType.success,
                                             ),
                                         accessDenied: () {
+                                          // become_seller dropped (Ray).
                                           Navigator.pop(context);
                                           context.router.popUntilRoot();
                                           context.replaceRoute(
-                                              const CreateShopRoute());
+                                              const LoginRoute());
                                         },
                                       );
                                     },
@@ -584,10 +605,11 @@ class _LoginModalState extends State<LoginModal> {
                                               type: SnackBarType.success,
                                             ),
                                         accessDenied: () {
+                                          // become_seller dropped (Ray).
                                           Navigator.pop(context);
                                           context.router.popUntilRoot();
                                           context.replaceRoute(
-                                              const CreateShopRoute());
+                                              const LoginRoute());
                                         },
                                       );
                                     },

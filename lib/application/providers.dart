@@ -1,60 +1,33 @@
-export 'main/main_provider.dart';
-export 'foods/foods_provider.dart';
-export 'order/order_provider.dart';
+// This file is part of paas_manager.
+// Copyright (C) 2024 RokctAI
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+// Host-owned providers only - the feature verticals (orders/POS, foods,
+// restaurant, income, delivery zone) migrated into their SDKs; their
+// providers now come from orders_sdk/products_sdk/merchants_sdk/revenue_sdk/
+// zones_sdk (see composer.json).
 export 'splash/splash_provider.dart';
 export 'profile/profile_provider.dart';
 export 'auth/login/login_provider.dart';
-export 'product/products_provider.dart';
-export 'order/create_order_provider.dart';
 export 'auth/sign_up/sign_up_provider.dart';
-export 'order_cart/order_cart_provider.dart';
-export 'restaurant/restaurant_provider.dart';
-export 'main/foods/extras/extras_provider.dart';
-export 'main/foods/addons/addons_provider.dart';
-export 'main/foods/tabs/food_tabs_provider.dart';
-export 'foods/filter/foods_filter_provider.dart';
-export 'main/orders/new/new_orders_provider.dart';
-export 'order_details/order_details_provider.dart';
-export 'order_products/order_products_provider.dart';
-export 'auth/login/languages/languages_provider.dart';
-export 'main/orders/appbar/home_appbar_provider.dart';
-export 'main/orders/ready/ready_orders_provider.dart';
-export 'order/shipping/user/order_user_provider.dart';
-export 'foods/categories/food_categories_provider.dart';
-export 'main/foods/addons/edit/edit_addon_provider.dart';
-export 'order/shipping/time/delivery_time_provider.dart';
 export 'auth/reset_password/reset_password_provider.dart';
-export 'foods/edit/stocks/edit_food_stocks_provider.dart';
-export 'main/orders/accepted/accepted_orders_provider.dart';
-export 'main/orders/on_a_way/on_a_way_orders_provider.dart';
-export 'foods/edit/details/edit_food_details_provider.dart';
-export 'restaurant/working_days/working_days_provider.dart';
-export 'order/shipping/payment/order_payment_provider.dart';
-export 'order/shipping/delivery/delivery_type_provider.dart';
-export 'main/foods/addons/create/create_addon_provider.dart';
-export 'order/shipping/address/select_address_provider.dart';
-export 'order/shipping/user/create/create_user_provider.dart';
-export 'foods/create/stocks/create_food_stocks_provider.dart';
-export 'restaurant/delivery_zone/delivery_zone_provider.dart';
+export 'auth/login/languages/languages_provider.dart';
 export 'auth/confirmation/register_confirmation_provider.dart';
-export 'restaurant/income/statistics/statistics_provider.dart';
-export 'foods/edit/details/units/edit_food_units_provider.dart';
-export 'foods/create/details/create_food_details_provider.dart';
-export 'foods/edit/stocks/addons/edit_food_addons_provider.dart';
-export 'order/shipping/address/order/order_address_provider.dart';
-export 'restaurant/income/today_orders/today_orders_provider.dart';
-export 'main/foods/extras/create/create_extras_group_provider.dart';
-export 'order_products/categories/product_categories_provider.dart';
-export 'foods/create/details/units/create_food_units_provider.dart';
-export 'main/foods/extras/delete/delete_extras_group_provider.dart';
-export 'main/foods/extras/update/update_extras_group_provider.dart';
-export 'main/foods/addons/edit/units/edit_addon_units_provider.dart';
-export 'foods/create/stocks/addons/create_food_addons_provider.dart';
-export 'main/foods/extras/details/extras_group_details_provider.dart';
-export 'foods/create/details/category/add/add_category_provider.dart';
-export 'foods/edit/details/category/edit_food_categories_provider.dart';
-export 'foods/create/details/category/add_food_categories_provider.dart';
-export 'main/foods/addons/create/units/create_addon_units_provider.dart';
-export 'main/foods/extras/details/edit_item/edit_extras_item_provider.dart';
-export 'main/foods/extras/details/new_item/create_new_group_item_provider.dart';
-export 'main/foods/extras/details/delete_item/delete_extras_item_provider.dart';
+
+// restaurantProvider moved to merchants_sdk's manager slice (commerce#3).
+// Re-exported here so the host splash/login flows keep reading
+// `restaurantProvider` unchanged (fetchMyShop(afterFetched:) signature is
+// preserved by the SDK port).
+export 'package:merchants_sdk/src/manager/application/restaurant/restaurant_provider.dart';

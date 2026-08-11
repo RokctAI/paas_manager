@@ -14,7 +14,6 @@ Measured against content, most are not.
 - diverged (40-85%): **42** - must be read individually
 - unrelated (<40%): **35** - same name, different feature. Do NOT delete
 
-
 ## Unrelated (<40%) - same name, different code  (35)
 
 | % | paas_manager | base_sdk |

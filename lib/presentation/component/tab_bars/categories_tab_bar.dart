@@ -1,14 +1,35 @@
+// This file is part of paas_manager.
+// Copyright (C) 2024 RokctAI
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../components.dart';
-import 'package:venderfoodyman/infrastructure/models/models.dart';
-import 'package:venderfoodyman/infrastructure/services/services.dart';
+import 'package:manager/infrastructure/services/services.dart';
 
 class CategoriesTabBar extends StatelessWidget {
-  final List<CategoryData> categories;
+  // Deliberately untyped (was List<CategoryData>): this host tab bar is the
+  // shared seam both composed verticals feed - orders_sdk's POS passes its
+  // own CategoryData and products_sdk's foods tab passes SellerCategoryData
+  // (ADR-005 keeps those model twins apart). Only `.translation?.title` is
+  // read, so a dynamic element type settles both call sites at once
+  // (commerce#3 host-consume note, H-6/H-7).
+  final List<dynamic> categories;
   final int activeIndex;
   final Function(int) onChangeTab;
   final Function() onLoading;

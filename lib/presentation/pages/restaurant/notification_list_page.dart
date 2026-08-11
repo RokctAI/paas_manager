@@ -1,3 +1,19 @@
+// This file is part of paas_manager.
+// Copyright (C) 2024 RokctAI
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
 // ignore_for_file: deprecated_member_use
 
 import 'package:auto_route/auto_route.dart';
@@ -7,13 +23,18 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:venderfoodyman/application/notification/notification_provider.dart';
-import 'package:venderfoodyman/infrastructure/models/models.dart';
-import 'package:venderfoodyman/infrastructure/services/services.dart';
-import 'package:venderfoodyman/presentation/component/common_app_bar.dart';
-import 'package:venderfoodyman/presentation/component/components.dart';
-import 'package:venderfoodyman/presentation/pages/main/orders/details/order_details_modal.dart';
-import 'package:venderfoodyman/presentation/styles/style.dart';
+import 'package:manager/application/notification/notification_provider.dart';
+import 'package:manager/infrastructure/models/models.dart';
+import 'package:manager/infrastructure/services/services.dart';
+import 'package:manager/presentation/component/common_app_bar.dart';
+import 'package:manager/presentation/component/components.dart';
+// The order-details modal now installs from orders_sdk (commerce#3); the
+// legacy pages/main/orders copy is deleted. Prefixed because the SDK's
+// manager OrderData shares its name with the host's legacy model above.
+import 'package:manager/presentation/pages/orders/details/order_details_modal.dart';
+import 'package:orders_sdk/src/manager/infrastructure/models/data/order_data.dart'
+    as sdk;
+import 'package:manager/presentation/styles/style.dart';
 
 @RoutePage()
 class NotificationListPage extends ConsumerStatefulWidget {
@@ -101,11 +122,16 @@ class _NotificationListPageState extends ConsumerState<NotificationListPage> {
                                     null) {
                                   if (state.notifications[index].orderData !=
                                       null) {
+                                    // The installed modal is typed on
+                                    // orders_sdk's manager OrderData and
+                                    // refetches details by id, so only the
+                                    // id needs to cross the model seam.
                                     AppHelpers.showCustomModalBottomSheet(
                                         context: context,
                                         modal: OrderDetailsModal(
-                                            order: state.notifications[index]
-                                                .orderData!),
+                                            order: sdk.OrderData(
+                                                id: state.notifications[index]
+                                                    .orderData!.id)),
                                         isDarkMode: false);
                                   }
                                 } else if (state

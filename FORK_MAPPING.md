@@ -5,7 +5,6 @@
 > (`revenue_sdk`, `zones_sdk`) that already contain forked paas_manager pages. §6 records what
 > I verified on disk, what is stale here, and two contradictions that block moving code.
 
-
 Branch: `fork/paas-manager-to-sdks` (paas_manager). No SDK repo has been branched or written to yet.
 Source: `paas_manager/lib`, 645 `.dart` files.
 Verified: `/api/v1` 89 hits vs `/api/method` 1 hit in `paas_manager/lib` — the app is entirely
