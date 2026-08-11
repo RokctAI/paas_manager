@@ -18,10 +18,10 @@ import 'package:flutter_remix/flutter_remix.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import 'package:venderfoodyman/presentation/styles/style.dart';
+import 'package:manager/presentation/styles/style.dart';
 import '../../component/components.dart';
-import 'package:venderfoodyman/infrastructure/models/models.dart';
-import 'package:venderfoodyman/infrastructure/services/services.dart';
+import 'package:manager/infrastructure/models/models.dart';
+import 'package:manager/infrastructure/services/services.dart';
 
 class OrderFoodItem extends StatelessWidget {
   final ProductData product;

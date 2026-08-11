@@ -16,7 +16,7 @@
 
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:venderfoodyman/infrastructure/models/models.dart';
+import 'package:manager/infrastructure/models/models.dart';
 
 import 'storage_keys.dart';
 

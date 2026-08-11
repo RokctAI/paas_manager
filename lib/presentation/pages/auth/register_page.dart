@@ -20,12 +20,12 @@ import 'package:flutter_remix/flutter_remix.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
-import 'package:venderfoodyman/presentation/component/components.dart';
-import 'package:venderfoodyman/infrastructure/models/data/user.dart';
-import 'package:venderfoodyman/infrastructure/services/services.dart';
-import 'package:venderfoodyman/application/providers.dart';
+import 'package:manager/presentation/component/components.dart';
+import 'package:manager/infrastructure/models/data/user.dart';
+import 'package:manager/infrastructure/services/services.dart';
+import 'package:manager/application/providers.dart';
 import '../../component/text_fields/outline_bordered_text_field.dart';
-import 'package:venderfoodyman/presentation/styles/style.dart';
+import 'package:manager/presentation/styles/style.dart';
 import 'register_confirmation_page.dart';
 
 class RegisterPage extends ConsumerWidget {

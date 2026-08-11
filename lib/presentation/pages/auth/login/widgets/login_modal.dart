@@ -25,7 +25,7 @@ import 'package:intl_phone_field/intl_phone_field.dart';
 
 import '../../../../styles/style.dart';
 import '../../../../component/components.dart';
-import 'package:venderfoodyman/presentation/routes/app_router.dart';
+import 'package:manager/presentation/routes/app_router.dart';
 import '../../../../../application/providers.dart';
 import '../../../../../infrastructure/services/services.dart';
 import '../../reset_password_page.dart';

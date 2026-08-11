@@ -15,7 +15,7 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:venderfoodyman/infrastructure/models/response/statistics_order_response.dart';
+import 'package:manager/infrastructure/models/response/statistics_order_response.dart';
 
 import '../handlers/handlers.dart';
 import '../../infrastructure/models/models.dart';

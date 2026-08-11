@@ -20,8 +20,8 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../components.dart';
-import 'package:venderfoodyman/infrastructure/models/models.dart';
-import 'package:venderfoodyman/infrastructure/services/services.dart';
+import 'package:manager/infrastructure/models/models.dart';
+import 'package:manager/infrastructure/services/services.dart';
 
 class CategoriesTabBar extends StatelessWidget {
   final List<CategoryData> categories;

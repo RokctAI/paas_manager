@@ -27,7 +27,7 @@ import 'package:image/image.dart' as img;
 import 'dart:async';
 import 'dart:math';
 
-import 'package:venderfoodyman/presentation/styles/style.dart';
+import 'package:manager/presentation/styles/style.dart';
 
 
 class ImageCropperForMarker {

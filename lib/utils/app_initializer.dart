@@ -20,7 +20,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-// import 'package:venderfoodyman/application/providers/app_providers.dart';
+// import 'package:manager/application/providers/app_providers.dart';
 
 import '../app_constants.dart';
 

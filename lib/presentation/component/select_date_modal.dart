@@ -19,11 +19,11 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'title_icon.dart';
-import 'package:venderfoodyman/presentation/styles/style.dart';
+import 'package:manager/presentation/styles/style.dart';
 import 'helper/modal_wrap.dart';
 import 'helper/modal_drag.dart';
 import 'buttons/custom_button.dart';
-import 'package:venderfoodyman/infrastructure/services/services.dart';
+import 'package:manager/infrastructure/services/services.dart';
 
 class SelectDateModal extends StatefulWidget {
   final String? initialDate;

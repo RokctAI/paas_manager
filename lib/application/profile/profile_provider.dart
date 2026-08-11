@@ -15,8 +15,8 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:venderfoodyman/domain/di/dependency_manager.dart';
-import 'package:venderfoodyman/application/profile/profile_notifier.dart';
+import 'package:manager/domain/di/dependency_manager.dart';
+import 'package:manager/application/profile/profile_notifier.dart';
 import 'profile_state.dart';
 
 

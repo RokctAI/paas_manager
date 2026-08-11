@@ -16,9 +16,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:venderfoodyman/presentation/component/buttons/buttons_bouncing_effect.dart';
+import 'package:manager/presentation/component/buttons/buttons_bouncing_effect.dart';
 
-import 'package:venderfoodyman/presentation/styles/style.dart';
+import 'package:manager/presentation/styles/style.dart';
 
 class CustomButton extends StatelessWidget {
   final Icon? icon;

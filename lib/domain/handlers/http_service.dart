@@ -17,7 +17,7 @@
 import 'package:dio/dio.dart';
 
 import 'token_interceptor.dart';
-import 'package:venderfoodyman/infrastructure/services/services.dart';
+import 'package:manager/infrastructure/services/services.dart';
 
 class HttpService {
   Dio client({bool requireAuth = false,bool chatGpt = false}) => Dio(

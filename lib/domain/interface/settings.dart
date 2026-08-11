@@ -15,9 +15,9 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 
-import 'package:venderfoodyman/domain/handlers/handlers.dart';
-import 'package:venderfoodyman/infrastructure/models/models.dart';
-import 'package:venderfoodyman/infrastructure/services/services.dart';
+import 'package:manager/domain/handlers/handlers.dart';
+import 'package:manager/infrastructure/models/models.dart';
+import 'package:manager/infrastructure/services/services.dart';
 
 abstract class SettingsInterface {
   Future<ApiResult<GalleryUploadResponse>> uploadImage(

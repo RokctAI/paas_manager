@@ -20,13 +20,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'title_icon.dart';
-import 'package:venderfoodyman/presentation/styles/style.dart';
+import 'package:manager/presentation/styles/style.dart';
 import 'helper/modal_drag.dart';
 import 'helper/modal_wrap.dart';
 import 'custom_date_picker.dart';
 import 'buttons/custom_button.dart';
 import 'tab_bars/custom_tab_bar.dart';
-import 'package:venderfoodyman/infrastructure/services/services.dart';
+import 'package:manager/infrastructure/services/services.dart';
 
 class FilterScreen extends StatefulWidget {
   final bool isTabBar;

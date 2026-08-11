@@ -18,8 +18,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import 'package:venderfoodyman/presentation/styles/style.dart';
-import 'package:venderfoodyman/infrastructure/services/services.dart';
+import 'package:manager/presentation/styles/style.dart';
+import 'package:manager/infrastructure/services/services.dart';
 
 class TabBarLoading extends StatelessWidget {
   final int itemCount;

@@ -17,8 +17,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import 'package:venderfoodyman/presentation/styles/style.dart';
-import 'package:venderfoodyman/infrastructure/models/models.dart';
+import 'package:manager/presentation/styles/style.dart';
+import 'package:manager/infrastructure/models/models.dart';
 
 class FoodKitchenItem extends StatelessWidget {
   final KitchenModel kitchen;

@@ -24,8 +24,8 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 import 'login_state.dart';
-import 'package:venderfoodyman/domain/interface/interfaces.dart';
-import 'package:venderfoodyman/infrastructure/services/services.dart';
+import 'package:manager/domain/interface/interfaces.dart';
+import 'package:manager/infrastructure/services/services.dart';
 
 import 'package:app_tracking_transparency/app_tracking_transparency.dart';
 import 'package:permission_handler/permission_handler.dart';

@@ -15,11 +15,11 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import 'package:flutter/material.dart';
-import 'package:venderfoodyman/domain/di/dependency_manager.dart';
-import 'package:venderfoodyman/domain/handlers/handlers.dart';
-import 'package:venderfoodyman/domain/interface/interfaces.dart';
-import 'package:venderfoodyman/infrastructure/models/data/address_data.dart';
-import 'package:venderfoodyman/infrastructure/services/services.dart';
+import 'package:manager/domain/di/dependency_manager.dart';
+import 'package:manager/domain/handlers/handlers.dart';
+import 'package:manager/domain/interface/interfaces.dart';
+import 'package:manager/infrastructure/models/data/address_data.dart';
+import 'package:manager/infrastructure/services/services.dart';
 
 class ShopsRepository implements ShopsInterface {
   @override

@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-import 'package:venderfoodyman/infrastructure/services/extension.dart';
+import 'package:manager/infrastructure/services/extension.dart';
 
 import 'group.dart';
 

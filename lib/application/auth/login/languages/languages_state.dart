@@ -16,7 +16,7 @@
 
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import 'package:venderfoodyman/infrastructure/models/models.dart';
+import 'package:manager/infrastructure/models/models.dart';
 
 part 'languages_state.freezed.dart';
 

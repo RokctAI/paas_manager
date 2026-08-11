@@ -18,12 +18,12 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
-import 'package:venderfoodyman/domain/interface/interfaces.dart';
-import 'package:venderfoodyman/infrastructure/models/data/user_data.dart';
+import 'package:manager/domain/interface/interfaces.dart';
+import 'package:manager/infrastructure/models/data/user_data.dart';
 
-import 'package:venderfoodyman/infrastructure/models/data/address_data.dart';
-import 'package:venderfoodyman/infrastructure/services/services.dart';
-import 'package:venderfoodyman/presentation/routes/app_router.dart';
+import 'package:manager/infrastructure/models/data/address_data.dart';
+import 'package:manager/infrastructure/services/services.dart';
+import 'package:manager/presentation/routes/app_router.dart';
 import 'profile_state.dart';
 
 class ProfileNotifier extends StateNotifier<ProfileState> {

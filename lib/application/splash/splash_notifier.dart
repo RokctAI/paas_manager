@@ -18,9 +18,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'splash_state.dart';
-import 'package:venderfoodyman/domain/interface/interfaces.dart';
-import 'package:venderfoodyman/infrastructure/models/models.dart';
-import 'package:venderfoodyman/infrastructure/services/services.dart';
+import 'package:manager/domain/interface/interfaces.dart';
+import 'package:manager/infrastructure/models/models.dart';
+import 'package:manager/infrastructure/services/services.dart';
 
 class SplashNotifier extends StateNotifier<SplashState> {
   final SettingsInterface _settingsRepository;

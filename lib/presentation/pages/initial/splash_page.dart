@@ -18,9 +18,9 @@ import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
-import 'package:venderfoodyman/presentation/routes/app_router.dart';
-import 'package:venderfoodyman/application/providers.dart';
-import 'package:venderfoodyman/infrastructure/services/services.dart';
+import 'package:manager/presentation/routes/app_router.dart';
+import 'package:manager/application/providers.dart';
+import 'package:manager/infrastructure/services/services.dart';
 
 @RoutePage()
 class SplashPage extends ConsumerStatefulWidget {

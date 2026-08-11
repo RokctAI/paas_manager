@@ -18,11 +18,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_remix/flutter_remix.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import 'package:venderfoodyman/presentation/styles/style.dart';
+import 'package:manager/presentation/styles/style.dart';
 import '../buttons/buttons_bouncing_effect.dart';
 import '../text_fields/underlined_text_field.dart';
-import 'package:venderfoodyman/infrastructure/models/models.dart';
-import 'package:venderfoodyman/infrastructure/services/services.dart';
+import 'package:manager/infrastructure/models/models.dart';
+import 'package:manager/infrastructure/services/services.dart';
 
 class EditableFoodStockItem extends StatelessWidget {
   final Stock stock;

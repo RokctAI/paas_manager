@@ -18,13 +18,13 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:venderfoodyman/infrastructure/models/data/location_data.dart';
-import 'package:venderfoodyman/presentation/routes/app_router.dart';
+import 'package:manager/infrastructure/models/data/location_data.dart';
+import 'package:manager/presentation/routes/app_router.dart';
 
-import 'package:venderfoodyman/infrastructure/models/data/address_data.dart';
-import 'package:venderfoodyman/infrastructure/services/services.dart';
+import 'package:manager/infrastructure/models/data/address_data.dart';
+import 'package:manager/infrastructure/services/services.dart';
 import '../component/components.dart';
-import 'package:venderfoodyman/presentation/styles/style.dart';
+import 'package:manager/presentation/styles/style.dart';
 
 class AddAddress extends StatelessWidget {
   const AddAddress({super.key}) ;

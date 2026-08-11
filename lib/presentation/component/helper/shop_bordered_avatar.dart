@@ -19,7 +19,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'blur_wrap.dart';
 import 'common_image.dart';
-import 'package:venderfoodyman/presentation/styles/style.dart';
+import 'package:manager/presentation/styles/style.dart';
 
 class ShopBorderedAvatar extends StatelessWidget {
   final String? imageUrl;

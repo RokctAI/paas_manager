@@ -15,8 +15,8 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:venderfoodyman/domain/handlers/handlers.dart';
-import 'package:venderfoodyman/infrastructure/models/models.dart';
+import 'package:manager/domain/handlers/handlers.dart';
+import 'package:manager/infrastructure/models/models.dart';
 
 abstract class UsersInterface {
   Future<ApiResult<ProfileResponse>> createUser({

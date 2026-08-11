@@ -25,17 +25,17 @@ import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
-import 'package:venderfoodyman/infrastructure/models/data/location_data.dart';
-import 'package:venderfoodyman/application/map/view_map_notifier.dart';
-import 'package:venderfoodyman/application/map/view_map_provider.dart';
-import 'package:venderfoodyman/application/map/view_map_state.dart';
-import 'package:venderfoodyman/domain/di/dependency_manager.dart';
-import 'package:venderfoodyman/infrastructure/models/data/address_data.dart';
-import 'package:venderfoodyman/infrastructure/services/services.dart';
-import 'package:venderfoodyman/infrastructure/services/tpying_delay.dart';
+import 'package:manager/infrastructure/models/data/location_data.dart';
+import 'package:manager/application/map/view_map_notifier.dart';
+import 'package:manager/application/map/view_map_provider.dart';
+import 'package:manager/application/map/view_map_state.dart';
+import 'package:manager/domain/di/dependency_manager.dart';
+import 'package:manager/infrastructure/models/data/address_data.dart';
+import 'package:manager/infrastructure/services/services.dart';
+import 'package:manager/infrastructure/services/tpying_delay.dart';
 import '../../component/components.dart';
-import 'package:venderfoodyman/presentation/routes/app_router.dart';
-import 'package:venderfoodyman/presentation/styles/style.dart';
+import 'package:manager/presentation/routes/app_router.dart';
+import 'package:manager/presentation/styles/style.dart';
 
 @RoutePage()
 class ViewMapPage extends ConsumerStatefulWidget {

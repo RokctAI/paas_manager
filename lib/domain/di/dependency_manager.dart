@@ -16,13 +16,13 @@
 
 import 'package:get_it/get_it.dart';
 import 'package:google_place/google_place.dart';
-import 'package:venderfoodyman/domain/interface/notification.dart';
-import 'package:venderfoodyman/domain/interface/table.dart';
-import 'package:venderfoodyman/infrastructure/services/local_storage.dart';
-import 'package:venderfoodyman/domain/handlers/handlers.dart';
+import 'package:manager/domain/interface/notification.dart';
+import 'package:manager/domain/interface/table.dart';
+import 'package:manager/infrastructure/services/local_storage.dart';
+import 'package:manager/domain/handlers/handlers.dart';
 import '../interface/interfaces.dart';
-import 'package:venderfoodyman/presentation/routes/app_router.dart';
-import 'package:venderfoodyman/infrastructure/repositories/repositories.dart';
+import 'package:manager/presentation/routes/app_router.dart';
+import 'package:manager/infrastructure/repositories/repositories.dart';
 
 final GetIt getIt = GetIt.instance;
 

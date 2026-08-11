@@ -15,7 +15,7 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 
-import 'package:venderfoodyman/infrastructure/services/services.dart';
+import 'package:manager/infrastructure/services/services.dart';
 
 class LoginModel {
   final String? email;

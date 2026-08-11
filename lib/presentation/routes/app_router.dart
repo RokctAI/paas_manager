@@ -16,8 +16,8 @@
 
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:venderfoodyman/presentation/pages/main/create_order/shipping/select_section/select_section_page.dart';
-import 'package:venderfoodyman/presentation/pages/main/create_order/shipping/select_table/select_table_page.dart';
+import 'package:manager/presentation/pages/main/create_order/shipping/select_section/select_section_page.dart';
+import 'package:manager/presentation/pages/main/create_order/shipping/select_table/select_table_page.dart';
 import '../pages/generate_image/generate_image_page.dart';
 import '../pages/pages.dart';
 part 'app_router.gr.dart';

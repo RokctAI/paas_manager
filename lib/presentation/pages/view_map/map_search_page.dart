@@ -19,9 +19,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_place/google_place.dart';
 
-import 'package:venderfoodyman/domain/di/dependency_manager.dart';
+import 'package:manager/domain/di/dependency_manager.dart';
 import '../../component/text_fields/search_text_field.dart';
-import 'package:venderfoodyman/presentation/styles/style.dart';
+import 'package:manager/presentation/styles/style.dart';
 @RoutePage()
 class MapSearchPage extends StatefulWidget {
   const MapSearchPage({super.key}) ;

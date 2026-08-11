@@ -19,8 +19,8 @@ import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import 'package:venderfoodyman/presentation/styles/style.dart';
-import 'package:venderfoodyman/infrastructure/services/services.dart';
+import 'package:manager/presentation/styles/style.dart';
+import 'package:manager/infrastructure/services/services.dart';
 
 class UnderlinedTextField extends StatelessWidget {
   final String label;

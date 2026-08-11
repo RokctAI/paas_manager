@@ -22,7 +22,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'styles/style.dart';
-import 'package:venderfoodyman/domain/di/dependency_manager.dart';
+import 'package:manager/domain/di/dependency_manager.dart';
 import '../infrastructure/services/services.dart';
 
 class AppWidget extends ConsumerWidget {

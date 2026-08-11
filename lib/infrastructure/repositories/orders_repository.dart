@@ -17,11 +17,11 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:venderfoodyman/domain/di/dependency_manager.dart';
-import 'package:venderfoodyman/infrastructure/models/models.dart';
-import 'package:venderfoodyman/infrastructure/services/services.dart';
-import 'package:venderfoodyman/domain/handlers/handlers.dart';
-import 'package:venderfoodyman/domain/interface/interfaces.dart';
+import 'package:manager/domain/di/dependency_manager.dart';
+import 'package:manager/infrastructure/models/models.dart';
+import 'package:manager/infrastructure/services/services.dart';
+import 'package:manager/domain/handlers/handlers.dart';
+import 'package:manager/domain/interface/interfaces.dart';
 
 class OrdersRepository implements OrdersInterface {
   @override

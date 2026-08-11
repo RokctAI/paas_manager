@@ -20,9 +20,9 @@ import 'package:auto_route/auto_route.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:venderfoodyman/domain/di/dependency_manager.dart';
-import 'package:venderfoodyman/infrastructure/services/services.dart';
-import 'package:venderfoodyman/presentation/routes/app_router.dart';
+import 'package:manager/domain/di/dependency_manager.dart';
+import 'package:manager/infrastructure/services/services.dart';
+import 'package:manager/presentation/routes/app_router.dart';
 import 'reset_password_state.dart';
 
 class ResetPasswordNotifier extends StateNotifier<ResetPasswordState> {

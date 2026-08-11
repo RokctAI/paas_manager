@@ -23,13 +23,13 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:venderfoodyman/application/notification/notification_provider.dart';
-import 'package:venderfoodyman/infrastructure/models/models.dart';
-import 'package:venderfoodyman/infrastructure/services/services.dart';
-import 'package:venderfoodyman/presentation/component/common_app_bar.dart';
-import 'package:venderfoodyman/presentation/component/components.dart';
-import 'package:venderfoodyman/presentation/pages/main/orders/details/order_details_modal.dart';
-import 'package:venderfoodyman/presentation/styles/style.dart';
+import 'package:manager/application/notification/notification_provider.dart';
+import 'package:manager/infrastructure/models/models.dart';
+import 'package:manager/infrastructure/services/services.dart';
+import 'package:manager/presentation/component/common_app_bar.dart';
+import 'package:manager/presentation/component/components.dart';
+import 'package:manager/presentation/pages/main/orders/details/order_details_modal.dart';
+import 'package:manager/presentation/styles/style.dart';
 
 @RoutePage()
 class NotificationListPage extends ConsumerStatefulWidget {

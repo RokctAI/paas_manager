@@ -28,7 +28,7 @@
 // import 'package:riverpodtemp/presentation/components/text_fields/outline_bordered_text_field.dart';
 // import 'package:riverpodtemp/presentation/pages/auth/confirmation/register_confirmation_page.dart';
 // import '../../../theme/theme.dart';
-// import 'package:venderfoodyman/application/reser_password/reset_password_provider.dart';
+// import 'package:manager/application/reser_password/reset_password_provider.dart';
 //
 // class ResetPasswordPage extends ConsumerWidget {
 //   const ResetPasswordPage({super.key}) ;

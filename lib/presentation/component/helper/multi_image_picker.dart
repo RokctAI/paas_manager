@@ -20,10 +20,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_remix/flutter_remix.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:venderfoodyman/infrastructure/models/models.dart';
-import 'package:venderfoodyman/infrastructure/services/services.dart';
-import 'package:venderfoodyman/infrastructure/services/tpying_delay.dart';
-import 'package:venderfoodyman/presentation/styles/style.dart';
+import 'package:manager/infrastructure/models/models.dart';
+import 'package:manager/infrastructure/services/services.dart';
+import 'package:manager/infrastructure/services/tpying_delay.dart';
+import 'package:manager/presentation/styles/style.dart';
 
 import '../buttons/animation_button_effect.dart';
 import 'blur_wrap.dart';

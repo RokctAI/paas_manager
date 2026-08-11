@@ -18,15 +18,15 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:venderfoodyman/presentation/pages/auth/login/widgets/languages_modal.dart';
-import 'package:venderfoodyman/application/providers/app_providers.dart';
+import 'package:manager/presentation/pages/auth/login/widgets/languages_modal.dart';
+import 'package:manager/application/providers/app_providers.dart';
 
 import '../register_page.dart';
 import 'widgets/login_modal.dart';
-import 'package:venderfoodyman/presentation/styles/style.dart';
+import 'package:manager/presentation/styles/style.dart';
 import '../../../component/components.dart';
-import 'package:venderfoodyman/application/providers.dart';
-import 'package:venderfoodyman/infrastructure/services/services.dart';
+import 'package:manager/application/providers.dart';
+import 'package:manager/infrastructure/services/services.dart';
 
 @RoutePage()
 class LoginPage extends ConsumerStatefulWidget {

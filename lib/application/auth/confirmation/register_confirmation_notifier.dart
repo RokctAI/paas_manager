@@ -23,9 +23,9 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:venderfoodyman/domain/handlers/handlers.dart';
-import 'package:venderfoodyman/domain/interface/interfaces.dart';
-import 'package:venderfoodyman/infrastructure/services/services.dart';
+import 'package:manager/domain/handlers/handlers.dart';
+import 'package:manager/domain/interface/interfaces.dart';
+import 'package:manager/infrastructure/services/services.dart';
 import 'register_confirmation_state.dart';
 
 class RegisterConfirmationNotifier

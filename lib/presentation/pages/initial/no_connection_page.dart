@@ -21,9 +21,9 @@ import 'package:flutter_remix/flutter_remix.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import 'package:venderfoodyman/presentation/styles/style.dart';
-import 'package:venderfoodyman/presentation/routes/app_router.dart';
-import 'package:venderfoodyman/infrastructure/services/services.dart';
+import 'package:manager/presentation/styles/style.dart';
+import 'package:manager/presentation/routes/app_router.dart';
+import 'package:manager/infrastructure/services/services.dart';
 
 @RoutePage()
 class NoConnectionPage extends ConsumerWidget {
