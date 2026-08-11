@@ -62,7 +62,7 @@ dependencies:
   intl: ^0.19.0
   lottie: ^3.0.0
   get_it: ^8.0.0
-  shimmer: ^3.0.0
+  shimmer: ^2.0.0 # pinned down to base_sdk's range (mirrors paas_driver); host usage is plain Shimmer.fromColors, identical API
   http: ^1.2.2
   auto_route: ^9.2.0
   flutter_svg: ^2.0.9
