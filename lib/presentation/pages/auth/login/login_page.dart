@@ -43,7 +43,8 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(languagesProvider.notifier).checkLanguage(context);
       // Debug print to check initialization state
-      print('Remote Config State: ${ref.read(remoteConfigInitializedProvider)}');
+      print(
+          'Remote Config State: ${ref.read(remoteConfigInitializedProvider)}');
     });
   }
 

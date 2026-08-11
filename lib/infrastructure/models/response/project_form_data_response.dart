@@ -29,8 +29,7 @@ class ProjectFormDataResponse {
       ProjectFormDataResponse(
         users: json["users"] == null
             ? []
-            : List<User>.from(
-                json["users"]!.map((x) => User.fromJson(x))),
+            : List<User>.from(json["users"]!.map((x) => User.fromJson(x))),
         statuses: json["status"] == null
             ? []
             : List<String>.from(json["status"]!.map((x) => x)),

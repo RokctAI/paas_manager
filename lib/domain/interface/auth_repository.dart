@@ -64,6 +64,5 @@ abstract class AuthRepository {
     required UserModel user,
   });
 
-  Future<ApiResult<CheckPhoneResponse>>  checkPhone({required String phone});
-
+  Future<ApiResult<CheckPhoneResponse>> checkPhone({required String phone});
 }

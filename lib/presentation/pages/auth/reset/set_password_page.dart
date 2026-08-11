@@ -26,7 +26,7 @@ import '../../../component/text_fields/outline_bordered_text_field.dart';
 import 'package:manager/presentation/styles/style.dart';
 
 class SetPasswordPage extends ConsumerWidget {
-  const SetPasswordPage({super.key}) ;
+  const SetPasswordPage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -57,12 +57,13 @@ class SetPasswordPage extends ConsumerWidget {
                     Column(
                       children: [
                         AppBarBottomSheet(
-                          title: AppHelpers.getTranslation(TrKeys.resetPassword),
+                          title:
+                              AppHelpers.getTranslation(TrKeys.resetPassword),
                         ),
                         40.verticalSpace,
                         OutlinedBorderTextField(
-                          label:
-                              AppHelpers.getTranslation(TrKeys.password).toUpperCase(),
+                          label: AppHelpers.getTranslation(TrKeys.password)
+                              .toUpperCase(),
                           obscure: state.showPassword,
                           suffixIcon: IconButton(
                             splashRadius: 25,
@@ -83,8 +84,8 @@ class SetPasswordPage extends ConsumerWidget {
                         ),
                         34.verticalSpace,
                         OutlinedBorderTextField(
-                          label:
-                              AppHelpers.getTranslation(TrKeys.password).toUpperCase(),
+                          label: AppHelpers.getTranslation(TrKeys.password)
+                              .toUpperCase(),
                           obscure: state.showConfirmPassword,
                           suffixIcon: IconButton(
                             splashRadius: 25,

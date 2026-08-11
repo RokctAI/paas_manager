@@ -39,7 +39,6 @@ Future setUpDependencies() async {
   getIt.registerSingleton<SettingsInterface>(SettingsRepository());
   getIt.registerSingleton<ProductsInterface>(ProductsRepository());
   getIt.registerSingleton<NotificationInterface>(NotificationRepository());
-
 }
 
 final translation = getIt.get<Map>();
@@ -55,4 +54,3 @@ final catalogRepository = getIt.get<CatalogInterface>();
 final productRepository = getIt.get<ProductsInterface>();
 final settingsRepository = getIt.get<SettingsInterface>();
 final notificationRepository = getIt.get<NotificationInterface>();
-

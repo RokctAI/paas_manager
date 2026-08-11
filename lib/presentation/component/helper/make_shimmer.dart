@@ -27,7 +27,7 @@ class MakeShimmer extends StatelessWidget {
     super.key,
     required this.child,
     this.isLoading = true,
-  }) ;
+  });
 
   @override
   Widget build(BuildContext context) {

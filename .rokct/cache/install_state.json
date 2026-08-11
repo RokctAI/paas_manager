@@ -1,0 +1,815 @@
+{
+  "packages": {
+    "base_sdk": {
+      "version": "1.1.0",
+      "files": {
+        "flutter_native_splash.yaml": "d469a133b5e1631d6ba811b048d290449224075edad2153189cfb2edc3f4d100",
+        "android/app/src/main/kotlin/com/foodyman/demo/JuvoApplication.kt": "08d9f33ad23841a9b200ec08ac99e62e9b34acb06e4ab49983a16992ed2c28ca",
+        "android/app/src/main/kotlin/com/foodyman/demo/MainActivity.kt": "6fd7464a016f4a6ee3cb580f0acf182fc397afa4f5583a99caa56dae7e52b9a8",
+        "android/app/src/main/res/font/montserrat_extrabolditalic.ttf": "d38bac61eda8d8c002b1a852f5368901a085fbe1d844b5e0a149b674e22e2cdd",
+        "android/app/src/main/res/raw/notification.wav": "e3e7b32ecf00872fa5da29d94b5738aaf9890981e39f640e083db9a522d961a6",
+        "ios/Runner/Assets.xcassets/AppIcon.appiconset/AppIcon-29@3x.png": "02373e1f13fdb0d818636d08959f3287ee8e1042a3959a9c1a9d30a0e2ca6a89",
+        "ios/Runner/Assets.xcassets/AppIcon.appiconset/AppIcon~ipad.png": "4d4be6287e85f6be6fba34ac40a159c8a2e6e12c9d3e2b2f65fc9a50a5209488",
+        "ios/Runner/Assets.xcassets/AppIcon.appiconset/AppIcon-20~ipad.png": "a0bbc103b3bc015ccec3ac6806de68d48a278726eb6a6d59855c37950cd591c1",
+        "ios/Runner/Assets.xcassets/AppIcon.appiconset/AppIcon-40~ipad.png": "0606dc265dd1b6dd08df03a90b7b9b1659c6d0d8133724cfa792c65e7aa50bf9",
+        "ios/Runner/Assets.xcassets/AppIcon.appiconset/AppIcon-40@2x~ipad.png": "4edeb36d690a4fb40d1b923564b5220ad0c82cccee873d8c49cf7ccdf6f17287",
+        "ios/Runner/Assets.xcassets/AppIcon.appiconset/AppIcon~ios-marketing.png": "904d4c9fdf1e5cfd99f8374a234126cb688b5561227097c168b799e774e01f85",
+        "ios/Runner/Assets.xcassets/AppIcon.appiconset/AppIcon-20@2x~ipad.png": "0606dc265dd1b6dd08df03a90b7b9b1659c6d0d8133724cfa792c65e7aa50bf9",
+        "ios/Runner/Assets.xcassets/AppIcon.appiconset/AppIcon-60@3x~car.png": "b6b30212ca33e3d3a0f8293f5d143b04cc4cea9776a6ca6a9f5e429ec88d5273",
+        "ios/Runner/Assets.xcassets/AppIcon.appiconset/AppIcon-60@2x~car.png": "f0d45eec5d5654768f5351247e6d10a5309365a4948d1aae1698294af30b2dcc",
+        "ios/Runner/Assets.xcassets/AppIcon.appiconset/AppIcon-40@2x.png": "4edeb36d690a4fb40d1b923564b5220ad0c82cccee873d8c49cf7ccdf6f17287",
+        "ios/Runner/Assets.xcassets/AppIcon.appiconset/AppIcon-29.png": "41b9440c36800caac47be04afac3135b699a6cb4ca432d6f22d0d0ed17cfa289",
+        "ios/Runner/Assets.xcassets/AppIcon.appiconset/AppIcon-29@2x~ipad.png": "c2c86a16df23add98a93d3ade928a8ad57e9cb1b755db309373067897f7f2a7e",
+        "ios/Runner/Assets.xcassets/AppIcon.appiconset/AppIcon-83.5@2x~ipad.png": "59f3f4d2a51a421873b9950137a8419b45d54d0e0658dd86d5c4736f507ff1f1",
+        "ios/Runner/Assets.xcassets/AppIcon.appiconset/AppIcon-20@2x.png": "0606dc265dd1b6dd08df03a90b7b9b1659c6d0d8133724cfa792c65e7aa50bf9",
+        "ios/Runner/Assets.xcassets/AppIcon.appiconset/AppIcon-29@2x.png": "c2c86a16df23add98a93d3ade928a8ad57e9cb1b755db309373067897f7f2a7e",
+        "ios/Runner/Assets.xcassets/AppIcon.appiconset/AppIcon@2x~ipad.png": "0b7dac7382a61ee5763a64cd3ebe31c9fb47ec7d0324c5ad6519225eb5ec1158",
+        "ios/Runner/Assets.xcassets/AppIcon.appiconset/AppIcon@3x.png": "b6b30212ca33e3d3a0f8293f5d143b04cc4cea9776a6ca6a9f5e429ec88d5273",
+        "ios/Runner/Assets.xcassets/AppIcon.appiconset/AppIcon@2x.png": "f0d45eec5d5654768f5351247e6d10a5309365a4948d1aae1698294af30b2dcc",
+        "ios/Runner/Assets.xcassets/AppIcon.appiconset/AppIcon-20@3x.png": "97f9b5dbb52449997d6cb644ac7adc0e42c2cda873e641c658c42dbe572893c9",
+        "ios/Runner/Assets.xcassets/AppIcon.appiconset/AppIcon-40@3x.png": "f0d45eec5d5654768f5351247e6d10a5309365a4948d1aae1698294af30b2dcc",
+        "ios/Runner/Assets.xcassets/AppIcon.appiconset/AppIcon-29~ipad.png": "41b9440c36800caac47be04afac3135b699a6cb4ca432d6f22d0d0ed17cfa289",
+        "assets/images/ui1.png": "cbcefd92c0f96e9c4f9315fff357cc63a8095d51ac53080f4490f7f8427ed9c7",
+        "assets/images/splash2.png": "15f17d2db026f6d02d4b639aa1ed7c8930a10952e09da8607c52f4c4443cc122",
+        "assets/images/splash1.png": "15f17d2db026f6d02d4b639aa1ed7c8930a10952e09da8607c52f4c4443cc122",
+        "assets/images/notFound.png": "bd8902d7a7b2b4f3d5701caf9ef252dc8765ab359f379c0dcb16f27ffe478adf",
+        "assets/images/ui3.png": "f916a60c05da26d504525cba339bf8e77063fe8bf7f0277884b93fffc730fe8e",
+        "assets/images/splash.png": "15f17d2db026f6d02d4b639aa1ed7c8930a10952e09da8607c52f4c4443cc122",
+        "assets/images/fast.png": "76bdf5d241ba5b8c515233349174e5cbbe0984a9e52fb5834bbef008b4b3ddfc",
+        "assets/images/order.png": "08558741d26a73cef0e93745cb9a8a3630ba716444adbed02453e9ee4ca15eec",
+        "assets/images/delivery.png": "bfba72635a86d7b69bca1774302e2f07cfe297b82fdcc7c45d1eae0915fbf5d1",
+        "assets/images/door.png": "c1ab409142c79303f40756d35e728ee7c91b6e8c548da0d6fb5ccf47c90c39f7",
+        "assets/images/ui0.png": "49c443c4901c937ed91bcdfe784f71a9e0277c97c4086e9d416ce8bede8f64eb",
+        "assets/images/save.png": "f6885a79bd859f5979043fec5843c4b5053679bf0fe66ed51c9933d1c65ce778",
+        "assets/images/set.png": "f944227f8cde814049a888a732bdbe255b2a32ec3a1629ea2a1127142bdef5a7",
+        "assets/images/app_logo.png": "7accc2b8b2f4d1414fc21b3fb3c9e018e10439fea02339efcd0660e5846369c9",
+        "assets/images/visa.png": "1719f035b3e01fb0efd7c300c7fad77e14ec7eac4bf63a2b7a6606cfd6c1f197",
+        "assets/images/card.png": "c490bd23f7566c1d56700cdcf4ec8c095be829237d8ca5845585c3bfe773ad79",
+        "assets/images/cardBg.png": "539b76b460c9376e04d1794a2af17fd5894ec9272761dc0d58fe6412c0c1156d",
+        "assets/images/ui2.png": "e21a03c853cef2fafed356ff0a8de0a5e80c36a23381dbf32fd3ca3c9d6d87cd",
+        "assets/images/logo.png": "c94a0b944700f35fadf980456d5c73aa9e40e3db9686c105755dfad3a0ad1b48",
+        "assets/lottie/notification_empty.json": "4910696b915ba2f7c1302460039c7f78c17782231eaa4887360710b364d7ad62",
+        "assets/lottie/girl_empty.json": "0bcdf98146d29714171085550fc4db6bb106236ccdad499ad696fb4acd3957bb",
+        "assets/lottie/not_found_page.json": "680a132bc530ba49e09ebd74d76bfc1ad35e7611d186c72d800ced8ea5a2a111",
+        "assets/lottie/not-found.json": "7febd84a50e1d738844b06c7b886bab9a4343eae6403cc11e2c3bd8f7821df6a",
+        "assets/svgs/avatar.svg": "9f0bcfc64a25f82a1d39d7b200659862b6c856072df31906230e1601407353f7",
+        "assets/svgs/delivery2.svg": "127690bf32f78617299505a810ea65116c06e0dd0fbaade9bba90dfa23fc494a",
+        "assets/svgs/ticket.svg": "13801b1f4de167b62b51f93b370c02bb278b8708a09f270f039e6dfbb0b5c7d2",
+        "assets/svgs/delivery_time.svg": "a125cc19652b774775a27ec8d632530ed624f5950817b853c7507ed79b3b9754",
+        "assets/svgs/delivery.svg": "48dc8f137f24c9d6ad90557e2a8b0f2aa53839e70361b0489f413780f7d320b8",
+        "assets/svgs/contact.svg": "2db95dd1c4bdc16c1db9fb0814af3e9e27cda2ec390c07e1ad7a8d24fac1f5b4",
+        "assets/svgs/pickUpFrom.svg": "3fa43dc1bf6aafe14bc4d5588e2e9a54cf9fdb4053bd16cf4f796f59f731dee8",
+        "assets/svgs/brand_logo_rounded.svg": "c0bacbe19e595cfa43e1c96621c9b62546c6970eb71bf48f44a62d5f8a3eaedf",
+        "assets/svgs/star.svg": "61afbcf2751aef31dc03b3bc1ea84ae4b4ebddaa8d6177fa2bb6e1457d8ed9c3",
+        "assets/svgs/discount.svg": "f2950ddf871d045df485662fcdbd9a42c73dc6048a93e3d06566b78a1122cb2b",
+        "assets/svgs/filter.svg": "99e051bcb1258f981bea16feec85d7596b7c373f8bd82cf5803388ccf9f042aa",
+        "assets/svgs/orderTime.svg": "bb7cae032a9c24293657560178fc301a078f1414485288d8cf93a7cb1d210ff1",
+        "assets/svgs/empty.svg": "145faca3f39dfdfbc1f5f9ddd7aad26c43cc58368e0cc9e878e1e1949b86a35a",
+        "assets/svgs/adress.svg": "774120f4d4cd801898852fc3062683a456a8c07bf8253a0c608fc5429f604697",
+        "assets/svgs/foodyman.svg": "8d9dd7f7cf44328d4ed2b7364163eb218a17636763d3cb886d9d9e4b6ab48261",
+        "lib/presentation/theme/theme.dart": "4fd8344adbba5f9720346b6406d4d06056752d7dec07b2318d2e0180955511a7",
+        "lib/presentation/theme/app_style.dart": "f202085343ef063bdfb3c285c6cda67eaac1e92e5d7fb32297783178eca55c63"
+      },
+      "routes": [
+        {
+          "path": "/",
+          "page": "SplashRoute.page",
+          "type": "MaterialRoute",
+          "import": "package:${package}/presentation/routes/route_pages.dart"
+        },
+        {
+          "path": "/no-connection",
+          "page": "NoConnectionRoute.page",
+          "type": "MaterialRoute",
+          "import": "package:${package}/presentation/routes/route_pages.dart"
+        },
+        {
+          "path": "/closed",
+          "page": "ClosedRoute.page",
+          "type": "MaterialRoute",
+          "import": "package:${package}/presentation/routes/route_pages.dart"
+        },
+        {
+          "path": "/ui-type",
+          "page": "UiTypeRoute.page",
+          "type": "MaterialRoute",
+          "import": "package:${package}/presentation/routes/route_pages.dart"
+        }
+      ],
+      "app_routes": [
+        {
+          "method": "replaceSplashRoute",
+          "body": "context.router.replace(SplashRoute());",
+          "imports": [
+            "import 'package:auto_route/auto_route.dart';",
+            "import 'package:${package}/presentation/routes/app_router.dart';"
+          ]
+        },
+        {
+          "method": "replaceNoConnectionRoute",
+          "body": "context.router.replace(NoConnectionRoute());",
+          "imports": [
+            "import 'package:auto_route/auto_route.dart';",
+            "import 'package:${package}/presentation/routes/app_router.dart';"
+          ]
+        },
+        {
+          "method": "replaceClosedRoute",
+          "body": "context.router.replace(ClosedRoute());",
+          "imports": [
+            "import 'package:auto_route/auto_route.dart';",
+            "import 'package:${package}/presentation/routes/app_router.dart';"
+          ]
+        },
+        {
+          "method": "replaceUiTypeRoute",
+          "body": "context.router.replace(UiTypeRoute());",
+          "imports": [
+            "import 'package:auto_route/auto_route.dart';",
+            "import 'package:${package}/presentation/routes/app_router.dart';"
+          ]
+        }
+      ],
+      "onboarding_slides": [],
+      "registration_steps": [],
+      "embedded_widgets": [],
+      "app_assets": [
+        "assets/images/app_logo.png",
+        "assets/images/card.png",
+        "assets/images/cardBg.png",
+        "assets/images/delivery.png",
+        "assets/images/door.png",
+        "assets/images/fast.png",
+        "assets/images/logo.png",
+        "assets/images/notFound.png",
+        "assets/images/order.png",
+        "assets/images/save.png",
+        "assets/images/set.png",
+        "assets/images/splash.png",
+        "assets/images/splash1.png",
+        "assets/images/splash2.png",
+        "assets/images/ui0.png",
+        "assets/images/ui1.png",
+        "assets/images/ui2.png",
+        "assets/images/ui3.png",
+        "assets/images/visa.png",
+        "assets/lottie/girl_empty.json",
+        "assets/lottie/not-found.json",
+        "assets/lottie/not_found_page.json",
+        "assets/lottie/notification_empty.json",
+        "assets/lottie/processing.json",
+        "assets/svgs/adress.svg",
+        "assets/svgs/avatar.svg",
+        "assets/svgs/brand_logo_rounded.svg",
+        "assets/svgs/contact.svg",
+        "assets/svgs/delivery.svg",
+        "assets/svgs/delivery2.svg",
+        "assets/svgs/delivery_time.svg",
+        "assets/svgs/discount.svg",
+        "assets/svgs/empty.svg",
+        "assets/svgs/filter.svg",
+        "assets/svgs/foodyman.svg",
+        "assets/svgs/orderTime.svg",
+        "assets/svgs/pickUpFrom.svg",
+        "assets/svgs/star.svg",
+        "assets/svgs/ticket.svg"
+      ]
+    },
+    "users_sdk": {
+      "version": "1.0.0",
+      "files": {},
+      "routes": [],
+      "app_routes": [],
+      "onboarding_slides": [],
+      "registration_steps": [],
+      "embedded_widgets": []
+    },
+    "merchants_sdk": {
+      "version": "1.2.0",
+      "files": {
+        "assets/audio/notification.wav": "9d62af6f1c8df010941d1daa17162175d87293bd78371c787803b5a11f95cb9d",
+        "assets/svgs/menu.svg": "9767d04ac4d157e423f972259a9c2c455a6a629c4098cc9c2fe8f9722451441b",
+        "lib/presentation/pages/main/main_page.dart": "735a52bdd03e24cd55434213e6c29d596b9d234aecf4667082e82875e2b03d89",
+        "lib/presentation/pages/main/widgets/bottom_navigator_item.dart": "13b6d8bf507b4fa59ba5d388277e64b1585b982423dbbbb7721a700764929df9",
+        "lib/presentation/pages/main/widgets/buttons_bouncing_effect.dart": "0a67599a1b89fdacea2f26928f485db3cd606eff9aabaea2516322f071dea891",
+        "lib/presentation/pages/restaurant/restaurant_page.dart": "3eba96ecfa0f9184f9cc6df041348a0c642dfd2a815e626b42eda8dc2f3d83a4",
+        "lib/presentation/pages/restaurant/widgets/edit_restaurant_modal.dart": "43cd539fdb5da1187b08908d60dd45119b6a9fef964e0d3b02366bea8f66b29c",
+        "lib/presentation/pages/restaurant/widgets/logout_button.dart": "4e6755d8971800b046811d38ff8421ae1247180d7f7b9a667df93f4b53184494",
+        "lib/presentation/pages/restaurant/widgets/working_time_modal.dart": "0f1f7567e64651b15240cd26d9c25c71e060e31c2cebeddda7f1f40d0cfabcce",
+        "lib/presentation/pages/restaurant/widgets/sections_item.dart": "9e0b8a6c09d5d4cac57be9b6e074a6493faa7a62d6ba8d9030eafad447ac464e",
+        "lib/presentation/pages/restaurant/widgets/logout_modal.dart": "53776231346d4f715d28e12ae71801ca84685f8eda436e0aa40745283efd442c",
+        "lib/presentation/pages/restaurant/widgets/shop_page_banner.dart": "1fa91befa87e36e5cd213b2cf023595e55cbb15cda22763c48f1ab9c611685a4",
+        "lib/presentation/components/restaurant/small_weekday_item.dart": "1600dec1dc5a55a76d0b57b264c6802948b56ce3e1e06b45bb7fa1a4a1b36364"
+      },
+      "routes": [
+        {
+          "path": "/main",
+          "page": "MainRoute.page",
+          "type": "CupertinoRoute",
+          "import": "package:${package}/presentation/pages/main/main_page.dart",
+          "_comment": "The installed page carries @RoutePage(name: 'MainRoute'), so auto_route generates the route class in the host's own app_router.gr.dart. Path and route name match paas_manager's existing CupertinoRoute(path: '/main', page: MainRoute.page), so host navigation call-sites keep working when the host deletes its own copy of the page."
+        }
+      ],
+      "app_routes": [],
+      "onboarding_slides": [],
+      "registration_steps": [],
+      "embedded_widgets": [],
+      "tr_keys": {
+        "theRestaurantIsClosedToday": "the_restaurant_is_closed_today",
+        "before": "before",
+        "after": "after",
+        "orderPayment": "order.payment"
+      },
+      "app_assets": [
+        "assets/audio/notification.wav",
+        "assets/images/splash.png",
+        "assets/images/splash1.png",
+        "assets/images/splash2.png",
+        "assets/svgs/menu.svg"
+      ]
+    },
+    "products_sdk": {
+      "version": "1.1.0",
+      "files": {
+        "lib/presentation/pages/foods/foods_page.dart": "e4608b849c611f02062e271b1c190ae0f6dc8d1817f3b016c7bb718f4a5aec88",
+        "lib/presentation/pages/foods/foods/foods_body.dart": "bf6714d529abf48dfd2eefc2b4b46b4dee694d3df68b04e0b4501097fd53d460",
+        "lib/presentation/pages/foods/addons/addons_body.dart": "eebf94226acae3d771810954a08ed28d7a375c1e529a76be27e12548a2104e86",
+        "lib/presentation/pages/foods/addons/create/create_addon_units_modal.dart": "944b4d1dcf0f67935b75a4df673ddc3b1da39bd2f9a18a07b6eeb07c7f888968",
+        "lib/presentation/pages/foods/addons/create/create_addon_modal.dart": "9b4b2fe5f0a7861c9a694709a6b8d2fa9ce4b0365c4bffda44e0665be4bf3ced",
+        "lib/presentation/pages/foods/addons/edit/edit_addon_units_modal.dart": "66ac3ef5cb0bba9452998311ab7a693b35c6e9da6a3fe10eb0ca42f735ed4b6a",
+        "lib/presentation/pages/foods/addons/edit/edit_addon_modal.dart": "cf83e2238d5dfbefc577b6e384f535e71343f09a43cecf2fe2042199381dfc1f",
+        "lib/presentation/pages/foods/addons/widgets/addon_item.dart": "91580f406a720d144edb19522cb6280bf42f8c7e1ae1cd333e7827040bbdc964",
+        "lib/presentation/pages/foods/extras/extras_body.dart": "c4752473d2e8e6d5507782619504b95827d411b6b1b55ea8581dba80a0aacca3",
+        "lib/presentation/pages/foods/extras/update/update_extras_group_modal.dart": "c26e7b3df1874fd2c439a8231fc92b46109d067041b258ef8ed622f772d93718",
+        "lib/presentation/pages/foods/extras/delete/delete_extras_group_modal.dart": "8c2139ac3f27f3a34bcc8b6f6f2dcd9cc814b076e39d20cb567e4646185bc47d",
+        "lib/presentation/pages/foods/extras/details/extras_group_details_modal.dart": "113f73b9aa22c87dd4fbb323b80b551171f4477b2e94c81bfefb39091a8a719d",
+        "lib/presentation/pages/foods/extras/details/widgets/delete_extras_item_modal.dart": "2ab927fe0b3d4759c85187bf18f6cf212b7f7f72f5d163f3cb764b513c369e6e",
+        "lib/presentation/pages/foods/extras/details/widgets/edit_extras_item_modal.dart": "ca8285f5264c1edb09bdcb15d9a7335e5595b3b11bf3c290e88456cb8f0772a0",
+        "lib/presentation/pages/foods/extras/details/widgets/create_new_group_item_modal.dart": "758b37e197ff8c612eb0a14a287e5965e84983c095d098ba6ebd73cb2cb6fd37",
+        "lib/presentation/pages/foods/extras/details/widgets/group_detail_extras_item.dart": "676d4b7fe358f5bc74353634243bda17b46c157fb05867e846bd15adc9802c77",
+        "lib/presentation/pages/foods/extras/create/create_extras_group_modal.dart": "96ff42875bd40220efd21d8a7c09a51b36fde2b9bc809f26e6c24ba14a4edaf7",
+        "lib/presentation/pages/foods/extras/widgets/main_group_item.dart": "09583df5a274be0907a36ffac6454562550b51ffce36568689d0b50a4d980883",
+        "lib/presentation/pages/foods/create/create_product_modal.dart": "8c6b6bc083f4217c4f9dad2bb165492a967c354ac8d0d35e5d77bb1b966b3d6a",
+        "lib/presentation/pages/foods/create/details/create_food_units_modal.dart": "435fcaf28fe79ee6379844b10db67f5cc5c9c689befe52384f79de9640f40d37",
+        "lib/presentation/pages/foods/create/details/create_food_details_body.dart": "e8e0ca99e2834b66eef025d1bce4b01b1cb49d5237f165aca420ea3dbb32583c",
+        "lib/presentation/pages/foods/create/details/add_category_modal.dart": "9c03d12ecd6ceb003d19096c1620e82a0ae771c0dd86825a6eea2d4252dad9f7",
+        "lib/presentation/pages/foods/create/details/food_categories_modal.dart": "f07de288a61c790dbb5e0e957a68373fe23309c8bfb2cc0ae0f798e5b76d7751",
+        "lib/presentation/pages/foods/create/stocks/create_food_edit_extras_modal.dart": "eb3223dc2733306d03e521433ce4cf15eb9c344f7a4733671833002b72291917",
+        "lib/presentation/pages/foods/create/stocks/create_food_addons_modal.dart": "77748f966f7f6652fe93ba49b8687bea5aad54df44a2ba2765ec2d4f391dc8b2",
+        "lib/presentation/pages/foods/create/stocks/create_food_stocks_body.dart": "d24f25e6a6dc273aa9f7064513bfd499bb2abdec7000af726276aecf8ec37f1d",
+        "lib/presentation/pages/foods/edit/edit_product_modal.dart": "69eb3985c43379c985f26a94f838f8b107d53cc690cea156784064f98d7a650f",
+        "lib/presentation/pages/foods/edit/details/edit_food_categories_modal.dart": "dc14c3cdef78e6a7bcdb12683847543f518640ec9104ef41e884b688edce01c8",
+        "lib/presentation/pages/foods/edit/details/edit_food_details_body.dart": "dab308bc1d8157411e0c6ec386f9ec8ec5cbb2499a1e8d08202772735445c4bf",
+        "lib/presentation/pages/foods/edit/details/edit_food_units_modal.dart": "52624a51cee1afd99a684b4f503929deca7b25eaff6de54ceaf548a086572ce2",
+        "lib/presentation/pages/foods/edit/stocks/edit_group_extras_modal.dart": "c4ae28d7a398dce775d6b493fb96422f74be21e33237c9d86ef4c237f339ecc3",
+        "lib/presentation/pages/foods/edit/stocks/edit_food_addons_modal.dart": "7e9a1d9e4b516a34fc9b39e350130718a3749e608ffe86e3061babf18658828f",
+        "lib/presentation/pages/foods/edit/stocks/edit_food_stocks_body.dart": "0cc501e3eec00b1458d686ec9b2519256c6c04bfc6c8450c399dd1eb067734a1",
+        "lib/presentation/pages/foods/widgets/food_kitchens_modal.dart": "74793542737b50f83a49fbf85842159f3bebfc10e0650c48f7bebeacd0f55516",
+        "lib/presentation/components/foods/food_item.dart": "33b85bbd7eee8de3ef66d76247af02299c87b6e89fd91a98108a76429b6ddde3",
+        "lib/presentation/components/foods/products_body.dart": "509f2f88d043d1937c74fc76867bfc437756e66a3093e7c3a4098757539585e7",
+        "lib/presentation/components/foods/food_category_item.dart": "d3c50122bee356177f40b3de49a3b9c2e64c50b11589fa32d586dedcb631c0f4",
+        "lib/presentation/components/foods/food_unit_item.dart": "ad05f00dbdde9c4b5489b025038a3366c3cb1decbfad7ca80f506c61aa946137",
+        "lib/presentation/components/foods/food_kitchen_item.dart": "d96d99f90059e29e7db2e5c37a21d5667581c69c0404494805457fe4940eab68",
+        "lib/presentation/components/foods/extras_item.dart": "bcf28670e148e12b3341e496f4c15e964a70ce487b40d3538df7b6c02fcebe32",
+        "lib/presentation/components/foods/group_extras_item.dart": "1071d2fca2c429c5afed5c26138954cd28d4762307c5c6bbb8a7ef194f196479",
+        "lib/presentation/components/foods/selectable_addon_item.dart": "57ef1625ee49ec18d148da6bf097a5b7557a546729553df54d37b17f73946902",
+        "lib/presentation/components/foods/editable_food_stock_item.dart": "836b22625625f46ad3c57859e51043408ce9e0ad068c0f281a03636ebfcf0599",
+        "lib/presentation/components/foods/multi_image_picker.dart": "15e542833cd9e0252cff8f0c1da86741a5f46e958db903cb8ca881341dfd4a22"
+      },
+      "routes": [],
+      "app_routes": [],
+      "onboarding_slides": [],
+      "registration_steps": [],
+      "embedded_widgets": [],
+      "tr_keys": {
+        "addNewCategory": "add_new_category",
+        "addNewExtras": "add_new_extras",
+        "addNewExtrasGroup": "add_new_extras_group",
+        "addProduct": "add_product",
+        "addons": "addons",
+        "areYouSureToDelete": "are_you_sure_to_delete",
+        "categoryName": "category_name",
+        "edit": "edit",
+        "extras": "extras",
+        "input": "input",
+        "interval": "interval",
+        "maxQtyShouldBeGreaterThanMinQty": "max_qty_should_be_greater_than_min_qty",
+        "maxQuantity": "max_quantity",
+        "minQuantity": "min_quantity",
+        "minQuantityError": "min_quantity_error",
+        "productCategory": "product_category",
+        "productTitle": "product.title",
+        "quantity": "quantity",
+        "showProduct": "show_the_product_to_the_customer",
+        "sku": "sku",
+        "stocks": "stocks",
+        "subShopCategory": "sub.shop.category",
+        "successfullyCreated": "successfully_created",
+        "successfullyUpdated": "successfully_updated",
+        "thanksForCategory": "thanks.for.category",
+        "units": "units",
+        "updateFailed": "update_failed"
+      }
+    },
+    "orders_sdk": {
+      "version": "1.1.0",
+      "files": {
+        "lib/presentation/pages/orders/orders_home_page.dart": "06384551a189afcc6b9c4736c45c12ebf06c9387d009465ea97f7715ff678793",
+        "lib/presentation/pages/orders/details/order_details_modal.dart": "1942ef1653c7742327e333a4f26d25d0e0fd1db8eb30ad02fa9373818ae15a31",
+        "lib/presentation/pages/orders/details/price_information.dart": "ebd4135577089dff241c2d38f0e8b98750cf7e0578110f68784b6316527dc4dd",
+        "lib/presentation/pages/orders/details/image_dialog.dart": "c9d27f4ff3d75dde97ce7181450e77c9dd406e36bd0ef41f1908dec14a15ad61",
+        "lib/presentation/pages/orders/widgets/new_orders_body.dart": "69d54e47b949be4d394d4bca2e1b473ab43fcc1781fa0dea6353a0bcd35929bf",
+        "lib/presentation/pages/orders/widgets/ready_orders_body.dart": "d9c711b6ce163d1dbd1fb5de23704d6391f432c9a1c137b639aa311a2081c497",
+        "lib/presentation/pages/orders/widgets/accepted_orders_body.dart": "be0ba914d5da04741372731348c4ff8e5c027ba62910d36e0cf50afecfa7e461",
+        "lib/presentation/pages/orders/widgets/no_orders.dart": "4f38ab2e73d3cd212142b48f41ac9c365b969b79ba50ce3de497067c9b051ae8",
+        "lib/presentation/pages/orders/widgets/on_a_way_orders_body.dart": "793553c544521497fd1032acfc789ce854d8e4054b24876ea63d27b507e5e39d",
+        "lib/presentation/pages/create_order/create_order_page.dart": "95fde3195f0ffd9a1501b72e08f0f403722702b4f75dd8ffbdef78ab98872ea5",
+        "lib/presentation/pages/create_order/details/food_details_modal.dart": "0e21d07269cc687492364e531287cf9ac9734c1426b99d6c79f0da01199cc452",
+        "lib/presentation/pages/create_order/details/widgets/food_price_widget.dart": "1c0c7d4311c5768e45a15c5fdb097c36c022149c67c498e7d72fc5580dc1f288",
+        "lib/presentation/pages/create_order/details/widgets/food_extras.dart": "01db35182d50d9fd5a36022085cfc1df938253880d4474e321a032a43165f091",
+        "lib/presentation/pages/create_order/details/widgets/w_ingredient.dart": "5d21e09c6409dc7192413c9fa1237562732194bb617484a29a9ab7c2969013ec",
+        "lib/presentation/pages/create_order/details/widgets/ingredient_item.dart": "f4b1050ad2fc1411f8af70263a38a15a6ee36fea9b03465ea41ba334a2c053f2",
+        "lib/presentation/pages/create_order/shipping/shipping_address_page.dart": "19b7921222cb00c83934def8bd3fcc7ebfa7a549b16805a79f3582c49f721d77",
+        "lib/presentation/pages/create_order/shipping/select_section/select_section_page.dart": "4183780e7b56da640aa7ccf4e282fb0a4ae2aa001bbc5a7bedd3e1c85b26a3cf",
+        "lib/presentation/pages/create_order/shipping/select_section/widgets/section_item.dart": "e35a16c9c94c73c2f9889a13fd50370217fd25e6bff7e381ba62d7982ccd64ed",
+        "lib/presentation/pages/create_order/shipping/details/delivery_time_page.dart": "6e0916d8a4684c74f9ccfcc794f0f1981330193766cf014bdb8e70f933b8c6ce",
+        "lib/presentation/pages/create_order/shipping/details/widgets/payment_item.dart": "87af73d0e1f6e4bef2bdcb2b3c9c458c7a3ab04cc1e2477589840a60f0aaf53b",
+        "lib/presentation/pages/create_order/shipping/address/select_address_page.dart": "a911fd24dcc5d02310129b35bf6d6ffef0d1c2ac2e7daeade4d7bcfee829bdcc",
+        "lib/presentation/pages/create_order/shipping/address/searched_location_item.dart": "bb7a67200be1e8d1caac7febdc6925f3cc5008362ced732445de8a525beecd05",
+        "lib/presentation/pages/create_order/shipping/select_table/select_table_page.dart": "004a1647ba1de90927b9a827fbf38358203ceb7aca7962723fe1622e0ea723d8",
+        "lib/presentation/pages/create_order/shipping/select_table/widgets/table_item.dart": "49cfa99b9dba72a7c39cf7a324747993c21c8d8883871dc3066bd9ca107b5b78",
+        "lib/presentation/pages/create_order/shipping/widgets/delivery_type_item.dart": "9f779e60a748b999cf9ce7761841c155a558e3bbccf7dd56234fb0f8901ee82c",
+        "lib/presentation/pages/create_order/shipping/widgets/searched_user_item.dart": "05825bb2974ace1df6e4be2713375e52a793aa7b5e5822caa00d1f08f19f3592",
+        "lib/presentation/pages/create_order/shipping/select_user/select_user_page.dart": "c74c5e68bd2348e91d149498d2d3ac4c64bb4f998ce719adfb73519acf085a2d",
+        "lib/presentation/pages/create_order/shipping/select_user/widgets/create_user_modal.dart": "346770cac0e9efcbdb6900b56fa1d941eeade53539149023ffc19bff8bf98560",
+        "lib/presentation/pages/create_order/shipping/select_user/widgets/user_item.dart": "bb1031eb71f18d53759811999ceb7bb5aa9278347d7ac41d868b857644dd2a27",
+        "lib/presentation/pages/create_order/order/order_page.dart": "b6bfbdaa81ab7a3a8d4e7b10d46c85ddc8ef50c5420e5d87b2bb5bbceeb95520",
+        "lib/presentation/pages/create_order/order/widgets/title_price.dart": "3bb2246aa05c57edf55a693c4288e3dc87713d1f21650f67bdc8add7846d1ed6",
+        "lib/presentation/pages/order_history/order_history.dart": "4634f24f3ff0dd44ae5b63b843f6ab7fe1ae25c7e65219b92df0012d04000b84",
+        "lib/presentation/components/orders/orders_item.dart": "8ba51df995fcdf965f8da6db1fac4b0e4ab528f4dd9c130e8cf5ea2a716f56ce",
+        "lib/presentation/components/orders/order_item.dart": "fa6bae875b320575af443fe049bad9a7a801cb416b66297b675c644c5a585d4b",
+        "lib/presentation/components/orders/order_food_item.dart": "6d59be2cda9d787c58ca2f3a6ee0581fd521e5e7dbd3fd518c337395cb3df583",
+        "lib/presentation/components/orders/order_product_item.dart": "caa4111191698c92cb865b4ee534784e424ebd8a7a3f886c1f0cbdba441fa97d",
+        "lib/presentation/components/orders/driver_avatar.dart": "0538c1f51fe72274e7a3b3791459b57aa1ed6c5b91fa5b25bacc618e1e336c87",
+        "lib/presentation/components/orders/products_body.dart": "9e2579803cf9b19b8558bd8b41790eae5f709e0cd16cb4ab63985acc37b96f8d",
+        "lib/presentation/components/orders/food_item.dart": "35c9d791f371cd50e989702bd33f6b6f90b9d7d3d80969edee5cb0b064deb569",
+        "lib/presentation/components/orders/food_stock_item.dart": "013702ed2586c33b6b87109d29b2c2ddb2de13de7733166c44b1309f7b56d5d9",
+        "lib/presentation/routes/orders_adapters.dart": "7f2a61662d437b5d6820bcae7e63d0bd99a1b704dbae2a1676975ef95af94a39",
+        "assets/images/no_orders.png": "40dee5619d6b6167dd5fcbec9ad4739738f0c6f8d98dc41857dc49ab01d08ed0"
+      },
+      "routes": [
+        {
+          "path": "/order-products",
+          "page": "ManagerCreateOrderRoute.page",
+          "type": "CupertinoRoute",
+          "import": "package:${package}/presentation/pages/create_order/create_order_page.dart",
+          "_comment": "Route names carry a Manager prefix (revenue_sdk's ManagerIncomeRoute convention) but keep paas_manager's exact legacy paths and CupertinoRoute/MaterialRoute types, so host navigation call-sites swap class names only. merchants_sdk's main_page.dart FAB pushes ManagerCreateOrderRoute - that name is this manifest's contract. The installed pages carry @RoutePage(name: 'Manager...Route'), so auto_route generates the classes in the host's own app_router.gr.dart."
+        },
+        {
+          "path": "/order",
+          "page": "ManagerOrderRoute.page",
+          "type": "CupertinoRoute",
+          "import": "package:${package}/presentation/pages/create_order/order/order_page.dart"
+        },
+        {
+          "path": "/order-history",
+          "page": "ManagerOrderHistoryRoute.page",
+          "type": "CupertinoRoute",
+          "import": "package:${package}/presentation/pages/order_history/order_history.dart"
+        },
+        {
+          "path": "/shipping-address",
+          "page": "ManagerShippingAddressRoute.page",
+          "type": "CupertinoRoute",
+          "import": "package:${package}/presentation/pages/create_order/shipping/shipping_address_page.dart"
+        },
+        {
+          "path": "/select-address",
+          "page": "ManagerSelectAddressRoute.page",
+          "type": "CupertinoRoute",
+          "import": "package:${package}/presentation/pages/create_order/shipping/address/select_address_page.dart"
+        },
+        {
+          "path": "/select-user",
+          "page": "ManagerSelectUserRoute.page",
+          "type": "CupertinoRoute",
+          "import": "package:${package}/presentation/pages/create_order/shipping/select_user/select_user_page.dart"
+        },
+        {
+          "path": "/delivery-time",
+          "page": "ManagerDeliveryTimeRoute.page",
+          "type": "CupertinoRoute",
+          "import": "package:${package}/presentation/pages/create_order/shipping/details/delivery_time_page.dart"
+        },
+        {
+          "path": "/select-section",
+          "page": "ManagerSelectSectionRoute.page",
+          "type": "MaterialRoute",
+          "import": "package:${package}/presentation/pages/create_order/shipping/select_section/select_section_page.dart"
+        },
+        {
+          "path": "/select-table",
+          "page": "ManagerSelectTableRoute.page",
+          "type": "MaterialRoute",
+          "import": "package:${package}/presentation/pages/create_order/shipping/select_table/select_table_page.dart"
+        }
+      ],
+      "app_routes": [],
+      "onboarding_slides": [],
+      "registration_steps": [],
+      "embedded_widgets": [],
+      "tr_keys": {
+        "addUser": "add.user",
+        "approximateTime": "spproximate_preparation_time: ",
+        "clearAllOrders": "clear_all_orders",
+        "customerInformation": "customer.information",
+        "deliveryService": "delivery_service",
+        "deliveryType": "delivery.type",
+        "dineIn": "dine_in",
+        "entrance": "entrance",
+        "estimatedTime": "estimated_delivery_time:",
+        "failed": "failed",
+        "noName": "no_name",
+        "noOrders": "no_orders",
+        "noTransaction": "no_transaction",
+        "onAWayOrders": "on_a_way_orders",
+        "otpCode": "otp.code",
+        "outOfStock": "out_of_stock",
+        "payment": "payment",
+        "pending": "pending",
+        "pleaseSelectASection": "please_select_a_section",
+        "pleaseSelectATable": "please_select_a_table",
+        "pleaseSelectAUser": "please_select_a_user",
+        "priceInformation": "price.information",
+        "published": "published",
+        "readyOrders": "ready_orders",
+        "searchLocation": "search_location",
+        "selectTable": "select.table",
+        "selectedAddress": "selected_address",
+        "selectedSection": "selected.section",
+        "selectedTable": "selected.table",
+        "selectedTimeAndDay": "selected_time_and_day",
+        "selectedUser": "selected_user",
+        "shippingAddress": "shipping_address",
+        "swipeToAccept": "swipe_to_accept",
+        "swipeToDelivered": "swipe_to_delivered",
+        "swipeToReady": "swipe_to_ready",
+        "swipeToWay": "swipe_to_way",
+        "table": "table",
+        "takeAway": "take_away",
+        "thereAre": "there_are"
+      },
+      "asset_keys": {
+        "pngNoOrders": "assets/images/no_orders.png",
+        "lottiePin": "assets/lottie/pin.json"
+      }
+    },
+    "kitchen_sdk": {
+      "version": "1.0.0",
+      "files": {},
+      "routes": [],
+      "app_routes": [],
+      "onboarding_slides": [],
+      "registration_steps": [],
+      "embedded_widgets": [],
+      "tr_keys": {
+        "kitchen": "kitchen",
+        "kitchens": "kitchens"
+      }
+    },
+    "hardware_sdk": {
+      "version": "1.0.0",
+      "files": {},
+      "routes": [],
+      "app_routes": [],
+      "onboarding_slides": [],
+      "registration_steps": [],
+      "embedded_widgets": []
+    },
+    "payments_sdk": {
+      "version": "1.0.0",
+      "files": {},
+      "routes": [],
+      "app_routes": [],
+      "onboarding_slides": [],
+      "registration_steps": [],
+      "embedded_widgets": []
+    },
+    "subscriptions_sdk": {
+      "version": "1.0.0",
+      "files": {
+        "lib/presentation/pages/subscriptions/subscriptions_page.dart": "746ea63f02b8a3a22b2da45a6907df66b0c7e098d040ccf399a404eb40ec132c",
+        "lib/presentation/pages/subscriptions/widgets/have_subscription.dart": "b9c59c6e33723061727ab2cebe37494e5ffb16f700cda3ef8f0221c12b3db816",
+        "lib/presentation/pages/subscriptions/widgets/subscriptions_item.dart": "9d9e45198f6244363b321dd54a81eada05c45e7b0c367bddd6f7aab175e6b743",
+        "lib/presentation/pages/subscriptions/widgets/payment_dialog.dart": "e946906ee635efbb976654355fabae8bb3b3b29d40426ade05c45a6e1f696638"
+      },
+      "routes": [
+        {
+          "path": "/subscriptions",
+          "page": "ManagerSubscriptionsRoute.page",
+          "type": "MaterialRoute",
+          "import": "package:${package}/presentation/pages/subscriptions/subscriptions_page.dart"
+        }
+      ],
+      "app_routes": [],
+      "onboarding_slides": [],
+      "registration_steps": [],
+      "embedded_widgets": [],
+      "database": {
+        "tables": [
+          {
+            "class": "UserSubscriptionsTable",
+            "import": "package:subscriptions_sdk/src/common/infrastructure/database/drift_tables.dart"
+          }
+        ],
+        "migration": {
+          "version": 15,
+          "step": "if (from < 15) { await m.createTable(userSubscriptionsTable); }"
+        }
+      }
+    },
+    "comms_sdk": {
+      "version": "1.0.0",
+      "files": {},
+      "routes": [],
+      "app_routes": [],
+      "onboarding_slides": [],
+      "registration_steps": [],
+      "embedded_widgets": []
+    },
+    "processing_sdk": {
+      "version": "1.0.0",
+      "files": {},
+      "routes": [],
+      "app_routes": [],
+      "onboarding_slides": [],
+      "registration_steps": [],
+      "embedded_widgets": []
+    },
+    "productivity_sdk": {
+      "version": "1.0.0",
+      "files": {
+        "lib/presentation/pages/tasks/tasks_page.dart": "2c370be2c0377cc6162b3e68a69ddacb5d5d6f3c61839533c3fa73cb3b2405da"
+      },
+      "routes": [
+        {
+          "path": "/tasks",
+          "page": "TasksRoute.page",
+          "type": "CupertinoRoute",
+          "import": "package:${package}/presentation/pages/tasks/tasks_page.dart"
+        }
+      ],
+      "app_routes": [],
+      "onboarding_slides": [],
+      "registration_steps": [],
+      "embedded_widgets": [],
+      "database": {
+        "tables": [
+          {
+            "class": "TasksTable",
+            "import": "package:productivity_sdk/src/common/infrastructure/database/tasks_table.dart"
+          },
+          {
+            "class": "RecoveryProfilesTable",
+            "import": "package:productivity_sdk/src/common/infrastructure/database/recovery_tables.dart"
+          },
+          {
+            "class": "AvoidedHabitsTable",
+            "import": "package:productivity_sdk/src/common/infrastructure/database/recovery_tables.dart"
+          },
+          {
+            "class": "UrgeLogsTable",
+            "import": "package:productivity_sdk/src/common/infrastructure/database/recovery_tables.dart"
+          },
+          {
+            "class": "DailyRitualsTable",
+            "import": "package:productivity_sdk/src/common/infrastructure/database/recovery_tables.dart"
+          },
+          {
+            "class": "RitualLogsTable",
+            "import": "package:productivity_sdk/src/common/infrastructure/database/recovery_tables.dart"
+          },
+          {
+            "class": "ProcrastinationLogsTable",
+            "import": "package:productivity_sdk/src/common/infrastructure/database/recovery_tables.dart"
+          }
+        ],
+        "migration": {
+          "version": 14,
+          "step": "if (from < 13) { await m.createTable(tasksTable); } if (from < 14) { await m.createTable(recoveryProfilesTable); await m.createTable(avoidedHabitsTable); await m.createTable(urgeLogsTable); await m.createTable(dailyRitualsTable); await m.createTable(ritualLogsTable); await m.createTable(procrastinationLogsTable); }"
+        }
+      },
+      "integrations": [
+        {
+          "target": "lib/presentation/pages/launch/home.dart",
+          "placeholder": "            // @launcher-glance",
+          "replacement": "            GlanceCard(\n              items: [\n                GlanceCardItem(\n                  icon: RemixIcons.task_line,\n                  text: 'Tasks - plan your day',\n                  onTap: () => context.router.pushNamed('/tasks'),\n                ),\n              ],\n            ),"
+        }
+      ]
+    },
+    "calc_sdk": {
+      "version": "1.0.0",
+      "files": {
+        "lib/presentation/pages/calc/calculator_page.dart": "b112fa519e0fe405915cf8cf69ec3796c24bca885f1f0ff44606a39f0e72b1f0"
+      },
+      "routes": [
+        {
+          "path": "/calc",
+          "page": "CalculatorRoute.page",
+          "type": "CupertinoRoute",
+          "import": "package:${package}/presentation/pages/calc/calculator_page.dart"
+        }
+      ],
+      "app_routes": [],
+      "onboarding_slides": [],
+      "registration_steps": [],
+      "embedded_widgets": []
+    },
+    "corporate_sdk": {
+      "version": "1.0.0",
+      "files": {},
+      "routes": [],
+      "app_routes": [],
+      "onboarding_slides": [],
+      "registration_steps": [],
+      "embedded_widgets": [
+        {
+          "method": "policyPage",
+          "params": "",
+          "body": "return const PolicyPage();"
+        },
+        {
+          "method": "termPage",
+          "params": "",
+          "body": "return const TermPage();"
+        }
+      ]
+    },
+    "promotions_sdk": {
+      "version": "1.0.0",
+      "files": {},
+      "routes": [],
+      "app_routes": [],
+      "onboarding_slides": [],
+      "registration_steps": [],
+      "embedded_widgets": []
+    },
+    "map_sdk": {
+      "version": "1.1.0",
+      "files": {},
+      "routes": [],
+      "app_routes": [],
+      "onboarding_slides": [],
+      "registration_steps": [],
+      "embedded_widgets": [],
+      "app_assets": [
+        "assets/lottie/pin.json"
+      ]
+    },
+    "weather_sdk": {
+      "version": "1.2.0",
+      "files": {
+        "lib/presentation/components/weather/weather_widget.dart": "d9972cf8cc902fc701ecfd4c869cc0c8ab254a17a8d7fe46a206fa570eb5de74"
+      },
+      "routes": [],
+      "app_routes": [],
+      "onboarding_slides": [],
+      "registration_steps": [],
+      "embedded_widgets": [
+        {
+          "method": "weatherHeaderWidget",
+          "body": "return const AppWeatherWidget(inlineExpansion: false);",
+          "imports": [
+            "import 'package:${package}/presentation/components/weather/weather_widget.dart';"
+          ],
+          "_comment": "Header slot (ADR-005): shells embed the compact adaptive widget without importing weather_sdk directly. inlineExpansion=false because headers are height-constrained; on small screens that leaves just the minimal icon+temp chip, and the popup-free WeatherInlineForecast card is placed in body flow via the weather_sdk barrel (it takes a WeatherState argument, so it cannot ride the zero-arg embedded-widget seam)."
+        }
+      ]
+    },
+    "revenue_sdk": {
+      "version": "1.0.0",
+      "files": {
+        "lib/presentation/pages/income/income_page.dart": "eeec83a52473b0a073c333808c8153517e75742c8acbafec8eae98d94d3b5988",
+        "lib/presentation/pages/income/app_bar_screen.dart": "9be871092cb1e4424ad5d32ca4be24e631d3d88c7e08b666b405e2b4c5f388a4",
+        "lib/presentation/pages/income/widgets/chart.dart": "12682b09247fc8b4184fde471381e81a4f8793aa6dd989ca29c6b001cda0c87a",
+        "lib/presentation/pages/income/widgets/statistics_item.dart": "3a5973f372637e69563540e95feff0d66aa7f4c78986b43b2420f3e3087060bf",
+        "lib/presentation/pages/income/widgets/order_prices_section.dart": "b9c8c1f26f88f2cd2924d96243f47cfa4e27acaa94c011dabea94da0f05f1b61",
+        "lib/presentation/pages/income/widgets/statistics_section.dart": "d667f27b28bb6cc06f24ae62615c7e03f8621e20f2ef291253f82c5fd2cc9f4e"
+      },
+      "routes": [
+        {
+          "path": "/income",
+          "page": "ManagerIncomeRoute.page",
+          "type": "CupertinoRoute",
+          "import": "package:${package}/presentation/pages/income/income_page.dart"
+        }
+      ],
+      "app_routes": [],
+      "onboarding_slides": [],
+      "registration_steps": [],
+      "embedded_widgets": []
+    },
+    "zones_sdk": {
+      "version": "1.1.0",
+      "files": {
+        "lib/presentation/pages/merchant/delivery_zone/delivery_zone_page.dart": "cfa82ca94e1c81868c7cee48d8420069e3ad9c2fba58fdc54d54ab87d31777f1",
+        "lib/presentation/routes/zones_adapters.dart": "ca4328627bfa169d7d992a27cb6d7cd4c9412984878588f6c9741785afe36bd8"
+      },
+      "routes": [
+        {
+          "path": "/delivery-zone",
+          "page": "ManagerDeliveryZoneRoute.page",
+          "type": "CupertinoRoute",
+          "_comment": "CupertinoRoute matches the legacy paas_manager app_router entry for this page (driver's flavour of the same path is a MaterialRoute). Declaring this block also keeps lib/src/manager/ alive through the composer's role-stripping.",
+          "import": "package:${package}/presentation/pages/merchant/delivery_zone/delivery_zone_page.dart"
+        }
+      ],
+      "app_routes": [],
+      "onboarding_slides": [],
+      "registration_steps": [],
+      "embedded_widgets": []
+    }
+  },
+  "sdk_cache": {
+    "base": {
+      "version": "1.1.0",
+      "hash": "14b3314415a0fda9"
+    },
+    "comms": {
+      "version": "1.0.0",
+      "hash": "0d191a62cd4facdb"
+    },
+    "auth": {
+      "version": "1.0.0",
+      "hash": "e63e013862a8ee47"
+    },
+    "users": {
+      "version": "1.0.0",
+      "hash": "b3ff5c300a27fd3b"
+    },
+    "merchants": {
+      "version": "1.2.0",
+      "hash": "c89d98dae0af071a"
+    },
+    "products": {
+      "version": "1.1.0",
+      "hash": "99649327eb04fb07"
+    },
+    "orders": {
+      "version": "1.1.0",
+      "hash": "8f49f8f18e94cc4b"
+    },
+    "kitchen": {
+      "version": "1.0.0",
+      "hash": "58383876b3f741cf"
+    },
+    "promotions": {
+      "version": "1.0.0",
+      "hash": "df158a445892db1c"
+    },
+    "hardware": {
+      "version": "1.0.0",
+      "hash": "ebe10d948fd28edc"
+    },
+    "payments": {
+      "version": "1.0.0",
+      "hash": "6e723b781e9c9931"
+    },
+    "subscriptions": {
+      "version": "1.0.0",
+      "hash": "68b5e80660762dd7"
+    },
+    "processing": {
+      "version": "1.0.0",
+      "hash": "d2896292bf243a0f"
+    },
+    "productivity": {
+      "version": "1.0.0",
+      "hash": "263a66f164ca712b"
+    },
+    "calc": {
+      "version": "1.0.0",
+      "hash": "fe2269f2fa4b71a7"
+    },
+    "corporate": {
+      "version": "1.0.0",
+      "hash": "71c3f541907496c9"
+    },
+    "revenue": {
+      "version": "1.0.0",
+      "hash": "58efb0cd2bcedf96"
+    },
+    "map": {
+      "version": "1.1.0",
+      "hash": "af7d107ee32d5922"
+    },
+    "weather": {
+      "version": "1.2.0",
+      "hash": "c207fda90e877bf4"
+    },
+    "zones": {
+      "version": "1.1.0",
+      "hash": "02af6bd74fc76a3c"
+    }
+  }
+}

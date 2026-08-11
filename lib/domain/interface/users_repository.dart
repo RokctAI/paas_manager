@@ -28,9 +28,11 @@ abstract class UsersRepository {
     required String email,
   });
 
-  Future<ApiResult<StatisticsResponse>> getStatistics({required DateTime startTime,required DateTime endTime});
+  Future<ApiResult<StatisticsResponse>> getStatistics(
+      {required DateTime startTime, required DateTime endTime});
 
-  Future<ApiResult<StatisticsOrderResponse>> getStatisticsOrder({ DateTime? startTime, DateTime? endTime,int? page,int? perPage});
+  Future<ApiResult<StatisticsOrderResponse>> getStatisticsOrder(
+      {DateTime? startTime, DateTime? endTime, int? page, int? perPage});
 
   Future<ApiResult<void>> updateDeliveryZones({
     required List<LatLng> points,
@@ -86,5 +88,4 @@ abstract class UsersRepository {
   Future<ApiResult<void>> updateFirebaseToken(String? token);
 
   Future<ApiResult<dynamic>> deleteAccount();
-
 }

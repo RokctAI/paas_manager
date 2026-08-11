@@ -34,7 +34,7 @@ class CategoryTabBar extends StatelessWidget {
     required this.tabs,
     required this.onTap,
     this.index = 0,
-  }) ;
+  });
 
   @override
   Widget build(BuildContext context) {

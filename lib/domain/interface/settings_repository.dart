@@ -27,9 +27,9 @@ abstract class SettingsRepository {
   );
 
   Future<ApiResult<MultiGalleryUploadResponse>> uploadMultiImage(
-      List<String?> filePaths,
-      UploadType uploadType,
-      );
+    List<String?> filePaths,
+    UploadType uploadType,
+  );
 
   Future<ApiResult<CurrenciesResponse>> getCurrencies();
 
