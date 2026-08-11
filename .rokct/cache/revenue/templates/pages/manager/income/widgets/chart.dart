@@ -4,6 +4,13 @@ import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:base_sdk/src/presentation/theme/app_style.dart';
+
+// base_sdk's AppStyle has no primaryGradient token yet (core follow-up:
+// promote it); same colors the deleted host Style.primaryGradient carried.
+final List<Color> _primaryGradient = [
+  AppStyle.primary.withOpacity(0.5),
+  AppStyle.transparent,
+];
 import 'package:${package}/presentation/theme/theme.dart';
 import 'package:base_sdk/src/services/app_helpers.dart';
 import 'package:base_sdk/src/services/tr_keys.dart';
@@ -152,7 +159,7 @@ class SalesChart extends StatelessWidget {
             gradient: LinearGradient(
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
-              colors: AppStyle.primaryGradient,
+              colors: _primaryGradient,
             ),
           ),
         ),
