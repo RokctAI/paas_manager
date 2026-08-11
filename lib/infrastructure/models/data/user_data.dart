@@ -34,7 +34,6 @@ class UserData {
     List<AddressData>? addresses,
     ShopData? shop,
     Wallet? wallet,
-
   }) {
     _id = id;
     _uuid = uuid;
@@ -50,7 +49,6 @@ class UserData {
     _addresses = addresses;
     _shop = shop;
     _wallet = wallet;
-
   }
 
   UserData.fromJson(dynamic json) {
@@ -75,7 +73,6 @@ class UserData {
     }
     _shop = json['shop'] != null ? ShopData.fromJson(json['shop']) : null;
     _wallet = json['wallet'] != null ? Wallet.fromJson(json['wallet']) : null;
-
   }
 
   int? _id;
@@ -93,7 +90,6 @@ class UserData {
   ShopData? _shop;
   Wallet? _wallet;
 
-
   UserData copyWith({
     int? id,
     String? uuid,
@@ -109,7 +105,6 @@ class UserData {
     List<AddressData>? addresses,
     ShopData? shop,
     Wallet? wallet,
-
   }) =>
       UserData(
         id: id ?? _id,
@@ -126,7 +121,6 @@ class UserData {
         addresses: addresses ?? _addresses,
         shop: shop ?? _shop,
         wallet: wallet ?? _wallet,
-
       );
 
   int? get id => _id;
@@ -143,7 +137,6 @@ class UserData {
   List<AddressData>? get addresses => _addresses;
   ShopData? get shop => _shop;
   Wallet? get wallet => _wallet;
-
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
