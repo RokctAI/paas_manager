@@ -21,7 +21,7 @@ import 'package:products_sdk/src/manager/application/foods/edit/details/units/ed
 import 'package:products_sdk/src/manager/application/foods/foods_provider.dart';
 import 'package:products_sdk/src/manager/utils/seller_form_helpers.dart';
 import 'package:${package}/presentation/component/custom_toggle.dart';
-import 'package:base_sdk/src/presentation/components/text_fields/underlined_text_field.dart';
+import 'package:${package}/presentation/component/text_fields/underlined_text_field.dart';
 import 'package:${package}/presentation/components/foods/multi_image_picker.dart';
 
 /// Seeds kitchen_sdk's autoDispose picker here (not at the list-tap that

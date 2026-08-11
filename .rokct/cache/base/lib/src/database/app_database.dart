@@ -7,6 +7,8 @@ import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 
 import 'kv_tables.dart';
+import '../sync/id_mappings_table.dart';
+import '../sync/outbox_table.dart';
 
 // @sdk-database-imports-start
 import 'injected/auth_sdk__offline_user_table.dart';
@@ -27,6 +29,8 @@ part 'app_database.g.dart';
 @DriftDatabase(
   tables: [
     KeyValueTable,
+    OutboxTable,
+    IdMappingsTable,
     // @sdk-database-tables-start
     OfflineUsersTable,
     TasksTable,
@@ -49,6 +53,9 @@ class AppDatabase extends _$AppDatabase {
   factory AppDatabase() => _instance ??= AppDatabase._internal();
   static AppDatabase? _instance;
 
+  /// Base-owned schema versions stay low (< 10); SDK manifests claim higher
+  /// numbers through the composer's migration injection (auth is around 16),
+  /// and the composer raises this getter in the cached copy accordingly.
   @override
   int get schemaVersion => 16;
 
@@ -59,11 +66,27 @@ class AppDatabase extends _$AppDatabase {
         await m.createAll();
       },
       onUpgrade: (Migrator m, int from, int to) async {
+        // Base-owned steps run before SDK-injected ones and guard on their
+        // own low version numbers only.
+        if (from < 2) {
+          await m.createTable(outboxTable);
+          await m.createTable(idMappingsTable);
+        }
         // @sdk-database-migrations-start
         if (from < 16) { await m.createTable(offlineUsersTable); }
         if (from < 13) { await m.createTable(tasksTable); } if (from < 14) { await m.createTable(recoveryProfilesTable); await m.createTable(avoidedHabitsTable); await m.createTable(urgeLogsTable); await m.createTable(dailyRitualsTable); await m.createTable(ritualLogsTable); await m.createTable(procrastinationLogsTable); }
         if (from < 15) { await m.createTable(userSubscriptionsTable); }
         // @sdk-database-migrations-end
+      },
+      beforeOpen: (details) async {
+        // Safety net for composed apps: injected SDK migrations own the
+        // effective schemaVersion there, so a database already past base's
+        // own version numbers would skip the onUpgrade step above. Drift's
+        // createTable emits CREATE TABLE IF NOT EXISTS, making this
+        // idempotent and a no-op once the tables exist.
+        final m = createMigrator();
+        await m.createTable(outboxTable);
+        await m.createTable(idMappingsTable);
       },
     );
   }

@@ -155,6 +155,22 @@ class ManagerSubscriptionsRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [NoConnectionRouteView]
+class NoConnectionRoute extends PageRouteInfo<void> {
+  const NoConnectionRoute({List<PageRouteInfo>? children})
+    : super(NoConnectionRoute.name, initialChildren: children);
+
+  static const String name = 'NoConnectionRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const NoConnectionRouteView();
+    },
+  );
+}
+
+/// generated route for
 /// [NotificationListPage]
 class NotificationListRoute extends PageRouteInfo<void> {
   const NotificationListRoute({List<PageRouteInfo>? children})
@@ -430,6 +446,22 @@ class ManagerShippingAddressRoute extends PageRouteInfo<void> {
     name,
     builder: (data) {
       return const ShippingAddressPage();
+    },
+  );
+}
+
+/// generated route for
+/// [SplashRouteView]
+class SplashRoute extends PageRouteInfo<void> {
+  const SplashRoute({List<PageRouteInfo>? children})
+    : super(SplashRoute.name, initialChildren: children);
+
+  static const String name = 'SplashRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const SplashRouteView();
     },
   );
 }

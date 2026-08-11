@@ -71,11 +71,6 @@ class FoodExtras extends ConsumerWidget {
                           ? ImageExtras(
                               uiExtras: typedExtra.uiExtras,
                               groupIndex: typedExtra.groupIndex,
-                              // The manager order sheet shows no product
-                              // gallery, so the image tap has nothing to
-                              // update (the pre-SDK host ImageExtras had no
-                              // such callback).
-                              updateImage: (_) {},
                               onUpdate: (uiExtra) =>
                                   event.updateSelectedIndexes(
                                 typedExtra.groupIndex,
