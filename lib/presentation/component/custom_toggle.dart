@@ -26,6 +26,10 @@ import 'package:base_sdk/src/presentation/theme/app_style.dart';
 const Color _toggleColor = Color(0xFFE7E7E7);
 const Color _toggleShadowColor = Color(0xFF6B6B6B);
 
+// base_sdk's TrKeys has `close` but no `open` (core follow-up: add it);
+// same key string the deleted host TrKeys declared.
+const String _trKeyOpen = 'open';
+
 class CustomToggle extends StatefulWidget {
   final ValueNotifier<bool>? controller;
   final bool isText;
@@ -84,7 +88,7 @@ class _CustomToggleState extends State<CustomToggle> {
           ? Padding(
         padding: REdgeInsets.only(left: 4.r),
         child: Text(
-          AppHelpers.getTranslation(TrKeys.open),
+          AppHelpers.getTranslation(_trKeyOpen),
           style: AppStyle.interNormal(size: 12.sp),
         ),
       )
