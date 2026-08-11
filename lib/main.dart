@@ -46,6 +46,25 @@ import 'package:orders_sdk/src/manager/domain/interface/pos_customers.dart';
 import 'package:orders_sdk/src/manager/domain/interface/pos_sections_tables.dart';
 
 // @generated-sdk-imports-start
+import 'package:base_sdk/base_sdk.dart';
+import 'package:calc_sdk/calc_sdk.dart';
+import 'package:comms_sdk/comms_sdk.dart';
+import 'package:corporate_sdk/corporate_sdk.dart';
+import 'package:hardware_sdk/hardware_sdk.dart';
+import 'package:kitchen_sdk/kitchen_sdk.dart';
+import 'package:map_sdk/map_sdk.dart';
+import 'package:merchants_sdk/merchants_sdk.dart';
+import 'package:orders_sdk/orders_sdk.dart';
+import 'package:payments_sdk/payments_sdk.dart';
+import 'package:processing_sdk/processing_sdk.dart';
+import 'package:productivity_sdk/productivity_sdk.dart';
+import 'package:products_sdk/products_sdk.dart';
+import 'package:promotions_sdk/promotions_sdk.dart';
+import 'package:revenue_sdk/revenue_sdk.dart';
+import 'package:subscriptions_sdk/subscriptions_sdk.dart';
+import 'package:users_sdk/users_sdk.dart';
+import 'package:weather_sdk/weather_sdk.dart';
+import 'package:zones_sdk/zones_sdk.dart';
 // @generated-sdk-imports-end
 
 // Wiring imports: each SDK manifest's app_routes / embedded_widgets /
@@ -53,6 +72,9 @@ import 'package:orders_sdk/src/manager/domain/interface/pos_sections_tables.dart
 // land here (deduped, sorted) so the injected bodies' symbols resolve
 // without any hand-written imports in this file.
 // @generated-wiring-imports-start
+import 'package:auto_route/auto_route.dart';
+import 'package:manager/presentation/components/weather/weather_widget.dart';
+import 'package:manager/presentation/routes/app_router.dart';
 // @generated-wiring-imports-end
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
@@ -75,6 +97,7 @@ void main() async {
   // app's brand palette into the shared AppStyle tokens before the first
   // frame. The kernel ships neutral defaults only.
   // @generated-brandhook-start
+
   // @generated-brandhook-end
 
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
@@ -98,7 +121,26 @@ void main() async {
   // blocks (base_sdk first - update_main_dependencies() orders it ahead of
   // every feature SDK). Do NOT also import/register it by hand up here.
   // @generated-sdk-di-start
-  // @generated-sdk-di-end
+  BaseSdkDependencies.register(GetIt.instance);
+  CalcSdkDependencies.register(GetIt.instance);
+  CommsSdkDependencies.register(GetIt.instance);
+  CorporateSdkDependencies.register(GetIt.instance);
+  HardwareSdkDependencies.register(GetIt.instance);
+  KitchenSdkDependencies.register(GetIt.instance);
+  MapSdkDependencies.register(GetIt.instance);
+  MerchantsSdkDependencies.register(GetIt.instance);
+  OrdersSdkDependencies.register(GetIt.instance);
+  PaymentsSdkDependencies.register(GetIt.instance);
+  ProcessingSdkDependencies.register(GetIt.instance);
+  ProductivitySdkDependencies.register(GetIt.instance);
+  ProductsSdkDependencies.register(GetIt.instance);
+  PromotionsSdkDependencies.register(GetIt.instance);
+  RevenueSdkDependencies.register(GetIt.instance);
+  SubscriptionsSdkDependencies.register(GetIt.instance);
+  UsersSdkDependencies.register(GetIt.instance);
+  WeatherSdkDependencies.register(GetIt.instance);
+  ZonesSdkDependencies.register(GetIt.instance);
+// @generated-sdk-di-end
 
   // ---- Host-owned DI ----
   // Deliberately OUTSIDE the generated block: update_sdk_di() rewrites
@@ -158,6 +200,21 @@ void main() async {
 
 class _HostEmbeddedWidgets implements EmbeddedWidgets {
   // @generated-embeddedwidgets-start
+  @override
+  Widget policyPage() {
+    return const PolicyPage();
+  }
+
+  @override
+  Widget termPage() {
+    return const TermPage();
+  }
+
+  @override
+  Widget weatherHeaderWidget() {
+    return const AppWeatherWidget(inlineExpansion: false);
+  }
+
   // @generated-embeddedwidgets-end
 
   @override
@@ -169,6 +226,18 @@ class _HostEmbeddedWidgets implements EmbeddedWidgets {
 
 class _HostAppRoutes implements AppRoutes {
   // @generated-approutes-start
+  @override
+  Future<Object?> replaceSplashRoute(BuildContext context) => context.router.replace(SplashRoute());
+
+  @override
+  Future<Object?> replaceNoConnectionRoute(BuildContext context) => context.router.replace(NoConnectionRoute());
+
+  @override
+  Future<Object?> replaceClosedRoute(BuildContext context) => context.router.replace(ClosedRoute());
+
+  @override
+  Future<Object?> replaceUiTypeRoute(BuildContext context) => context.router.replace(UiTypeRoute());
+
   // @generated-approutes-end
 
   @override
