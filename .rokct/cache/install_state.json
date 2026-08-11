@@ -930,7 +930,7 @@
     },
     "comms": {
       "version": "1.1.0",
-      "hash": "1615f1f2c3de3586"
+      "hash": "1056b1e6512c2332"
     },
     "auth": {
       "version": "1.1.0",
@@ -942,15 +942,15 @@
     },
     "merchants": {
       "version": "1.5.0",
-      "hash": "147b146f211cc1f7"
+      "hash": "a91747288f2bff41"
     },
     "products": {
       "version": "1.1.0",
-      "hash": "99649327eb04fb07"
+      "hash": "3f5eac471d719c1b"
     },
     "orders": {
       "version": "1.2.0",
-      "hash": "953db85d95a04c76"
+      "hash": "e461d6b655d13bab"
     },
     "kitchen": {
       "version": "1.0.0",
@@ -990,7 +990,7 @@
     },
     "revenue": {
       "version": "1.1.0",
-      "hash": "7ffd9ec88d71b11f"
+      "hash": "aebcbc4571f165bd"
     },
     "map": {
       "version": "1.1.0",

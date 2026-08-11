@@ -16,9 +16,6 @@
 
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-// Host pages referenced by the routes below. The .gr.dart part shares this
-// library's imports, so every @RoutePage class routed here must be visible.
-import 'package:manager/presentation/pages/pages.dart';
 // The blocks between the @generated markers are owned by the composer's
 // update_router_table(): they are regenerated on every compose from the
 // installed SDK manifests' "routes" declarations (base_sdk's initial routes,
@@ -80,25 +77,10 @@ class AppRouter extends RootStackRouter {
     MaterialRoute(path: '/reset-password', page: ResetPasswordRoute.page),
     MaterialRoute(path: '/registration-steps', page: RegistrationStepsRoute.page),
 // @generated-routes-end
-        // Host-owned routes, deliberately OUTSIDE the generated markers:
-        // update_router_table() rewrites everything between them on every
-        // compose, and no SDK manifest declares these pages - they are the
-        // app's own (lib/presentation/pages/). Each should migrate into its
-        // owning SDK's manifest as its feature moves out of the app.
-        //
-        // /login is NO LONGER host-owned (plan M3): auth_sdk installs with
-        // skip_install lifted, its route shells generate LoginRoute et al.,
-        // and its manifest routes land in the @generated block above on
-        // recompose. The host auth pages are deleted.
-        //
-        // /list-notification stays host-owned until comms_sdk's notification
-        // parameterisation (fork plan S-3) lands.
-        //
-        // /view_map + /search_map: host map pages, still referenced by the
-        // kept application/map slice (fork plan H-10 dedup follow-up).
-        CupertinoRoute(
-            path: '/list-notification', page: NotificationListRoute.page),
-        CupertinoRoute(path: '/view_map', page: ViewMapRoute.page),
-        CupertinoRoute(path: '/search_map', page: MapSearchRoute.page),
+        // No host-owned routes remain (migration M2): /list-notification is
+        // comms_sdk's manifest route now (its installed page generates the
+        // same NotificationListRoute), and the /view_map + /search_map host
+        // map pages were deleted with the application/map slice (decision D5:
+        // nothing composed navigates to them; map_sdk owns the map surface).
       ];
 }

@@ -90,10 +90,18 @@ void main() async {
 
   // Host-specific startup (kept through the compose flip): the splash is
   // held until the router decides where to go, Firebase must be initialized
-  // before anything touches messaging.
+  // before anything touches messaging. Destined for comms_sdk's "boot_hooks"
+  // manifest entry (The-Rokct-Protocol#160) - once comms declares the
+  // Firebase/FCM boot, these lines move into the generated block below.
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   await Firebase.initializeApp();
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+
+  // Boot hooks: SDK-declared startup statements (each SDK manifest's
+  // "boot_hooks" list - id-keyed, order-sequenced; see the installer's
+  // update_boot_hooks()). Empty until an installed SDK declares one.
+  // @generated-boot-hooks-start
+  // @generated-boot-hooks-end
 
   // Brand hook: at most ONE installed SDK (normally the home SDK) declares
   // "brand_hook" in its manifest and its call is injected here to load the
@@ -147,15 +155,25 @@ void main() async {
   ZonesSdkDependencies.register(GetIt.instance);
 // @generated-sdk-di-end
 
+  // DI hooks: SDK-declared DI statements beyond the standard
+  // *SdkDependencies.register calls above (each SDK manifest's "di_hooks"
+  // list; see the installer's update_di_hooks()). The hand-written role DI
+  // and ADR-005 facade registrations below move here once orders_sdk /
+  // merchants_sdk / zones_sdk declare them (see
+  // scratchpad/di-hooks-declarations.md in the migration PR).
+  // @generated-di-hooks-start
+  // @generated-di-hooks-end
+
   // ---- Host-owned DI ----
   // Deliberately OUTSIDE the generated block: update_sdk_di() rewrites
   // everything between the markers on every compose, so anything placed
   // inside is silently lost. The installer detects hand edits to main.dart
   // and stops overwriting the file, which is what keeps this section alive.
 
-  // The manager app's own repositories (auth, settings, users, notification,
-  // ... - see dependency_manager.dart). Must run before the adapters below,
-  // which resolve the users repository.
+  // The last host-owned repository (migration M2): the delivery-zone slice
+  // of the old users repository, still resolved by zones_sdk's installed
+  // adapter via di.usersRepository - see dependency_manager.dart for the
+  // exit plan. Must run before the adapters below.
   await setUpDependencies();
 
   // Manager role DI hooks (commerce#3): orders_sdk's seller-orders/POS
