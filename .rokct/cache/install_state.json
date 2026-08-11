@@ -761,12 +761,111 @@
       "onboarding_slides": [],
       "registration_steps": [],
       "embedded_widgets": []
+    },
+    "auth_sdk": {
+      "version": "1.1.0",
+      "files": {
+        "lib/presentation/routes/auth_route_pages.dart": "8cf1fff16f979f09f5a92551df5de2d89a6211eb8b82801502628e386ecc2007",
+        "lib/presentation/routes/registration_step_pages.dart": "6173d2dcda9d444e4e7ece9b5b15e73f72dbaf833bac04be38f7708186ac3a62",
+        "lib/presentation/routes/auth_session_policy.dart": "8369d222afb939d90d1e9341757d2bef2da19b088060cbf01eabce6d2493f612"
+      },
+      "routes": [
+        {
+          "path": "/login",
+          "page": "LoginRoute.page",
+          "type": "MaterialRoute",
+          "import": "package:${package}/presentation/routes/auth_route_pages.dart"
+        },
+        {
+          "path": "/register",
+          "page": "RegisterRoute.page",
+          "type": "MaterialRoute",
+          "import": "package:${package}/presentation/routes/auth_route_pages.dart"
+        },
+        {
+          "path": "/register-confirmation",
+          "page": "RegisterConfirmationRoute.page",
+          "type": "MaterialRoute",
+          "import": "package:${package}/presentation/routes/auth_route_pages.dart"
+        },
+        {
+          "path": "/reset-password",
+          "page": "ResetPasswordRoute.page",
+          "type": "MaterialRoute",
+          "import": "package:${package}/presentation/routes/auth_route_pages.dart"
+        },
+        {
+          "path": "/registration-steps",
+          "page": "RegistrationStepsRoute.page",
+          "type": "MaterialRoute",
+          "import": "package:${package}/presentation/routes/registration_step_pages.dart"
+        }
+      ],
+      "app_routes": [
+        {
+          "method": "replaceLoginRoute",
+          "body": "context.router.replace(LoginRoute());",
+          "imports": [
+            "import 'package:${package}/presentation/routes/app_router.dart';"
+          ]
+        },
+        {
+          "method": "replaceUiTypeRoute",
+          "body": "context.router.replace(UiTypeRoute());",
+          "imports": [
+            "import 'package:${package}/presentation/routes/app_router.dart';"
+          ]
+        }
+      ],
+      "onboarding_slides": [],
+      "registration_steps": [],
+      "embedded_widgets": [],
+      "database": {
+        "tables": [
+          {
+            "class": "OfflineUsersTable",
+            "import": "package:auth_sdk/src/common/infrastructure/database/offline_user_table.dart"
+          }
+        ],
+        "migration": {
+          "version": 16,
+          "step": "if (from < 16) { await m.createTable(offlineUsersTable); }"
+        }
+      }
+    },
+    "desktop_sdk": {
+      "version": "1.1.0",
+      "files": {
+        "windows/CMakeLists.txt": "f56eb803753a78cf5f2494822e2bb226e590ecc7ff05ae43115bda46919842d6",
+        "windows/.gitignore": "96345475f1a3c66bd32d28178fba151ab1506b35b1f7857b8f7651863093ea11",
+        "windows/runner/CMakeLists.txt": "34119ec122e36940235ef4bc245fcfb43b6960ed443e28af1a8d833a81209b9e",
+        "windows/runner/win32_window.cpp": "9065f31ccf746cf8b390121f958f9e959033af864aed779597066625ed56bc36",
+        "windows/runner/utils.h": "95a7f7dddb832997cefa937a96f89472332277e75734a5de553610760b744b03",
+        "windows/runner/flutter_window.cpp": "dd185884c0b5301d400b58f12ebb36b1c8b326531597e531b40e44a6eeb0e943",
+        "windows/runner/win32_window.h": "7dd03746b19dcf3542829b2f6e8ed40a2714ce5f2cb3b0e23f0118a2fcf62d62",
+        "windows/runner/main.cpp": "fbbb2bb4245bfc70cdfda5062268f2a020744489180079ee5f8c8efd6c8372ac",
+        "windows/runner/flutter_window.h": "38e0fcd3a0b83895852ec295cb70d90179c0dcd40d58f065eb5232a4ecd84898",
+        "windows/runner/resource.h": "1fa98588b04561590ba1cf0521ab86a9db4a878312f21c9d5861d965ddd8d1ae",
+        "windows/runner/runner.exe.manifest": "825d243e9fa1542619909c1b72d09b3ed7c1f3b225bb8367c125835e5dc3f8aa",
+        "windows/runner/Runner.rc": "4e647733359daebd93b69bff90d664b109ccd67ce5a81868745014118c8d2e0a",
+        "windows/runner/utils.cpp": "dc2ee94d43116f959a4abd42557f71d07acc631abbffe03b11489dbeed35bedb",
+        "windows/runner/resources/app_icon.ico": "c098d3fc85cacff98b8e69811b48e9f0d852fcee278132d794411d978869cbf8",
+        "windows/flutter/CMakeLists.txt": "1fe418971b6f41bb35ceb3d64113a835f3f6f171ecaa707bf232492b57a588d6",
+        "windows/flutter/generated_plugin_registrant.h": "dbc11635d7b1ba1887adf40df5b83d634e9c3ab0bee34510c71528bb4d73602a",
+        "windows/flutter/generated_plugin_registrant.cc": "82e02567f2faf5e732dc92a2fb0d01104f7ba8c48973f8cfd41a860b4fac3f3b",
+        "windows/flutter/generated_plugins.cmake": "286346b0d5303dc6b41072f9582d4c52bca35255b85b27b310f858e264dfdc56"
+      },
+      "routes": [],
+      "app_routes": [],
+      "onboarding_slides": [],
+      "registration_steps": [],
+      "embedded_widgets": []
     }
   },
   "sdk_cache": {
     "base": {
       "version": "1.3.0",
-      "hash": "69c9a74ba1133d27"
+      "hash": "e16b7d1845431296"
     },
     "comms": {
       "version": "1.0.0",
@@ -843,6 +942,10 @@
     "zones": {
       "version": "1.1.1",
       "hash": "80b9e122660728b4"
+    },
+    "desktop": {
+      "version": "1.1.0",
+      "hash": "f4b6d3cf48f1d0fe"
     }
   }
 }

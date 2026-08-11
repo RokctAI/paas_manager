@@ -9,6 +9,7 @@ import 'package:path_provider/path_provider.dart';
 import 'kv_tables.dart';
 
 // @sdk-database-imports-start
+import 'injected/auth_sdk__offline_user_table.dart';
 import 'injected/productivity_sdk__recovery_tables.dart';
 import 'injected/productivity_sdk__tasks_table.dart';
 import 'injected/subscriptions_sdk__drift_tables.dart';
@@ -27,6 +28,7 @@ part 'app_database.g.dart';
   tables: [
     KeyValueTable,
     // @sdk-database-tables-start
+    OfflineUsersTable,
     TasksTable,
     RecoveryProfilesTable,
     AvoidedHabitsTable,
@@ -48,7 +50,7 @@ class AppDatabase extends _$AppDatabase {
   static AppDatabase? _instance;
 
   @override
-  int get schemaVersion => 15;
+  int get schemaVersion => 16;
 
   @override
   MigrationStrategy get migration {
@@ -58,6 +60,7 @@ class AppDatabase extends _$AppDatabase {
       },
       onUpgrade: (Migrator m, int from, int to) async {
         // @sdk-database-migrations-start
+        if (from < 16) { await m.createTable(offlineUsersTable); }
         if (from < 13) { await m.createTable(tasksTable); } if (from < 14) { await m.createTable(recoveryProfilesTable); await m.createTable(avoidedHabitsTable); await m.createTable(urgeLogsTable); await m.createTable(dailyRitualsTable); await m.createTable(ritualLogsTable); await m.createTable(procrastinationLogsTable); }
         if (from < 15) { await m.createTable(userSubscriptionsTable); }
         // @sdk-database-migrations-end
