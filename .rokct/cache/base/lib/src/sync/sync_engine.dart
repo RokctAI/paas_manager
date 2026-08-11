@@ -89,6 +89,63 @@ class SyncEngine {
     return opId;
   }
 
+  /// Queue a coalescing op: at most one outbox row per (opType, dedupeKey),
+  /// under the deterministic id `<opType>:<dedupeKey>`. While that row is
+  /// still in the outbox, calling again replaces its payload with the newer
+  /// one and resets it to pending (latest snapshot wins) — including when
+  /// the old payload is mid-push, in which case the row survives that push
+  /// and goes out again with the new payload. Use for ops whose payload is
+  /// a full snapshot (e.g. `cart.sync`), where replaying every intermediate
+  /// state would be wasteful.
+  Future<String> enqueueOrReplace({
+    required String opType,
+    required String sdk,
+    required String dedupeKey,
+    required Map<String, dynamic> payload,
+    List<String> tempIds = const [],
+    List<String> dependsOn = const [],
+  }) async {
+    final opId = '$opType:$dedupeKey';
+    final existing = await (_db.select(
+      _db.outboxTable,
+    )..where((t) => t.id.equals(opId))).getSingleOrNull();
+    if (existing == null) {
+      return enqueue(
+        opType: opType,
+        sdk: sdk,
+        payload: payload,
+        tempIds: tempIds,
+        dependsOn: dependsOn,
+        id: opId,
+      );
+    }
+    // Fresh snapshot: earlier failures no longer apply, so retry state is
+    // reset alongside the payload.
+    await _writeOp(
+      opId,
+      OutboxTableCompanion(
+        payload: Value(jsonEncode(payload)),
+        tempIds: Value(jsonEncode(tempIds)),
+        dependsOn: Value(jsonEncode(dependsOn)),
+        status: Value(OutboxStatus.pending.name),
+        attempts: const Value(0),
+        lastError: const Value(null),
+        nextAttemptAt: const Value(null),
+      ),
+    );
+    return opId;
+  }
+
+  /// Whether any op of [opType] is still in the outbox, whatever its
+  /// status — a failed or dead op also means the backend has not caught up.
+  Future<bool> hasPending(String opType) async {
+    final row = await (_db.select(_db.outboxTable)
+          ..where((t) => t.opType.equals(opType))
+          ..limit(1))
+        .get();
+    return row.isNotEmpty;
+  }
+
   /// Drain pending ops oldest-first. Safe to call from anywhere at any
   /// time: overlapping calls coalesce into one extra pass, ops without a
   /// registered handler stay pending untouched, and backoff windows are
@@ -147,8 +204,8 @@ class SyncEngine {
       }
       switch (result) {
         case SyncSynced(:final idMappings, :final entityType):
-          await _applySynced(op, handler, idMappings, entityType);
-          unsynced.remove(op.id);
+          final removed = await _applySynced(op, handler, idMappings, entityType);
+          if (removed) unsynced.remove(op.id);
         case SyncRetryable(:final error):
           await _applyRetryable(op, error);
         case SyncRejected(:final error):
@@ -157,7 +214,8 @@ class SyncEngine {
     }
   }
 
-  Future<void> _applySynced(
+  /// Returns whether the op's row was actually removed from the outbox.
+  Future<bool> _applySynced(
     OutboxEntry op,
     SyncHandler handler,
     Map<String, String> idMappings,
@@ -186,7 +244,16 @@ class SyncEngine {
       // The op itself synced; a callback failure must not re-queue it.
       debugPrint('==> sync onSynced callback failed (${op.opType}): $e');
     }
-    await (_db.delete(_db.outboxTable)..where((t) => t.id.equals(op.id))).go();
+    // Delete only while still inFlight: enqueueOrReplace may have swapped in
+    // a newer payload mid-push (resetting the row to pending), and that
+    // newer snapshot must survive to be pushed on the next pass.
+    final deleted = await (_db.delete(_db.outboxTable)..where(
+          (t) =>
+              t.id.equals(op.id) &
+              t.status.equals(OutboxStatus.inFlight.name),
+        ))
+        .go();
+    return deleted > 0;
   }
 
   /// Exact-string substitution of `offline:<uuid>` tokens in still-pending
