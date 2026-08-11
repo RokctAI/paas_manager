@@ -39,7 +39,8 @@ class _AppInitializerWidgetState extends State<AppInitializerWidget> {
   }
 
   Future<void> _initializeApp() async {
-    final appInitializer = AppInitializer(providerContainer: _providerContainer);
+    final appInitializer =
+        AppInitializer(providerContainer: _providerContainer);
     await appInitializer.initializeRemoteConfigWithoutAPICall();
     await appInitializer.checkAppStatusFromAPI();
 
@@ -58,13 +59,14 @@ class _AppInitializerWidgetState extends State<AppInitializerWidget> {
   Widget build(BuildContext context) {
     return _isInitialized
         ? UncontrolledProviderScope(
-      container: _providerContainer,
-      child: widget.child,
-    )
+            container: _providerContainer,
+            child: widget.child,
+          )
         : Scaffold(
-      body: Center(
-        child: SizedBox(width: 20, height: 20, child: CircularProgressIndicator()),
-      ),
-    );
+            body: Center(
+              child: SizedBox(
+                  width: 20, height: 20, child: CircularProgressIndicator()),
+            ),
+          );
   }
 }
