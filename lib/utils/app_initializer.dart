@@ -67,39 +67,54 @@ class _AppInitializerState extends State<AppInitializer> {
 
     try {
       print('Fetching Remote Config values...');
-      final response = await http.get(Uri.parse('$tenantSite/api/method/paas.api.get_remote_config?app_type=Manager'));
+      final response = await http.get(Uri.parse(
+          '$tenantSite/api/method/paas.api.get_remote_config?app_type=Manager'));
 
       if (response.statusCode == 200) {
         final responseData = jsonDecode(response.body);
         final config = responseData['message'];
 
         if (config != null) {
-            String? getString(String key) => config[key]?.toString();
-            bool? getBool(String key) => config[key] == 1 || config[key] == true || config[key] == "true";
-            double? getDouble(String key) => double.tryParse(config[key]?.toString() ?? "");
+          String? getString(String key) => config[key]?.toString();
+          bool? getBool(String key) =>
+              config[key] == 1 || config[key] == true || config[key] == "true";
+          double? getDouble(String key) =>
+              double.tryParse(config[key]?.toString() ?? "");
 
-            // AppConstants.adminPageUrl and AppConstants.baseUrl are
-            // compile-time consts (dart-define) - not remote-overridable.
-            if (getString('chatGpt') != null) AppConstants.chatGpt = getString('chatGpt')!;
-            if (getString('webUrl') != null) AppConstants.webUrl = getString('webUrl')!;
-            if (getString('imageBaseUrl') != null) AppConstants.imageBaseUrl = getString('imageBaseUrl')!;
+          // AppConstants.adminPageUrl and AppConstants.baseUrl are
+          // compile-time consts (dart-define) - not remote-overridable.
+          if (getString('chatGpt') != null)
+            AppConstants.chatGpt = getString('chatGpt')!;
+          if (getString('webUrl') != null)
+            AppConstants.webUrl = getString('webUrl')!;
+          if (getString('imageBaseUrl') != null)
+            AppConstants.imageBaseUrl = getString('imageBaseUrl')!;
 
-            /// auth phone fields
-            if (getBool('isSpecificNumberEnabled') != null) AppConstants.isSpecificNumberEnabled = getBool('isSpecificNumberEnabled')!;
-            if (getBool('isNumberLengthAlwaysSame') != null) AppConstants.isNumberLengthAlwaysSame = getBool('isNumberLengthAlwaysSame')!;
-            if (getString('countryCodeISO') != null) AppConstants.countryCodeISO = getString('countryCodeISO')!;
-            if (getBool('showFlag') != null) AppConstants.showFlag = getBool('showFlag')!;
-            if (getBool('showArrowIcon') != null) AppConstants.showArrowIcon = getBool('showArrowIcon')!;
+          /// auth phone fields
+          if (getBool('isSpecificNumberEnabled') != null)
+            AppConstants.isSpecificNumberEnabled =
+                getBool('isSpecificNumberEnabled')!;
+          if (getBool('isNumberLengthAlwaysSame') != null)
+            AppConstants.isNumberLengthAlwaysSame =
+                getBool('isNumberLengthAlwaysSame')!;
+          if (getString('countryCodeISO') != null)
+            AppConstants.countryCodeISO = getString('countryCodeISO')!;
+          if (getBool('showFlag') != null)
+            AppConstants.showFlag = getBool('showFlag')!;
+          if (getBool('showArrowIcon') != null)
+            AppConstants.showArrowIcon = getBool('showArrowIcon')!;
 
-            if (getDouble('demoLatitude') != null) AppConstants.demoLatitude = getDouble('demoLatitude')!;
-            if (getDouble('demoLongitude') != null) AppConstants.demoLongitude = getDouble('demoLongitude')!;
+          if (getDouble('demoLatitude') != null)
+            AppConstants.demoLatitude = getDouble('demoLatitude')!;
+          if (getDouble('demoLongitude') != null)
+            AppConstants.demoLongitude = getDouble('demoLongitude')!;
 
-            print('Remote Config initialized successfully');
-            // providerContainer.read(remoteConfigInitializedProvider.notifier).state = true;
+          print('Remote Config initialized successfully');
+          // providerContainer.read(remoteConfigInitializedProvider.notifier).state = true;
         }
       } else {
-          print('Failed to fetch remote config. Status: ${response.statusCode}');
-          // providerContainer.read(remoteConfigInitializedProvider.notifier).state = false;
+        print('Failed to fetch remote config. Status: ${response.statusCode}');
+        // providerContainer.read(remoteConfigInitializedProvider.notifier).state = false;
       }
     } catch (e) {
       print('Error initializing remote config: $e');
@@ -132,4 +147,3 @@ class _AppInitializerState extends State<AppInitializer> {
     return Container();
   }
 }
-

@@ -57,6 +57,15 @@ export 'src/services/tr_keys.dart';
 export 'src/database/app_database.dart';
 export 'src/database/kv_tables.dart';
 
+// Offline sync engine (outbox drain + temp-id -> backend-id mapping).
+// Feature SDKs implement SyncHandler and register it per op type from
+// their *SdkDependencies.register.
+export 'src/services/connectivity_service.dart';
+export 'src/sync/id_mappings_table.dart';
+export 'src/sync/outbox_table.dart';
+export 'src/sync/sync_engine.dart';
+export 'src/sync/sync_handler.dart';
+
 // DI facade accessors (repository interfaces resolved via get_it)
 export 'src/di/injection.dart';
 export 'src/di/base_di.dart';

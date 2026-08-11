@@ -1,7 +1,7 @@
 {
   "packages": {
     "base_sdk": {
-      "version": "1.4.0",
+      "version": "1.5.0",
       "files": {
         "flutter_native_splash.yaml": "d469a133b5e1631d6ba811b048d290449224075edad2153189cfb2edc3f4d100",
         "android/app/src/main/kotlin/com/foodyman/demo/JuvoApplication.kt": "08d9f33ad23841a9b200ec08ac99e62e9b34acb06e4ab49983a16992ed2c28ca",
@@ -780,7 +780,7 @@
       "files": {
         "lib/presentation/pages/income/income_page.dart": "30f8eafcc4936ecef84d13a20aeeae5660ad88ae02a58700f49cda2fbe520d80",
         "lib/presentation/pages/income/app_bar_screen.dart": "30c5407f991ad6375c3f24022aeb62b53966e61533d9f515c2155befeb7ac66a",
-        "lib/presentation/pages/income/widgets/chart.dart": "3160c4663629fb975e51ec5dc83c346f9efb8b06d37f045197dfdc644c6cbc1b",
+        "lib/presentation/pages/income/widgets/chart.dart": "a9d9671b2d68d32be94b8edfe3d556680fb4e79ef630c73e77ffbf0eb224078b",
         "lib/presentation/pages/income/widgets/statistics_item.dart": "3a5973f372637e69563540e95feff0d66aa7f4c78986b43b2420f3e3087060bf",
         "lib/presentation/pages/income/widgets/order_prices_section.dart": "0789d8c71fc507fe06bb17a93b91b6bf4f6e86d7033f2b876711d48c915095ad",
         "lib/presentation/pages/income/widgets/statistics_section.dart": "d667f27b28bb6cc06f24ae62615c7e03f8621e20f2ef291253f82c5fd2cc9f4e"
@@ -831,7 +831,7 @@
       "boot_hooks": []
     },
     "auth_sdk": {
-      "version": "1.1.0",
+      "version": "1.2.0",
       "files": {
         "lib/presentation/routes/auth_route_pages.dart": "8cf1fff16f979f09f5a92551df5de2d89a6211eb8b82801502628e386ecc2007",
         "lib/presentation/routes/registration_step_pages.dart": "6173d2dcda9d444e4e7ece9b5b15e73f72dbaf833bac04be38f7708186ac3a62",
@@ -936,16 +936,16 @@
   },
   "sdk_cache": {
     "base": {
-      "version": "1.4.0",
-      "hash": "e2731d989824db80"
+      "version": "1.5.0",
+      "hash": "f0cd42040852d24c"
     },
     "comms": {
       "version": "1.1.0",
       "hash": "1615f1f2c3de3586"
     },
     "auth": {
-      "version": "1.1.0",
-      "hash": "2665eb1d25850274"
+      "version": "1.2.0",
+      "hash": "018144e3158277bd"
     },
     "users": {
       "version": "1.1.0",
