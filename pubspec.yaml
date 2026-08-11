@@ -96,7 +96,7 @@ dependencies:
   file_picker: ^8.0.7
   image: ^4.1.7
   app_tracking_transparency: ^2.0.6
-  permission_handler: ^11.3.1
+  permission_handler: ^12.0.1
 
   #maps:
   geocoding: ^3.0.0
@@ -200,3 +200,8 @@ dependency_overrides:
   google_fonts: ^6.3.0
   http: ^1.2.0
   sqlite3: 2.9.4
+  # auth_sdk still pins ^11.3.1 while hardware_sdk needs ^12.0.1; the two
+  # ranges don't overlap, so arbitrate at the root. v11->v12 is API-compatible
+  # for the composed usage (plain Permission.x.request() calls). Follow-up:
+  # bump auth_sdk's constraint in RokctAI/Users, then this override can go.
+  permission_handler: ^12.0.1
