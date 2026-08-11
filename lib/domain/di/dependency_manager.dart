@@ -14,45 +14,28 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+// Shrunken to the single seam that still needs a host-owned repository
+// (migration stage M2): zones_sdk's installed manager adapter
+// (lib/presentation/routes/zones_adapters.dart) resolves the shop's
+// delivery-zone polygon through `di.usersRepository`. Everything else the
+// old setUpDependencies() registered is SDK-owned now (base_sdk registers
+// HttpService and the translations Map; each vertical SDK registers its own
+// repositories in the @generated-sdk-di block).
+//
+// This file dies entirely once zones_sdk's adapter template is rewritten
+// against a users_sdk delivery-zone repository (zones repo follow-up), or
+// once the registration moves to a `di_hooks` manifest declaration
+// (The-Rokct-Protocol#160) - see scratchpad/di-hooks-declarations.md.
 import 'package:get_it/get_it.dart';
-import 'package:google_place/google_place.dart';
-import 'package:manager/domain/interface/notification.dart';
-import 'package:manager/domain/interface/table.dart';
-import 'package:manager/infrastructure/services/local_storage.dart';
-import 'package:manager/domain/handlers/handlers.dart';
-import '../interface/interfaces.dart';
-import 'package:manager/presentation/routes/app_router.dart';
-import 'package:manager/infrastructure/repositories/repositories.dart';
+import 'package:manager/domain/interface/users.dart';
+import 'package:manager/infrastructure/repositories/users_repository.dart';
 
-final GetIt getIt = GetIt.instance;
+final getIt = GetIt.instance;
 
-Future setUpDependencies() async {
-  getIt.registerSingleton<AppRouter>(AppRouter());
-  getIt.registerLazySingleton<HttpService>(() => HttpService());
-  getIt.registerSingleton<Map>(LocalStorage.getTranslations());
-  getIt.registerSingleton<AuthInterface>(AuthRepository());
-  getIt.registerSingleton<TableInterface>(TableRepository());
-  getIt.registerSingleton<UsersInterface>(UsersRepository());
-  getIt.registerSingleton<ShopsInterface>(ShopsRepository());
-  getIt.registerSingleton<OrdersInterface>(OrdersRepository());
-  getIt.registerSingleton<CatalogInterface>(CatalogRepository());
-  getIt.registerSingleton<SettingsInterface>(SettingsRepository());
-  getIt.registerSingleton<ProductsInterface>(ProductsRepository());
-  getIt.registerSingleton<NotificationInterface>(NotificationRepository());
-
+Future<void> setUpDependencies() async {
+  if (!getIt.isRegistered<UsersInterface>()) {
+    getIt.registerSingleton<UsersInterface>(UsersRepository());
+  }
 }
 
-final translation = getIt.get<Map>();
-final dioHttp = getIt.get<HttpService>();
-final appRouter = getIt.get<AppRouter>();
-final googlePlace = getIt.get<GooglePlace>();
-final authRepository = getIt.get<AuthInterface>();
-final shopsRepository = getIt.get<ShopsInterface>();
-final tableRepository = getIt.get<TableInterface>();
 final usersRepository = getIt.get<UsersInterface>();
-final ordersRepository = getIt.get<OrdersInterface>();
-final catalogRepository = getIt.get<CatalogInterface>();
-final productRepository = getIt.get<ProductsInterface>();
-final settingsRepository = getIt.get<SettingsInterface>();
-final notificationRepository = getIt.get<NotificationInterface>();
-

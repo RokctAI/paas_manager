@@ -78,8 +78,8 @@ class _AppInitializerState extends State<AppInitializer> {
             bool? getBool(String key) => config[key] == 1 || config[key] == true || config[key] == "true";
             double? getDouble(String key) => double.tryParse(config[key]?.toString() ?? "");
 
-            if (getString('adminPageUrl') != null) AppConstants.adminPageUrl = getString('adminPageUrl')!;
-            // AppConstants.baseUrl is not overwritten
+            // AppConstants.adminPageUrl and AppConstants.baseUrl are
+            // compile-time consts (dart-define) - not remote-overridable.
             if (getString('chatGpt') != null) AppConstants.chatGpt = getString('chatGpt')!;
             if (getString('webUrl') != null) AppConstants.webUrl = getString('webUrl')!;
             if (getString('imageBaseUrl') != null) AppConstants.imageBaseUrl = getString('imageBaseUrl')!;

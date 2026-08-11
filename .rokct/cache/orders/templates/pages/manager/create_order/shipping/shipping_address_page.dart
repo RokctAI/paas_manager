@@ -9,9 +9,14 @@ import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:base_sdk/src/presentation/theme/app_style.dart';
 import 'widgets/delivery_type_item.dart';
 import 'package:${package}/presentation/routes/app_router.dart';
-import 'package:${package}/presentation/component/text_fields/underlined_text_field.dart';
+import 'package:base_sdk/src/presentation/components/text_fields/underlined_text_field.dart';
 import 'package:${package}/presentation/pages/main/widgets/buttons_bouncing_effect.dart';
 import 'package:base_sdk/src/constants/app_constants.dart';
+
+// base_sdk's AppConstants does not carry this flag yet; same dart-define the
+// deleted host AppConstants read (follow-up: promote into base AppConstants).
+const bool _isSpecificNumberEnabled =
+    bool.fromEnvironment('IS_SPECIFIC_NUMBER_ENABLED');
 import 'package:base_sdk/src/presentation/components/buttons/custom_button.dart';
 import 'package:base_sdk/src/presentation/components/buttons/pop_button.dart';
 import 'package:base_sdk/src/presentation/components/keyboard_dismisser.dart';
@@ -23,12 +28,6 @@ import 'package:orders_sdk/src/manager/application/order/shipping/delivery/deliv
 import 'package:orders_sdk/src/manager/application/order/shipping/section/section_provider.dart';
 import 'package:orders_sdk/src/manager/application/order/shipping/table/table_provider.dart';
 import 'package:orders_sdk/src/manager/application/order/shipping/user/order_user_provider.dart';
-
-// Shared with merchants_sdk's main_page.dart FAB Hero: base_sdk's AppConstants
-// does not carry this tag (yet), so both sides use the same literal. If
-// base_sdk grows AppConstants.heroTagAddOrderButton, swap the literal for the
-// constant.
-const String _heroTagAddOrderButton = 'heroTagAddOrderButton';
 
 
 @RoutePage(name: 'ManagerShippingAddressRoute')
@@ -164,7 +163,7 @@ class _ShippingAddressPageState extends State<ShippingAddressPage> {
                                         : userState.selectedUser?.email ?? '',
                                   ),
                                   16.verticalSpace,
-                                  if (AppConstants.isSpecificNumberEnabled &&
+                                  if (_isSpecificNumberEnabled &&
                                       userState.selectedUser != null)
                                     IntlPhoneField(
                                       disableLengthCheck: !AppConstants
@@ -205,18 +204,18 @@ class _ShippingAddressPageState extends State<ShippingAddressPage> {
                                         enabledBorder: UnderlineInputBorder(
                                             borderSide: BorderSide.merge(
                                                 const BorderSide(
-                                                    color: Style
+                                                    color: AppStyle
                                                         .differBorderColor),
                                                 const BorderSide(
-                                                    color: Style
+                                                    color: AppStyle
                                                         .differBorderColor))),
                                         errorBorder: UnderlineInputBorder(
                                             borderSide: BorderSide.merge(
                                                 const BorderSide(
-                                                    color: Style
+                                                    color: AppStyle
                                                         .differBorderColor),
                                                 const BorderSide(
-                                                    color: Style
+                                                    color: AppStyle
                                                         .differBorderColor))),
                                         border: const UnderlineInputBorder(),
                                         focusedErrorBorder:
@@ -224,16 +223,16 @@ class _ShippingAddressPageState extends State<ShippingAddressPage> {
                                         disabledBorder: UnderlineInputBorder(
                                             borderSide: BorderSide.merge(
                                                 const BorderSide(
-                                                    color: Style
+                                                    color: AppStyle
                                                         .differBorderColor),
                                                 const BorderSide(
-                                                    color: Style
+                                                    color: AppStyle
                                                         .differBorderColor))),
                                         focusedBorder:
                                             const UnderlineInputBorder(),
                                       ),
                                     ),
-                                  if (!AppConstants.isSpecificNumberEnabled &&
+                                  if (!_isSpecificNumberEnabled &&
                                       userState.selectedUser != null)
                                     UnderlinedTextField(
                                       label: TrKeys.phoneNumber,
@@ -410,7 +409,7 @@ class _ShippingAddressPageState extends State<ShippingAddressPage> {
           child: Consumer(
             builder: (context, ref, child) => Row(
               children: [
-                const PopButton(heroTag: _heroTagAddOrderButton),
+                const PopButton(),
                 8.horizontalSpace,
                 if ((ref.watch(deliveryTypeProvider).type == TrKeys.delivery &&
                         ref.watch(orderUserProvider).selectedUser?.phone !=

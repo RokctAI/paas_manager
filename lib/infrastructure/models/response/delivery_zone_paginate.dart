@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-import '../data/shop_data.dart';
+import 'package:base_sdk/src/models/data/shop_data.dart';
 
 class DeliveryZonePaginate {
   DeliveryZonePaginate({List<DeliveryZoneData>? data}) {

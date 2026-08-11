@@ -28,6 +28,12 @@ class CreateAddonNotifier extends StateNotifier<CreateAddonState> {
     _quantity = value.trim();
   }
 
+  // Mirrors EditAddonNotifier.setBarcode - the create modal's SKU field
+  // writes through this (upstream commerce follow-up: add to the SDK).
+  void setBarcode(String value) {
+    _barcode = value.trim();
+  }
+
   void setPrice(String value) {
     _price = value.trim();
   }

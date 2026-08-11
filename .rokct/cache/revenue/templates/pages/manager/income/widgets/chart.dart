@@ -3,7 +3,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:${package}/presentation/styles/style.dart';
+import 'package:base_sdk/src/presentation/theme/app_style.dart';
 import 'package:${package}/presentation/theme/theme.dart';
 import 'package:base_sdk/src/services/app_helpers.dart';
 import 'package:base_sdk/src/services/tr_keys.dart';
@@ -152,7 +152,7 @@ class SalesChart extends StatelessWidget {
             gradient: LinearGradient(
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
-              colors: Style.primaryGradient,
+              colors: AppStyle.primaryGradient,
             ),
           ),
         ),

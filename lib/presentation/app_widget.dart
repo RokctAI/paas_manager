@@ -14,73 +14,64 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+// Aligned with base_sdk's templates/app_widget.dart (migration stage M2/M4):
+// the settings/translations warmup now rides base_sdk's SettingsRepository
+// facade instead of the deleted host repositories. Kept host-owned (tracked)
+// until the final untrack commit (M5); the body must stay in sync with the
+// template so a fresh compose produces the identical widget.
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
-import 'styles/style.dart';
-import 'package:manager/domain/di/dependency_manager.dart';
-import '../infrastructure/services/services.dart';
+import 'package:base_sdk/src/application/app_widget/app_provider.dart';
+import 'package:base_sdk/src/di/injection.dart';
+import 'package:base_sdk/src/domain/interface/settings.dart';
+import 'package:base_sdk/src/services/local_storage.dart';
+import 'package:base_sdk/src/presentation/theme/app_style.dart';
+import 'package:manager/presentation/routes/app_router.dart';
 
 class AppWidget extends ConsumerWidget {
   const AppWidget({super.key});
 
-  Future fetchSetting() async {
+  static final _appRouter = AppRouter();
+
+  Future<void> _fetchSettings() async {
+    // Settings live behind comms_sdk's registration; apps composed without
+    // it simply skip the remote settings fetch.
+    if (!getIt.isRegistered<SettingsRepositoryFacade>()) return;
     final connect = await Connectivity().checkConnectivity();
     if (connect.contains(ConnectivityResult.mobile) ||
         connect.contains(ConnectivityResult.ethernet) ||
         connect.contains(ConnectivityResult.wifi)) {
       settingsRepository.getGlobalSettings();
       await settingsRepository.getLanguages();
-      await settingsRepository.getTranslations();
+      await settingsRepository.getMobileTranslations();
     }
   }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final state = ref.refresh(appProvider);
     return FutureBuilder(
-        future: Future.wait([
-          setUpDependencies(),
-          LocalStorage.init(),
-          if (LocalStorage.getTranslations().isEmpty) fetchSetting()
-        ]),
-        builder: (context, AsyncSnapshot<List<dynamic>> snap) {
+      future: Future.wait([
+        if (LocalStorage.getTranslations().isEmpty) _fetchSettings(),
+      ]),
+      builder: (context, AsyncSnapshot<List<dynamic>> snapshot) {
         return ScreenUtilInit(
-          useInheritedMediaQuery: true,
+          useInheritedMediaQuery: false,
           designSize: const Size(375, 812),
-          builder: (context, child) => RefreshConfiguration(
-            footerBuilder: () => const ClassicFooter(
-              idleIcon: SizedBox.shrink(),
-              idleText: '',
-              noDataText: '',
-              noMoreIcon: null,
-              loadingText: '',
-              loadingIcon: CupertinoActivityIndicator(),
-              loadStyle: LoadStyle.ShowWhenLoading,
-            ),
-            headerBuilder: () => const WaterDropMaterialHeader(
-              backgroundColor: Style.white,
-              distance: 30,
-              color: Style.blackColor,
-            ),
-            child: MaterialApp.router(
-              theme: ThemeData(
-                useMaterial3: false
-              ),
+          builder: (context, child) {
+            return MaterialApp.router(
               debugShowCheckedModeBanner: false,
-              routerDelegate: appRouter.delegate(),
-              routeInformationParser: appRouter.defaultRouteParser(),
-              locale: Locale(LocalStorage.getLanguage()?.locale ?? 'en'),
-              themeMode: ThemeMode.light,
-              builder: (context, child) =>
-                  ScrollConfiguration(behavior: CustomBehavior(), child: child!),
-            ),
-          ),
+              routerDelegate: _appRouter.delegate(),
+              routeInformationParser: _appRouter.defaultRouteParser(),
+              locale: Locale(state.activeLanguage?.locale ?? 'en'),
+              theme: ThemeData(useMaterial3: false),
+              themeMode: state.isDarkMode ? ThemeMode.dark : ThemeMode.light,
+            );
+          },
         );
-      }
+      },
     );
   }
 }

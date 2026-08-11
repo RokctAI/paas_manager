@@ -17,9 +17,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_advanced_switch/flutter_advanced_switch.dart';
-import 'package:manager/infrastructure/services/services.dart';
+import 'package:base_sdk/src/services/app_helpers.dart';
+import 'package:base_sdk/src/services/tr_keys.dart';
 
-import 'package:manager/presentation/styles/style.dart';
+import 'package:base_sdk/src/presentation/theme/app_style.dart';
+
+// Legacy manager toggle palette - not part of base AppStyle's tokens.
+const Color _toggleColor = Color(0xFFE7E7E7);
+const Color _toggleShadowColor = Color(0xFF6B6B6B);
 
 class CustomToggle extends StatefulWidget {
   final ValueNotifier<bool>? controller;
@@ -68,8 +73,8 @@ class _CustomToggleState extends State<CustomToggle> {
         debugPrint('=============================');
       },
 
-      activeColor: Style.primary,
-      inactiveColor: Style.toggleColor,
+      activeColor: AppStyle.primary,
+      inactiveColor: _toggleColor,
       borderRadius: BorderRadius.circular(10.r),
       width: 70.w,
       height: 30.h,
@@ -80,7 +85,7 @@ class _CustomToggleState extends State<CustomToggle> {
         padding: REdgeInsets.only(left: 4.r),
         child: Text(
           AppHelpers.getTranslation(TrKeys.open),
-          style: Style.interNormal(size: 12.sp),
+          style: AppStyle.interNormal(size: 12.sp),
         ),
       )
           : const SizedBox.shrink(),
@@ -89,7 +94,7 @@ class _CustomToggleState extends State<CustomToggle> {
         padding: REdgeInsets.only(right: 4.r),
         child: Text(
           AppHelpers.getTranslation(TrKeys.close),
-          style: Style.interNormal(size: 12.sp),
+          style: AppStyle.interNormal(size: 12.sp),
         ),
       )
           : const SizedBox.shrink(),
@@ -97,11 +102,11 @@ class _CustomToggleState extends State<CustomToggle> {
         margin: REdgeInsets.all(3),
         padding: REdgeInsets.symmetric(vertical: 7, horizontal: 9),
         decoration: BoxDecoration(
-          color: Style.white,
+          color: AppStyle.white,
           borderRadius: BorderRadius.circular(6.r),
           boxShadow: [
             BoxShadow(
-              color: Style.toggleShadowColor.withOpacity(0.4),
+              color: _toggleShadowColor.withOpacity(0.4),
               spreadRadius: 0,
               blurRadius: 2,
               offset: const Offset(0, 2),
@@ -109,7 +114,7 @@ class _CustomToggleState extends State<CustomToggle> {
           ],
         ),
         child: Container(
-          decoration: const BoxDecoration(color: Style.toggleColor),
+          decoration: const BoxDecoration(color: _toggleColor),
         ),
       ),
     );
