@@ -55,8 +55,7 @@ class FoodKitchenItem extends StatelessWidget {
                     width: 18.w,
                     height: 18.h,
                     decoration: BoxDecoration(
-                      color:
-                          isSelected ? Style.primary : Style.transparent,
+                      color: isSelected ? Style.primary : Style.transparent,
                       shape: BoxShape.circle,
                       border: Border.all(
                         color: isSelected ? Style.blackColor : Style.textColor,

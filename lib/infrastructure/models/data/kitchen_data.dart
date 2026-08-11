@@ -43,16 +43,18 @@ class KitchenModel {
       );
 
   factory KitchenModel.fromJson(Map<String, dynamic> json) => KitchenModel(
-    id: json["id"],
-    active: json["active"],
-    shopId: json["shop_id"],
-    translation: json["translation"] == null ? null : Translation.fromJson(json["translation"]),
-  );
+        id: json["id"],
+        active: json["active"],
+        shopId: json["shop_id"],
+        translation: json["translation"] == null
+            ? null
+            : Translation.fromJson(json["translation"]),
+      );
 
   Map<String, dynamic> toJson() => {
-    "id": id,
-    "active": active,
-    "shop_id": shopId,
-    "translation": translation?.toJson(),
-  };
+        "id": id,
+        "active": active,
+        "shop_id": shopId,
+        "translation": translation?.toJson(),
+      };
 }

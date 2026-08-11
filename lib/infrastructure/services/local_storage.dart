@@ -25,7 +25,6 @@ class LocalStorage {
 
   LocalStorage._();
 
-
   static Future<void> init() async {
     _preferences = await SharedPreferences.getInstance();
   }
@@ -38,8 +37,8 @@ class LocalStorage {
 
   static Future<void> setAddressSelected(AddressData data) async {
     if (_preferences != null) {
-      await _preferences!.setString(
-          StorageKeys.keyAddressSelected, jsonEncode(data.toJson()));
+      await _preferences!
+          .setString(StorageKeys.keyAddressSelected, jsonEncode(data.toJson()));
     }
   }
 
@@ -61,7 +60,8 @@ class LocalStorage {
     }
   }
 
-  static String getToken() => _preferences?.getString(StorageKeys.keyToken) ?? '';
+  static String getToken() =>
+      _preferences?.getString(StorageKeys.keyToken) ?? '';
 
   static void _deleteToken() => _preferences?.remove(StorageKeys.keyToken);
 
@@ -78,8 +78,7 @@ class LocalStorage {
     if (_preferences != null) {
       final List<String> strings =
           settings.map((setting) => jsonEncode(setting.toJson())).toList();
-      await _preferences!
-          .setStringList(StorageKeys.keyGlobalSettings, strings);
+      await _preferences!.setStringList(StorageKeys.keyGlobalSettings, strings);
     }
   }
 
@@ -94,7 +93,8 @@ class LocalStorage {
     return settingsList;
   }
 
-  static Future<void> setTranslations(Map<String, dynamic>? translations) async {
+  static Future<void> setTranslations(
+      Map<String, dynamic>? translations) async {
     if (_preferences != null) {
       final String encoded = jsonEncode(translations);
       await _preferences!.setString(StorageKeys.keyTranslations, encoded);
@@ -145,7 +145,8 @@ class LocalStorage {
     }
   }
 
-  static bool getLangLtr() => !(_preferences?.getBool(StorageKeys.keyLangLtr) ?? false);
+  static bool getLangLtr() =>
+      !(_preferences?.getBool(StorageKeys.keyLangLtr) ?? false);
 
   static Future<void> setSelectedCurrency(CurrencyData? currency) async {
     if (_preferences != null) {

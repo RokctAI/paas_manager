@@ -42,7 +42,7 @@ class _SplashPageState extends ConsumerState<SplashPage> {
               goMain: () {
                 ref.read(restaurantProvider.notifier).fetchMyShop(
                     afterFetched: () {
-                    context.replaceRoute(const MainRoute());
+                  context.replaceRoute(const MainRoute());
                 });
               },
               goLogin: () => context.replaceRoute(const LoginRoute()),

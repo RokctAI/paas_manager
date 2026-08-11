@@ -29,7 +29,7 @@ class SizeItem extends StatelessWidget {
     required this.onTap,
     required this.isActive,
     required this.title,
-  }) ;
+  });
 
   @override
   Widget build(BuildContext context) {
