@@ -27,14 +27,15 @@ class CommonAppBar extends StatelessWidget {
     super.key,
     required this.child,
     this.height = 76,
-     this.isSearchPage = false,
+    this.isSearchPage = false,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      height: height.h+((MediaQuery.paddingOf(context).top > 34)
+      height: height.h +
+          ((MediaQuery.paddingOf(context).top > 34)
               ? 34.h
               : MediaQuery.paddingOf(context).top),
       decoration: BoxDecoration(
@@ -45,7 +46,8 @@ class CommonAppBar extends StatelessWidget {
       child: Align(
         alignment: Alignment.bottomLeft,
         child: Padding(
-          padding: EdgeInsets.only(left: 16.w, right: 16.w, bottom: isSearchPage ? 10.h : 20.h),
+          padding: EdgeInsets.only(
+              left: 16.w, right: 16.w, bottom: isSearchPage ? 10.h : 20.h),
           child: child,
         ),
       ),

@@ -31,6 +31,7 @@ class AppConstants {
   static const String heroTagOrderHistory = 'heroTagOrderHistory';
   static const String heroTagIncomePage = 'heroTagIncomePage';
   static const String heroTagListNotification = 'heroTagListNotification';
+
   /// api urls
   static const String baseUrl = String.fromEnvironment('BASE_URL');
   static const String adminPageUrl = String.fromEnvironment('ADMIN_URL');
@@ -38,26 +39,30 @@ class AppConstants {
   static String chatGpt = const String.fromEnvironment('CHAT_GPT_KEY');
   static String webUrl = const String.fromEnvironment('WEB_URL');
 
-
   /// auth phone fields
-  static bool isSpecificNumberEnabled = const bool.fromEnvironment('IS_SPECIFIC_NUMBER_ENABLED');
-  static bool isNumberLengthAlwaysSame = const bool.fromEnvironment('IS_NUMBER_LENGTH_ALWAYS_SAME');
+  static bool isSpecificNumberEnabled =
+      const bool.fromEnvironment('IS_SPECIFIC_NUMBER_ENABLED');
+  static bool isNumberLengthAlwaysSame =
+      const bool.fromEnvironment('IS_NUMBER_LENGTH_ALWAYS_SAME');
   static String countryCodeISO = const String.fromEnvironment('COUNTRY_ISO');
   static bool showFlag = const bool.fromEnvironment('SHOW_FLAG');
   static bool showArrowIcon = const bool.fromEnvironment('SHOW_ARROW_ICON');
-  static SignUpType get signUpType => SignUpType.values.byName(const String.fromEnvironment('SIGN_UP_TYPE'));
-
-
+  static SignUpType get signUpType =>
+      SignUpType.values.byName(const String.fromEnvironment('SIGN_UP_TYPE'));
 
   /// location
-  static double demoLatitude = double.parse(const String.fromEnvironment('DEMO_LATITUDE'));
-  static double demoLongitude = double.parse(const String.fromEnvironment('DEMO_LONGITUDE'));
+  static double demoLatitude =
+      double.parse(const String.fromEnvironment('DEMO_LATITUDE'));
+  static double demoLongitude =
+      double.parse(const String.fromEnvironment('DEMO_LONGITUDE'));
   static const double pinLoadingMin = 0.116666667;
   static const double pinLoadingMax = 0.611111111;
 
   /// demo app info
-  static const String demoSellerLogin = String.fromEnvironment('DEMO_SELLER_LOGIN');
-  static const String demoSellerPassword = String.fromEnvironment('DEMO_SELLER_PASSWORD');
+  static const String demoSellerLogin =
+      String.fromEnvironment('DEMO_SELLER_LOGIN');
+  static const String demoSellerPassword =
+      String.fromEnvironment('DEMO_SELLER_PASSWORD');
 
   ////QRCodes for Water Service
   static const Map<String, String> STEP_CODES = {

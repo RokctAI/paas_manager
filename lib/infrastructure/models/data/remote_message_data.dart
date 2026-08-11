@@ -14,18 +14,13 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-
-
-class RemoteMessageData{
+class RemoteMessageData {
   final num? id;
   final String? status;
   RemoteMessageData({this.id, this.status});
 
-  factory RemoteMessageData.fromJson( Map data){
+  factory RemoteMessageData.fromJson(Map data) {
     return RemoteMessageData(
-      id: int.tryParse(data["id"]),
-      status: data["status"]
-    );
+        id: int.tryParse(data["id"]), status: data["status"]);
   }
-
 }
