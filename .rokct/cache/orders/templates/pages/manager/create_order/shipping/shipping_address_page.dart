@@ -11,7 +11,14 @@ import 'widgets/delivery_type_item.dart';
 import 'package:${package}/presentation/routes/app_router.dart';
 import 'package:base_sdk/src/presentation/components/text_fields/underlined_text_field.dart';
 import 'package:${package}/presentation/pages/main/widgets/buttons_bouncing_effect.dart';
-import 'package:base_sdk/src/constants/app_constants.dart';
+// Host AppConstants, not base_sdk's: the five phone-field flags
+// (isSpecificNumberEnabled, isNumberLengthAlwaysSame, countryCodeISO,
+// showFlag, showArrowIcon) are runtime-mutable there and overridden from the
+// tenant's remote config by lib/utils/app_initializer.dart at boot - a
+// compile-time const would freeze them. base_sdk's AppConstants also lacks
+// isSpecificNumberEnabled (core follow-up: absorb the flag set when the host
+// app_constants dies in M5).
+import 'package:${package}/app_constants.dart';
 import 'package:base_sdk/src/presentation/components/buttons/custom_button.dart';
 import 'package:base_sdk/src/presentation/components/buttons/pop_button.dart';
 import 'package:base_sdk/src/presentation/components/keyboard_dismisser.dart';
@@ -23,11 +30,6 @@ import 'package:orders_sdk/src/manager/application/order/shipping/delivery/deliv
 import 'package:orders_sdk/src/manager/application/order/shipping/section/section_provider.dart';
 import 'package:orders_sdk/src/manager/application/order/shipping/table/table_provider.dart';
 import 'package:orders_sdk/src/manager/application/order/shipping/user/order_user_provider.dart';
-
-// base_sdk's AppConstants does not carry this flag yet; same dart-define the
-// deleted host AppConstants read (follow-up: promote into base AppConstants).
-const bool _isSpecificNumberEnabled =
-    bool.fromEnvironment('IS_SPECIFIC_NUMBER_ENABLED');
 
 
 @RoutePage(name: 'ManagerShippingAddressRoute')
@@ -163,7 +165,7 @@ class _ShippingAddressPageState extends State<ShippingAddressPage> {
                                         : userState.selectedUser?.email ?? '',
                                   ),
                                   16.verticalSpace,
-                                  if (_isSpecificNumberEnabled &&
+                                  if (AppConstants.isSpecificNumberEnabled &&
                                       userState.selectedUser != null)
                                     IntlPhoneField(
                                       disableLengthCheck: !AppConstants
@@ -232,7 +234,7 @@ class _ShippingAddressPageState extends State<ShippingAddressPage> {
                                             const UnderlineInputBorder(),
                                       ),
                                     ),
-                                  if (!_isSpecificNumberEnabled &&
+                                  if (!AppConstants.isSpecificNumberEnabled &&
                                       userState.selectedUser != null)
                                     UnderlinedTextField(
                                       label: TrKeys.phoneNumber,
