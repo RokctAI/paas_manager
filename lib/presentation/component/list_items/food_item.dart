@@ -81,8 +81,7 @@ class FoodItem extends StatelessWidget {
                                 product.stocks?.first.price ?? 0),
                         style: Style.interSemi(
                           size: 14.sp,
-                          color:
-                              isOutOfStock ? Style.red : Style.blackColor,
+                          color: isOutOfStock ? Style.red : Style.blackColor,
                           letterSpacing: -0.3,
                         ),
                       ),

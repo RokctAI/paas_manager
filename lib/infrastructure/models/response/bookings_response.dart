@@ -14,7 +14,6 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-
 import '../data/bookings_data.dart';
 
 class BookingsResponse {
@@ -22,7 +21,10 @@ class BookingsResponse {
 
   BookingsResponse({required this.data});
 
-  factory BookingsResponse.fromJson(Map<String, dynamic> json) =>
-      BookingsResponse(data: json["data"]== null?null: BookingsData.fromJson(json["data"]));
-
+  factory BookingsResponse.fromJson(
+          Map<String, dynamic> json) =>
+      BookingsResponse(
+          data: json["data"] == null
+              ? null
+              : BookingsData.fromJson(json["data"]));
 }

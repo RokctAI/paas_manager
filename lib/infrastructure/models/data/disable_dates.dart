@@ -14,9 +14,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-
-List<DisableDates> disableDatesFromJson(dynamic str) => List<DisableDates>.from(str.map((x) => DisableDates.fromJson(x)));
-
+List<DisableDates> disableDatesFromJson(dynamic str) =>
+    List<DisableDates>.from(str.map((x) => DisableDates.fromJson(x)));
 
 class DisableDates {
   DateTime startDate;
@@ -28,12 +27,12 @@ class DisableDates {
   });
 
   factory DisableDates.fromJson(Map<String, dynamic> json) => DisableDates(
-    startDate: DateTime.parse(json["start_date"]),
-    endDate: DateTime.parse(json["end_date"]),
-  );
+        startDate: DateTime.parse(json["start_date"]),
+        endDate: DateTime.parse(json["end_date"]),
+      );
 
   Map<String, dynamic> toJson() => {
-    "start_date": startDate.toIso8601String(),
-    "end_date": endDate.toIso8601String(),
-  };
+        "start_date": startDate.toIso8601String(),
+        "end_date": endDate.toIso8601String(),
+      };
 }

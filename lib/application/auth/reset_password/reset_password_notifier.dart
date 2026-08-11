@@ -114,7 +114,7 @@ class ResetPasswordNotifier extends StateNotifier<ResetPasswordState> {
               isLoading: false, isEmailError: true, isSuccess: false);
           AppHelpers.showCheckTopSnackBar(
             context,
-            text:AppHelpers.getTranslation(failure),
+            text: AppHelpers.getTranslation(failure),
           );
           debugPrint('==> send otp failure: $failure');
         },
