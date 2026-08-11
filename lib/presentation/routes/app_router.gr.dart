@@ -1,3 +1,4 @@
+// dart format width=80
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
 // **************************************************************************
@@ -10,15 +11,44 @@
 part of 'app_router.dart';
 
 /// generated route for
-/// [CreateOrderPage]
-class CreateOrderRoute extends PageRouteInfo<void> {
-  const CreateOrderRoute({List<PageRouteInfo>? children})
-      : super(
-          CreateOrderRoute.name,
-          initialChildren: children,
-        );
+/// [CalculatorPage]
+class CalculatorRoute extends PageRouteInfo<void> {
+  const CalculatorRoute({List<PageRouteInfo>? children})
+    : super(CalculatorRoute.name, initialChildren: children);
 
-  static const String name = 'CreateOrderRoute';
+  static const String name = 'CalculatorRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const CalculatorPage();
+    },
+  );
+}
+
+/// generated route for
+/// [ClosedRouteView]
+class ClosedRoute extends PageRouteInfo<void> {
+  const ClosedRoute({List<PageRouteInfo>? children})
+    : super(ClosedRoute.name, initialChildren: children);
+
+  static const String name = 'ClosedRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const ClosedRouteView();
+    },
+  );
+}
+
+/// generated route for
+/// [CreateOrderPage]
+class ManagerCreateOrderRoute extends PageRouteInfo<void> {
+  const ManagerCreateOrderRoute({List<PageRouteInfo>? children})
+    : super(ManagerCreateOrderRoute.name, initialChildren: children);
+
+  static const String name = 'ManagerCreateOrderRoute';
 
   static PageInfo page = PageInfo(
     name,
@@ -29,34 +59,12 @@ class CreateOrderRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [CreateShopPage]
-class CreateShopRoute extends PageRouteInfo<void> {
-  const CreateShopRoute({List<PageRouteInfo>? children})
-      : super(
-          CreateShopRoute.name,
-          initialChildren: children,
-        );
-
-  static const String name = 'CreateShopRoute';
-
-  static PageInfo page = PageInfo(
-    name,
-    builder: (data) {
-      return const CreateShopPage();
-    },
-  );
-}
-
-/// generated route for
 /// [DeliveryTimePage]
-class DeliveryTimeRoute extends PageRouteInfo<void> {
-  const DeliveryTimeRoute({List<PageRouteInfo>? children})
-      : super(
-          DeliveryTimeRoute.name,
-          initialChildren: children,
-        );
+class ManagerDeliveryTimeRoute extends PageRouteInfo<void> {
+  const ManagerDeliveryTimeRoute({List<PageRouteInfo>? children})
+    : super(ManagerDeliveryTimeRoute.name, initialChildren: children);
 
-  static const String name = 'DeliveryTimeRoute';
+  static const String name = 'ManagerDeliveryTimeRoute';
 
   static PageInfo page = PageInfo(
     name,
@@ -67,70 +75,10 @@ class DeliveryTimeRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [DeliveryZonePage]
-class DeliveryZoneRoute extends PageRouteInfo<void> {
-  const DeliveryZoneRoute({List<PageRouteInfo>? children})
-      : super(
-          DeliveryZoneRoute.name,
-          initialChildren: children,
-        );
-
-  static const String name = 'DeliveryZoneRoute';
-
-  static PageInfo page = PageInfo(
-    name,
-    builder: (data) {
-      return const DeliveryZonePage();
-    },
-  );
-}
-
-/// generated route for
-/// [GenerateImagePage]
-class GenerateImageRoute extends PageRouteInfo<void> {
-  const GenerateImageRoute({List<PageRouteInfo>? children})
-      : super(
-          GenerateImageRoute.name,
-          initialChildren: children,
-        );
-
-  static const String name = 'GenerateImageRoute';
-
-  static PageInfo page = PageInfo(
-    name,
-    builder: (data) {
-      return const GenerateImagePage();
-    },
-  );
-}
-
-/// generated route for
-/// [IncomePage]
-class IncomeRoute extends PageRouteInfo<void> {
-  const IncomeRoute({List<PageRouteInfo>? children})
-      : super(
-          IncomeRoute.name,
-          initialChildren: children,
-        );
-
-  static const String name = 'IncomeRoute';
-
-  static PageInfo page = PageInfo(
-    name,
-    builder: (data) {
-      return const IncomePage();
-    },
-  );
-}
-
-/// generated route for
 /// [LoginPage]
 class LoginRoute extends PageRouteInfo<void> {
   const LoginRoute({List<PageRouteInfo>? children})
-      : super(
-          LoginRoute.name,
-          initialChildren: children,
-        );
+    : super(LoginRoute.name, initialChildren: children);
 
   static const String name = 'LoginRoute';
 
@@ -146,10 +94,7 @@ class LoginRoute extends PageRouteInfo<void> {
 /// [MainPage]
 class MainRoute extends PageRouteInfo<void> {
   const MainRoute({List<PageRouteInfo>? children})
-      : super(
-          MainRoute.name,
-          initialChildren: children,
-        );
+    : super(MainRoute.name, initialChildren: children);
 
   static const String name = 'MainRoute';
 
@@ -162,13 +107,58 @@ class MainRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [ManagerDeliveryZonePage]
+class ManagerDeliveryZoneRoute extends PageRouteInfo<void> {
+  const ManagerDeliveryZoneRoute({List<PageRouteInfo>? children})
+    : super(ManagerDeliveryZoneRoute.name, initialChildren: children);
+
+  static const String name = 'ManagerDeliveryZoneRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const ManagerDeliveryZonePage();
+    },
+  );
+}
+
+/// generated route for
+/// [ManagerIncomePage]
+class ManagerIncomeRoute extends PageRouteInfo<void> {
+  const ManagerIncomeRoute({List<PageRouteInfo>? children})
+    : super(ManagerIncomeRoute.name, initialChildren: children);
+
+  static const String name = 'ManagerIncomeRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const ManagerIncomePage();
+    },
+  );
+}
+
+/// generated route for
+/// [ManagerSubscriptionsPage]
+class ManagerSubscriptionsRoute extends PageRouteInfo<void> {
+  const ManagerSubscriptionsRoute({List<PageRouteInfo>? children})
+    : super(ManagerSubscriptionsRoute.name, initialChildren: children);
+
+  static const String name = 'ManagerSubscriptionsRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const ManagerSubscriptionsPage();
+    },
+  );
+}
+
+/// generated route for
 /// [MapSearchPage]
 class MapSearchRoute extends PageRouteInfo<void> {
   const MapSearchRoute({List<PageRouteInfo>? children})
-      : super(
-          MapSearchRoute.name,
-          initialChildren: children,
-        );
+    : super(MapSearchRoute.name, initialChildren: children);
 
   static const String name = 'MapSearchRoute';
 
@@ -184,10 +174,7 @@ class MapSearchRoute extends PageRouteInfo<void> {
 /// [NoConnectionPage]
 class NoConnectionRoute extends PageRouteInfo<void> {
   const NoConnectionRoute({List<PageRouteInfo>? children})
-      : super(
-          NoConnectionRoute.name,
-          initialChildren: children,
-        );
+    : super(NoConnectionRoute.name, initialChildren: children);
 
   static const String name = 'NoConnectionRoute';
 
@@ -203,10 +190,7 @@ class NoConnectionRoute extends PageRouteInfo<void> {
 /// [NotificationListPage]
 class NotificationListRoute extends PageRouteInfo<void> {
   const NotificationListRoute({List<PageRouteInfo>? children})
-      : super(
-          NotificationListRoute.name,
-          initialChildren: children,
-        );
+    : super(NotificationListRoute.name, initialChildren: children);
 
   static const String name = 'NotificationListRoute';
 
@@ -220,14 +204,11 @@ class NotificationListRoute extends PageRouteInfo<void> {
 
 /// generated route for
 /// [OrderHistoryPage]
-class OrderHistoryRoute extends PageRouteInfo<void> {
-  const OrderHistoryRoute({List<PageRouteInfo>? children})
-      : super(
-          OrderHistoryRoute.name,
-          initialChildren: children,
-        );
+class ManagerOrderHistoryRoute extends PageRouteInfo<void> {
+  const ManagerOrderHistoryRoute({List<PageRouteInfo>? children})
+    : super(ManagerOrderHistoryRoute.name, initialChildren: children);
 
-  static const String name = 'OrderHistoryRoute';
+  static const String name = 'ManagerOrderHistoryRoute';
 
   static PageInfo page = PageInfo(
     name,
@@ -239,14 +220,11 @@ class OrderHistoryRoute extends PageRouteInfo<void> {
 
 /// generated route for
 /// [OrderPage]
-class OrderRoute extends PageRouteInfo<void> {
-  const OrderRoute({List<PageRouteInfo>? children})
-      : super(
-          OrderRoute.name,
-          initialChildren: children,
-        );
+class ManagerOrderRoute extends PageRouteInfo<void> {
+  const ManagerOrderRoute({List<PageRouteInfo>? children})
+    : super(ManagerOrderRoute.name, initialChildren: children);
 
-  static const String name = 'OrderRoute';
+  static const String name = 'ManagerOrderRoute';
 
   static PageInfo page = PageInfo(
     name,
@@ -258,14 +236,11 @@ class OrderRoute extends PageRouteInfo<void> {
 
 /// generated route for
 /// [SelectAddressPage]
-class SelectAddressRoute extends PageRouteInfo<void> {
-  const SelectAddressRoute({List<PageRouteInfo>? children})
-      : super(
-          SelectAddressRoute.name,
-          initialChildren: children,
-        );
+class ManagerSelectAddressRoute extends PageRouteInfo<void> {
+  const ManagerSelectAddressRoute({List<PageRouteInfo>? children})
+    : super(ManagerSelectAddressRoute.name, initialChildren: children);
 
-  static const String name = 'SelectAddressRoute';
+  static const String name = 'ManagerSelectAddressRoute';
 
   static PageInfo page = PageInfo(
     name,
@@ -277,14 +252,11 @@ class SelectAddressRoute extends PageRouteInfo<void> {
 
 /// generated route for
 /// [SelectSectionPage]
-class SelectSectionRoute extends PageRouteInfo<void> {
-  const SelectSectionRoute({List<PageRouteInfo>? children})
-      : super(
-          SelectSectionRoute.name,
-          initialChildren: children,
-        );
+class ManagerSelectSectionRoute extends PageRouteInfo<void> {
+  const ManagerSelectSectionRoute({List<PageRouteInfo>? children})
+    : super(ManagerSelectSectionRoute.name, initialChildren: children);
 
-  static const String name = 'SelectSectionRoute';
+  static const String name = 'ManagerSelectSectionRoute';
 
   static PageInfo page = PageInfo(
     name,
@@ -296,39 +268,31 @@ class SelectSectionRoute extends PageRouteInfo<void> {
 
 /// generated route for
 /// [SelectTablePage]
-class SelectTableRoute extends PageRouteInfo<SelectTableRouteArgs> {
-  SelectTableRoute({
+class ManagerSelectTableRoute
+    extends PageRouteInfo<ManagerSelectTableRouteArgs> {
+  ManagerSelectTableRoute({
     Key? key,
     required int? sectionId,
     List<PageRouteInfo>? children,
   }) : super(
-          SelectTableRoute.name,
-          args: SelectTableRouteArgs(
-            key: key,
-            sectionId: sectionId,
-          ),
-          initialChildren: children,
-        );
+         ManagerSelectTableRoute.name,
+         args: ManagerSelectTableRouteArgs(key: key, sectionId: sectionId),
+         initialChildren: children,
+       );
 
-  static const String name = 'SelectTableRoute';
+  static const String name = 'ManagerSelectTableRoute';
 
   static PageInfo page = PageInfo(
     name,
     builder: (data) {
-      final args = data.argsAs<SelectTableRouteArgs>();
-      return SelectTablePage(
-        key: args.key,
-        sectionId: args.sectionId,
-      );
+      final args = data.argsAs<ManagerSelectTableRouteArgs>();
+      return SelectTablePage(key: args.key, sectionId: args.sectionId);
     },
   );
 }
 
-class SelectTableRouteArgs {
-  const SelectTableRouteArgs({
-    this.key,
-    required this.sectionId,
-  });
+class ManagerSelectTableRouteArgs {
+  const ManagerSelectTableRouteArgs({this.key, required this.sectionId});
 
   final Key? key;
 
@@ -336,20 +300,17 @@ class SelectTableRouteArgs {
 
   @override
   String toString() {
-    return 'SelectTableRouteArgs{key: $key, sectionId: $sectionId}';
+    return 'ManagerSelectTableRouteArgs{key: $key, sectionId: $sectionId}';
   }
 }
 
 /// generated route for
 /// [SelectUserPage]
-class SelectUserRoute extends PageRouteInfo<void> {
-  const SelectUserRoute({List<PageRouteInfo>? children})
-      : super(
-          SelectUserRoute.name,
-          initialChildren: children,
-        );
+class ManagerSelectUserRoute extends PageRouteInfo<void> {
+  const ManagerSelectUserRoute({List<PageRouteInfo>? children})
+    : super(ManagerSelectUserRoute.name, initialChildren: children);
 
-  static const String name = 'SelectUserRoute';
+  static const String name = 'ManagerSelectUserRoute';
 
   static PageInfo page = PageInfo(
     name,
@@ -361,14 +322,11 @@ class SelectUserRoute extends PageRouteInfo<void> {
 
 /// generated route for
 /// [ShippingAddressPage]
-class ShippingAddressRoute extends PageRouteInfo<void> {
-  const ShippingAddressRoute({List<PageRouteInfo>? children})
-      : super(
-          ShippingAddressRoute.name,
-          initialChildren: children,
-        );
+class ManagerShippingAddressRoute extends PageRouteInfo<void> {
+  const ManagerShippingAddressRoute({List<PageRouteInfo>? children})
+    : super(ManagerShippingAddressRoute.name, initialChildren: children);
 
-  static const String name = 'ShippingAddressRoute';
+  static const String name = 'ManagerShippingAddressRoute';
 
   static PageInfo page = PageInfo(
     name,
@@ -382,10 +340,7 @@ class ShippingAddressRoute extends PageRouteInfo<void> {
 /// [SplashPage]
 class SplashRoute extends PageRouteInfo<void> {
   const SplashRoute({List<PageRouteInfo>? children})
-      : super(
-          SplashRoute.name,
-          initialChildren: children,
-        );
+    : super(SplashRoute.name, initialChildren: children);
 
   static const String name = 'SplashRoute';
 
@@ -398,6 +353,58 @@ class SplashRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [TasksPage]
+class TasksRoute extends PageRouteInfo<void> {
+  const TasksRoute({List<PageRouteInfo>? children})
+    : super(TasksRoute.name, initialChildren: children);
+
+  static const String name = 'TasksRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const TasksPage();
+    },
+  );
+}
+
+/// generated route for
+/// [UiTypeRouteView]
+class UiTypeRoute extends PageRouteInfo<UiTypeRouteArgs> {
+  UiTypeRoute({Key? key, bool isBack = false, List<PageRouteInfo>? children})
+    : super(
+        UiTypeRoute.name,
+        args: UiTypeRouteArgs(key: key, isBack: isBack),
+        initialChildren: children,
+      );
+
+  static const String name = 'UiTypeRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<UiTypeRouteArgs>(
+        orElse: () => const UiTypeRouteArgs(),
+      );
+      return UiTypeRouteView(key: args.key, isBack: args.isBack);
+    },
+  );
+}
+
+class UiTypeRouteArgs {
+  const UiTypeRouteArgs({this.key, this.isBack = false});
+
+  final Key? key;
+
+  final bool isBack;
+
+  @override
+  String toString() {
+    return 'UiTypeRouteArgs{key: $key, isBack: $isBack}';
+  }
+}
+
+/// generated route for
 /// [ViewMapPage]
 class ViewMapRoute extends PageRouteInfo<ViewMapRouteArgs> {
   ViewMapRoute({
@@ -407,15 +414,15 @@ class ViewMapRoute extends PageRouteInfo<ViewMapRouteArgs> {
     int? shopId,
     List<PageRouteInfo>? children,
   }) : super(
-          ViewMapRoute.name,
-          args: ViewMapRouteArgs(
-            onChanged: onChanged,
-            key: key,
-            isShopLocation: isShopLocation,
-            shopId: shopId,
-          ),
-          initialChildren: children,
-        );
+         ViewMapRoute.name,
+         args: ViewMapRouteArgs(
+           onChanged: onChanged,
+           key: key,
+           isShopLocation: isShopLocation,
+           shopId: shopId,
+         ),
+         initialChildren: children,
+       );
 
   static const String name = 'ViewMapRoute';
 

@@ -1,0 +1,26 @@
+{
+  "name": "weather_sdk",
+  "version": "1.2.0",
+  "installs": [
+    {
+      "from": "templates/components/weather/weather_widget.dart",
+      "to": "lib/presentation/components/weather/weather_widget.dart",
+      "_comment": "Host wiring template: configureWeatherSdk() startup hook (shop-location resolver + remote-config key hydration point) and the AppWeatherWidget shell widget. Top-level (not app_type-gated) because the weather suite is role-agnostic - the whole library lives in src/common/. Hosts that don't render it pay only an unused file."
+    }
+  ],
+  "routes": [],
+  "_comment_routes": "Deliberately empty: the weather suite has no routed page on pos main - it is a header widget plus (large screens only) a dialog. If a standalone weather page is ever wanted, it becomes a template with @RoutePage here.",
+  "integrations": [],
+  "embedded_widgets": [
+    {
+      "method": "weatherHeaderWidget",
+      "body": "return const AppWeatherWidget(inlineExpansion: false);",
+      "imports": [
+        "import 'package:${package}/presentation/components/weather/weather_widget.dart';"
+      ],
+      "_comment": "Header slot (ADR-005): shells embed the compact adaptive widget without importing weather_sdk directly. inlineExpansion=false because headers are height-constrained; on small screens that leaves just the minimal icon+temp chip, and the popup-free WeatherInlineForecast card is placed in body flow via the weather_sdk barrel (it takes a WeatherState argument, so it cannot ride the zero-arg embedded-widget seam)."
+    }
+  ],
+  "_comment_tr_keys": "No tr_keys block: the ported suite ships pos main's hardcoded English strings verbatim (pos never translated this surface). Translating it is a recorded follow-up, not smuggled into the port.",
+  "_comment_secrets": "No secret is committed anywhere in this SDK. The OpenWeatherMap key (extended forecast only) resolves from the OPEN_WEATHER_API_KEY dart-define and/or the host's remote-config bootstrap (pos main's get_remote_config pattern); the primary feed uses the tenant Frappe proxy with the user's bearer token."
+}
