@@ -74,7 +74,10 @@ dependencies:
   remixicon: ^1.2.0
   path_provider: ^2.1.2
   pull_to_refresh: ^2.0.0
-  flutter_slidable: ^3.0.1
+  # 3.x uses the removed Flutter 'hashValues' API (gone in Flutter 3.38);
+  # 4.x (min Flutter 3.27) drops it with no changes to the Slidable/ActionPane
+  # API surface used here.
+  flutter_slidable: ^4.0.3
   flutter_riverpod: ^2.5.1
   connectivity_plus: ^6.0.5
   sliding_up_panel: ^2.0.0+1
@@ -199,6 +202,10 @@ dependency_overrides:
   freezed_annotation: ^2.4.4
   google_fonts: ^6.3.0
   http: ^1.2.0
+  # drift must stay on a release whose sqlite3 constraint admits the pinned
+  # sqlite3 2.9.4 below (2.34.x moved to sqlite3 ^3.x and fails to compile
+  # against it). Mirrors supacharge's arbitration of the same conflict.
+  drift: 2.31.0
   sqlite3: 2.9.4
   # auth_sdk still pins ^11.3.1 while hardware_sdk needs ^12.0.1; the two
   # ranges don't overlap, so arbitrate at the root. v11->v12 is API-compatible
