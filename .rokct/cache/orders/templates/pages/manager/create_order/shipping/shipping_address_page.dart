@@ -12,11 +12,6 @@ import 'package:${package}/presentation/routes/app_router.dart';
 import 'package:base_sdk/src/presentation/components/text_fields/underlined_text_field.dart';
 import 'package:${package}/presentation/pages/main/widgets/buttons_bouncing_effect.dart';
 import 'package:base_sdk/src/constants/app_constants.dart';
-
-// base_sdk's AppConstants does not carry this flag yet; same dart-define the
-// deleted host AppConstants read (follow-up: promote into base AppConstants).
-const bool _isSpecificNumberEnabled =
-    bool.fromEnvironment('IS_SPECIFIC_NUMBER_ENABLED');
 import 'package:base_sdk/src/presentation/components/buttons/custom_button.dart';
 import 'package:base_sdk/src/presentation/components/buttons/pop_button.dart';
 import 'package:base_sdk/src/presentation/components/keyboard_dismisser.dart';
@@ -28,6 +23,11 @@ import 'package:orders_sdk/src/manager/application/order/shipping/delivery/deliv
 import 'package:orders_sdk/src/manager/application/order/shipping/section/section_provider.dart';
 import 'package:orders_sdk/src/manager/application/order/shipping/table/table_provider.dart';
 import 'package:orders_sdk/src/manager/application/order/shipping/user/order_user_provider.dart';
+
+// base_sdk's AppConstants does not carry this flag yet; same dart-define the
+// deleted host AppConstants read (follow-up: promote into base AppConstants).
+const bool _isSpecificNumberEnabled =
+    bool.fromEnvironment('IS_SPECIFIC_NUMBER_ENABLED');
 
 
 @RoutePage(name: 'ManagerShippingAddressRoute')
