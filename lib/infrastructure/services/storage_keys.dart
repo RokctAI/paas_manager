@@ -37,4 +37,3 @@ abstract class StorageKeys {
   static const String keyWaterMeterReadings = 'keyWaterMeterReadings';
   static const String keyWaterRate = 'keyWaterRate';
 }
-

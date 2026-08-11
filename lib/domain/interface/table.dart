@@ -18,7 +18,6 @@ import 'package:manager/domain/handlers/api_result.dart';
 import 'package:manager/infrastructure/models/models.dart';
 
 abstract class TableInterface {
-
   Future<ApiResult<ShopSection>> createNewSection(
       {required String name, required num area});
 

@@ -14,7 +14,6 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-
 import 'package:manager/domain/handlers/handlers.dart';
 import 'package:manager/infrastructure/models/models.dart';
 import 'package:manager/infrastructure/services/services.dart';
@@ -26,9 +25,9 @@ abstract class SettingsInterface {
   );
 
   Future<ApiResult<MultiGalleryUploadResponse>> uploadMultiImage(
-      List<String?> filePaths,
-      UploadType uploadType,
-      );
+    List<String?> filePaths,
+    UploadType uploadType,
+  );
 
   Future<ApiResult<CurrenciesResponse>> getCurrencies();
 

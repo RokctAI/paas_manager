@@ -39,7 +39,7 @@ class ProductsRepository implements ProductsInterface {
     } catch (e) {
       debugPrint('==> delete extra group failure: $e');
       return ApiResult.failure(
-           error: AppHelpers.errorHandler(e),
+          error: AppHelpers.errorHandler(e),
           statusCode: NetworkExceptions.getDioStatus(e));
     }
   }
@@ -66,7 +66,7 @@ class ProductsRepository implements ProductsInterface {
     } catch (e) {
       debugPrint('==> update extra groups failure: $e');
       return ApiResult.failure(
-           error: AppHelpers.errorHandler(e),
+          error: AppHelpers.errorHandler(e),
           statusCode: NetworkExceptions.getDioStatus(e));
     }
   }
@@ -89,7 +89,7 @@ class ProductsRepository implements ProductsInterface {
     } catch (e) {
       debugPrint('==> delete extra item failure: $e');
       return ApiResult.failure(
-           error: AppHelpers.errorHandler(e),
+          error: AppHelpers.errorHandler(e),
           statusCode: NetworkExceptions.getDioStatus(e));
     }
   }
@@ -114,7 +114,7 @@ class ProductsRepository implements ProductsInterface {
     } catch (e) {
       debugPrint('==> update extra item failure: $e');
       return ApiResult.failure(
-           error: AppHelpers.errorHandler(e),
+          error: AppHelpers.errorHandler(e),
           statusCode: NetworkExceptions.getDioStatus(e));
     }
   }
@@ -138,7 +138,7 @@ class ProductsRepository implements ProductsInterface {
     } catch (e) {
       debugPrint('==> create extra item failure: $e');
       return ApiResult.failure(
-           error: AppHelpers.errorHandler(e),
+          error: AppHelpers.errorHandler(e),
           statusCode: NetworkExceptions.getDioStatus(e));
     }
   }
@@ -165,7 +165,7 @@ class ProductsRepository implements ProductsInterface {
     } catch (e) {
       debugPrint('==> create extra groups failure: $e');
       return ApiResult.failure(
-           error: AppHelpers.errorHandler(e),
+          error: AppHelpers.errorHandler(e),
           statusCode: NetworkExceptions.getDioStatus(e));
     }
   }
@@ -194,7 +194,7 @@ class ProductsRepository implements ProductsInterface {
     } catch (e) {
       debugPrint('==> get calculations failure: $e');
       return ApiResult.failure(
-           error: AppHelpers.errorHandler(e),
+          error: AppHelpers.errorHandler(e),
           statusCode: NetworkExceptions.getDioStatus(e));
     }
   }
@@ -214,7 +214,7 @@ class ProductsRepository implements ProductsInterface {
     } catch (e) {
       debugPrint('==> get extras failure: $e');
       return ApiResult.failure(
-           error: AppHelpers.errorHandler(e),
+          error: AppHelpers.errorHandler(e),
           statusCode: NetworkExceptions.getDioStatus(e));
     }
   }
@@ -272,7 +272,7 @@ class ProductsRepository implements ProductsInterface {
     } catch (e) {
       debugPrint('==> update stocks fail: $e');
       return ApiResult.failure(
-           error: AppHelpers.errorHandler(e),
+          error: AppHelpers.errorHandler(e),
           statusCode: NetworkExceptions.getDioStatus(e));
     }
   }
@@ -293,7 +293,6 @@ class ProductsRepository implements ProductsInterface {
     String? uuid,
     bool needAddons = false,
   }) async {
-
     // ENHANCED DEBUG LOGGING
     debugPrint('=== UPDATE PRODUCT REQUEST DEBUG ===');
     debugPrint('Raw active parameter: $active (${active.runtimeType})');
@@ -304,9 +303,9 @@ class ProductsRepository implements ProductsInterface {
       'title': {
         for (int i = 0; i < titlesAndDescriptions.keys.length; i++)
           titlesAndDescriptions.keys.toList()[i]:
-          titlesAndDescriptions[titlesAndDescriptions.keys.toList()[i]]
-              ?.first ??
-              ""
+              titlesAndDescriptions[titlesAndDescriptions.keys.toList()[i]]
+                      ?.first ??
+                  ""
       },
       'description': {
         for (String locale in titlesAndDescriptions.keys)
@@ -344,7 +343,8 @@ class ProductsRepository implements ProductsInterface {
       debugPrint('=== UPDATE PRODUCT RESPONSE DEBUG ===');
       debugPrint('Response status: ${response.statusCode}');
       debugPrint('Response active: ${response.data['data']?['active']}');
-      debugPrint('Response stocks tax: ${response.data['data']?['stocks']?[0]?['tax']}');
+      debugPrint(
+          'Response stocks tax: ${response.data['data']?['stocks']?[0]?['tax']}');
       debugPrint('Full response: ${jsonEncode(response.data)}');
       debugPrint('==================================');
 
@@ -378,7 +378,7 @@ class ProductsRepository implements ProductsInterface {
     } catch (e) {
       debugPrint('==> update extras failure: $e');
       return ApiResult.failure(
-           error: AppHelpers.errorHandler(e),
+          error: AppHelpers.errorHandler(e),
           statusCode: NetworkExceptions.getDioStatus(e));
     }
   }
@@ -404,7 +404,7 @@ class ProductsRepository implements ProductsInterface {
     } catch (e) {
       debugPrint('==> get extras groups failure: $e');
       return ApiResult.failure(
-           error: AppHelpers.errorHandler(e),
+          error: AppHelpers.errorHandler(e),
           statusCode: NetworkExceptions.getDioStatus(e));
     }
   }
@@ -455,7 +455,7 @@ class ProductsRepository implements ProductsInterface {
     } catch (e) {
       debugPrint('==> create product fail: $e');
       return ApiResult.failure(
-           error: AppHelpers.errorHandler(e),
+          error: AppHelpers.errorHandler(e),
           statusCode: NetworkExceptions.getDioStatus(e));
     }
   }
@@ -480,7 +480,7 @@ class ProductsRepository implements ProductsInterface {
     } catch (e) {
       debugPrint('==> get product details failure: $e');
       return ApiResult.failure(
-           error: AppHelpers.errorHandler(e),
+          error: AppHelpers.errorHandler(e),
           statusCode: NetworkExceptions.getDioStatus(e));
     }
   }
@@ -536,7 +536,7 @@ class ProductsRepository implements ProductsInterface {
     } catch (e) {
       debugPrint('==> get products failure: $e');
       return ApiResult.failure(
-           error: AppHelpers.errorHandler(e),
+          error: AppHelpers.errorHandler(e),
           statusCode: NetworkExceptions.getDioStatus(e));
     }
   }

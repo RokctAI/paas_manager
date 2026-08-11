@@ -1,0 +1,62 @@
+import 'package:get_it/get_it.dart';
+
+class SubscriptionsSdkDependencies {
+  static void register(GetIt getIt) {
+    // SubscriptionsRepository needs the host app's Dio client and AppDatabase,
+    // which the host wires in its own composition code (see the dependency
+    // manager template in core_sdk). Nothing to register SDK-side.
+  }
+}
+
+// ---------------------------------------------------------------------------
+// HOST-APP ADAPTER EXAMPLE (documentation only — not compiled wiring)
+//
+// subscriptions_sdk owns SubscriptionPaymentsProvider and never imports
+// payments_sdk or wallet_sdk. The HOST APP — the only place where these SDKs
+// are installed together — implements the adapter and overrides the riverpod
+// provider. There is no composed host app in this workspace yet
+// (supacharge/ is an empty shell), so this adapter is documented here rather
+// than wired anywhere real.
+//
+//   import 'package:subscriptions_sdk/subscriptions_sdk.dart';
+//   import 'package:payments_sdk/payments_sdk.dart';
+//
+//   class PaymentsAdapter implements SubscriptionPaymentsProvider {
+//     final PaymentsFacade _payments;
+//     PaymentsAdapter(this._payments);
+//
+//     @override
+//     Future<ApiResult<List<SubscriptionPaymentMethod>>>
+//         getPaymentMethods() async {
+//       final res = await _payments.getPayments();
+//       return res.when(
+//         success: (data) => ApiResult.success(
+//           data: (data.data ?? [])
+//               .map((p) => SubscriptionPaymentMethod(id: p.id, tag: p.tag))
+//               .toList(),
+//         ),
+//         failure: (error, statusCode) =>
+//             ApiResult.failure(error: error, statusCode: statusCode),
+//       );
+//     }
+//
+//     @override
+//     Future<ApiResult<String>> paymentSubscriptionWebView({
+//       required String name,
+//       required int subscriptionId,
+//     }) =>
+//         _payments.paymentSubscriptionWebView(
+//           name: name,
+//           subscriptionId: subscriptionId,
+//         );
+//   }
+//
+//   // in the host's ProviderScope overrides:
+//   // paymentsRepositoryProvider.overrideWithValue(
+//   //   PaymentsAdapter(getIt.get<PaymentsFacade>())),
+//   //
+//   // wallet_sdk is already decoupled the same way: the wallet balance is
+//   // injected as a plain callback, e.g.
+//   // walletPriceProvider.overrideWithValue(
+//   //   () => LocalStorage.getUser()?.wallet?.price ?? 0),
+// ---------------------------------------------------------------------------

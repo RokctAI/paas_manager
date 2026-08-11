@@ -58,8 +58,9 @@ class UnderlinedTextField extends StatelessWidget {
     this.textInputAction,
     this.hint,
     this.onTap,
-    this.validator, this.inputFormatters,
-  }) ;
+    this.validator,
+    this.inputFormatters,
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -1,7 +1,7 @@
 {
   "packages": {
     "base_sdk": {
-      "version": "1.2.0",
+      "version": "1.3.0",
       "files": {
         "flutter_native_splash.yaml": "d469a133b5e1631d6ba811b048d290449224075edad2153189cfb2edc3f4d100",
         "android/app/src/main/kotlin/com/foodyman/demo/JuvoApplication.kt": "08d9f33ad23841a9b200ec08ac99e62e9b34acb06e4ab49983a16992ed2c28ca",
@@ -185,7 +185,7 @@
       "embedded_widgets": []
     },
     "merchants_sdk": {
-      "version": "1.2.0",
+      "version": "1.5.0",
       "files": {
         "assets/audio/notification.wav": "9d62af6f1c8df010941d1daa17162175d87293bd78371c787803b5a11f95cb9d",
         "assets/svgs/menu.svg": "9767d04ac4d157e423f972259a9c2c455a6a629c4098cc9c2fe8f9722451441b",
@@ -199,7 +199,8 @@
         "lib/presentation/pages/restaurant/widgets/sections_item.dart": "9e0b8a6c09d5d4cac57be9b6e074a6493faa7a62d6ba8d9030eafad447ac464e",
         "lib/presentation/pages/restaurant/widgets/logout_modal.dart": "53776231346d4f715d28e12ae71801ca84685f8eda436e0aa40745283efd442c",
         "lib/presentation/pages/restaurant/widgets/shop_page_banner.dart": "1fa91befa87e36e5cd213b2cf023595e55cbb15cda22763c48f1ab9c611685a4",
-        "lib/presentation/components/restaurant/small_weekday_item.dart": "1600dec1dc5a55a76d0b57b264c6802948b56ce3e1e06b45bb7fa1a4a1b36364"
+        "lib/presentation/components/restaurant/small_weekday_item.dart": "1600dec1dc5a55a76d0b57b264c6802948b56ce3e1e06b45bb7fa1a4a1b36364",
+        "lib/presentation/routes/merchants_adapters.dart": "8913bf9b6eefc5f0e51019cb4a3e4b6ce22a3d03d0daf89df60b1825909746f1"
       },
       "routes": [
         {
@@ -212,13 +213,27 @@
       ],
       "app_routes": [],
       "onboarding_slides": [],
-      "registration_steps": [],
+      "registration_steps": [
+        {
+          "id": "merchants.shop_setup",
+          "order": 10,
+          "imports": [
+            "package:merchants_sdk/src/manager/presentation/widgets/shop_setup_slide.dart",
+            "package:${package}/presentation/routes/merchants_adapters.dart"
+          ],
+          "body": "RegistrationStep(\n  data: const {'id': 'merchants.shop_setup'},\n  content: Builder(\n    builder: (context) => ShopSetupSlide(\n      capture: MerchantsShopSetupAdapter(),\n      initialPhone: RegistrationStepScope.of(context).account?.phone,\n      onContinue: () => RegistrationStepScope.of(context).next(),\n    ),\n  ),\n)"
+        }
+      ],
       "embedded_widgets": [],
       "tr_keys": {
         "theRestaurantIsClosedToday": "the_restaurant_is_closed_today",
         "before": "before",
         "after": "after",
-        "orderPayment": "order.payment"
+        "orderPayment": "order.payment",
+        "setUpYourShop": "set_up_your_shop",
+        "shopSetupExplainer": "a_few_details_to_open_your_shop_you_can_change_everything_later",
+        "shopName": "shop_name",
+        "accessDenied": "access.denied"
       },
       "app_assets": [
         "assets/audio/notification.wav",
@@ -226,7 +241,17 @@
         "assets/images/splash1.png",
         "assets/images/splash2.png",
         "assets/svgs/menu.svg"
-      ]
+      ],
+      "session_policy": {
+        "allowed_roles": [
+          {
+            "role": "seller",
+            "landing_route": "/main"
+          }
+        ],
+        "rejection_message_tr_key": "access.denied",
+        "rejection_route": "/login"
+      }
     },
     "products_sdk": {
       "version": "1.1.0",
@@ -312,7 +337,7 @@
       }
     },
     "orders_sdk": {
-      "version": "1.1.0",
+      "version": "1.2.0",
       "files": {
         "lib/presentation/pages/orders/orders_home_page.dart": "06384551a189afcc6b9c4736c45c12ebf06c9387d009465ea97f7715ff678793",
         "lib/presentation/pages/orders/details/order_details_modal.dart": "1942ef1653c7742327e333a4f26d25d0e0fd1db8eb30ad02fa9373818ae15a31",
@@ -608,7 +633,7 @@
       ]
     },
     "calc_sdk": {
-      "version": "1.0.0",
+      "version": "1.0.1",
       "files": {
         "lib/presentation/pages/calc/calculator_page.dart": "b112fa519e0fe405915cf8cf69ec3796c24bca885f1f0ff44606a39f0e72b1f0"
       },
@@ -626,7 +651,7 @@
       "embedded_widgets": []
     },
     "corporate_sdk": {
-      "version": "1.0.0",
+      "version": "1.1.0",
       "files": {},
       "routes": [],
       "app_routes": [],
@@ -687,13 +712,13 @@
       ]
     },
     "revenue_sdk": {
-      "version": "1.0.0",
+      "version": "1.1.0",
       "files": {
-        "lib/presentation/pages/income/income_page.dart": "eeec83a52473b0a073c333808c8153517e75742c8acbafec8eae98d94d3b5988",
+        "lib/presentation/pages/income/income_page.dart": "30f8eafcc4936ecef84d13a20aeeae5660ad88ae02a58700f49cda2fbe520d80",
         "lib/presentation/pages/income/app_bar_screen.dart": "9be871092cb1e4424ad5d32ca4be24e631d3d88c7e08b666b405e2b4c5f388a4",
-        "lib/presentation/pages/income/widgets/chart.dart": "12682b09247fc8b4184fde471381e81a4f8793aa6dd989ca29c6b001cda0c87a",
+        "lib/presentation/pages/income/widgets/chart.dart": "a44212fb723e97407cca67a638e3bc2dd19e21ad451cb7738bd4582ffa926a8e",
         "lib/presentation/pages/income/widgets/statistics_item.dart": "3a5973f372637e69563540e95feff0d66aa7f4c78986b43b2420f3e3087060bf",
-        "lib/presentation/pages/income/widgets/order_prices_section.dart": "b9c8c1f26f88f2cd2924d96243f47cfa4e27acaa94c011dabea94da0f05f1b61",
+        "lib/presentation/pages/income/widgets/order_prices_section.dart": "0789d8c71fc507fe06bb17a93b91b6bf4f6e86d7033f2b876711d48c915095ad",
         "lib/presentation/pages/income/widgets/statistics_section.dart": "d667f27b28bb6cc06f24ae62615c7e03f8621e20f2ef291253f82c5fd2cc9f4e"
       },
       "routes": [
@@ -707,13 +732,21 @@
       "app_routes": [],
       "onboarding_slides": [],
       "registration_steps": [],
-      "embedded_widgets": []
+      "embedded_widgets": [],
+      "tr_keys": {
+        "needOrder": "need.order",
+        "cancelOrders": "cancel_orders",
+        "deliveredOrdersCount": "delivered.orders.count",
+        "restaurantRevenue": "restaurant_revenue",
+        "fMRevenue": "fm_revenue",
+        "moreAboutOrders": "more_about_orders"
+      }
     },
     "zones_sdk": {
-      "version": "1.1.0",
+      "version": "1.1.1",
       "files": {
         "lib/presentation/pages/merchant/delivery_zone/delivery_zone_page.dart": "cfa82ca94e1c81868c7cee48d8420069e3ad9c2fba58fdc54d54ab87d31777f1",
-        "lib/presentation/routes/zones_adapters.dart": "ca4328627bfa169d7d992a27cb6d7cd4c9412984878588f6c9741785afe36bd8"
+        "lib/presentation/routes/zones_adapters.dart": "ddfdbe5c9858e5dc5e69b7c541cf271deb6853dc67be8d9d3b125604805e778e"
       },
       "routes": [
         {
@@ -730,5 +763,86 @@
       "embedded_widgets": []
     }
   },
-  "sdk_cache": {}
+  "sdk_cache": {
+    "base": {
+      "version": "1.3.0",
+      "hash": "69c9a74ba1133d27"
+    },
+    "comms": {
+      "version": "1.0.0",
+      "hash": "0d191a62cd4facdb"
+    },
+    "auth": {
+      "version": "1.1.0",
+      "hash": "2665eb1d25850274"
+    },
+    "users": {
+      "version": "1.0.0",
+      "hash": "b3ff5c300a27fd3b"
+    },
+    "merchants": {
+      "version": "1.5.0",
+      "hash": "147b146f211cc1f7"
+    },
+    "products": {
+      "version": "1.1.0",
+      "hash": "99649327eb04fb07"
+    },
+    "orders": {
+      "version": "1.2.0",
+      "hash": "953db85d95a04c76"
+    },
+    "kitchen": {
+      "version": "1.0.0",
+      "hash": "58383876b3f741cf"
+    },
+    "promotions": {
+      "version": "1.0.0",
+      "hash": "df158a445892db1c"
+    },
+    "hardware": {
+      "version": "1.0.0",
+      "hash": "ebe10d948fd28edc"
+    },
+    "payments": {
+      "version": "1.0.0",
+      "hash": "6e723b781e9c9931"
+    },
+    "subscriptions": {
+      "version": "1.0.0",
+      "hash": "68b5e80660762dd7"
+    },
+    "processing": {
+      "version": "1.0.0",
+      "hash": "d2896292bf243a0f"
+    },
+    "productivity": {
+      "version": "1.0.0",
+      "hash": "263a66f164ca712b"
+    },
+    "calc": {
+      "version": "1.0.1",
+      "hash": "4b342062ee23dfaf"
+    },
+    "corporate": {
+      "version": "1.1.0",
+      "hash": "22dc201f9e9f9023"
+    },
+    "revenue": {
+      "version": "1.1.0",
+      "hash": "7ffd9ec88d71b11f"
+    },
+    "map": {
+      "version": "1.1.0",
+      "hash": "af7d107ee32d5922"
+    },
+    "weather": {
+      "version": "1.2.0",
+      "hash": "c207fda90e877bf4"
+    },
+    "zones": {
+      "version": "1.1.1",
+      "hash": "80b9e122660728b4"
+    }
+  }
 }
