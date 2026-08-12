@@ -4,6 +4,12 @@
 // base_sdk's NotificationRepositoryFacade (comms_sdk registers its Frappe
 // implementation via CommsSdkDependencies), manager models/services become
 // their base_sdk twins, and snackbar calls use base's positional signature.
+//
+// Shared manager+driver template (driver migration S-D5): paas_driver's host
+// lib/application/notification/notification_notifier.dart is the same file
+// modulo import paths, so both app_type blocks install this one source from
+// templates/application/common/ to the same host destination — one copy, no
+// role divergence to drift.
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
