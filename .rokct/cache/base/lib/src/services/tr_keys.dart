@@ -12,6 +12,8 @@ class TrKeys {
   static const String shopSetupExplainer = 'a_few_details_to_open_your_shop_you_can_change_everything_later';
   static const String shopName = 'shop_name';
   static const String accessDenied = 'access.denied';
+  static const String syncIssues = 'sync_issues';
+  static const String discard = 'discard';
   static const String addUser = 'add.user';
   static const String approximateTime = 'spproximate_preparation_time: ';
   static const String clearAllOrders = 'clear_all_orders';

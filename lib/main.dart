@@ -75,9 +75,20 @@ import 'package:zones_sdk/zones_sdk.dart';
 // without any hand-written imports in this file.
 // @generated-wiring-imports-start
 import 'package:auto_route/auto_route.dart';
+import 'package:base_sdk/src/services/remote_config_service.dart';
 import 'package:comms_sdk/src/common/presentation/pages/setting/language_page.dart';
+import 'package:comms_sdk/src/common/services/firebase_background_handler.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:manager/presentation/components/weather/weather_widget.dart';
 import 'package:manager/presentation/routes/app_router.dart';
+import 'package:manager/presentation/routes/orders_adapters.dart';
+import 'package:manager/presentation/routes/zones_adapters.dart';
+import 'package:merchants_sdk/src/manager/di/manager_merchants_di.dart';
+import 'package:orders_sdk/src/manager/di/manager_orders_di.dart';
+import 'package:orders_sdk/src/manager/domain/interface/pos_customers.dart';
+import 'package:orders_sdk/src/manager/domain/interface/pos_sections_tables.dart';
 // @generated-wiring-imports-end
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
@@ -101,7 +112,18 @@ void main() async {
   // "boot_hooks" list - id-keyed, order-sequenced; see the installer's
   // update_boot_hooks()). Empty until an installed SDK declares one.
   // @generated-boot-hooks-start
-
+  // auth_pending_otp_gate (order 0, from auth_sdk)
+  PendingOtpGate.install();
+  // merchants-manager-splash-preserve (order 1, from merchants_sdk)
+  FlutterNativeSplash.preserve(
+      widgetsBinding: WidgetsFlutterBinding.ensureInitialized());
+  // comms-firebase-fcm-boot (order 10, from comms_sdk)
+  if (Firebase.apps.isEmpty) {
+    await Firebase.initializeApp();
+  }
+  FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
+  // base-remote-config-boot (order 20, from base_sdk)
+  await RemoteConfigService.initialize(appType: 'Manager');
   // @generated-boot-hooks-end
 
   // Brand hook: at most ONE installed SDK (normally the home SDK) declares
@@ -163,7 +185,24 @@ void main() async {
   // merchants_sdk / zones_sdk declare them (see
   // scratchpad/di-hooks-declarations.md in the migration PR).
   // @generated-di-hooks-start
-
+  // orders-manager-role-di (order 10, from orders_sdk)
+  ManagerOrdersDependencies.register(GetIt.instance);
+  // merchants-manager-role-di (order 12, from merchants_sdk)
+  ManagerMerchantsDependencies.register(GetIt.instance);
+  // orders-manager-pos-facades (order 20, from orders_sdk)
+  if (!GetIt.instance.isRegistered<PosSectionsTablesFacade>()) {
+    GetIt.instance.registerLazySingleton<PosSectionsTablesFacade>(
+        () => ManagerPosSectionsTablesAdapter());
+  }
+  if (!GetIt.instance.isRegistered<PosCustomersFacade>()) {
+    GetIt.instance.registerLazySingleton<PosCustomersFacade>(
+        () => ManagerPosCustomersAdapter());
+  }
+  // zones-manager-delivery-zones-facade (order 30, from zones_sdk)
+  if (!GetIt.instance.isRegistered<DeliveryZonesFacade>()) {
+    GetIt.instance.registerLazySingleton<DeliveryZonesFacade>(
+        () => ManagerDeliveryZonesAdapter());
+  }
   // @generated-di-hooks-end
 
   // ---- Host-owned DI ----
@@ -257,19 +296,24 @@ class _HostEmbeddedWidgets implements EmbeddedWidgets {
 class _HostAppRoutes implements AppRoutes {
   // @generated-approutes-start
   @override
-  Future<Object?> replaceSplashRoute(BuildContext context) => context.router.replace(SplashRoute());
+  Future<Object?> replaceSplashRoute(BuildContext context) =>
+      context.router.replace(SplashRoute());
 
   @override
-  Future<Object?> replaceNoConnectionRoute(BuildContext context) => context.router.replace(NoConnectionRoute());
+  Future<Object?> replaceNoConnectionRoute(BuildContext context) =>
+      context.router.replace(NoConnectionRoute());
 
   @override
-  Future<Object?> replaceClosedRoute(BuildContext context) => context.router.replace(ClosedRoute());
+  Future<Object?> replaceClosedRoute(BuildContext context) =>
+      context.router.replace(ClosedRoute());
 
   @override
-  Future<Object?> replaceUiTypeRoute(BuildContext context) => context.router.replace(UiTypeRoute());
+  Future<Object?> replaceUiTypeRoute(BuildContext context) =>
+      context.router.replace(UiTypeRoute());
 
   @override
-  Future<Object?> replaceLoginRoute(BuildContext context) => context.router.replace(LoginRoute());
+  Future<Object?> replaceLoginRoute(BuildContext context) =>
+      context.router.replace(LoginRoute());
 
   // @generated-approutes-end
 

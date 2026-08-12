@@ -38,6 +38,7 @@ import 'package:manager/presentation/pages/merchant/delivery_zone/delivery_zone_
 import 'package:manager/presentation/pages/notification/notification_list_page.dart';
 import 'package:manager/presentation/pages/order_history/order_history.dart';
 import 'package:manager/presentation/pages/subscriptions/subscriptions_page.dart';
+import 'package:manager/presentation/pages/sync_issues/sync_issues_page.dart';
 import 'package:manager/presentation/pages/tasks/tasks_page.dart';
 import 'package:manager/presentation/routes/auth_route_pages.dart';
 import 'package:manager/presentation/routes/registration_step_pages.dart';
@@ -51,31 +52,45 @@ class AppRouter extends RootStackRouter {
   @override
   List<AutoRoute> get routes => [
 // @generated-routes-start
-    MaterialRoute(path: '/', page: SplashRoute.page),
-    MaterialRoute(path: '/no-connection', page: NoConnectionRoute.page),
-    MaterialRoute(path: '/closed', page: ClosedRoute.page),
-    MaterialRoute(path: '/ui-type', page: UiTypeRoute.page),
-    CupertinoRoute(path: '/main', page: MainRoute.page),
-    CupertinoRoute(path: '/order-products', page: ManagerCreateOrderRoute.page),
-    CupertinoRoute(path: '/order', page: ManagerOrderRoute.page),
-    CupertinoRoute(path: '/order-history', page: ManagerOrderHistoryRoute.page),
-    CupertinoRoute(path: '/shipping-address', page: ManagerShippingAddressRoute.page),
-    CupertinoRoute(path: '/select-address', page: ManagerSelectAddressRoute.page),
-    CupertinoRoute(path: '/select-user', page: ManagerSelectUserRoute.page),
-    CupertinoRoute(path: '/delivery-time', page: ManagerDeliveryTimeRoute.page),
-    MaterialRoute(path: '/select-section', page: ManagerSelectSectionRoute.page),
-    MaterialRoute(path: '/select-table', page: ManagerSelectTableRoute.page),
-    MaterialRoute(path: '/subscriptions', page: ManagerSubscriptionsRoute.page),
-    CupertinoRoute(path: '/list-notification', page: NotificationListRoute.page),
-    CupertinoRoute(path: '/tasks', page: TasksRoute.page),
-    CupertinoRoute(path: '/calc', page: CalculatorRoute.page),
-    CupertinoRoute(path: '/income', page: ManagerIncomeRoute.page),
-    CupertinoRoute(path: '/delivery-zone', page: ManagerDeliveryZoneRoute.page),
-    MaterialRoute(path: '/login', page: LoginRoute.page),
-    MaterialRoute(path: '/register', page: RegisterRoute.page),
-    MaterialRoute(path: '/register-confirmation', page: RegisterConfirmationRoute.page),
-    MaterialRoute(path: '/reset-password', page: ResetPasswordRoute.page),
-    MaterialRoute(path: '/registration-steps', page: RegistrationStepsRoute.page),
+        MaterialRoute(path: '/', page: SplashRoute.page),
+        MaterialRoute(path: '/no-connection', page: NoConnectionRoute.page),
+        MaterialRoute(path: '/closed', page: ClosedRoute.page),
+        MaterialRoute(path: '/ui-type', page: UiTypeRoute.page),
+        CupertinoRoute(path: '/main', page: MainRoute.page),
+        CupertinoRoute(path: '/sync-issues', page: ManagerSyncIssuesRoute.page),
+        CupertinoRoute(
+            path: '/order-products', page: ManagerCreateOrderRoute.page),
+        CupertinoRoute(path: '/order', page: ManagerOrderRoute.page),
+        CupertinoRoute(
+            path: '/order-history', page: ManagerOrderHistoryRoute.page),
+        CupertinoRoute(
+            path: '/shipping-address', page: ManagerShippingAddressRoute.page),
+        CupertinoRoute(
+            path: '/select-address', page: ManagerSelectAddressRoute.page),
+        CupertinoRoute(path: '/select-user', page: ManagerSelectUserRoute.page),
+        CupertinoRoute(
+            path: '/delivery-time', page: ManagerDeliveryTimeRoute.page),
+        MaterialRoute(
+            path: '/select-section', page: ManagerSelectSectionRoute.page),
+        MaterialRoute(
+            path: '/select-table', page: ManagerSelectTableRoute.page),
+        MaterialRoute(
+            path: '/subscriptions', page: ManagerSubscriptionsRoute.page),
+        CupertinoRoute(
+            path: '/list-notification', page: NotificationListRoute.page),
+        CupertinoRoute(path: '/tasks', page: TasksRoute.page),
+        CupertinoRoute(path: '/calc', page: CalculatorRoute.page),
+        CupertinoRoute(path: '/income', page: ManagerIncomeRoute.page),
+        CupertinoRoute(
+            path: '/delivery-zone', page: ManagerDeliveryZoneRoute.page),
+        MaterialRoute(path: '/login', page: LoginRoute.page),
+        MaterialRoute(path: '/register', page: RegisterRoute.page),
+        MaterialRoute(
+            path: '/register-confirmation',
+            page: RegisterConfirmationRoute.page),
+        MaterialRoute(path: '/reset-password', page: ResetPasswordRoute.page),
+        MaterialRoute(
+            path: '/registration-steps', page: RegistrationStepsRoute.page),
 // @generated-routes-end
         // No host-owned routes remain (migration M2): /list-notification is
         // comms_sdk's manifest route now (its installed page generates the
