@@ -3,6 +3,11 @@
 // swapped for their base_sdk twins (NotificationModel lives in base's
 // notification_response.dart; CountNotificationModel in
 // count_of_notifications_data.dart).
+//
+// Shared manager+driver template (driver migration S-D5): paas_driver's host
+// twin declares the identical four fields. notification_state.freezed.dart
+// is deliberately not shipped — the host's own build_runner pass regenerates
+// it after install.
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'package:base_sdk/src/models/data/count_of_notifications_data.dart';
