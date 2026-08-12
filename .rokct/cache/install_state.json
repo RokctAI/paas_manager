@@ -1,7 +1,7 @@
 {
   "packages": {
     "base_sdk": {
-      "version": "1.8.0",
+      "version": "1.8.1",
       "files": {
         "flutter_native_splash.yaml": "d469a133b5e1631d6ba811b048d290449224075edad2153189cfb2edc3f4d100",
         "android/app/src/main/kotlin/com/foodyman/demo/JuvoApplication.kt": "08d9f33ad23841a9b200ec08ac99e62e9b34acb06e4ab49983a16992ed2c28ca",
@@ -847,7 +847,7 @@
       "boot_hooks": []
     },
     "revenue_sdk": {
-      "version": "1.2.0",
+      "version": "1.3.0",
       "files": {
         "lib/presentation/pages/income/income_page.dart": "30f8eafcc4936ecef84d13a20aeeae5660ad88ae02a58700f49cda2fbe520d80",
         "lib/presentation/pages/income/app_bar_screen.dart": "30c5407f991ad6375c3f24022aeb62b53966e61533d9f515c2155befeb7ac66a",
@@ -880,7 +880,7 @@
       "boot_hooks": []
     },
     "zones_sdk": {
-      "version": "1.2.0",
+      "version": "1.3.0",
       "files": {
         "lib/presentation/pages/merchant/delivery_zone/delivery_zone_page.dart": "cfa82ca94e1c81868c7cee48d8420069e3ad9c2fba58fdc54d54ab87d31777f1",
         "lib/presentation/routes/zones_adapters.dart": "e7a28c1a7699ce05c589f143f3ed400f82ed9f604ad25f153adde41a09ec1668"
@@ -1022,8 +1022,8 @@
   },
   "sdk_cache": {
     "base": {
-      "version": "1.8.0",
-      "hash": "fdbc9fd6892f8ed9"
+      "version": "1.8.1",
+      "hash": "039d48a511bebece"
     },
     "comms": {
       "version": "1.3.0",
@@ -1086,8 +1086,8 @@
       "hash": "22dc201f9e9f9023"
     },
     "revenue": {
-      "version": "1.2.0",
-      "hash": "d1613470d6e4d137"
+      "version": "1.3.0",
+      "hash": "f36ad7c93edbb33c"
     },
     "map": {
       "version": "1.1.0",
@@ -1098,8 +1098,8 @@
       "hash": "c207fda90e877bf4"
     },
     "zones": {
-      "version": "1.2.0",
-      "hash": "414baf3bdc9db594"
+      "version": "1.3.0",
+      "hash": "35805c4d3e2f8639"
     },
     "desktop": {
       "version": "1.1.0",
