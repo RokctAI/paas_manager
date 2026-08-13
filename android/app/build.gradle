@@ -58,16 +58,21 @@ if (project.hasProperty('flutter.dart-defines')) {
 
 android {
     namespace "org.foodyman.manager"
-    compileSdkVersion 34
-    ndkVersion "26.1.10909125"
+    compileSdkVersion 36
+    ndkVersion "28.2.13676358"
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
+        coreLibraryDesugaringEnabled true
     }
 
     kotlinOptions {
         jvmTarget = '17'
+        freeCompilerArgs += [
+                '-Xskip-metadata-version-check',
+                '-opt-in=kotlin.RequiresOptIn'
+        ]
     }
 
     sourceSets {
@@ -79,7 +84,7 @@ android {
         applicationId dartDefines.MANAGER_ANDROID_PACKAGE_NAME
         minSdkVersion 23
         multiDexEnabled true
-        targetSdkVersion flutter.targetSdkVersion
+        targetSdkVersion 35
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
 
@@ -119,6 +124,9 @@ flutter {
 }
 
 dependencies {
+    // Java 8+ API desugaring (required by flutter_local_notifications)
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.1.4'
+
     implementation platform('com.google.firebase:firebase-bom:32.7.2')
     implementation 'com.google.firebase:firebase-analytics-ktx'
 
