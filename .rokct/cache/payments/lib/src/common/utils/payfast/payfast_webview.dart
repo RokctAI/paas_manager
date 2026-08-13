@@ -1,14 +1,15 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
-import 'package:base_sdk/src/constants/app_constants.dart';
-import 'package:base_sdk/src/di/injection.dart';
 import 'package:base_sdk/src/services/app_helpers.dart';
 import 'package:base_sdk/src/services/tr_keys.dart';
 import 'package:base_sdk/src/presentation/components/buttons/custom_button.dart';
 import 'package:base_sdk/src/presentation/theme/theme.dart';
+
+import 'payfast_completion.dart';
 
 // Provider for preloaded WebView state
 final payFastWebViewProvider = StateProvider<PayFastWebViewState?>(
@@ -160,143 +161,25 @@ class _PayFastWebViewState extends State<PayFastWebView> {
     );
   }
 
-  // Check if the URL indicates payment completion (success or failure)
+  // Check if the URL indicates payment completion (success or failure).
+  // Shared logic lives in payfast_completion.dart so the Windows variant
+  // (payfast_webview_windows.dart) behaves identically.
   bool _checkForPaymentCompletion(String url) {
     // Don't process if already detected payment completion
     if (isPaymentComplete) return false;
 
-    debugPrint('PayFast URL check: $url');
+    final result = evaluatePayFastUrl(url);
+    if (!result.isCompletion) return false;
 
-    // Parse URL to check for token and other parameters
-    final uri = Uri.parse(url);
-    final params = uri.queryParameters;
+    isPaymentComplete = true;
 
-    // Log all parameters to help with debugging
-    debugPrint('PayFast URL parameters: $params');
-
-    // Specifically log all custom_str fields
-    debugPrint('PayFast custom_str1: ${params['custom_str1']}');
-    debugPrint('PayFast custom_str2: ${params['custom_str2']}');
-    debugPrint('PayFast custom_str3: ${params['custom_str3']}');
-    debugPrint('PayFast custom_str4: ${params['custom_str4']}');
-    debugPrint('PayFast custom_str5: ${params['custom_str5']}');
-
-    // Log token parameter
-    debugPrint('PayFast token value: ${params['token']}');
-
-    // Match patterns for success
-    bool isSuccess = url.contains('order-stripe-success') ||
-        url.contains('payment-success') ||
-        url.contains('redirect-success') ||
-        url.contains(AppConstants.baseUrl);
-
-    // Match patterns for cancellation or failure
-    bool isFailure = url.contains('payment-cancel') ||
-        url.contains('payment-failed') ||
-        url.contains('redirect-cancel');
-
-    // Check if the URL contains success indicators
-    if (isSuccess) {
-      isPaymentComplete = true;
-
-      // Check for token in various potential places
-      final token =
-          params['token'] ?? params['pf_token'] ?? params['payfast_token'];
-
-      // Extract card details
-      final cardData = {
-        'last_four': params['card_last_digits'] ??
-            params['last_four'] ??
-            params['cardlastfour'] ??
-            '••••',
-        'card_type': params['card_brand'] ?? params['card_type'] ?? 'Card',
-        'expiry_date': params['card_expiry'] ?? params['expiry'] ?? '',
-        'card_holder_name': params['card_holder'] ?? '',
-      };
-
-      debugPrint('PayFast card details found: $cardData');
-
-      // If token exists, capture it along with card details
-      if (token != null && token.isNotEmpty) {
-        debugPrint('PayFast token found: $token');
-
-        // Notify about token capture using callback
-        if (widget.onTokenCaptured != null) {
-          // Pass both token and card details to the callback
-          widget.onTokenCaptured!(token, cardData);
-        } else {
-          // If no callback is provided, save directly
-          _saveToken(token, cardData);
-        }
-      } else {
-        debugPrint('No token found in return URL');
-      }
-
-      // Show success message
-      if (!mounted) return true;
-      AppHelpers.showCheckTopSnackBarDone(
-        context,
-        AppHelpers.getTranslation(TrKeys.paymentSuccessful),
-      );
-
-      // Perform success actions
-      if (widget.onComplete != null) {
-        widget.onComplete!(true);
-      }
-
-      // Navigate back to main route
-      Future.delayed(const Duration(milliseconds: 500), () {
-        if (!mounted) return;
-        AppHelpers.goHome(context);
-      });
-
-      return true;
-    }
-    // Check if the URL contains cancel/failure indicators
-    else if (isFailure) {
-      isPaymentComplete = true;
-
-      // Show error message
-      if (!mounted) return true;
-      AppHelpers.showCheckTopSnackBarInfo(
-        context,
-        AppHelpers.getTranslation(TrKeys.paymentRejected),
-      );
-
-      // Inform parent about failure
-      if (widget.onComplete != null) {
-        widget.onComplete!(false);
-      }
-
-      // Navigate back
-      if (!mounted) return true;
-      Navigator.pop(context);
-
-      return true;
-    }
-
-    // Not a completion URL
-    return false;
-  }
-
-  // Method to save token
-  void _saveToken(String token, Map<String, String> cardData) async {
-    try {
-      // Use PaymentRepository to save the token with card details
-      await paymentsRepository.tokenizeAfterPayment(
-        '', // Empty card number since we're using token
-        cardData['card_holder_name'] ?? '',
-        cardData['expiry_date'] ?? '',
-        '', // Empty CVC since we're using token
-        token, // Pass the token
-        cardData['last_four'] ?? '••••',
-        cardData['card_type'] ?? 'Card',
-      );
-
-      debugPrint('PayFast token and card details saved successfully');
-    } catch (e) {
-      debugPrint('Failed to save PayFast token and card details: $e');
-    }
+    return handlePayFastCompletion(
+      context: context,
+      isMounted: () => mounted,
+      result: result,
+      onComplete: widget.onComplete,
+      onTokenCaptured: widget.onTokenCaptured,
+    );
   }
 
   @override
@@ -389,6 +272,13 @@ class _PayFastWebViewState extends State<PayFastWebView> {
 class PayFastWebViewPreloader {
   /// Preloads a WebView with the given PayFast URL
   static void preloadPayFastWebView(BuildContext context, String url) {
+    // webview_flutter has no Windows implementation — the Windows payment
+    // flow uses PayFastWebViewWindows without a warm-up preload.
+    if (!kIsWeb && defaultTargetPlatform == TargetPlatform.windows) {
+      debugPrint('PayFast WebView preload skipped on Windows');
+      return;
+    }
+
     try {
       // Create the controller first
       final controller = WebViewController()

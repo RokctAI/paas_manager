@@ -11,9 +11,12 @@ dependencies:
   base_sdk:
     path: ../base
   crypto: ^3.0.6
+  # Windows payment WebView (WebView2 via flutter_inappwebview_windows).
+  flutter_inappwebview: ^6.1.5
   flutter_riverpod: ^2.5.1
   flutter_screenutil: ^5.9.0
   freezed_annotation: ^2.4.4
+  url_launcher: ^6.3.2
   webview_flutter: ^4.10.0
 dev_dependencies:
   flutter_test:
