@@ -306,7 +306,7 @@
       ]
     },
     "products_sdk": {
-      "version": "1.2.2",
+      "version": "1.3.0",
       "files": {
         "lib/presentation/pages/foods/foods_page.dart": "285d688faf478c4c3dd51429fe44d6b60fce989aad37a916292ee3e9313ae08f",
         "lib/presentation/pages/foods/foods/foods_body.dart": "8974f19a212a8ce18e3bc6d3de081d5c1e5bb5225c15f314ccce9d0654a3e3dc",
@@ -328,7 +328,7 @@
         "lib/presentation/pages/foods/extras/widgets/main_group_item.dart": "09583df5a274be0907a36ffac6454562550b51ffce36568689d0b50a4d980883",
         "lib/presentation/pages/foods/create/create_product_modal.dart": "d2024245cabbc745f359c3ede650d23f9ec28617310bd4388ac8e0913f6e9eef",
         "lib/presentation/pages/foods/create/details/create_food_units_modal.dart": "4bd45d8087bd494cca32537b1910186832934d0c71da16d2cf29400747965be1",
-        "lib/presentation/pages/foods/create/details/create_food_details_body.dart": "faa316e1b7d3b408cbbfc45b0a675f15b3e7a9add27e90b0606b51c5c2c1a1fc",
+        "lib/presentation/pages/foods/create/details/create_food_details_body.dart": "9bac0155f918bf508d3e52a5155e73cc5baa7f24debac44175246595ba017ed9",
         "lib/presentation/pages/foods/create/details/add_category_modal.dart": "c3b0d3b0ba0027830d02d096cdad2482f7389c1b63f0ec0d7cfed79f0aabac4f",
         "lib/presentation/pages/foods/create/details/food_categories_modal.dart": "18b62aba0f2a0a25247951e9e2a8d28452482fa7f85f64887a798151f7c5dfcc",
         "lib/presentation/pages/foods/create/stocks/create_food_edit_extras_modal.dart": "810ef45a01522e3dc4417eaf96f5644eaa56a255a5885fb8f04ff03ccb4d3b13",
@@ -336,7 +336,7 @@
         "lib/presentation/pages/foods/create/stocks/create_food_stocks_body.dart": "d24f25e6a6dc273aa9f7064513bfd499bb2abdec7000af726276aecf8ec37f1d",
         "lib/presentation/pages/foods/edit/edit_product_modal.dart": "923bccb8f7d8fa6315e732273ca20cd924d2a34627889b76d0eeeea0c49cf3e8",
         "lib/presentation/pages/foods/edit/details/edit_food_categories_modal.dart": "d057d920d583afafc8ceb039617d3d06ea98df9545288c2f3453dca0c97e5933",
-        "lib/presentation/pages/foods/edit/details/edit_food_details_body.dart": "1add467a63773d8e4b9602a4b2a6acb365defecc4dedbdd6529cdef29b584a19",
+        "lib/presentation/pages/foods/edit/details/edit_food_details_body.dart": "ea06a5206c0bc57e8cba275cd0d38aa3fc06a36363752176d70094ca67fae6a1",
         "lib/presentation/pages/foods/edit/details/edit_food_units_modal.dart": "68e377c1c16681abbd3559953fd71f8f41949f91a9815f700a472a41733c24c7",
         "lib/presentation/pages/foods/edit/stocks/edit_group_extras_modal.dart": "3895472bd733a6a454d882b3dba3c2640b90bc6a9df27808f79aad2ef6883609",
         "lib/presentation/pages/foods/edit/stocks/edit_food_addons_modal.dart": "601cb867144e22cfd875438b8385055c231f89103448692a60ebea6b03db6400",
@@ -366,6 +366,7 @@
         "addons": "addons",
         "areYouSureToDelete": "are_you_sure_to_delete",
         "categoryName": "category_name",
+        "costPrice": "cost_price",
         "edit": "edit",
         "extras": "extras",
         "input": "input",
@@ -1034,7 +1035,7 @@
   "sdk_cache": {
     "base": {
       "version": "1.10.1",
-      "hash": "05f2a70054fe7f8f"
+      "hash": "d4413826e9fdd93f"
     },
     "comms": {
       "version": "1.7.0",
@@ -1053,8 +1054,8 @@
       "hash": "919d35cd2658b183"
     },
     "products": {
-      "version": "1.2.2",
-      "hash": "1bd3e8381498f9a7"
+      "version": "1.3.0",
+      "hash": "d1e53f083a5fa338"
     },
     "orders": {
       "version": "1.5.0",

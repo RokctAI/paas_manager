@@ -60,6 +60,7 @@ class TrKeys {
   static const String addons = 'addons';
   static const String areYouSureToDelete = 'are_you_sure_to_delete';
   static const String categoryName = 'category_name';
+  static const String costPrice = 'cost_price';
   static const String edit = 'edit';
   static const String extras = 'extras';
   static const String input = 'input';
