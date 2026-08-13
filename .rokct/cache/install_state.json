@@ -594,7 +594,7 @@
       "boot_hooks": []
     },
     "payments_sdk": {
-      "version": "1.0.0",
+      "version": "1.1.0",
       "files": {},
       "routes": [],
       "app_routes": [],
@@ -640,7 +640,7 @@
       "boot_hooks": []
     },
     "comms_sdk": {
-      "version": "1.5.0",
+      "version": "1.6.0",
       "files": {
         "lib/presentation/pages/notification/notification_list_page.dart": "76230e06012a8b8b51fd49a4998af3a36ca456cce9f60a5e50b05bdc436c19a4",
         "lib/application/notification/notification_state.dart": "ec4e92ba80840dbbd3bb0270a9d0f5617152178276166b81cf7cbb65940b28db",
@@ -681,6 +681,16 @@
             "import 'package:firebase_messaging/firebase_messaging.dart';",
             "import 'package:comms_sdk/src/common/services/firebase_background_handler.dart';"
           ]
+        },
+        {
+          "id": "comms-desktop-notification-poller-boot",
+          "order": 20,
+          "body": "if (!kIsWeb && defaultTargetPlatform == TargetPlatform.windows) {\n  WidgetsBinding.instance.addPostFrameCallback((_) {\n    try {\n      DesktopNotificationPoller.instance.start();\n    } catch (e) {\n      debugPrint('Desktop notification poller boot skipped: $e');\n    }\n  });\n}",
+          "imports": [
+            "import 'package:flutter/foundation.dart';",
+            "import 'package:comms_sdk/src/common/services/desktop_notification_poller.dart';"
+          ],
+          "_comment": "Windows notification delivery, POS parity (1.6.0): firebase_messaging has no Windows implementation, so the FCM hook above deliberately excludes Windows and composed Windows exes shipped with NO notification path at all. This hook starts comms' DesktopNotificationPoller (10s REST count polling + looping POS notification.wav + ValueNotifier badge feed - see the service's doc comment) on Windows only. The start is deferred to addPostFrameCallback because boot-hook bodies run BEFORE LocalStorage.init() and the sdk-di block in the generated main.dart: by first frame both are done, and runApp is never delayed by a poll. Fail-open try/catch like the FCM hook - a boot failure debugPrints instead of blanking the app. WidgetsBinding resolves via main.dart's static material import; foundation dedupes with the FCM hook's wiring import. Toast layer (still 1.6.0, same unmerged PR): poller.start() also initializes LocalNotifications fail-open (flutter_local_notifications 19.x WindowsInitializationSettings - stable hardcoded GUID, APP_NAME/WINDOWS_AUMID dart-defines for branding, works unpackaged; MSIX identity optional host-side) and each count increase raises a native toast via LocalNotifications.show() alongside the sound - no hook body change needed, the toast path lives entirely inside the service."
         }
       ]
     },
@@ -912,7 +922,7 @@
       "boot_hooks": []
     },
     "auth_sdk": {
-      "version": "1.5.0",
+      "version": "1.6.0",
       "files": {
         "lib/presentation/routes/auth_route_pages.dart": "8cf1fff16f979f09f5a92551df5de2d89a6211eb8b82801502628e386ecc2007",
         "lib/presentation/routes/registration_step_pages.dart": "6173d2dcda9d444e4e7ece9b5b15e73f72dbaf833bac04be38f7708186ac3a62",
@@ -1027,12 +1037,12 @@
       "hash": "4b99f238550d099d"
     },
     "comms": {
-      "version": "1.5.0",
-      "hash": "9863aec4dfbb5b23"
+      "version": "1.6.0",
+      "hash": "35218d07d1cd5366"
     },
     "auth": {
-      "version": "1.5.0",
-      "hash": "73c8f46eabddb6ee"
+      "version": "1.6.0",
+      "hash": "95749051a7d49f72"
     },
     "users": {
       "version": "1.1.0",
@@ -1063,8 +1073,8 @@
       "hash": "ebe10d948fd28edc"
     },
     "payments": {
-      "version": "1.0.0",
-      "hash": "6e723b781e9c9931"
+      "version": "1.1.0",
+      "hash": "3619f1ac891d196f"
     },
     "subscriptions": {
       "version": "1.0.0",

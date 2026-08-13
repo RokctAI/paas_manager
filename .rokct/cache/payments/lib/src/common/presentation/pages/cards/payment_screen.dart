@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -9,6 +10,7 @@ import 'package:base_sdk/src/models/data/saved_card.dart';
 import 'package:base_sdk/src/services/app_helpers.dart';
 import 'package:base_sdk/src/services/tr_keys.dart';
 import 'package:payments_sdk/src/common/utils/payfast/payfast_webview.dart';
+import 'package:payments_sdk/src/common/utils/payfast/payfast_webview_windows.dart';
 import 'package:base_sdk/src/presentation/components/buttons/custom_button.dart';
 import 'package:base_sdk/src/presentation/theme/theme.dart';
 import 'package:payments_sdk/src/common/presentation/pages/cards/payment_card.dart';
@@ -147,6 +149,17 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen> {
     }
   }
 
+  // Shared completion callback for both PayFast WebView variants
+  void _onPayFastComplete(bool success) {
+    if (success) {
+      // Refresh the cards list
+      _checkSavedCards();
+      widget.onPaymentComplete(true);
+    } else {
+      widget.onPaymentComplete(false);
+    }
+  }
+
   // Redirects to PayFast WebView for payment
   Future<void> _redirectToPayFastWebView() async {
     setState(() {
@@ -165,21 +178,24 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen> {
 
       result.when(
         success: (paymentUrl) {
+          // webview_flutter has no Windows implementation; use the
+          // WebView2-based variant there. Other platforms keep the
+          // existing WebView.
+          final bool useWindowsWebView =
+              !kIsWeb && defaultTargetPlatform == TargetPlatform.windows;
+
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (_) => PayFastWebView(
-                url: paymentUrl,
-                onComplete: (success) {
-                  if (success) {
-                    // Refresh the cards list
-                    _checkSavedCards();
-                    widget.onPaymentComplete(true);
-                  } else {
-                    widget.onPaymentComplete(false);
-                  }
-                },
-              ),
+              builder: (_) => useWindowsWebView
+                  ? PayFastWebViewWindows(
+                      url: paymentUrl,
+                      onComplete: _onPayFastComplete,
+                    )
+                  : PayFastWebView(
+                      url: paymentUrl,
+                      onComplete: _onPayFastComplete,
+                    ),
             ),
           );
         },

@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:crypto/crypto.dart' as crypto;
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -101,6 +102,13 @@ class PayFastService {
 
   /// Preloads a PayFast WebView for faster checkout experience
   static void preloadPayFastWebView(BuildContext context, String paymentUrl) {
+    // webview_flutter has no Windows implementation — the Windows payment
+    // flow uses PayFastWebViewWindows without a warm-up preload.
+    if (!kIsWeb && defaultTargetPlatform == TargetPlatform.windows) {
+      debugPrint('==> PayFast WebView preload skipped on Windows');
+      return;
+    }
+
     try {
       final WebViewController webController = WebViewController();
 
