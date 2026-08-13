@@ -1,7 +1,7 @@
 {
   "packages": {
     "base_sdk": {
-      "version": "1.9.0",
+      "version": "1.10.0",
       "files": {
         "flutter_native_splash.yaml": "d469a133b5e1631d6ba811b048d290449224075edad2153189cfb2edc3f4d100",
         "android/app/src/main/kotlin/com/foodyman/demo/JuvoApplication.kt": "08d9f33ad23841a9b200ec08ac99e62e9b34acb06e4ab49983a16992ed2c28ca",
@@ -70,7 +70,7 @@
         "lib/presentation/theme/theme.dart": "4fd8344adbba5f9720346b6406d4d06056752d7dec07b2318d2e0180955511a7",
         "lib/presentation/theme/app_style.dart": "f202085343ef063bdfb3c285c6cda67eaac1e92e5d7fb32297783178eca55c63",
         "lib/main.dart": "c7edcc84e4322a0874fab214180dc0070921bfcea8404be0f7e1495c3019efbf",
-        "lib/presentation/app_widget.dart": "693288e351b5e6571d3e590228471d5b32db07576cc40fe31ec72e7a0ea47a91",
+        "lib/presentation/app_widget.dart": "9d6f488689804fcea79572cf07aa7332759ae9775441a046f5b3500659128e14",
         "lib/presentation/routes/app_router.dart": "e08b822163e08ac9e330bd6a0bffc42dbfd149d076449012092ddcdd0d2d2979",
         "lib/presentation/routes/route_pages.dart": "82dd7f21941054861f2e7b4f6c32fa227510fcc1535d06b1983c8a27aac8b9b7"
       },
@@ -206,7 +206,7 @@
       "boot_hooks": []
     },
     "merchants_sdk": {
-      "version": "1.9.0",
+      "version": "1.9.1",
       "files": {
         "assets/audio/notification.wav": "9d62af6f1c8df010941d1daa17162175d87293bd78371c787803b5a11f95cb9d",
         "assets/svgs/menu.svg": "9767d04ac4d157e423f972259a9c2c455a6a629c4098cc9c2fe8f9722451441b",
@@ -640,7 +640,7 @@
       "boot_hooks": []
     },
     "comms_sdk": {
-      "version": "1.6.0",
+      "version": "1.7.0",
       "files": {
         "lib/presentation/pages/notification/notification_list_page.dart": "76230e06012a8b8b51fd49a4998af3a36ca456cce9f60a5e50b05bdc436c19a4",
         "lib/application/notification/notification_state.dart": "ec4e92ba80840dbbd3bb0270a9d0f5617152178276166b81cf7cbb65940b28db",
@@ -1033,12 +1033,12 @@
   },
   "sdk_cache": {
     "base": {
-      "version": "1.9.0",
-      "hash": "4b99f238550d099d"
+      "version": "1.10.0",
+      "hash": "4da2eaf3dc41c070"
     },
     "comms": {
-      "version": "1.6.0",
-      "hash": "35218d07d1cd5366"
+      "version": "1.7.0",
+      "hash": "a9b19a45697ce8f3"
     },
     "auth": {
       "version": "1.6.0",
@@ -1049,8 +1049,8 @@
       "hash": "0c406a88759e0089"
     },
     "merchants": {
-      "version": "1.9.0",
-      "hash": "6913548b268b863f"
+      "version": "1.9.1",
+      "hash": "919d35cd2658b183"
     },
     "products": {
       "version": "1.2.2",

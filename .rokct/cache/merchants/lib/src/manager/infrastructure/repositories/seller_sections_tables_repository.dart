@@ -4,7 +4,7 @@ import 'package:base_sdk/src/handlers/handlers.dart';
 import 'package:base_sdk/src/services/app_helpers.dart';
 import 'package:base_sdk/src/services/local_storage.dart';
 import 'package:merchants_sdk/src/manager/domain/interface/seller_sections_tables.dart';
-import 'package:merchants_sdk/src/manager/infrastructure/models/sections_tables.dart';
+import 'package:merchants_sdk/src/manager/infrastructure/models/data/sections_tables.dart';
 
 /// Port of the section/table listing + CRUD subset of `paas_manager`'s
 /// `TableRepository` (the subset with a reader in the fork: the POS dine-in

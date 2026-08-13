@@ -1,7 +1,7 @@
 import 'package:base_sdk/src/handlers/handlers.dart';
 import 'package:base_sdk/src/models/data/shop_data.dart';
 import 'package:base_sdk/src/models/data/translation.dart';
-import 'package:merchants_sdk/src/manager/infrastructure/models/my_shop_response.dart';
+import 'package:merchants_sdk/src/manager/infrastructure/models/response/my_shop_response.dart';
 
 /// Contract of `paas_manager`'s shop-management half of `UsersInterface`
 /// (`getMyShop` / `updateShop` / `setOnlineOffline` /

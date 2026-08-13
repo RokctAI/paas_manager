@@ -1,5 +1,5 @@
 import 'package:base_sdk/src/handlers/handlers.dart';
-import 'package:merchants_sdk/src/manager/infrastructure/models/sections_tables.dart';
+import 'package:merchants_sdk/src/manager/infrastructure/models/data/sections_tables.dart';
 
 /// Owner-side contract for shop sections and dine-in tables
 /// (`seller_operations.py` domain) — the counterpart of orders_sdk's ADR-005

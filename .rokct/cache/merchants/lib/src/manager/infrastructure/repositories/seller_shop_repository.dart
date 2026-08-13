@@ -7,7 +7,7 @@ import 'package:base_sdk/src/services/app_helpers.dart';
 import 'package:base_sdk/src/services/local_storage.dart';
 import 'package:base_sdk/src/sync/sync_engine.dart';
 import 'package:merchants_sdk/src/manager/domain/interface/seller_shop.dart';
-import 'package:merchants_sdk/src/manager/infrastructure/models/my_shop_response.dart';
+import 'package:merchants_sdk/src/manager/infrastructure/models/response/my_shop_response.dart';
 import 'package:merchants_sdk/src/manager/infrastructure/services/manager_shops_local_store.dart';
 import 'package:merchants_sdk/src/manager/infrastructure/services/shop_create_sync_handler.dart';
 
