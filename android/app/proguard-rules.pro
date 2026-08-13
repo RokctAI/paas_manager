@@ -1,3 +1,16 @@
+# Play Core split-install / deferred components:
+# The Flutter embedding (FlutterPlayStoreSplitApplication,
+# PlayStoreDeferredComponentManager) references the legacy
+# com.google.android.play:core split-install APIs. This app does not use
+# deferred components and does not ship that dependency, but the broad
+# "-keep class io.flutter.**" rule below keeps those embedding classes,
+# so R8 fails with "Missing class com.google.android.play.core.*" unless
+# the references are declared safe to ignore.
+-dontwarn com.google.android.play.core.splitcompat.**
+-dontwarn com.google.android.play.core.splitinstall.**
+-dontwarn com.google.android.play.core.tasks.**
+-dontwarn com.google.android.play.core.**
+
 # Flutter wrapper
 -keep class io.flutter.app.** { *; }
 -keep class io.flutter.plugin.**  { *; }
