@@ -640,7 +640,7 @@
       "boot_hooks": []
     },
     "comms_sdk": {
-      "version": "1.4.0",
+      "version": "1.5.0",
       "files": {
         "lib/presentation/pages/notification/notification_list_page.dart": "76230e06012a8b8b51fd49a4998af3a36ca456cce9f60a5e50b05bdc436c19a4",
         "lib/application/notification/notification_state.dart": "ec4e92ba80840dbbd3bb0270a9d0f5617152178276166b81cf7cbb65940b28db",
@@ -674,8 +674,9 @@
         {
           "id": "comms-firebase-fcm-boot",
           "order": 10,
-          "body": "if (Firebase.apps.isEmpty) {\n  await Firebase.initializeApp();\n}\nFirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);",
+          "body": "if (!kIsWeb && (defaultTargetPlatform == TargetPlatform.android || defaultTargetPlatform == TargetPlatform.iOS || defaultTargetPlatform == TargetPlatform.macOS)) {\n  try {\n    if (Firebase.apps.isEmpty) {\n      await Firebase.initializeApp();\n    }\n    FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);\n  } catch (e) {\n    debugPrint('Firebase boot skipped: $e');\n  }\n}",
           "imports": [
+            "import 'package:flutter/foundation.dart';",
             "import 'package:firebase_core/firebase_core.dart';",
             "import 'package:firebase_messaging/firebase_messaging.dart';",
             "import 'package:comms_sdk/src/common/services/firebase_background_handler.dart';"
@@ -1026,8 +1027,8 @@
       "hash": "4b99f238550d099d"
     },
     "comms": {
-      "version": "1.4.0",
-      "hash": "5a8a9a048a11b648"
+      "version": "1.5.0",
+      "hash": "9863aec4dfbb5b23"
     },
     "auth": {
       "version": "1.5.0",
