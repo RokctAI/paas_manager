@@ -2,13 +2,20 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:dio/dio.dart';
 import 'package:base_sdk/base_sdk.dart';
-import 'package:base_sdk/src/database/app_database.dart';
 import '../../domain/interface/subscription_facade.dart';
 import '../models/data/subscriptions_data.dart';
 import '../models/response/subscriptions_response.dart';
 import '../models/response/transactions_response.dart';
 
+/// Calls `agent/subscriptions/frappe`'s composed module over the app's
+/// shared Dio client. Endpoint paths mirror that module's `manifest.json`
+/// whitelisted-method aliases (`paas.api.subscription.*`), same as the
+/// sibling SDK clients ([HttpLmsRepository], `FrappeStationsSource`) — the
+/// Laravel-era `/api/v1/...` marketplace paths are not served by the
+/// composed Frappe backend.
 class SubscriptionsRepository implements SubscriptionsFacade {
+  static const _base = '/api/method/paas.api.subscription';
+
   final Dio _client;
   final AppDatabase _database;
   final String? Function()? _localeCallback;
@@ -22,13 +29,23 @@ class SubscriptionsRepository implements SubscriptionsFacade {
     String? locale,
   }) async {
     final activeLocale = locale ?? _localeCallback?.call();
+    // list_subscriptions returns the complete plan catalog in one response —
+    // the composed backend has no server-side pagination. Later pages are
+    // reported empty so load-more footers terminate instead of re-appending
+    // the same rows.
+    if (page > 1) {
+      return ApiResult.success(data: SubscriptionResponse(data: const []));
+    }
     final data = {'lang': activeLocale};
     try {
       final response = await _client.get(
-        '/api/v1/dashboard/seller/subscriptions',
+        // Frappe drops kwargs the whitelisted method does not declare, so
+        // `lang` is inert today; it stays on the wire to keep the facade's
+        // locale contract when the composed backend grows translations.
+        '$_base.list_subscriptions',
         queryParameters: data,
       );
-      final subResponse = SubscriptionResponse.fromJson(response.data);
+      final subResponse = _parseSubscriptionList(response.data);
 
       // Cache the active subscription (status + allowed subjects) locally so
       // offline consumers like BackgroundAssetOrchestrator can read it.
@@ -50,6 +67,27 @@ class SubscriptionsRepository implements SubscriptionsFacade {
         statusCode: NetworkExceptions.getDioStatus(e),
       );
     }
+  }
+
+  /// FrappeResponseInterceptor already unwraps `{'message': ...}` on 2xx;
+  /// tolerate both shapes for overridden clients, plus the legacy
+  /// `{data: [...]}` envelope, and map a bare Frappe row list into the
+  /// response type the facade promises.
+  SubscriptionResponse _parseSubscriptionList(dynamic body) {
+    final message =
+        body is Map && body.containsKey('message') ? body['message'] : body;
+    if (message is List) {
+      return SubscriptionResponse(
+        data: message
+            .whereType<Map>()
+            .map((e) => SubscriptionData.fromJson(Map<String, dynamic>.from(e)))
+            .toList(),
+      );
+    }
+    if (message is Map) {
+      return SubscriptionResponse.fromJson(Map<String, dynamic>.from(message));
+    }
+    return SubscriptionResponse(data: const []);
   }
 
   /// Writes the active subscription into the shared database's generic
@@ -98,9 +136,18 @@ class SubscriptionsRepository implements SubscriptionsFacade {
   Future<ApiResult> purchaseSubscription({
     required int id,
     required int paymentId,
+    String? ref,
     String? beneficiaryUserId,
   }) async {
     final data = {
+      // subscribe_my_shop's own argument: the plan's Frappe document name
+      // ([ref]) when the row carries one, falling back to the legacy
+      // numeric id for stored rows that predate the composed backend.
+      'subscription_id': ref ?? id,
+      // Not consumed by subscribe_my_shop today (Frappe drops undeclared
+      // kwargs); kept on the wire per decision log #23/#30 so the payment
+      // integration that lands later can start reading it without a
+      // client release.
       'payment_sys_id': paymentId,
       // Delegated billing (see the facade doc): only sent when purchasing
       // for another account, so the self-purchase wire shape is unchanged.
@@ -108,10 +155,20 @@ class SubscriptionsRepository implements SubscriptionsFacade {
     };
     try {
       final response = await _client.post(
-        '/api/v1/dashboard/seller/subscriptions/$id/attach',
+        '$_base.subscribe_my_shop',
         data: data,
       );
-      return ApiResult.success(data: response.data['data']['id']);
+      // subscribe_my_shop returns the new Shop Subscription document — its
+      // Frappe `name` identifies the purchase. The legacy `{data: {id}}`
+      // envelope is still tolerated for overridden clients.
+      final body = response.data;
+      final message =
+          body is Map && body.containsKey('message') ? body['message'] : body;
+      final dynamic identifier = message is Map
+          ? (message['name'] ??
+              (message['data'] is Map ? message['data']['id'] : null))
+          : null;
+      return ApiResult.success(data: identifier);
     } catch (e) {
       debugPrint('==> purchase ads failure: $e');
       return ApiResult.failure(
@@ -121,9 +178,17 @@ class SubscriptionsRepository implements SubscriptionsFacade {
     }
   }
 
+  /// KNOWN LEGACY SEAM — deliberately NOT migrated to `paas.api.*`. The
+  /// composed Frappe backend exposes no payment-transaction alias (see
+  /// `agent/subscriptions/frappe/manifest.json`): `subscribe_my_shop` is the
+  /// entire purchase, and decision log #30 records this transactions path as
+  /// belonging to the external legacy marketplace backend. Pointing it at an
+  /// invented `paas.api.subscription.*` path would fabricate a payment
+  /// record, so it stays on the legacy path (and fails honestly) until the
+  /// real payment integration (decision #33/#34 direction) lands.
   @override
   Future<ApiResult<SubscriptionTransactionsResponse>> createTransaction({
-    required int id,
+    required Object id,
     required int paymentId,
     String? beneficiaryUserId,
   }) async {

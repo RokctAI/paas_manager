@@ -8,6 +8,11 @@ abstract class SubscriptionsFacade {
     String? locale,
   });
 
+  /// [ref] is the plan's Frappe document name on the composed backend
+  /// (plan rows are hash-named, so the legacy numeric [id] is null for
+  /// them); when present it identifies the plan on the wire, with [id] as
+  /// the fallback for stored rows that still carry one.
+  ///
   /// [beneficiaryUserId] enables delegated billing: purchase this
   /// subscription FOR another account (e.g. an accountability partner
   /// paying for a linked student — the subscription stays the student's,
@@ -17,11 +22,15 @@ abstract class SubscriptionsFacade {
   Future<ApiResult> purchaseSubscription({
     required int id,
     required int paymentId,
+    String? ref,
     String? beneficiaryUserId,
   });
 
+  /// [id] is whatever identifier [purchaseSubscription] returned — the
+  /// legacy backend used an int, the composed backend a Frappe document
+  /// name (String) — so it is deliberately untyped.
   Future<ApiResult<SubscriptionTransactionsResponse>> createTransaction({
-    required int id,
+    required Object id,
     required int paymentId,
     String? beneficiaryUserId,
   });

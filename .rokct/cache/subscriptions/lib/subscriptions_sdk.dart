@@ -1,5 +1,3 @@
-library subscriptions_sdk;
-
 export 'src/common/domain/interface/subscription_facade.dart';
 export 'src/common/domain/interface/subscription_payments_provider.dart';
 export 'src/common/infrastructure/repository/subscription_repository.dart';

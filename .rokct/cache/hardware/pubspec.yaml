@@ -18,7 +18,7 @@ dependencies:
   mobile_scanner: ^6.0.4
   shared_preferences: ^2.5.4
   # Aligned with base_sdk (shared kernel, ADR-005) so the graphs co-resolve.
-  freezed_annotation: ^2.4.4
+  freezed_annotation: ^3.1.0
   rxdart: any
   get_it: ^8.0.0
 
@@ -46,8 +46,8 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^3.0.0
-  freezed: ^2.5.7
-  build_runner: ^2.4.8
+  freezed: ^3.2.3
+  build_runner: ^2.10.4
 
 # Workspace-relative override so this package resolves standalone for
 # codegen/analysis. Ignored when a host app is the resolution root, and
@@ -56,4 +56,4 @@ dev_dependencies:
 dependency_overrides:
   http: ^1.2.0
   base_sdk:
-    path: ../base
+    path: ../../../core/base/dart
