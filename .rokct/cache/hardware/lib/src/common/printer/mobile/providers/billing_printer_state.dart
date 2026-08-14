@@ -16,7 +16,7 @@ enum PrinterStatus {
 }
 
 @freezed
-class BillingPrinterState with _$BillingPrinterState {
+abstract class BillingPrinterState with _$BillingPrinterState {
   const factory BillingPrinterState({
     @Default(PrinterStatus.initial) PrinterStatus status,
     @Default([]) List<PrinterDevice> devices,

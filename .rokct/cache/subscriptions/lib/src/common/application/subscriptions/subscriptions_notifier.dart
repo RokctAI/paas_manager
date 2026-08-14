@@ -62,7 +62,7 @@ class SubscriptionNotifier extends StateNotifier<SubscriptionState> {
         state = state.copyWith(isLoading: false);
         debugPrint(" ==> fetch ads fail: $failure");
         if (context != null && _onError != null) {
-          _onError?.call(context, failure);
+          _onError(context, failure);
         }
       },
     );
@@ -79,10 +79,7 @@ class SubscriptionNotifier extends StateNotifier<SubscriptionState> {
       final num orderPrice = state.list[state.selectSubscribe].price ?? 0;
       if (walletPrice < orderPrice) {
         if (_onError != null && _getTranslation != null) {
-          _onError?.call(
-            context,
-            _getTranslation?.call(TrKeys.notEnoughMoney) ?? "Not enough money",
-          );
+          _onError(context, _getTranslation(TrKeys.notEnoughMoney));
         }
         state = state.copyWith(isPaymentLoading: false);
         return;
@@ -90,6 +87,8 @@ class SubscriptionNotifier extends StateNotifier<SubscriptionState> {
 
       final res = await _subscriptionRepository.purchaseSubscription(
         id: state.list[state.selectSubscribe].id ?? 0,
+        // Frappe plan rows are hash-named — ref is the purchase key there.
+        ref: state.list[state.selectSubscribe].ref,
         paymentId: state.payments?[state.selectPayment].id ?? 0,
       );
       res.when(
@@ -111,7 +110,7 @@ class SubscriptionNotifier extends StateNotifier<SubscriptionState> {
         failure: (failure, status) {
           state = state.copyWith(isPaymentLoading: false);
           if (_onError != null) {
-            _onError?.call(context, failure);
+            _onError(context, failure);
           }
         },
       );
@@ -124,15 +123,14 @@ class SubscriptionNotifier extends StateNotifier<SubscriptionState> {
         success: (data) async {
           state = state.copyWith(isPaymentLoading: false);
           if (_onNavigateToWebView != null) {
-            await _onNavigateToWebView!
-                .call(context, data)
+            await _onNavigateToWebView(context, data)
                 .whenComplete(() => onSuccess());
           }
         },
         failure: (failure, status) {
           state = state.copyWith(isPaymentLoading: false);
           if (_onError != null) {
-            _onError?.call(context, failure);
+            _onError(context, failure);
           }
         },
       );
@@ -149,7 +147,7 @@ class SubscriptionNotifier extends StateNotifier<SubscriptionState> {
       },
       failure: (failure, status) {
         if (_onError != null) {
-          _onError?.call(context, failure);
+          _onError(context, failure);
         }
       },
     );

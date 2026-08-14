@@ -40,14 +40,25 @@ void main() {
       // A partner purchasing FOR a linked student.
       await repo.purchaseSubscription(
           id: 7, paymentId: 3, beneficiaryUserId: 'student@example.com');
+      expect(adapter.lastPath,
+          '/api/method/paas.api.subscription.subscribe_my_shop');
       expect(adapter.lastBody, {
+        'subscription_id': 7,
         'payment_sys_id': 3,
         'beneficiary_user_id': 'student@example.com',
       });
 
-      // A plain self-purchase: the pre-P3.1 wire shape, unchanged.
+      // A plain self-purchase: the pre-P3.1 wire shape plus the composed
+      // endpoint's own subscription_id argument.
       await repo.purchaseSubscription(id: 7, paymentId: 3);
-      expect(adapter.lastBody, {'payment_sys_id': 3});
+      expect(adapter.lastBody, {'subscription_id': 7, 'payment_sys_id': 3});
+
+      // Frappe plan rows are hash-named: ref wins over the legacy id.
+      await repo.purchaseSubscription(id: 0, ref: 'a1b2c3d4e5', paymentId: 3);
+      expect(adapter.lastBody, {
+        'subscription_id': 'a1b2c3d4e5',
+        'payment_sys_id': 3,
+      });
 
       await repo.createTransaction(
           id: 7, paymentId: 3, beneficiaryUserId: 'student@example.com');
@@ -60,12 +71,14 @@ void main() {
 /// enough for the repository's response mapping to not throw.
 class _RecordingAdapter implements HttpClientAdapter {
   Map<String, dynamic>? lastBody;
+  String? lastPath;
 
   @override
   Future<ResponseBody> fetch(RequestOptions options,
       Stream<Uint8List>? requestStream, Future<void>? cancelFuture) async {
     final data = options.data;
     lastBody = data is Map<String, dynamic> ? data : null;
+    lastPath = options.path;
     return ResponseBody.fromString(
       jsonEncode({
         'data': {'id': 1}

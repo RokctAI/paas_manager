@@ -2,6 +2,11 @@ import 'dart:convert';
 
 class SubscriptionData {
   int? id;
+
+  /// Frappe document name identifying this row on the composed backend
+  /// (`paas.api.subscription.*`). Plan rows there are hash-named, so the
+  /// legacy numeric [id] is null for them and this is the purchase key.
+  String? ref;
   String? type;
   num? price;
   int? month;
@@ -55,6 +60,7 @@ class SubscriptionData {
 
   SubscriptionData({
     this.id,
+    this.ref,
     this.type,
     this.price,
     this.month,
@@ -112,6 +118,7 @@ class SubscriptionData {
 
   SubscriptionData copyWith({
     int? id,
+    String? ref,
     String? type,
     num? price,
     int? month,
@@ -135,6 +142,7 @@ class SubscriptionData {
     bool? personalizedCatchUp,
   }) => SubscriptionData(
     id: id ?? this.id,
+    ref: ref ?? this.ref,
     type: type ?? this.type,
     price: price ?? this.price,
     month: month ?? this.month,
@@ -161,6 +169,8 @@ class SubscriptionData {
   factory SubscriptionData.fromJson(Map<String, dynamic> json) =>
       SubscriptionData(
         id: json["id"],
+        // Round-trips as "ref"; live Frappe rows carry it as "name".
+        ref: (json["ref"] ?? json["name"])?.toString(),
         type: json["type"],
         price: json["price"],
         month: json["month"],
@@ -188,9 +198,12 @@ class SubscriptionData {
             json["with_report"] == "1" ||
             json["with_report"]?.toString().toLowerCase() == "true",
         shopId: json["shop_id"],
-        subscription: json["subscription"] == null
-            ? null
-            : SubscriptionData.fromJson(json["subscription"]),
+        // Nested plan object in the legacy shape; on Frappe Shop
+        // Subscription rows the field is a link STRING (the plan's name),
+        // which is not a nestable object — guard rather than throw.
+        subscription: json["subscription"] is Map<String, dynamic>
+            ? SubscriptionData.fromJson(json["subscription"])
+            : null,
         subscriptionId: json["subscription_id"],
         allowedSubjects: parseAllowedSubjects(json["allowed_subjects"]),
         payer: json["payer"]?.toString(),
@@ -204,6 +217,7 @@ class SubscriptionData {
 
   Map<String, dynamic> toJson() => {
     "id": id,
+    "ref": ref,
     "type": type,
     "price": price,
     "month": month,
