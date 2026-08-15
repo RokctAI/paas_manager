@@ -107,6 +107,7 @@ class ParcelRepository implements ParcelRepositoryFacade {
     required String instruction,
     required bool notify,
     required String usernameFrom,
+    num? codAmount,
   }) async {
     final data = {
       'lang': LocalStorage.getLanguage()?.locale,
@@ -138,6 +139,9 @@ class ParcelRepository implements ParcelRepositoryFacade {
       'notify': notify ? 1 : 0,
       'username_from': usernameFrom,
       'username_to': usernameTo,
+      // Optional COD: sender asks the driver to collect this cash amount
+      // from the recipient. Omitted entirely when the sender didn't opt in.
+      if (codAmount != null && codAmount > 0) 'cod_amount': codAmount,
     };
     try {
       final client = dioHttp.client(requireAuth: true);
