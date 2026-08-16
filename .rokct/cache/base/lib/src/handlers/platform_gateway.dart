@@ -5,14 +5,14 @@ import 'package:base_sdk/src/di/injection.dart';
 /// The universal platform entry-point method name — the ONE place the
 /// gateway's dotted method lives, so a future rename is a single-constant
 /// change. Registered app-side (rCore #108) as
-/// `rokct.platform.api.tenant -> rcore.platform.api.execute_tenant`; the
+/// `rokct.platform.api -> rcore.platform.api.execute_tenant`; the
 /// paas shell exposes the same key, so which backend answers is decided
 /// purely by `AppConstants.baseUrl`.
-const String kPlatformGatewayMethod = 'rokct.platform.api.tenant';
+const String kPlatformGatewayMethod = 'rokct.platform.api';
 
 /// The full request path derived from [kPlatformGatewayMethod]. Never
 /// hardcode this elsewhere — import it.
-const String kPlatformGatewayPath = '/api/method/$kPlatformGatewayMethod';
+const String kPlatformGatewayPath = '/api/v1/method/$kPlatformGatewayMethod';
 
 /// Client for the universal platform gateway: every backend call is a
 /// `POST` to [kPlatformGatewayPath] with a JSON body of
