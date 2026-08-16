@@ -1,0 +1,9 @@
+# Android release-signing config. Copy to android/key.properties and fill in.
+# key.properties is gitignored - never commit the real file.
+# The keystore itself belongs at android/app/keys/ (also gitignored); get it
+# from the signing machine / Bitwarden escrow. Deploys pull it from the
+# private secrets repo, so CI/CD does not need this file.
+storePassword=
+keyPassword=
+keyAlias=
+storeFile=keys/upload-keystore.jks
