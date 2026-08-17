@@ -79,7 +79,7 @@ jobs:
   # --- 2. UNIFIED PIPELINE (Smart) ---
   pipeline:
     needs: detect
-    uses: RokctAI/shared-workflows/.github/workflows/universal-pipeline.yml@main
+    uses: RokctAI/shared-workflows/.github/workflows/universal-pipeline.yml@b41cc5ff4404112cae6516e7aed91eefdfb8a201 # shared-workflows main (gateway envelope)
     with:
       project_type: ${{ needs.detect.outputs.is_flutter == 'true' && 'flutter' || (needs.detect.outputs.is_node == 'true' && 'node' || 'frappe') }}
       # Quality Gate Toggles
@@ -97,7 +97,7 @@ jobs:
       # One-time cleanup: run cleanup once if past this date (marker file prevents re-runs)
       one_time_cleanup_cutoff_date: '2026-01-30'
       # Brain Endpoint (AI release notes)
-      brain_endpoint: https://platform.rokct.ai/api/method/brain.api.generate_release_notes
+      brain_endpoint: https://platform.rokct.ai/api/v1/method/rokct.platform.api
       build_android: true
       # Build Windows desktop app and attach it to releases (windows/ scaffolding is
       # installed by desktop_sdk at compose time and committed back like android/ etc.)

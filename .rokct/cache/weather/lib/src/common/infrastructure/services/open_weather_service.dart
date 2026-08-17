@@ -1,8 +1,29 @@
+// Copyright (c) 2026 RokctAI
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:base_sdk/src/di/injection.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:weather_sdk/src/common/application/weather/open_weather_state.dart';
@@ -14,6 +35,12 @@ import 'package:weather_sdk/src/common/infrastructure/services/weather_service.d
 /// client-side key ([WeatherSdkConfig.openWeatherApiKey] - env default,
 /// remote-config hydrated; never hardcoded). Ported from pos main's
 /// `weather/service/open_weather_service.dart`.
+///
+/// Requests go through base_sdk's [HttpService] client so they ride the
+/// standard interceptor chain — TimingInterceptor (timing telemetry) and the
+/// ADR-006 trace-id stamping — instead of a bare package:http call that the
+/// telemetry pipeline never sees. `requireAuth: false` keeps the tenant
+/// bearer token off this third-party host.
 class OpenWeatherService {
   static const String baseUrl = 'https://api.openweathermap.org/data/2.5';
 
@@ -22,9 +49,13 @@ class OpenWeatherService {
   static const String cacheKey = 'open_weather_extended_cache';
   static const int maxRetries = 3;
 
-  final http.Client _client;
+  /// Test seam only. Production resolves the shared [HttpService] client
+  /// lazily so registration order at bootstrap does not matter.
+  final Dio? _client;
 
-  OpenWeatherService({http.Client? client}) : _client = client ?? http.Client();
+  OpenWeatherService({Dio? client}) : _client = client;
+
+  Dio get _dio => _client ?? dioHttp.client(requireAuth: false);
 
   Future<Map<String, dynamic>> getExtendedForecast(
     double lat,
@@ -88,26 +119,37 @@ class OpenWeatherService {
     int attempt = 1,
   }) async {
     try {
-      final uri = Uri.parse(url).replace(queryParameters: queryParams);
+      final response = await _dio.get<dynamic>(
+        url,
+        queryParameters: queryParams,
+      );
 
-      final response = await _client.get(uri, headers: {
-        'Accept': 'application/json'
-      }).timeout(const Duration(seconds: 10));
-
-      if (response.statusCode == 200) {
-        final responseBody = json.decode(response.body);
-
-        // Additional validation
-        if (responseBody['cod'] != '200') {
-          throw Exception('API returned error: ${responseBody['message']}');
-        }
-
-        return responseBody;
+      final data = response.data;
+      // Dio only auto-decodes application/json; fall back for providers that
+      // serve JSON under another content type.
+      final dynamic decoded = data is String ? json.decode(data) : data;
+      if (decoded is! Map<String, dynamic>) {
+        throw OpenWeatherServiceException(
+          'Unexpected response shape from weather API',
+        );
       }
 
+      // Additional validation
+      if (decoded['cod'] != '200') {
+        throw Exception('API returned error: ${decoded['message']}');
+      }
+
+      return decoded;
+    } on DioException catch (e) {
+      debugLog('Fetch attempt $attempt failed: $e');
+      if (attempt < maxRetries) {
+        final waitTime = Duration(milliseconds: 1000 * attempt);
+        await Future.delayed(waitTime);
+        return _fetchWithRetry(url, queryParams, attempt: attempt + 1);
+      }
       throw OpenWeatherServiceException(
-        'Failed to load weather data: ${response.statusCode}',
-        statusCode: response.statusCode,
+        'Failed to load weather data: ${e.response?.statusCode}',
+        statusCode: e.response?.statusCode,
       );
     } catch (e) {
       debugLog('Fetch attempt $attempt failed: $e');
@@ -153,7 +195,8 @@ class OpenWeatherService {
   }
 
   void dispose() {
-    _client.close();
+    // Nothing to release: the shared [HttpService] client's lifecycle is
+    // owned by base_sdk, not this service.
   }
 }
 
