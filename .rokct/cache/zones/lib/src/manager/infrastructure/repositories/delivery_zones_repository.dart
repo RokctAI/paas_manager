@@ -1,10 +1,30 @@
+// Copyright (c) 2026 RokctAI
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 
-import 'package:base_sdk/src/di/injection.dart';
 import 'package:base_sdk/src/handlers/api_result.dart';
 import 'package:base_sdk/src/handlers/network_exceptions.dart';
+import 'package:base_sdk/src/handlers/platform_gateway.dart';
 import 'package:base_sdk/src/services/app_helpers.dart';
 import 'package:base_sdk/src/services/local_storage.dart';
 
@@ -22,38 +42,63 @@ import 'package:zones_sdk/src/common/domain/interface/delivery_zones.dart';
 /// installed manager zones_adapters.dart is a thin shim over this class,
 /// registered via the manifest's app_type.manager di_hooks entry.
 ///
-/// The paginate response carries a list of zones, each with an `address` of
-/// `[latitude, longitude]` pairs; the seller dashboard only ever edits the
-/// first (fetched with perPage: 1), so the first zone's polygon is the
-/// facade's whole answer — already exactly the primitive shape the facade
-/// speaks, so no model class is needed.
+/// Repointed from the dead legacy `/api/v1/dashboard/seller/delivery-zones`
+/// endpoint pair to the registered Frappe methods of the zones module
+/// (manifest keys `api.delivery_zone.get_shop_delivery_zones` /
+/// `create_delivery_zone` / `update_delivery_zone`) through the universal
+/// platform gateway. The Delivery Zone doctype stores the polygon in two
+/// Code (JSON string) columns: `address` keeps the client's own
+/// `[latitude, longitude]` pair list (round-tripped verbatim by this
+/// repository), and `coordinates` keeps the same ring in the GeoJSON
+/// `[longitude, latitude]` order that the backend's
+/// check_delivery_availability point-in-polygon test reads. The seller
+/// dashboard only ever edits one zone, so the first zone answers the
+/// facade and the write upserts it (update when a zone exists, create
+/// otherwise).
 class ManagerDeliveryZonesRepository implements DeliveryZonesFacade {
+  static const _gateway = PlatformGateway();
+
+  /// The shop's zones as raw rows from the gateway (already
+  /// interceptor-unwrapped: the answer is the list itself).
+  Future<List<dynamic>> _fetchZoneRows() async {
+    final response = await _gateway.tenant(
+      'api.delivery_zone.get_shop_delivery_zones',
+      {'shop_id': LocalStorage.getShopJson()?['id']},
+    );
+    return response is List ? response : const [];
+  }
+
+  /// Decodes a Delivery Zone row's `address` Code column ([lat, lng]
+  /// pair list stored as a JSON string) into the facade's primitive
+  /// shape. Tolerates an already-decoded list and malformed content.
+  static List<List<double>> _decodeAddress(dynamic address) {
+    dynamic decoded = address;
+    if (decoded is String) {
+      if (decoded.trim().isEmpty) return const [];
+      try {
+        decoded = jsonDecode(decoded);
+      } catch (_) {
+        return const [];
+      }
+    }
+    if (decoded is! List) return const [];
+    return decoded
+        .whereType<List<dynamic>>()
+        .map((point) => point
+            .map((coordinate) => double.parse(coordinate.toString()))
+            .toList())
+        .toList();
+  }
+
   @override
   Future<ApiResult<List<List<double>>>> fetchDeliveryZones() async {
-    final data = {
-      'lang': LocalStorage.getLanguage()?.locale,
-      'currency_id': LocalStorage.getSelectedCurrency()?.id,
-      'perPage': 1,
-    };
     try {
-      final client = dioHttp.client(requireAuth: true);
-      final response = await client.get(
-        '/api/v1/dashboard/seller/delivery-zones',
-        queryParameters: data,
-      );
-      final List<dynamic> zones =
-          (response.data?['data'] as List<dynamic>?) ?? const [];
+      final zones = await _fetchZoneRows();
       if (zones.isEmpty) {
         return const ApiResult.success(data: <List<double>>[]);
       }
-      final List<dynamic> address =
-          (zones.first['address'] as List<dynamic>?) ?? const [];
       return ApiResult.success(
-        data: address
-            .map((point) => (point as List<dynamic>)
-                .map((coordinate) => double.parse(coordinate.toString()))
-                .toList())
-            .toList(),
+        data: _decodeAddress(zones.first['address']),
       );
     } catch (e) {
       debugPrint('==> get delivery zone failure: $e');
@@ -68,19 +113,31 @@ class ManagerDeliveryZonesRepository implements DeliveryZonesFacade {
   Future<ApiResult<void>> updateDeliveryZones({
     required List<List<double>> points,
   }) async {
-    final data = {
-      'shop_id': LocalStorage.getShopJson()?['id'],
-      'address': [
-        for (final point in points) {'0': point[0], '1': point[1]},
-      ],
+    final zoneData = {
+      'address': jsonEncode([
+        for (final point in points) [point[0], point[1]],
+      ]),
+      // GeoJSON [lng, lat] order — what check_delivery_availability reads.
+      'coordinates': jsonEncode([
+        for (final point in points) [point[1], point[0]],
+      ]),
     };
-    debugPrint('====> update delivery zone ${jsonEncode(data)}');
+    debugPrint('====> update delivery zone ${jsonEncode(zoneData)}');
     try {
-      final client = dioHttp.client(requireAuth: true);
-      await client.post(
-        '/api/v1/dashboard/seller/delivery-zones',
-        data: data,
-      );
+      final zones = await _fetchZoneRows();
+      if (zones.isEmpty) {
+        await _gateway.tenant('api.delivery_zone.create_delivery_zone', {
+          'data': {
+            'shop': LocalStorage.getShopJson()?['id'],
+            ...zoneData,
+          },
+        });
+      } else {
+        await _gateway.tenant('api.delivery_zone.update_delivery_zone', {
+          'name': zones.first['name'],
+          'data': zoneData,
+        });
+      }
       return const ApiResult.success(data: null);
     } catch (e) {
       debugPrint('==> update delivery zones failure: $e');

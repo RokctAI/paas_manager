@@ -1,3 +1,23 @@
+// Copyright (c) 2026 RokctAI
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+
 import 'package:flutter/widgets.dart';
 
 import 'package:base_sdk/src/constants/app_constants.dart';
@@ -30,7 +50,7 @@ abstract class WeatherSdkConfig {
 
   /// OpenWeatherMap API key, used ONLY by the extended (day 4-6) forecast,
   /// which calls api.openweathermap.org directly. The primary current+3-day
-  /// feed goes through the tenant backend proxy (see [weatherEndpoint]) and
+  /// feed goes through the tenant backend proxy (see [weatherCmd]) and
   /// needs no client key.
   ///
   /// NEVER hardcode a key here. Sourcing order, matching pos main:
@@ -40,14 +60,14 @@ abstract class WeatherSdkConfig {
   static String openWeatherApiKey =
       const String.fromEnvironment('OPEN_WEATHER_API_KEY');
 
-  /// Tenant-relative Frappe endpoint for the proxied current+forecast feed
+  /// Prefix-free platform-gateway cmd for the proxied current+forecast feed
   /// (weatherapi.com-shaped payload, served by the control plane through the
-  /// tenant). This is what pos main calls today. NOTE: this repo's
-  /// `weather/frappe` module whitelists the same proxy as
-  /// `{app_name}.tenant.api.get_weather` - reconcile the two paths when the
-  /// backend package is installed per-tenant (recorded in the PR).
-  static String weatherEndpoint =
-      'api/method/paas.api.system.system.get_weather';
+  /// tenant): the `weather/frappe` module's `manifest.json` whitelists the
+  /// proxy as `{app_name}.tenant.api.get_weather`, and the cmd is that key
+  /// with the app segment dropped. The fetch POSTs base_sdk's single
+  /// universal gateway path with a `{"cmd": ..., "payload": ...}` envelope
+  /// (see weather_service.dart), so no per-method URL is baked in here.
+  static String weatherCmd = 'tenant.api.get_weather';
 
   /// GeoNames reverse-geocode service used to turn shop lat/lng into the
   /// "city,cc" string the proxy endpoint expects. Public username, not a
