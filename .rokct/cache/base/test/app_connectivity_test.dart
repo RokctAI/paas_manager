@@ -59,9 +59,9 @@ Future<void> main() async {
 
     test('HTTP 200 with status ok reports up', () async {
       stubRadio(['wifi']);
-      late Uri requested;
+      late http.Request requested;
       final client = MockClient((request) async {
-        requested = request.url;
+        requested = request;
         return http.Response(apiStatusBody('ok'), 200);
       });
 
@@ -70,9 +70,11 @@ Future<void> main() async {
         BackendStatus.up,
       );
       expect(
-        requested.path,
-        endsWith('api/method/paas.api.system.api_status'),
+        requested.url.path,
+        endsWith('api/v1/method/rokct.platform.api'),
       );
+      expect(requested.method, 'POST');
+      expect(jsonDecode(requested.body)['cmd'], 'api.system.api_status');
       expect(
           await AppConnectivity.backendAvailability(client: client), isTrue);
     });
