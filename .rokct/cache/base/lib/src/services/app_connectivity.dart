@@ -27,8 +27,7 @@ abstract class AppConnectivity {
 
   // True backend reachability: unlike connectivity() (radio-only, which a
   // Wi-Fi network without internet false-passes), this probes the tenant
-  // backend's guest api_status method via the platform gateway. On-demand
-  // only — never poll it.
+  // backend's guest api_status endpoint. On-demand only — never poll it.
   static Future<bool> backendAvailability({
     Duration timeout = const Duration(seconds: 5),
     http.Client? client,
@@ -44,9 +43,11 @@ abstract class AppConnectivity {
   }) async {
     try {
       if (!await connectivity()) return BackendStatus.down;
-      final uri = Uri.parse(
-        '${AppConstants.baseUrl}$kPlatformGatewayPath',
-      );
+      // Raw http (pre-DI) — POST the platform gateway envelope directly;
+      // the DI'd PlatformGateway client is not in play here. The gateway
+      // returns the same single `message` envelope a direct dotted call
+      // did, so the parsing below is unchanged.
+      final uri = Uri.parse('${AppConstants.baseUrl}$kPlatformGatewayPath');
       final headers = {'Content-Type': 'application/json'};
       final body = jsonEncode({'cmd': 'api.system.api_status'});
       final response = await (client == null

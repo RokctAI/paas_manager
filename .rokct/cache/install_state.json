@@ -1,7 +1,7 @@
 {
   "packages": {
     "base_sdk": {
-      "version": "1.15.3",
+      "version": "1.15.4",
       "files": {
         "flutter_native_splash.yaml": "d469a133b5e1631d6ba811b048d290449224075edad2153189cfb2edc3f4d100",
         "android/app/src/main/kotlin/com/foodyman/demo/JuvoApplication.kt": "3e2f819a62bdabd753c16e168d4806dd8d44308aee0d493441627994ab141bf7",
@@ -1047,8 +1047,8 @@
   },
   "sdk_cache": {
     "base": {
-      "version": "1.15.3",
-      "hash": "c981d8a50f6b5bcc"
+      "version": "1.15.4",
+      "hash": "ef9733c53d7b5397"
     },
     "comms": {
       "version": "1.9.0",
