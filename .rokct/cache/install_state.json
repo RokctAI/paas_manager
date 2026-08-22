@@ -4,8 +4,6 @@
       "version": "1.15.4",
       "files": {
         "flutter_native_splash.yaml": "d469a133b5e1631d6ba811b048d290449224075edad2153189cfb2edc3f4d100",
-        "android/app/src/main/kotlin/com/foodyman/demo/JuvoApplication.kt": "3e2f819a62bdabd753c16e168d4806dd8d44308aee0d493441627994ab141bf7",
-        "android/app/src/main/kotlin/com/foodyman/demo/MainActivity.kt": "6fd7464a016f4a6ee3cb580f0acf182fc397afa4f5583a99caa56dae7e52b9a8",
         "android/app/src/main/res/font/montserrat_extrabolditalic.ttf": "d38bac61eda8d8c002b1a852f5368901a085fbe1d844b5e0a149b674e22e2cdd",
         "android/app/src/main/res/raw/notification.wav": "e3e7b32ecf00872fa5da29d94b5738aaf9890981e39f640e083db9a522d961a6",
         "ios/Runner/Assets.xcassets/AppIcon.appiconset/AppIcon-29@3x.png": "02373e1f13fdb0d818636d08959f3287ee8e1042a3959a9c1a9d30a0e2ca6a89",
@@ -66,7 +64,6 @@
         "assets/svgs/orderTime.svg": "bb7cae032a9c24293657560178fc301a078f1414485288d8cf93a7cb1d210ff1",
         "assets/svgs/empty.svg": "145faca3f39dfdfbc1f5f9ddd7aad26c43cc58368e0cc9e878e1e1949b86a35a",
         "assets/svgs/adress.svg": "774120f4d4cd801898852fc3062683a456a8c07bf8253a0c608fc5429f604697",
-        "assets/svgs/foodyman.svg": "8d9dd7f7cf44328d4ed2b7364163eb218a17636763d3cb886d9d9e4b6ab48261",
         "lib/presentation/theme/theme.dart": "4fd8344adbba5f9720346b6406d4d06056752d7dec07b2318d2e0180955511a7",
         "lib/presentation/theme/app_style.dart": "f202085343ef063bdfb3c285c6cda67eaac1e92e5d7fb32297783178eca55c63",
         "lib/main.dart": "02ba8df27e273a8c7102d5cbe2b796138afcea89dbe9b4ebec3bb8727bf36666",
