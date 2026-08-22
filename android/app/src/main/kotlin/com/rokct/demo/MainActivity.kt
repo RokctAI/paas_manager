@@ -1,4 +1,4 @@
-package org.foodyman.manager
+package com.rokct.demo
 
 import io.flutter.embedding.android.FlutterActivity
 
