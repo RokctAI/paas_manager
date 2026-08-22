@@ -1,3 +1,24 @@
+// Copyright (c) 2026 RokctAI
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+
+
 import 'package:base_sdk/src/services/tr_keys.dart';
 import 'package:remixicon/remixicon.dart';
 import 'package:base_sdk/src/presentation/app_assets.dart';
@@ -23,6 +44,23 @@ abstract class AppConstants {
   }
   static const bool use24Format = true;
   static const double radius = 16;
+
+  /// App identity: the display name and brand motto of THIS composed app.
+  ///
+  /// The kernel ships the neutral JUVO defaults only. Each app re-points
+  /// these at its own brand constants through its home SDK manifest's
+  /// "constants" overrides — the same compose-time seam that already
+  /// re-points [baseUrl]/[webUrl] at e.g. SupachargeConstants (see
+  /// update_constants_overrides() in the shared installer). Consumers:
+  ///  - AppHelpers.getAppName() falls back to [appTitle] when the server
+  ///    settings carry no 'title' key;
+  ///  - comms_sdk's MockSettingsRepository seeds the demo 'title' setting
+  ///    and the demo 'motto' translation from these, so a demo build of
+  ///    every composed app shows that app's own name and motto instead of
+  ///    one shared hardcoded pair.
+  /// Apps that override nothing keep today's exact behavior.
+  static const String appTitle = 'JUVO';
+  static const String appMotto = 'To the next level';
 
   /// api urls
   static const String baseUrl = String.fromEnvironment('BASE_URL');

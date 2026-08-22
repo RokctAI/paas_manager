@@ -69,6 +69,25 @@ abstract class WeatherSdkConfig {
   /// (see weather_service.dart), so no per-method URL is baked in here.
   static String weatherCmd = 'tenant.api.get_weather';
 
+  /// Prefix-free platform-gateway cmd for the severe-weather early-warning
+  /// feed (warnings computed server-side per registered watch location;
+  /// copy and attribution rendered by the backend). Same envelope and
+  /// gateway as [weatherCmd], but the payload carries raw
+  /// latitude/longitude - no geocode hop. On shells whose backend does not
+  /// expose this cmd yet, the fetch fails and the warnings surface renders
+  /// nothing (silent-failure contract in weather_warnings_service.dart).
+  static String weatherWarningsCmd = 'tenant.api.get_weather_warnings';
+
+  /// Prefix-free platform-gateway cmd for severe-weather delivery receipts
+  /// (`{app_name}.tenant.api.ack_weather_notice` in the frappe manifest's
+  /// whitelist, app segment dropped - same convention as
+  /// [weatherWarningsCmd]). Payload contract, pinned with the backend:
+  /// `{"warning_id": ..., "event": "seen"|"opened", "client_ts": <ISO-8601>}`.
+  /// Fire-and-forget telemetry only: on shells whose backend does not
+  /// expose this cmd yet the single attempt fails silently and nothing in
+  /// the UI changes (see weather_notice_ack_service.dart).
+  static String weatherNoticeAckCmd = 'tenant.api.ack_weather_notice';
+
   /// GeoNames reverse-geocode service used to turn shop lat/lng into the
   /// "city,cc" string the proxy endpoint expects. Public username, not a
   /// secret (carried over from pos main).

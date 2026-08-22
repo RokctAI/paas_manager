@@ -35,6 +35,8 @@ export 'src/common/config/weather_sdk_config.dart';
 export 'src/common/di/weather_sdk_di.dart';
 
 // Application state
+export 'src/common/application/warnings/weather_warnings_notifier.dart';
+export 'src/common/application/warnings/weather_warnings_state.dart';
 export 'src/common/application/weather/open_weather_state.dart';
 export 'src/common/application/weather/weather_notifier.dart';
 export 'src/common/application/weather/weather_state.dart';
@@ -44,13 +46,17 @@ export 'src/common/infrastructure/services/open_weather_icon_mapper.dart';
 export 'src/common/infrastructure/services/open_weather_service.dart';
 export 'src/common/infrastructure/services/rain_feedback_system.dart';
 export 'src/common/infrastructure/services/weather_icon_mapper.dart';
+export 'src/common/infrastructure/services/weather_notice_ack_service.dart';
 export 'src/common/infrastructure/services/weather_service.dart';
+export 'src/common/infrastructure/services/weather_warnings_cache.dart';
+export 'src/common/infrastructure/services/weather_warnings_service.dart';
 
 // Presentation
 export 'src/common/presentation/theme/weather_colors.dart';
 export 'src/common/presentation/widgets/extended_forecast_loader.dart';
 export 'src/common/presentation/widgets/extended_forecast_view.dart';
 export 'src/common/presentation/widgets/rain_feedback_widget.dart';
+export 'src/common/presentation/widgets/severe_weather_banner.dart';
 export 'src/common/presentation/widgets/temperature_badge.dart';
 export 'src/common/presentation/widgets/weather_forecast_dialog.dart';
 export 'src/common/presentation/widgets/weather_icon.dart';

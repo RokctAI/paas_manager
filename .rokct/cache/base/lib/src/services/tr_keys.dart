@@ -1,3 +1,24 @@
+// Copyright (c) 2026 RokctAI
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+
+
 class TrKeys {
   TrKeys._();
 
@@ -89,6 +110,7 @@ class TrKeys {
   static const String restaurantRevenue = 'restaurant_revenue';
   static const String fMRevenue = 'fm_revenue';
   static const String moreAboutOrders = 'more_about_orders';
+  static const String asOf = 'as.of';
   // @sdk-tr-keys-end
 
   static const String bgPicture = 'bg_picture';
@@ -375,7 +397,6 @@ class TrKeys {
   static const String county = 'country';
   static const String orAccessQuickly = 'or_access_quickly';
   static const String keepLogged = 'keep_me_logged_in';
-  static const String foodyman = 'foodyman';
   static const String shopList = 'shop_list';
   static const String viewMap = 'view_map';
   static const String address = 'address';
@@ -760,7 +781,12 @@ class TrKeys {
   static const String enterOpeningHours = 'enter_the_restaurant_opening_hours';
   static const String fm = 'fm';
   static const String foods = 'foods';
-  static const String foodymanBenefit = 'foodyman_benefit';
+  static const String juvoBenefit = 'juvo_benefit';
+  // TEMPORARY back-compat alias: zones/delivery and commerce/orders still
+  // reference TrKeys.foodymanBenefit at their current mains. Remove this
+  // alias once their juvoBenefit rename PRs are merged.
+  @Deprecated('Use juvoBenefit; remove after zones/commerce rename PRs merge')
+  static const String foodymanBenefit = juvoBenefit;
   static const String inactiveTime = 'choose_inactive_meal_time';
   static const String income = 'income';
   static const String keepMeLoggedIn = 'keep_me_logged_in';
