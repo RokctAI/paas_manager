@@ -158,10 +158,14 @@ printer/bluetooth/esc_pos/scanner in `paas_manager/lib` returns nothing outside 
    `main_page.dart`, one model re-exported from `models.dart`. No Frappe counterpart exists
    anywhere in the SDK family. Fits no SDK. If it is kept, only the camera/OCR half has a
    home (`hardware_sdk/common/camera`); the domain itself does not.
-3. **`generate_image/`** (application + page, route `/generate_image` is **live**). AI
-   product-image generation, `getGenerateImage(String name)` against Laravel. No Frappe
-   method for it in any SDK (`grep generate_image` over all `*.py` finds only unrelated ROK
-   plugin code). Drop the feature, or is there a backend I have not found?
+3. **`generate_image/`** — **REMOVED 2026-08-23 per Ray's decision** ("must go"). AI
+   product-image generation (application + page, formerly live at route `/generate_image`),
+   `getGenerateImage(String name)` against Laravel; no Frappe method for it in any SDK.
+   The shell code (pages + application) was already deleted in ed1b252 (2026-08-10,
+   "dropped per Ray") before `lib/` was untracked in f8824c3; Ray's 2026-08-23 ruling
+   closes this ask — the feature is dropped, not ported. `generate_image_model.dart`
+   still present in the composed base_sdk cache (`.rokct/cache/base/`) is upstream
+   SDK-monorepo surface, out of this repo's scope.
 
 ## 3. Coverage flags — SDK Frappe method may not cover what the Laravel call did
 
