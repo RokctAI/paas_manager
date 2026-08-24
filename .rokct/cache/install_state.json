@@ -801,7 +801,7 @@
       "boot_hooks": []
     },
     "corporate_sdk": {
-      "version": "1.1.1",
+      "version": "1.1.2",
       "files": {},
       "routes": [],
       "app_routes": [],
@@ -1024,7 +1024,7 @@
       ]
     },
     "desktop_sdk": {
-      "version": "1.1.0",
+      "version": "1.1.1",
       "files": {
         "windows/CMakeLists.txt": "f56eb803753a78cf5f2494822e2bb226e590ecc7ff05ae43115bda46919842d6",
         "windows/.gitignore": "96345475f1a3c66bd32d28178fba151ab1506b35b1f7857b8f7651863093ea11",
@@ -1116,8 +1116,8 @@
       "hash": "4b342062ee23dfaf"
     },
     "corporate": {
-      "version": "1.1.1",
-      "hash": "d3cab1602db9259d"
+      "version": "1.1.2",
+      "hash": "1a56d3b907707222"
     },
     "revenue": {
       "version": "1.3.2",
@@ -1136,8 +1136,8 @@
       "hash": "5ec5ce170e0ff2f8"
     },
     "desktop": {
-      "version": "1.1.0",
-      "hash": "f4b6d3cf48f1d0fe"
+      "version": "1.1.1",
+      "hash": "f89d6e3d39a2d809"
     }
   }
 }
