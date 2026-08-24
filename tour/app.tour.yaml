@@ -1,0 +1,140 @@
+# Guided-tour manifest for the Manager app shell (paas_manager).
+#
+# This file is the ONLY place the tour carries Manager branding: SDK tour
+# fragments (each SDK's templates/tour/<sdk>.tour.yaml) stay brand-neutral
+# and receive {app_name}/{app_tagline} by substitution at merge time.
+# The merge, capture and assembly all run in CI via
+# RokctAI/shared-workflows .github/workflows/universal-guided-tour.yml;
+# format documentation lives in that repo at scripts/tour/README.md.
+#
+# Role chaining: auth_sdk's fragment ends with its generic demo sign-in
+# (demo.student@example.com). Manager's session policy (merchants_sdk
+# manifest, app_type.manager) admits ONLY the seller role, so that attempt
+# is rejected back to /login without a session; the back_to_login step
+# below then resets defensively and the tour signs in as
+# manager@demo.rokct.ai - in demo builds MockAuthRepository maps that email
+# to the seller role, which the policy lands on /main, exactly where the
+# merchants fragment starts.
+#
+# Fragment order mirrors the composed SDKs that ship manager-role fragments
+# today (composer profile: The-Rokct-Protocol core/utils/flutter/composer/
+# manager.json): merchants -> products -> orders (all commerce/*), then
+# promotions (registered empty until promotions_sdk routes a screen of its
+# own). users_sdk's fragment is deliberately NOT listed: this compose has
+# no /profile route (the account surface is the profile tab inside /main),
+# and the users fragment documents that such apps should leave it out until
+# /profile resolves. Other composed SDKs (kitchen, payments, comms, ...)
+# ship no fragment yet - coverage grows with the SDKs.
+#
+# Video colours are intentionally NOT declared here: the assembler derives
+# brand/accent colours from the composed AppStyle when the manifest carries
+# no colour keys, so the video always matches the app's real theme.
+#
+# Outputs land in marketing/tour/ (screenshots + feature-guide.md required,
+# per-chapter videos best-effort).
+app:
+  name: Manager
+  tagline: Run your store from your pocket
+  # Committed app logo (transparent background), shown on the video end card.
+  logo: assets/images/logo.png
+video:
+  hook: "Orders in. Menu up. Store running."
+  offer: "Take charge of your store today."
+  # The auth chapter's key content is bottom sheets, so its phone hangs
+  # top-cropped from the top canvas edge (keeping the sheet fully
+  # visible); every other chapter keeps the default bottom-cropped
+  # WhatsApp-ad framing.
+  chapter_frame_anchor:
+    auth: top
+setup:
+  imports:
+    - "import 'package:base_sdk/src/models/response/languages_response.dart';"
+    - "import 'package:base_sdk/src/services/local_storage.dart';"
+  dart: |
+    // Pre-seed the language so the first-run language picker can never
+    // block the tour behind a non-dismissible modal (the backend may
+    // advertise several languages). LocalStorage.init() is idempotent -
+    // app.main() calls it again.
+    await LocalStorage.init();
+    if (LocalStorage.getLanguage() == null) {
+      await LocalStorage.setLanguageData(LanguageData(
+        id: 1,
+        title: 'English',
+        locale: 'en',
+        backward: false,
+        isDefault: true,
+        active: true,
+      ));
+      await LocalStorage.setLanguageSelected(true);
+      await LocalStorage.setLangLtr(false);
+    }
+tour:
+  # Splash settles onto the sign-in screen (demo builds show the demo hint).
+  - step:
+      key: welcome
+      title: "Welcome to Manager"
+      caption: "{app_name} runs *your whole store* from one screen - and in this demo build, any sign-in details work."
+      action: wait
+      settle: 12
+  # auth_sdk captures the auth screens, then performs its generic demo
+  # sign-in (action only, no still); manager's seller-only session policy
+  # rejects that account back to /login without persisting a session.
+  - fragment: auth
+  # --- chaining: rejected demo account -> seller ------------------------
+  # Defensive reset: the seller-only policy already left the app on /login
+  # with no session, but tearing down and re-landing explicitly keeps this
+  # step correct even if the policy grows a fallback role later.
+  # LocalStorage.logout() is base_sdk's static session teardown (the same
+  # call the app's own sign-out uses) and is a no-op without a session.
+  - step:
+      key: back_to_login
+      title: "Back to sign-in"
+      action: dart
+      screenshot: false
+      settle: 4
+      dart: |
+        LocalStorage.logout();
+        router.replaceNamed('/login');
+  # Sign in as the demo seller through the same login flow the auth
+  # fragment's demo_sign_in uses; MockAuthRepository maps this email to
+  # the seller role, and the manager session policy lands it on /main -
+  # the merchants fragment's first step routes there explicitly, so only
+  # a modest settle is needed here.
+  - step:
+      key: manager_sign_in
+      title: "Sign in (seller)"
+      action: dart
+      screenshot: false
+      settle: 6
+      dart: |
+        final Element element = tester.element(find.byType(Navigator).first);
+        final ProviderContainer container =
+            ProviderScope.containerOf(element, listen: false);
+        // loginProvider is autoDispose: hold a subscription so the notifier
+        // survives between the field writes and the login call.
+        final ProviderSubscription<dynamic> subscription =
+            container.listen(loginProvider, (_, __) {});
+        try {
+          final login = container.read(loginProvider.notifier);
+          login.setEmail('manager@demo.rokct.ai');
+          login.setPassword('demo-managers-2026');
+          // MockAuthRepository accepts any credentials. The timeout guards the
+          // post-session FCM sync, which can stall on an emulator - navigation
+          // to the demo landing happens before it, so a timeout is harmless.
+          await login
+              .login(element)
+              .timeout(const Duration(seconds: 45), onTimeout: () {});
+        } finally {
+          subscription.close();
+        }
+  # Chapter 1 - the manager home shell (/main) and the offline sync-issues
+  # safety net (merchants_sdk).
+  - fragment: merchants
+  # Chapter 2 - the menu: foods tab + create-product modal (products_sdk).
+  - fragment: products
+  # Chapter 3 - the order queue and order history (orders_sdk).
+  - fragment: orders
+  # promotions_sdk's fragment is registered empty on purpose (it owns no
+  # navigable parameter-less screen yet); listing it keeps the chapter slot
+  # so steps land here the moment the SDK routes one.
+  - fragment: promotions
