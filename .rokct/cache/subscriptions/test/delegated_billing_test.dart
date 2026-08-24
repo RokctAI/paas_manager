@@ -1,3 +1,26 @@
+// Copyright (c) 2026 RokctAI
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+
+
+// compliance-ignore-file: flutter-http-timeout (test double: Dio uses a scripted in-memory adapter, no real network)
+
 import 'dart:convert';
 import 'dart:typed_data';
 
@@ -37,25 +60,30 @@ void main() {
       final dio = Dio()..httpClientAdapter = adapter;
       final repo = SubscriptionsRepository(dio, AppDatabase());
 
-      // A partner purchasing FOR a linked student.
+      // A partner purchasing FOR a linked student. Purchases ride the
+      // universal platform gateway: the method's own kwargs sit in
+      // `payload` under the prefix-free `cmd`.
       await repo.purchaseSubscription(
           id: 7, paymentId: 3, beneficiaryUserId: 'student@example.com');
-      expect(adapter.lastPath,
-          '/api/method/paas.api.subscription.subscribe_my_shop');
+      expect(adapter.lastPath, '/api/v1/method/rokct.platform.api');
       expect(adapter.lastBody, {
-        'subscription_id': 7,
-        'payment_sys_id': 3,
-        'beneficiary_user_id': 'student@example.com',
+        'cmd': 'api.subscription.subscribe_my_shop',
+        'payload': {
+          'subscription_id': 7,
+          'payment_sys_id': 3,
+          'beneficiary_user_id': 'student@example.com',
+        },
       });
 
       // A plain self-purchase: the pre-P3.1 wire shape plus the composed
       // endpoint's own subscription_id argument.
       await repo.purchaseSubscription(id: 7, paymentId: 3);
-      expect(adapter.lastBody, {'subscription_id': 7, 'payment_sys_id': 3});
+      expect(adapter.lastBody?['payload'],
+          {'subscription_id': 7, 'payment_sys_id': 3});
 
       // Frappe plan rows are hash-named: ref wins over the legacy id.
       await repo.purchaseSubscription(id: 0, ref: 'a1b2c3d4e5', paymentId: 3);
-      expect(adapter.lastBody, {
+      expect(adapter.lastBody?['payload'], {
         'subscription_id': 'a1b2c3d4e5',
         'payment_sys_id': 3,
       });

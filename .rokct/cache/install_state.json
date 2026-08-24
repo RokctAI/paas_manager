@@ -1,7 +1,7 @@
 {
   "packages": {
     "base_sdk": {
-      "version": "1.20.1",
+      "version": "1.20.2",
       "files": {
         "flutter_native_splash.yaml": "d469a133b5e1631d6ba811b048d290449224075edad2153189cfb2edc3f4d100",
         "android/app/src/main/res/font/montserrat_extrabolditalic.ttf": "d38bac61eda8d8c002b1a852f5368901a085fbe1d844b5e0a149b674e22e2cdd",
@@ -188,11 +188,11 @@
       ]
     },
     "users_sdk": {
-      "version": "1.3.0",
+      "version": "1.3.1",
       "files": {
         "lib/application/profile/profile_state.dart": "99b168c8cd937960db6d7752ad6464f9f0a1b26b7c86d3ef92b2bc66bcd9f384",
         "lib/application/profile/profile_provider.dart": "8dd2dc4116f159c1050c1877d8d42417dc7577d579eb4671fd790f73ec6b74f3",
-        "lib/application/profile/profile_notifier.dart": "9b8f4da825bfd4b951bb4b4daab189b4c3147b88c437c53caf22fe76422d8c25"
+        "lib/application/profile/profile_notifier.dart": "6af652031ca5331f04957c04c1e0f75877f2078e59eca9b801d50386904b4ca7"
       },
       "routes": [],
       "app_routes": [],
@@ -311,7 +311,7 @@
       ]
     },
     "products_sdk": {
-      "version": "1.4.0",
+      "version": "1.5.0",
       "files": {
         "lib/presentation/pages/foods/foods_page.dart": "73955037dc18d4e2a20f8fdbfe393b72b5366c2c5a50fe6d8d7a744672e6f07d",
         "lib/presentation/pages/foods/foods/foods_body.dart": "3b27f72dea4837319ff4af02dbbd5a22a3fb6c976f6ffb9ca4377306cf488e99",
@@ -324,18 +324,18 @@
         "lib/presentation/pages/foods/extras/extras_body.dart": "847f1097265840e3216c84f7b58c85f651c726844f123a1e4c9f9710bfb5285b",
         "lib/presentation/pages/foods/extras/update/update_extras_group_modal.dart": "61a93754f554f72278a62510ef07d9a342c67eb23008fdf1b79037c8f802a8d1",
         "lib/presentation/pages/foods/extras/delete/delete_extras_group_modal.dart": "c3c5572326380d87e97768dad0318ead528d16e26ce2a4171c3281c181f37c90",
-        "lib/presentation/pages/foods/extras/details/extras_group_details_modal.dart": "f08abb27e440baa35f20006299b40872b4283e5b037cfa3360308cfa291599bd",
+        "lib/presentation/pages/foods/extras/details/extras_group_details_modal.dart": "c5d52c55b1ab7d6bf50cae09b018ac558befb9ebc35c6e736ec24d10a8e097b9",
         "lib/presentation/pages/foods/extras/details/widgets/delete_extras_item_modal.dart": "b32178e0880c7fc37b194007308838a410f890f01857e477022c6488beb5e2a9",
         "lib/presentation/pages/foods/extras/details/widgets/edit_extras_item_modal.dart": "ff94e658cd29be0157a56eec4631aa1f1adc7906c79cea87aea4767335d0eb2b",
         "lib/presentation/pages/foods/extras/details/widgets/create_new_group_item_modal.dart": "8bacdceac5a36d8a82df4da341d634ee1f6b2e22dd0ee1cac60ad45f831d3296",
-        "lib/presentation/pages/foods/extras/details/widgets/group_detail_extras_item.dart": "72a6c5f8b0d2363659dc91339b522eae77b41daeb3312bb81b50e49e8c191208",
+        "lib/presentation/pages/foods/extras/details/widgets/group_detail_extras_item.dart": "311ffe9439ac9501f603bfef5c62a8e15f9ab8ad46d43dbf5eff63018299633e",
         "lib/presentation/pages/foods/extras/create/create_extras_group_modal.dart": "cba1e88f232ab70afcfc03a07bcb52bfd002e3d81c2e0b07ca8cf9488c5e1d82",
         "lib/presentation/pages/foods/extras/widgets/main_group_item.dart": "90746e86e397a57ff6f2abdf1f4ad95324f1a84dda1e350cfa1d3962a2dce81a",
         "lib/presentation/pages/foods/create/create_product_modal.dart": "6e3ddcbdca6cdf565e94f1e538553c3e9ff9fee82185f22c635e003ee97f6c44",
         "lib/presentation/pages/foods/create/details/create_food_units_modal.dart": "50518dd0c337f7a65f95cef8aa5bebcb9f2a6d23a6541cb258af7a0a238b08dd",
         "lib/presentation/pages/foods/create/details/create_food_details_body.dart": "8c735771628b4a8bd65467a68cf1b65037d6bc8bf8f78d5028b399ebbe56f423",
         "lib/presentation/pages/foods/create/details/add_category_modal.dart": "afc4cdf20a8e4a93ba6d742186dcea2bbefb1bcd7f968212b3e306ee37653530",
-        "lib/presentation/pages/foods/create/details/food_categories_modal.dart": "d4b5f416beed28350b7fad0f1eaeaf13fdedd5d88508826711c70d0f3a5104b5",
+        "lib/presentation/pages/foods/create/details/food_categories_modal.dart": "96b3bf699447195e20bde8f9469711e5ea7da7228ea8a496bedd27bb895ba5f8",
         "lib/presentation/pages/foods/create/stocks/create_food_edit_extras_modal.dart": "4bd3d84fef05dd03d81b9f3d500d0778b639806fcc9b5661b27c641eb60a1ad2",
         "lib/presentation/pages/foods/create/stocks/create_food_addons_modal.dart": "524cdca25ac1e9155c58e4760d64388d27c9529aeef02eed30958455bb86f42b",
         "lib/presentation/pages/foods/create/stocks/create_food_stocks_body.dart": "2fe0c1987d6081f9646a7cfa6ff6196b2b38dac6ced0551c3ac178cfaa28955e",
@@ -398,7 +398,7 @@
       "boot_hooks": []
     },
     "orders_sdk": {
-      "version": "1.8.0",
+      "version": "1.9.0",
       "files": {
         "lib/presentation/pages/orders/orders_home_page.dart": "dc41deab608489a570b0781ecf755ad49d58974bdc8ef55ec7bf356d99eebb39",
         "lib/presentation/pages/orders/details/order_details_modal.dart": "0087d3c8fbc77327867cfb6039af287228f932bf15d0f29e9e9e5c328d7d4ef8",
@@ -418,11 +418,11 @@
         "lib/presentation/pages/create_order/shipping/shipping_address_page.dart": "d7e9029855213e2f762fd3785526b43fb52afbc0452efe4a58952d2ba2992e0c",
         "lib/presentation/pages/create_order/shipping/select_section/select_section_page.dart": "a7ac8956182617db32463d2a0e41226723d5faca10f4e78b1ed75ccce371b14a",
         "lib/presentation/pages/create_order/shipping/select_section/widgets/section_item.dart": "b5751e49acd98ef06e5076a1bc9a1f386ce13f7727bd75e1ef44b5a7857bd666",
-        "lib/presentation/pages/create_order/shipping/details/delivery_time_page.dart": "3543393208365957b34447c9b4a1f6631646e73a9350b720fba2d1f58917c666",
+        "lib/presentation/pages/create_order/shipping/details/delivery_time_page.dart": "bf36ee5cf5e2764ebf1e719123ca902c0bb2733e297c949a4ec86ff34cfaf69c",
         "lib/presentation/pages/create_order/shipping/details/widgets/payment_item.dart": "508a11bd48cdb61443a3cb8dd29b4826ebf4306550e9da44c0eda53292d16226",
         "lib/presentation/pages/create_order/shipping/address/select_address_page.dart": "79651b9b0074c6aa920f384db8c7995f08a1f8ad8141293f0d66849718adde67",
         "lib/presentation/pages/create_order/shipping/address/searched_location_item.dart": "af33e2081d6e05802977866492d1c9e2ccb2f6bb002666e089db2e9d54772c0c",
-        "lib/presentation/pages/create_order/shipping/select_table/select_table_page.dart": "a066d38ad00fcffb93c1929ff4d2b625fba79e0ce568179ba25758b44adbf3f6",
+        "lib/presentation/pages/create_order/shipping/select_table/select_table_page.dart": "313b9cc8c72afff06c19ec0f0a856bd527dd8f4d0d3577f357c9bf03e53ec5d0",
         "lib/presentation/pages/create_order/shipping/select_table/widgets/table_item.dart": "bc3f76ec3daccebfcf02ded9bf0f50ba1ccd59a866e9d818f4ff0b11176fd8c8",
         "lib/presentation/pages/create_order/shipping/widgets/delivery_type_item.dart": "8110c4419835fa2ea0d75a5620a4eb80159a7a1fb327179014000f3022e56c33",
         "lib/presentation/pages/create_order/shipping/widgets/searched_user_item.dart": "e1056ffa8f0ebda305b0892afbc06d34e09a17c6aa5751bfd34f5d5489adfbc0",
@@ -440,13 +440,13 @@
         "lib/presentation/components/orders/products_body.dart": "fe25d726b7f5808cd9cf3c46ce496a06b6a510a553f8f31e2672ca9177c476f9",
         "lib/presentation/components/orders/food_item.dart": "ea50350c8d9c8dd9dc89b8fbbf96375b6ee3e9bc3d963f803080375e6d460f1e",
         "lib/presentation/components/orders/food_stock_item.dart": "0958d17dce83cfe1c4c802c5ebe6ed90ccb92d78200bd9ad24af3ae21458420f",
-        "lib/presentation/routes/orders_adapters.dart": "1fbc5d326761c95c4af3f1e68ca4f4337566b6a4cc08a8c34af856ce65032fd1",
+        "lib/presentation/routes/orders_adapters.dart": "a5e5b429e59327c550bf93a8b7a0dd28d0da5d7d6f5e309185b204b98778f242",
         "assets/images/no_orders.png": "40dee5619d6b6167dd5fcbec9ad4739738f0c6f8d98dc41857dc49ab01d08ed0",
         "lib/presentation/component/buttons/custom_icon_button.dart": "31c6423f9ff050d8e0039ce01984e91b50fc09a2efe059f3c8b5d49ae1aefba5",
         "lib/presentation/component/loading/text_loading.dart": "ce4cbfbc63cd225a678d233f3bc788117130fd814c75b82a7a0d3b020c7c645b",
         "lib/presentation/component/select_date_modal.dart": "1c067f7834258c243d32b5a89a0df13a1b6fcd120342d4e6cadd86323a6aefd1",
-        "lib/presentation/pages/orders/widgets/board/orders_board_view.dart": "b942be562d0a3a301cfa569501fb7eb386b1a2065f1d2065979e026be7f67b29",
-        "lib/presentation/pages/orders/widgets/board/board_order_column.dart": "71412824fa5d643784e577e0bdcf6a293dcf2540f24aa667e9d4519557212ab6",
+        "lib/presentation/pages/orders/widgets/board/orders_board_view.dart": "487412829f5afa2fc552b274cb58760a3cb48b6cc920edfaeb034443eb4ff800",
+        "lib/presentation/pages/orders/widgets/board/board_order_column.dart": "faa2758d8bb9b39bf8e14935f5a2f7b4f5401425a69a55ae5abcd4995670aa0c",
         "lib/presentation/pages/create_order/order/widgets/order_pane.dart": "7ba381283176133fc66738c99bf7e152f391a4be5dce37ccd132b3cc9a190d3a"
       },
       "routes": [
@@ -581,7 +581,7 @@
       "boot_hooks": []
     },
     "kitchen_sdk": {
-      "version": "1.0.2",
+      "version": "1.1.0",
       "files": {},
       "routes": [],
       "app_routes": [],
@@ -618,12 +618,12 @@
       "boot_hooks": []
     },
     "subscriptions_sdk": {
-      "version": "1.0.0",
+      "version": "1.1.0",
       "files": {
-        "lib/presentation/pages/subscriptions/subscriptions_page.dart": "746ea63f02b8a3a22b2da45a6907df66b0c7e098d040ccf399a404eb40ec132c",
-        "lib/presentation/pages/subscriptions/widgets/have_subscription.dart": "b9c59c6e33723061727ab2cebe37494e5ffb16f700cda3ef8f0221c12b3db816",
-        "lib/presentation/pages/subscriptions/widgets/subscriptions_item.dart": "9d9e45198f6244363b321dd54a81eada05c45e7b0c367bddd6f7aab175e6b743",
-        "lib/presentation/pages/subscriptions/widgets/payment_dialog.dart": "e946906ee635efbb976654355fabae8bb3b3b29d40426ade05c45a6e1f696638"
+        "lib/presentation/pages/subscriptions/subscriptions_page.dart": "69f7192b62d27c3a45b6434b3763cbcb7ac11e4e54ea37d5c561d750029741df",
+        "lib/presentation/pages/subscriptions/widgets/have_subscription.dart": "99537ffc2e2099c457947a605e9d6b1ffeafad691d121c356ac4dafda1f2c077",
+        "lib/presentation/pages/subscriptions/widgets/subscriptions_item.dart": "dc44be0b9fa5cff1c2607066e97cef064137ab7252c9cda790b1c22fd920fdc6",
+        "lib/presentation/pages/subscriptions/widgets/payment_dialog.dart": "50a64bba19c17bcb207ef67e65905c0c1a76ccf403423ecfde339d62ae5fddcd"
       },
       "routes": [
         {
@@ -653,11 +653,11 @@
       "boot_hooks": []
     },
     "comms_sdk": {
-      "version": "1.10.2",
+      "version": "1.10.3",
       "files": {
-        "lib/presentation/pages/notification/notification_list_page.dart": "18b3d32054abdc95bfdb84b5f89506f576611cf39af7c4d3dd74251370cf3e6d",
+        "lib/presentation/pages/notification/notification_list_page.dart": "313f8d3060f54a6a41a6e06b0e3c41740e4603e79e42c400a7b5beec7fa2978d",
         "lib/application/notification/notification_state.dart": "ece1b61b4b796d1aa99933484c0abe4f4103e673413d6e56d6a9127a8ff8bd4e",
-        "lib/application/notification/notification_notifier.dart": "c69ece45e0ede2a966c1315298818ddaf73c35b09798dc0b8fa3b23a1812d8cf",
+        "lib/application/notification/notification_notifier.dart": "52ef929e4e305adee1fff2c0678942c7c8417cab23ae97ae30370ae57e98715e",
         "lib/application/notification/notification_provider.dart": "73a8f37463e67815894ba34a57cc48e17efcb06c219b05126b63fc80ce090f2d"
       },
       "routes": [
@@ -824,7 +824,7 @@
       "boot_hooks": []
     },
     "promotions_sdk": {
-      "version": "1.0.1",
+      "version": "1.1.0",
       "files": {},
       "routes": [],
       "app_routes": [],
@@ -1079,20 +1079,20 @@
   },
   "sdk_cache": {
     "base": {
-      "version": "1.20.1",
-      "hash": "92ebc9b436804935"
+      "version": "1.20.2",
+      "hash": "512210c6a0a112d7"
     },
     "comms": {
-      "version": "1.10.2",
-      "hash": "b8455c81f148f7ff"
+      "version": "1.10.3",
+      "hash": "8c20a3785a45c469"
     },
     "auth": {
       "version": "1.8.6",
       "hash": "ccc2d59cc667cd62"
     },
     "users": {
-      "version": "1.3.0",
-      "hash": "fe2dd9c814795f23"
+      "version": "1.3.1",
+      "hash": "53b6b5a46cb8187f"
     },
     "merchants": {
       "version": "1.9.6",
@@ -1100,11 +1100,11 @@
     },
     "products": {
       "version": "1.5.0",
-      "hash": "f8c3584980cb1f43"
+      "hash": "1a664bbfa87ed834"
     },
     "orders": {
       "version": "1.9.0",
-      "hash": "19e29f018c7ea2f5"
+      "hash": "3c7f3bf41ab70a12"
     },
     "kitchen": {
       "version": "1.1.0",
@@ -1123,8 +1123,8 @@
       "hash": "8fce7a6563da7906"
     },
     "subscriptions": {
-      "version": "1.0.0",
-      "hash": "68b5e80660762dd7"
+      "version": "1.1.0",
+      "hash": "1d1beb615408779e"
     },
     "processing": {
       "version": "1.0.1",

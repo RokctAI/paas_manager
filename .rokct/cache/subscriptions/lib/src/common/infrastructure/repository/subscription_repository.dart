@@ -1,3 +1,26 @@
+// Copyright (c) 2026 RokctAI
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+
+
+// compliance-ignore-file: flutter-http-timeout (Dio injected from base_sdk HttpService (see the DI), whose BaseOptions set connect/receive/send timeouts centrally)
+
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:dio/dio.dart';
@@ -8,13 +31,22 @@ import '../models/response/subscriptions_response.dart';
 import '../models/response/transactions_response.dart';
 
 /// Calls `agent/subscriptions/frappe`'s composed module over the app's
-/// shared Dio client. Endpoint paths mirror that module's `manifest.json`
-/// whitelisted-method aliases (`paas.api.subscription.*`), same as the
-/// sibling SDK clients ([HttpLmsRepository], `FrappeStationsSource`) — the
-/// Laravel-era `/api/v1/...` marketplace paths are not served by the
+/// shared Dio client, through the universal platform gateway: every call is
+/// a POST to [_gatewayPath] with a `{"cmd", "payload"}` body. Cmd names
+/// mirror that module's `manifest.json` whitelisted-method aliases with the
+/// `{app_name}` segment dropped (`api.subscription.*`), same as the sibling
+/// SDK clients ([HttpLmsRepository], `FrappeStationsSource`) — the
+/// Laravel-era `/api/v1/...` REST marketplace paths are not served by the
 /// composed Frappe backend.
 class SubscriptionsRepository implements SubscriptionsFacade {
-  static const _base = '/api/method/paas.api.subscription';
+  /// The universal platform gateway entry point. Kept on the injected
+  /// [_client] (rather than base_sdk's [PlatformGateway]) so tests and
+  /// non-standard hosts keep controlling the transport.
+  static const _gatewayPath = '/api/v1/method/rokct.platform.api';
+
+  /// Prefix-free cmd base: the old `paas.api.subscription.*` dotted
+  /// endpoints with the leading app segment stripped.
+  static const _cmd = 'api.subscription';
 
   final Dio _client;
   final AppDatabase _database;
@@ -38,12 +70,12 @@ class SubscriptionsRepository implements SubscriptionsFacade {
     }
     final data = {'lang': activeLocale};
     try {
-      final response = await _client.get(
+      final response = await _client.post(
+        _gatewayPath,
         // Frappe drops kwargs the whitelisted method does not declare, so
         // `lang` is inert today; it stays on the wire to keep the facade's
         // locale contract when the composed backend grows translations.
-        '$_base.list_subscriptions',
-        queryParameters: data,
+        data: {'cmd': '$_cmd.list_subscriptions', 'payload': data},
       );
       final subResponse = _parseSubscriptionList(response.data);
 
@@ -155,8 +187,8 @@ class SubscriptionsRepository implements SubscriptionsFacade {
     };
     try {
       final response = await _client.post(
-        '$_base.subscribe_my_shop',
-        data: data,
+        _gatewayPath,
+        data: {'cmd': '$_cmd.subscribe_my_shop', 'payload': data},
       );
       // subscribe_my_shop returns the new Shop Subscription document — its
       // Frappe `name` identifies the purchase. The legacy `{data: {id}}`
