@@ -81,6 +81,16 @@
       "_comment": "Native desktop runner scaffolding. Manager inherits pos's desktop role (fold plan): the SDK's app_type.manager block installs windows/ into the host with ${package}-parameterized CMake naming; the build_windows CI flag stays host-side in paas_manager (workflows cannot be SDK-installed - the CI guard blocks workflow deploys). Mirrors pos.json's entry."
     },
     {
+      "name": "hms_sdk",
+      "enabled": true,
+      "source": "git",
+      "git": "https://github.com/RokctAI/hardware",
+      "path": "../hardware/hms/dart",
+      "ref": "main",
+      "sha256": "197261eff5adae8a5bcbb42ce2dd1f7b16ad15716c4ff4268f9b9a77b3e9517c",
+      "_comment": "Huawei Mobile Services (AGConnect) wiring. The core Android template activates its HMS/AGConnect hooks only when BUILD_HMS=true at Gradle time; the build_hms CI flag stays host-side in build.yml/release.yml (workflows cannot be SDK-installed - the CI guard blocks workflow deploys), and shared-workflows fetches android/app/agconnect-services.json (local > Occultation > secret) with a graceful GMS-only skip when absent. Mirrors supacharge's entry (supacharge PR #90)."
+    },
+    {
       "name": "payments_sdk",
       "enabled": true,
       "source": "git",

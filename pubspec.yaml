@@ -27,6 +27,8 @@ dependencies:
     path: .rokct/cache/hardware
   desktop_sdk:
     path: .rokct/cache/desktop
+  hms_sdk:
+    path: .rokct/cache/hms
   payments_sdk:
     path: .rokct/cache/payments
   subscriptions_sdk:
