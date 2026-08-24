@@ -81,6 +81,7 @@ class TrKeys {
   static const String addNewExtrasGroup = 'add_new_extras_group';
   static const String addProduct = 'add_product';
   static const String addons = 'addons';
+  static const String adultsOnly = 'adults_only_18_plus';
   static const String areYouSureToDelete = 'are_you_sure_to_delete';
   static const String categoryName = 'category_name';
   static const String costPrice = 'cost_price';
