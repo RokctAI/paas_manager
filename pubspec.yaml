@@ -27,8 +27,6 @@ dependencies:
     path: .rokct/cache/hardware
   desktop_sdk:
     path: .rokct/cache/desktop
-  hms_sdk:
-    path: .rokct/cache/hms
   payments_sdk:
     path: .rokct/cache/payments
   subscriptions_sdk:
@@ -53,6 +51,8 @@ dependencies:
     path: .rokct/cache/revenue
   zones_sdk:
     path: .rokct/cache/zones
+  hms_sdk:
+    path: .rokct/cache/hms
   # Composed SDKs (21) - vendored by the composer into .rokct/cache/* from
   # composer.json (The-Rokct-Protocol manager.json incl. protocol#149's
   # calc_sdk + weather_sdk). agent_sdk is disabled there and auth_sdk is
