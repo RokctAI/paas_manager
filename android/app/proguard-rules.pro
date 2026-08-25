@@ -68,3 +68,10 @@
 # If you're using androidx
 -keep class androidx.** { *; }
 -keep interface androidx.** { *; }
+
+# Optional HMS/EMUI and BouncyCastle paths referenced by Huawei SDKs but not
+# bundled; guarded at runtime, so suppress R8's missing-class errors.
+-dontwarn com.huawei.android.os.**
+-dontwarn com.huawei.hianalytics.**
+-dontwarn com.huawei.libcore.io.**
+-dontwarn org.bouncycastle.**
