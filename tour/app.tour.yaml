@@ -79,7 +79,7 @@ tour:
   - step:
       key: welcome
       title: "Welcome to Manager"
-      caption: "{app_name} runs *your whole store* from one screen - and in this demo build, any sign-in details work."
+      caption: "{app_name} runs *your whole store* from one screen - sign in to get started."
       action: wait
       settle: 12
   # auth_sdk captures the auth screens, then performs its generic demo
