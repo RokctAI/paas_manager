@@ -18,14 +18,15 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:get_it/get_it.dart';
-import 'package:kitchen_sdk/src/manager/application/kitchens/kitchen_picker_notifier.dart';
-import 'package:kitchen_sdk/src/manager/application/kitchens/kitchen_picker_state.dart';
-import 'package:kitchen_sdk/src/common/domain/interface/kitchens.dart';
 
-/// autoDispose so a create flow and an edit flow never share seeded state.
-final kitchenPickerProvider = StateNotifierProvider.autoDispose<
-    KitchenPickerNotifier, KitchenPickerState>(
-  (ref) => KitchenPickerNotifier(GetIt.instance<KitchensRepositoryFacade>()),
-);
+// Bundled Afrikaans (af) UI strings covering this SDK's manifest.json tr_keys backend keys.
+// Keys are BACKEND translation keys (the values TrKeys constants hold),
+// not Dart field names. Served-translation rows from the backend always
+// win; these values are the offline/unseeded fallback consulted by
+// base_sdk's BundledTranslations registry before the humanized-key
+// fallback. Generated from the SDK's key set; keep in sync when keys
+// change. Locale 'af' is left-to-right.
+const Map<String, String> kKitchenAfTranslations = {
+  'kitchen': 'Kombuis',
+  'kitchens': 'Kombuise',
+};
