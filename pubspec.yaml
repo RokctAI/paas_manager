@@ -33,6 +33,8 @@ dependencies:
     path: .rokct/cache/subscriptions
   comms_sdk:
     path: .rokct/cache/comms
+  telemetry_sdk:
+    path: .rokct/cache/telemetry
   processing_sdk:
     path: .rokct/cache/processing
   productivity_sdk:

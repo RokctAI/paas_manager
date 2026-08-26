@@ -43,5 +43,7 @@ class AppAssets {
   static const String svgMenu = '$_svgPath/menu.svg';
 
   // @sdk-asset-keys-start
+  static const String pngNoOrders = 'assets/images/no_orders.png';
+  static const String lottiePin = 'assets/lottie/pin.json';
   // @sdk-asset-keys-end
 }

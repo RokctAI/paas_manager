@@ -1,5 +1,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
+    <!-- @sdk-android-permissions-start -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+    <uses-permission android:name="android.permission.VIBRATE"/>
+    <!-- @sdk-android-permissions-end -->
     <!-- HMS wave (hms_sdk): huawei_hmsavailability 6.13.0+300 declares
          minSdk 26 in its Android library while the fleet ships minSdk 24
          (flutter.minSdkVersion), which fails the manifest merge in every

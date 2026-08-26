@@ -32,6 +32,10 @@ import '../sync/id_mappings_table.dart';
 import '../sync/outbox_table.dart';
 
 // @sdk-database-imports-start
+import 'injected/auth_sdk__offline_user_table.dart';
+import 'injected/productivity_sdk__recovery_tables.dart';
+import 'injected/productivity_sdk__tasks_table.dart';
+import 'injected/subscriptions_sdk__drift_tables.dart';
 // @sdk-database-imports-end
 
 part 'app_database.g.dart';
@@ -49,6 +53,15 @@ part 'app_database.g.dart';
     OutboxTable,
     IdMappingsTable,
     // @sdk-database-tables-start
+    OfflineUsersTable,
+    TasksTable,
+    RecoveryProfilesTable,
+    AvoidedHabitsTable,
+    UrgeLogsTable,
+    DailyRitualsTable,
+    RitualLogsTable,
+    ProcrastinationLogsTable,
+    UserSubscriptionsTable,
     // @sdk-database-tables-end
   ],
 )
@@ -65,7 +78,7 @@ class AppDatabase extends _$AppDatabase {
   /// numbers through the composer's migration injection (auth is around 16),
   /// and the composer raises this getter in the cached copy accordingly.
   @override
-  int get schemaVersion => 2;
+  int get schemaVersion => 16;
 
   @override
   MigrationStrategy get migration {
@@ -81,6 +94,9 @@ class AppDatabase extends _$AppDatabase {
           await m.createTable(idMappingsTable);
         }
         // @sdk-database-migrations-start
+        if (from < 16) { await m.createTable(offlineUsersTable); }
+        if (from < 13) { await m.createTable(tasksTable); } if (from < 14) { await m.createTable(recoveryProfilesTable); await m.createTable(avoidedHabitsTable); await m.createTable(urgeLogsTable); await m.createTable(dailyRitualsTable); await m.createTable(ritualLogsTable); await m.createTable(procrastinationLogsTable); }
+        if (from < 15) { await m.createTable(userSubscriptionsTable); }
         // @sdk-database-migrations-end
       },
       beforeOpen: (details) async {
