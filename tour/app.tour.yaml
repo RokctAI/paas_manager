@@ -46,6 +46,12 @@ video:
   # WhatsApp-ad framing.
   chapter_frame_anchor:
     auth: top
+store:
+  # Play feature graphic: the hero screenshot is the app's HOME screen.
+  # The merchants fragment's manager_home step is action-only (no still),
+  # so the hero is order_queue - the /main home shell on its default
+  # order-queue tab, the screen sellers land on after sign-in.
+  feature_step: order_queue
 setup:
   imports:
     - "import 'package:base_sdk/src/models/response/languages_response.dart';"
