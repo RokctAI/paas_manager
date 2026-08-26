@@ -1,7 +1,7 @@
 {
   "packages": {
     "base_sdk": {
-      "version": "1.23.0",
+      "version": "1.24.0",
       "files": {
         "flutter_native_splash.yaml": "d469a133b5e1631d6ba811b048d290449224075edad2153189cfb2edc3f4d100",
         "android/app/src/main/res/font/montserrat_extrabolditalic.ttf": "d38bac61eda8d8c002b1a852f5368901a085fbe1d844b5e0a149b674e22e2cdd",
@@ -217,11 +217,11 @@
       "boot_hooks": []
     },
     "merchants_sdk": {
-      "version": "1.9.6",
+      "version": "1.9.7",
       "files": {
         "assets/audio/notification.wav": "9d62af6f1c8df010941d1daa17162175d87293bd78371c787803b5a11f95cb9d",
         "assets/svgs/menu.svg": "9767d04ac4d157e423f972259a9c2c455a6a629c4098cc9c2fe8f9722451441b",
-        "lib/presentation/pages/main/main_page.dart": "3d6e826a7f3ddf11e40f90710a3df1f2d447891dfd513c14ab0ed1a02a9b481a",
+        "lib/presentation/pages/main/main_page.dart": "3c5838a509ebad95874f927a4e0ee33feb927ccca112fbffef22393fc8a229b9",
         "lib/presentation/pages/main/widgets/bottom_navigator_item.dart": "39375300171d851ac56caea15c39d63a5b808b01e3efb4a76f02de353ae79cfd",
         "lib/presentation/pages/main/widgets/buttons_bouncing_effect.dart": "d59fcc3834201c113e98bf08ec9eed644da477fbf187e16acb3aef8dd2385adc",
         "lib/presentation/pages/restaurant/restaurant_page.dart": "0f9f4d989c300455fe0c2fc740808b8609eb7166934c8326dfdc37e53ce17f1b",
@@ -322,7 +322,13 @@
             "import 'package:flutter_native_splash/flutter_native_splash.dart';"
           ]
         }
-      ]
+      ],
+      "constants": {
+        "import": "package:base_sdk/src/presentation/components/floating_nav/floating_nav_mode.dart",
+        "overrides": {
+          "tabletNavPlacement": "FloatingNavPlacement.railStart"
+        }
+      }
     },
     "products_sdk": {
       "version": "1.5.0",
@@ -989,7 +995,7 @@
       "boot_hooks": []
     },
     "auth_sdk": {
-      "version": "1.8.8",
+      "version": "1.8.9",
       "files": {
         "lib/presentation/routes/auth_route_pages.dart": "51a62a8dcd3a1c33fb3d50cbaa5eb22aa2b611a634550b2ad5832be7f6acbcfa",
         "lib/presentation/routes/registration_step_pages.dart": "73e43c48ad35f5681c9d089dad9c48fbb9094b0bb77e9026f91fce6ce1cfdd0f",
@@ -1133,24 +1139,24 @@
   },
   "sdk_cache": {
     "base": {
-      "version": "1.23.0",
-      "hash": "dfd569edab798149"
+      "version": "1.24.0",
+      "hash": "149e6872a1363742"
     },
     "comms": {
       "version": "1.10.3",
       "hash": "8c20a3785a45c469"
     },
     "auth": {
-      "version": "1.8.8",
-      "hash": "345a23b6d2915a0d"
+      "version": "1.8.9",
+      "hash": "ae26ac05273e9df2"
     },
     "users": {
       "version": "1.3.1",
       "hash": "53b6b5a46cb8187f"
     },
     "merchants": {
-      "version": "1.9.6",
-      "hash": "9068834556427a69"
+      "version": "1.9.7",
+      "hash": "8aaab19fce6e10fe"
     },
     "products": {
       "version": "1.5.0",
