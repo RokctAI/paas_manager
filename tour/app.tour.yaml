@@ -20,11 +20,15 @@
 # today (composer profile: The-Rokct-Protocol core/utils/flutter/composer/
 # manager.json): merchants -> products -> orders (all commerce/*), then
 # promotions (registered empty until promotions_sdk routes a screen of its
-# own). users_sdk's fragment is deliberately NOT listed: this compose has
+# own), then revenue (corporate/revenue - /income), subscriptions
+# (agent/subscriptions - /subscriptions), productivity
+# (productivity/productivity - /tasks) and calc (productivity/calc -
+# /calc). users_sdk's fragment is deliberately NOT listed: this compose has
 # no /profile route (the account surface is the profile tab inside /main),
 # and the users fragment documents that such apps should leave it out until
-# /profile resolves. Other composed SDKs (kitchen, payments, comms, ...)
-# ship no fragment yet - coverage grows with the SDKs.
+# /profile resolves. Other composed SDKs (kitchen, payments, comms:
+# headless or fragment-less; base: its status screens are toured by the
+# minilauncher shell) are not chained - coverage grows with the SDKs.
 #
 # Video colours are intentionally NOT declared here: the assembler derives
 # brand/accent colours from the composed AppStyle when the manifest carries
@@ -144,3 +148,19 @@ tour:
   # navigable parameter-less screen yet); listing it keeps the chapter slot
   # so steps land here the moment the SDK routes one.
   - fragment: promotions
+  # Chapter 4 - the money: revenue_sdk's /income dashboard
+  # (app_type.manager ManagerIncomeRoute). In demo builds
+  # DemoSellerStatisticsRepository serves a fictional week of store revenue
+  # so the tiles, chart and order rows render stocked.
+  - fragment: revenue
+  # Chapter 5 - the plan: subscriptions_sdk's /subscriptions list
+  # (ManagerSubscriptionsRoute). In demo builds its riverpod providers fall
+  # back to DemoSubscriptionsRepository, so the grid shows two plans
+  # without the host payment adapters.
+  - fragment: subscriptions
+  # Chapter 6 - the day plan: productivity_sdk's /tasks (local drift
+  # database; renders its add-a-task surface with no backend).
+  - fragment: productivity
+  # Chapter 7 - the pocket calculator: calc_sdk's /calc (composed on
+  # manager and driver alike per Ray's decision recorded in its manifest).
+  - fragment: calc

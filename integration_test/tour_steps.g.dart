@@ -22,6 +22,7 @@ import 'package:base_sdk/src/services/local_storage.dart';
 import 'package:base_sdk/src/services/tr_keys.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:merchants_sdk/src/manager/application/main/main_provider.dart';
+import 'package:merchants_sdk/src/manager/application/pos_cart/pos_cart_provider.dart';
 import 'package:remixicon/remixicon.dart';
 
 typedef TourAction = Future<void> Function(
@@ -168,25 +169,56 @@ final List<TourStep> tourSteps = <TourStep>[
   TourStep('manager_home', 10000, false, (WidgetTester tester, StackRouter router) async {
     router.replaceNamed('/main');
   }),
-  TourStep('sync_issues', 6000, true, (WidgetTester tester, StackRouter router) async {
-    router.replaceNamed('/sync-issues');
-  }),
-  TourStep('menu', 8000, true, (WidgetTester tester, StackRouter router) async {
-    // Land the manager home shell, then select the foods tab (index 1)
-    // through the shell's own mainProvider - the same state the bottom
-    // navigation buttons drive. Route first: an earlier fragment may have
-    // left the app elsewhere.
+  TourStep('pos_scan', 8000, true, (WidgetTester tester, StackRouter router) async {
+    // Select the POS tab (index 0) explicitly - an earlier fragment may
+    // have left another tab selected, and mainProvider's selection
+    // persists across routes.
     router.replaceNamed('/main');
     await Future<void>.delayed(const Duration(seconds: 3));
     final Element element = tester.element(find.byType(Navigator).first);
     final ProviderContainer container =
         ProviderScope.containerOf(element, listen: false);
-    container.read(mainProvider.notifier).selectIndex(1);
+    container.read(mainProvider.notifier).selectIndex(0);
+  }),
+  TourStep('pos_cart', 6000, true, (WidgetTester tester, StackRouter router) async {
+    // Demo build: the barcode lane resolves through this SDK's
+    // MockProductsRepository ("Demo Product", R150.00), zero backend
+    // contact - the same path a real scan takes.
+    final Element element = tester.element(find.byType(Navigator).first);
+    final ProviderContainer container =
+        ProviderScope.containerOf(element, listen: false);
+    await container
+        .read(posCartProvider.notifier)
+        .addByBarcode('6001067890123');
+    container.read(posCartProvider.notifier).increment(0);
+  }),
+  TourStep('pos_checkout', 8000, true, (WidgetTester tester, StackRouter router) async {
+    router.replaceNamed('/pos-checkout');
+  }),
+  TourStep('sync_issues', 6000, true, (WidgetTester tester, StackRouter router) async {
+    router.replaceNamed('/sync-issues');
+  }),
+  TourStep('menu', 8000, true, (WidgetTester tester, StackRouter router) async {
+    // Land the manager home shell, then select the foods tab (index 3
+    // since merchants_sdk 1.14.0 - POS till 0, order queue 1, kitchen 2;
+    // this fragment had gone stale at 1 when the POS-first shift moved
+    // foods to 2) through the shell's own mainProvider - the same state
+    // the bottom navigation buttons drive. Route first: an earlier
+    // fragment may have left the app elsewhere.
+    router.replaceNamed('/main');
+    await Future<void>.delayed(const Duration(seconds: 3));
+    final Element element = tester.element(find.byType(Navigator).first);
+    final ProviderContainer container =
+        ProviderScope.containerOf(element, listen: false);
+    container.read(mainProvider.notifier).selectIndex(3);
   }),
   TourStep('add_product', 6000, true, (WidgetTester tester, StackRouter router) async {
-    // On the foods tab the home shell's FAB opens the create-product
-    // modal (main_page.dart's _showModalBasedOnFoodTab, foods sub-tab 0).
-    // The FAB is the only Remix.add_line on screen; tolerant tap anyway.
+    // FoodsPage's own "+ New product" header button opens the
+    // create-product modal (foods_page.dart's _newButton dispatches by
+    // inner tab, foods sub-tab 0 - the shell FAB's old rule, moved
+    // in-page in products_sdk 1.6.0). Both its wide (labelled) and
+    // phone (icon ring) dresses carry Remix.add_line, the only
+    // Remix.add_line on this screen; tolerant tap anyway.
     await tester.tap(
       find.byIcon(Remix.add_line).first,
       warnIfMissed: false,
@@ -203,16 +235,29 @@ final List<TourStep> tourSteps = <TourStep>[
   }),
   TourStep('order_queue', 8000, true, (WidgetTester tester, StackRouter router) async {
     // Land the manager home shell and select the order-queue tab
-    // (index 0) explicitly - an earlier fragment may have left another
-    // tab selected, and mainProvider's selection persists across routes.
+    // (index 1 - index 0 is the POS till since merchants_sdk 1.12.0)
+    // explicitly - an earlier fragment may have left another tab
+    // selected, and mainProvider's selection persists across routes.
     router.replaceNamed('/main');
     await Future<void>.delayed(const Duration(seconds: 3));
     final Element element = tester.element(find.byType(Navigator).first);
     final ProviderContainer container =
         ProviderScope.containerOf(element, listen: false);
-    container.read(mainProvider.notifier).selectIndex(0);
+    container.read(mainProvider.notifier).selectIndex(1);
   }),
   TourStep('order_history', 6000, true, (WidgetTester tester, StackRouter router) async {
     router.replaceNamed('/order-history');
+  }),
+  TourStep('revenue_income', 8000, true, (WidgetTester tester, StackRouter router) async {
+    router.replaceNamed('/income');
+  }),
+  TourStep('subscriptions_plans', 8000, true, (WidgetTester tester, StackRouter router) async {
+    router.replaceNamed('/subscriptions');
+  }),
+  TourStep('productivity_tasks', 7000, true, (WidgetTester tester, StackRouter router) async {
+    router.replaceNamed('/tasks');
+  }),
+  TourStep('calc_keypad', 6000, true, (WidgetTester tester, StackRouter router) async {
+    router.replaceNamed('/calc');
   }),
 ];
