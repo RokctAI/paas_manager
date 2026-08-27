@@ -1,7 +1,7 @@
 {
   "packages": {
     "base_sdk": {
-      "version": "1.24.0",
+      "version": "1.27.0",
       "files": {
         "flutter_native_splash.yaml": "d469a133b5e1631d6ba811b048d290449224075edad2153189cfb2edc3f4d100",
         "android/app/src/main/res/font/montserrat_extrabolditalic.ttf": "d38bac61eda8d8c002b1a852f5368901a085fbe1d844b5e0a149b674e22e2cdd",
@@ -221,20 +221,20 @@
       "files": {
         "assets/audio/notification.wav": "9d62af6f1c8df010941d1daa17162175d87293bd78371c787803b5a11f95cb9d",
         "assets/svgs/menu.svg": "9767d04ac4d157e423f972259a9c2c455a6a629c4098cc9c2fe8f9722451441b",
-        "lib/presentation/pages/main/main_page.dart": "3c5838a509ebad95874f927a4e0ee33feb927ccca112fbffef22393fc8a229b9",
-        "lib/presentation/pages/main/widgets/bottom_navigator_item.dart": "39375300171d851ac56caea15c39d63a5b808b01e3efb4a76f02de353ae79cfd",
-        "lib/presentation/pages/main/widgets/buttons_bouncing_effect.dart": "d59fcc3834201c113e98bf08ec9eed644da477fbf187e16acb3aef8dd2385adc",
-        "lib/presentation/pages/restaurant/restaurant_page.dart": "0f9f4d989c300455fe0c2fc740808b8609eb7166934c8326dfdc37e53ce17f1b",
-        "lib/presentation/pages/restaurant/widgets/edit_restaurant_modal.dart": "7415b8f7c661c6040b8f4490b2ec46de4a25423a579516f9a1ef945f3b67fd67",
-        "lib/presentation/pages/restaurant/widgets/logout_button.dart": "8ae518818e8041cac49d9e7f458d1447a5b8c047a88f81f2356034b97b20c857",
-        "lib/presentation/pages/restaurant/widgets/working_time_modal.dart": "36c523833d1415752705200b8fb6a5b5a3471388b0340147caaaf3fc4f62a6ef",
-        "lib/presentation/pages/restaurant/widgets/sections_item.dart": "405c83c554d155d85f3cbca48137a728bb575fa3f786b3f9bec5435d4e9a03e3",
-        "lib/presentation/pages/restaurant/widgets/logout_modal.dart": "451e4820e179f0e69a5edd6366af8a8d3bb102bb4cd75b0d76a720434cabc7d5",
-        "lib/presentation/pages/restaurant/widgets/shop_page_banner.dart": "ccb2ff091d3d379047968f863dc76f23dad69482cfb76055c98c6e73400a8532",
-        "lib/presentation/components/restaurant/small_weekday_item.dart": "6118272842fbf15733a8767c2a6da4015430e6fe9bf0ee3a9411b3cf63ab49e8",
-        "lib/presentation/routes/merchants_adapters.dart": "cdea8bdb2720c1d981cc05a88bce7e3bd9bbc9d102db0a8bc480cb49181d0a3d",
-        "lib/presentation/component/helper/horizontal_image_picker.dart": "066bdd1667d8c2f1e6121d31aea2a19385962250625e36e613d2ea756ed58995",
-        "lib/presentation/pages/sync_issues/sync_issues_page.dart": "8a723bbc429f0aa6f80c8d1ae418bc968ec75b7276f1f46ea65c202892add12b"
+        "lib/presentation/pages/main/main_page.dart": "33e8bb98117428b2a518a1fe9b95c7e06284eae6e0048bcd54688d138eb3f9b4",
+        "lib/presentation/pages/main/widgets/bottom_navigator_item.dart": "c6228cb9956755e414a182039c327307657248e4f43375808a3cc320d8cedcac",
+        "lib/presentation/pages/main/widgets/buttons_bouncing_effect.dart": "eba448616df6943286848341e85beb0be47e0240077c4e3e67ac1c80fa71c9d4",
+        "lib/presentation/pages/restaurant/restaurant_page.dart": "85c630878509efbdc41af468df93d3fe268e787b00554fc0dc3ab9f72c87c7a6",
+        "lib/presentation/pages/restaurant/widgets/edit_restaurant_modal.dart": "d63ee830c4ab72f17a9ecec828f90f626c0ad3dc8f14199a329592578bb317f2",
+        "lib/presentation/pages/restaurant/widgets/logout_button.dart": "248139cde18fd5b40be4b92be540132741146019d1a7ae436b006343339c81c9",
+        "lib/presentation/pages/restaurant/widgets/working_time_modal.dart": "8399eebad8e5cef072e8ec6888ebd3673e4c704093c37a1e8b9d82216f5ca1b3",
+        "lib/presentation/pages/restaurant/widgets/sections_item.dart": "c61d495900611cde8312fa2b3a5c06653bb72462ba23e5d2965a6822a2a744c8",
+        "lib/presentation/pages/restaurant/widgets/logout_modal.dart": "4b1756f01e004a54b8c95a8df50d9c362a02ebe6b6080be03555d2855f598021",
+        "lib/presentation/pages/restaurant/widgets/shop_page_banner.dart": "14e4883da1ff9eee769166f684a8a424762aeb5f767e8362dac7d6008614f1af",
+        "lib/presentation/components/restaurant/small_weekday_item.dart": "fe2135a54c32ab7e50076e038eaa20018e0cacaa5eca12793a79dd81bf547345",
+        "lib/presentation/routes/merchants_adapters.dart": "6903a6527ee7cff5f52ab42ad52c781c1d382fe51e7c465f2835ef7b2395ecd4",
+        "lib/presentation/component/helper/horizontal_image_picker.dart": "24ed37cf01ef6935e00411311f50b535061ed632142f688cfeddd3151f029248",
+        "lib/presentation/pages/sync_issues/sync_issues_page.dart": "691854f7ba472b9f1fcc86834085542d4ca2d845b84e2b316363c7b8e7bcc459"
       },
       "routes": [
         {
@@ -1005,9 +1005,9 @@
     "auth_sdk": {
       "version": "1.9.0",
       "files": {
-        "lib/presentation/routes/auth_route_pages.dart": "66f29577aeadb1701b24d57df4894866f2e5d66e3eb02167f4125f83581020dd",
-        "lib/presentation/routes/registration_step_pages.dart": "73e43c48ad35f5681c9d089dad9c48fbb9094b0bb77e9026f91fce6ce1cfdd0f",
-        "lib/presentation/routes/auth_session_policy.dart": "8809e5c797f7509b61a63251c4c93c8bbe2276e7fb26a59601d7921b1dd7b51d"
+        "lib/presentation/routes/auth_route_pages.dart": "ebb28ea83140b03a62e0023027dce5cd840a1301e5414475545f40f61fb5937b",
+        "lib/presentation/routes/registration_step_pages.dart": "0688256171defa4e5aadaa38b010cb754d0a4ca19bc517b9a6f192d4afdd4e6f",
+        "lib/presentation/routes/auth_session_policy.dart": "b2a880ddf4caf4a23b42a6fa4bca97b69a72f88fc58ba885e33f832bfb04d441"
       },
       "routes": [
         {
@@ -1147,8 +1147,8 @@
   },
   "sdk_cache": {
     "base": {
-      "version": "1.24.0",
-      "hash": "149e6872a1363742"
+      "version": "1.27.0",
+      "hash": "bb4ba09be18f554a"
     },
     "comms": {
       "version": "1.10.3",
