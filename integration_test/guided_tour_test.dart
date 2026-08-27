@@ -1,5 +1,5 @@
 // This file is part of paas_manager.
-// Copyright (C) 2024 RokctAI
+// Copyright (C) 2024 ROKCT INTELLIGENCE (PTY) LTD
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
