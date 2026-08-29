@@ -1,7 +1,7 @@
 {
   "packages": {
     "base_sdk": {
-      "version": "1.27.0",
+      "version": "1.42.0",
       "files": {
         "flutter_native_splash.yaml": "d469a133b5e1631d6ba811b048d290449224075edad2153189cfb2edc3f4d100",
         "android/app/src/main/res/font/montserrat_extrabolditalic.ttf": "d38bac61eda8d8c002b1a852f5368901a085fbe1d844b5e0a149b674e22e2cdd",
@@ -67,7 +67,7 @@
         "lib/presentation/theme/theme.dart": "a2b2ac2e4e90abdcac4247ea6d29ced0e58922a99a1c65c3d12639bfb6949f27",
         "lib/presentation/theme/app_style.dart": "c9dc27c1648d67478f2c4633753141715735c97773b775b3a215292071521e30",
         "lib/main.dart": "9c287268ebed26bbc0512b83f09ce6ba4d091d25e8848091b9942d70da3a028a",
-        "lib/presentation/app_widget.dart": "d1473309b894ff665bacc32c17de8751d203f06e4c4721e2671c2fb11d5e5ce0",
+        "lib/presentation/app_widget.dart": "1deab8c8cd7b2988a99b557d7492d85ab70d58a086afb7a7ca679ad2d04a5f68",
         "lib/presentation/routes/app_router.dart": "a3f4d5db5deab2ef09734b3d48a22957c96906a14368ea452c594ed92c6a0411",
         "lib/presentation/routes/route_pages.dart": "49d80533970d4eec6fdc9e5e938f42cb9534a34e364ab0c5f00521dbea44ba46",
         "android/app/src/main/kotlin/com/app/demo/JuvoApplication.kt": "18870e8ca0b87482d3ad45fecc6211762fde11d19fd46791aba40a49b4d31d07"
@@ -217,14 +217,14 @@
       "boot_hooks": []
     },
     "merchants_sdk": {
-      "version": "1.9.8",
+      "version": "1.13.1",
       "files": {
         "assets/audio/notification.wav": "9d62af6f1c8df010941d1daa17162175d87293bd78371c787803b5a11f95cb9d",
         "assets/svgs/menu.svg": "9767d04ac4d157e423f972259a9c2c455a6a629c4098cc9c2fe8f9722451441b",
-        "lib/presentation/pages/main/main_page.dart": "33e8bb98117428b2a518a1fe9b95c7e06284eae6e0048bcd54688d138eb3f9b4",
+        "lib/presentation/pages/main/main_page.dart": "f330a7f7b490847252b2f398a6d8a4f0506f25945b7203615dbdd8f42c764cfa",
         "lib/presentation/pages/main/widgets/bottom_navigator_item.dart": "c6228cb9956755e414a182039c327307657248e4f43375808a3cc320d8cedcac",
         "lib/presentation/pages/main/widgets/buttons_bouncing_effect.dart": "eba448616df6943286848341e85beb0be47e0240077c4e3e67ac1c80fa71c9d4",
-        "lib/presentation/pages/restaurant/restaurant_page.dart": "85c630878509efbdc41af468df93d3fe268e787b00554fc0dc3ab9f72c87c7a6",
+        "lib/presentation/pages/restaurant/restaurant_page.dart": "c680b62e74797c4812583d6510aada575b5ebe9d87c721b2bc0e1d08c4a3a3e0",
         "lib/presentation/pages/restaurant/widgets/edit_restaurant_modal.dart": "d63ee830c4ab72f17a9ecec828f90f626c0ad3dc8f14199a329592578bb317f2",
         "lib/presentation/pages/restaurant/widgets/logout_button.dart": "248139cde18fd5b40be4b92be540132741146019d1a7ae436b006343339c81c9",
         "lib/presentation/pages/restaurant/widgets/working_time_modal.dart": "8399eebad8e5cef072e8ec6888ebd3673e4c704093c37a1e8b9d82216f5ca1b3",
@@ -234,7 +234,10 @@
         "lib/presentation/components/restaurant/small_weekday_item.dart": "fe2135a54c32ab7e50076e038eaa20018e0cacaa5eca12793a79dd81bf547345",
         "lib/presentation/routes/merchants_adapters.dart": "6903a6527ee7cff5f52ab42ad52c781c1d382fe51e7c465f2835ef7b2395ecd4",
         "lib/presentation/component/helper/horizontal_image_picker.dart": "24ed37cf01ef6935e00411311f50b535061ed632142f688cfeddd3151f029248",
-        "lib/presentation/pages/sync_issues/sync_issues_page.dart": "691854f7ba472b9f1fcc86834085542d4ca2d845b84e2b316363c7b8e7bcc459"
+        "lib/presentation/pages/sync_issues/sync_issues_page.dart": "691854f7ba472b9f1fcc86834085542d4ca2d845b84e2b316363c7b8e7bcc459",
+        "lib/presentation/pages/billing/billing_page.dart": "a637dc0a2647af84dae7fd603ef16179f2e6e8e2b938d621e27c01e4f7b851bb",
+        "lib/presentation/pages/billing/checkout_page.dart": "9cf8c3cb2dd2d3f43ca2eb10ebe5c5013d74e9e8d958ca4eac24cea2259faaca",
+        "lib/presentation/adapters/pos_orders_adapter.dart": "a52920067b029f1c02a3195730e3d715b43aa5b258c68cfce3e7415c114d3796"
       },
       "routes": [
         {
@@ -250,6 +253,13 @@
           "type": "CupertinoRoute",
           "import": "package:${package}/presentation/pages/sync_issues/sync_issues_page.dart",
           "_comment": "Sync-issues screen (park-and-surface): parked needs_attention records across the three manager boxes with per-record Retry/Discard. New path, no legacy paas_manager counterpart; route name follows the Manager prefix convention. Reached from the restaurant tab's sections list."
+        },
+        {
+          "path": "/pos-checkout",
+          "page": "PosCheckoutRoute.page",
+          "type": "CupertinoRoute",
+          "import": "package:${package}/presentation/pages/billing/checkout_page.dart",
+          "_comment": "POS checkout (approved strip section 11, frames 11c-11f): Cash | QR pay-link toggle, dual finish, offline code inversion. Pushed BY PATH from the tab-hosted BillingPage (context.router.pushNamed('/pos-checkout')) so the billing templates compile without the host's generated router - the standalone POS test harness compiles them directly. The installed page carries @RoutePage(name: 'PosCheckoutRoute')."
         }
       ],
       "app_routes": [
@@ -275,6 +285,53 @@
       ],
       "embedded_widgets": [],
       "tr_keys": {
+        "scan": "Scan",
+        "addItems": "Add Items",
+        "items": "Items",
+        "editQuantity": "Edit quantity",
+        "qrPayLink": "QR / Pay link",
+        "letCustomerScanQr": "Let the customer scan this QR to pay online.",
+        "iveScannedWaitForCode": "I've Scanned, Wait for Code",
+        "printReceipt": "Print Receipt & Finish",
+        "finish": "Finish without Receipt",
+        "activeTransaction": "Active Transaction",
+        "tillOfflineBanner": "Till offline \u2014 payment confirms by code. The customer pays the link on their phone and reads you the 6-digit code from their payment screen; the sale syncs when you are back online.",
+        "confirmByCode": "Confirm by Code",
+        "enterSixDigitCode": "Enter the 6-digit verification code shown on the customer's payment screen after successful payment.",
+        "sixDigitCode": "6-Digit Code",
+        "paymentConfirmed": "Payment confirmed",
+        "invalidCode": "That code doesn't match. Check it with the customer and try again.",
+        "printFailed": "Printing failed \u2014 the sale was NOT recorded. Fix the printer or finish without a receipt.",
+        "saleCompleted": "Sale completed",
+        "inStore": "In-store",
+        "sendForDelivery": "Send for delivery",
+        "billingTo": "Billing to",
+        "addCustomer": "Add customer",
+        "changeCustomer": "Change",
+        "owes": "owes",
+        "searchCustomers": "Search customers",
+        "amountPayingNow": "Amount paying now",
+        "payingOf": "of",
+        "fullAmount": "Full",
+        "allOnCredit": "\u2014 all on credit",
+        "creditRemainder": "remains \u2014 the sale completes as a CREDIT order on the customer's account and auto-collects in full from their next wallet top-up (oldest debt first).",
+        "creditAvailableFronts": "Credit available \u2014 shop fronts the",
+        "commissionAllowanceCovers": "commission; allowance covers it.",
+        "creditUnavailable": "Credit unavailable \u2014 completing on credit would breach the shop's credit allowance.",
+        "deliversTo": "Delivers to",
+        "deliveryFeeJoins": "delivery fee joins the order",
+        "addDeliveryAddress": "Add the delivery address",
+        "deliveryNeedsAddress": "Add a delivery address to send this order out.",
+        "deliveryNeedsCustomer": "Attach a customer to send this order for delivery.",
+        "sendForDeliveryFinish": "Send for delivery & Finish",
+        "entersOrderQueue": "enters the order queue \u00b7 mark Ready when packed",
+        "takes": "takes",
+        "nowWord": "now",
+        "records": "records",
+        "due": "due",
+        "payingNow": "Paying now",
+        "onCredit": "On credit",
+        "pendingSync": "pending sync",
         "theRestaurantIsClosedToday": "the_restaurant_is_closed_today",
         "before": "before",
         "after": "after",
@@ -426,7 +483,7 @@
       "boot_hooks": []
     },
     "orders_sdk": {
-      "version": "1.9.0",
+      "version": "1.10.0",
       "files": {
         "lib/presentation/pages/orders/orders_home_page.dart": "4ccbba2387ae047f0bb9d13c31e3fd563704c0eb78aa8500c40c3be672f584be",
         "lib/presentation/pages/orders/details/order_details_modal.dart": "7bafe0be570b8e856149a09e58915e0005b7c7e0f9755921c8a937df90cb3879",
@@ -468,7 +525,7 @@
         "lib/presentation/components/orders/products_body.dart": "26f9dfc16439578a6583939fe14071ce0b236bc68ac7ed1ff88381c261b23913",
         "lib/presentation/components/orders/food_item.dart": "6707bafb735d67cd2194edf9113874112bbe7df443b1f657135b866c5a3fa672",
         "lib/presentation/components/orders/food_stock_item.dart": "44109d7055e9c45d70ef242e3ce534328317758a2df5b6de02cbf0b2e79b4b80",
-        "lib/presentation/routes/orders_adapters.dart": "c1aa9dcca728e06114642cfcfbdc6eb336e096660456395c9c354d4eb93c41f0",
+        "lib/presentation/routes/orders_adapters.dart": "13b87c32dad83723edb6aa901e4b2391c428bfd3003595534a84d842d17d2f02",
         "assets/images/no_orders.png": "40dee5619d6b6167dd5fcbec9ad4739738f0c6f8d98dc41857dc49ab01d08ed0",
         "lib/presentation/component/buttons/custom_icon_button.dart": "7c5ac68bbe550997e3221cf1694bca32090efbaed1377e786ff5908cf4f5c0bd",
         "lib/presentation/component/loading/text_loading.dart": "c049cd3e254b9374bbbb21fb03bb8cc72375235fd7339aa57f36173129a5b7ce",
@@ -657,7 +714,7 @@
       "boot_hooks": []
     },
     "subscriptions_sdk": {
-      "version": "1.1.0",
+      "version": "1.2.0",
       "files": {
         "lib/presentation/pages/subscriptions/subscriptions_page.dart": "c60a9c75dd19ba9a0da62bb841658f7d794a9928ab4753aeb0959889d70c311e",
         "lib/presentation/pages/subscriptions/widgets/have_subscription.dart": "0764c1e76b810d8a27b10114db0251db5953607c19eb4b7013a0dbf297621612",
@@ -692,9 +749,9 @@
       "boot_hooks": []
     },
     "comms_sdk": {
-      "version": "1.10.3",
+      "version": "1.12.0",
       "files": {
-        "lib/presentation/pages/notification/notification_list_page.dart": "2effb373a153fae5593dca4ace31595e5b622b74ded18323b5ce704041657e7a",
+        "lib/presentation/pages/notification/notification_list_page.dart": "97bcd5d8c81529136503eae25d94fd25bf1c2f81ef555b12900995db801316eb",
         "lib/application/notification/notification_state.dart": "9c656e1bc05122717549b9f72a3d143f59eabbb817791afc87fcf2f5a9a15f15",
         "lib/application/notification/notification_notifier.dart": "58505bc713d9551826894f0fa31cd38acb02b4653c11f524c13ff23d1a11deb0",
         "lib/application/notification/notification_provider.dart": "867555234e4da9bf922c26f72dd95cbc686c9d27bc931f7c637e6505b31416f4"
@@ -881,7 +938,7 @@
       "boot_hooks": []
     },
     "map_sdk": {
-      "version": "1.1.0",
+      "version": "1.2.0",
       "files": {},
       "routes": [],
       "app_routes": [],
@@ -939,9 +996,9 @@
       }
     },
     "revenue_sdk": {
-      "version": "1.3.2",
+      "version": "1.5.0",
       "files": {
-        "lib/presentation/pages/income/income_page.dart": "81070c6b13e37743e52f0a1536aabeb79e6d7ee61dde756d89fd28b17b1e9ad3",
+        "lib/presentation/pages/income/income_page.dart": "6d2b59e1e19dd172f0aa0a7103bf3d708debfef3395d58f7834f87f84937393c",
         "lib/presentation/pages/income/app_bar_screen.dart": "da70222a0db114f137b0a48e9c8c5086cc369e151d48406913263e4f73c5628a",
         "lib/presentation/pages/income/widgets/chart.dart": "10a75d42a029fa2a7ec3e719ef33d0b237eff4bfe9cb4f168f3a9c29ff6e2428",
         "lib/presentation/pages/income/widgets/statistics_item.dart": "e775cf8160b264c292c9cb5ba6bb0b7c7d0e95fd6911a04f49c8ed27116fc105",
@@ -972,7 +1029,7 @@
       "boot_hooks": []
     },
     "zones_sdk": {
-      "version": "1.3.3",
+      "version": "1.4.0",
       "files": {
         "lib/presentation/pages/merchant/delivery_zone/delivery_zone_page.dart": "15fb0f9f5a79a4bd4cc02fb1a700a93f16f5181134416db55fdb7ec8df88c691",
         "lib/presentation/routes/zones_adapters.dart": "6ed148db5997a0b91959983f1230f9556c7b8e4be7130b10b81036c5850a559d"
@@ -1003,7 +1060,7 @@
       "boot_hooks": []
     },
     "auth_sdk": {
-      "version": "1.9.0",
+      "version": "1.9.1",
       "files": {
         "lib/presentation/routes/auth_route_pages.dart": "ebb28ea83140b03a62e0023027dce5cd840a1301e5414475545f40f61fb5937b",
         "lib/presentation/routes/registration_step_pages.dart": "0688256171defa4e5aadaa38b010cb754d0a4ca19bc517b9a6f192d4afdd4e6f",
@@ -1147,32 +1204,32 @@
   },
   "sdk_cache": {
     "base": {
-      "version": "1.27.0",
-      "hash": "bb4ba09be18f554a"
+      "version": "1.42.0",
+      "hash": "ef91ef9bbbf470ae"
     },
     "comms": {
-      "version": "1.10.3",
-      "hash": "8c20a3785a45c469"
+      "version": "1.12.0",
+      "hash": "0608f1252da820d4"
     },
     "auth": {
-      "version": "1.9.0",
-      "hash": "e135c2ed7b672a5f"
+      "version": "1.9.1",
+      "hash": "f537756d8e1fceea"
     },
     "users": {
       "version": "1.3.1",
       "hash": "53b6b5a46cb8187f"
     },
     "merchants": {
-      "version": "1.9.8",
-      "hash": "6a05d214e5474a32"
+      "version": "1.13.1",
+      "hash": "1c4abeee4d506047"
     },
     "products": {
       "version": "1.5.0",
       "hash": "1a664bbfa87ed834"
     },
     "orders": {
-      "version": "1.9.0",
-      "hash": "3c7f3bf41ab70a12"
+      "version": "1.10.0",
+      "hash": "46e2c512de62f657"
     },
     "kitchen": {
       "version": "1.2.0",
@@ -1191,8 +1248,8 @@
       "hash": "8fce7a6563da7906"
     },
     "subscriptions": {
-      "version": "1.1.0",
-      "hash": "1d1beb615408779e"
+      "version": "1.2.0",
+      "hash": "7e305a08af24044f"
     },
     "processing": {
       "version": "1.0.1",
@@ -1211,20 +1268,20 @@
       "hash": "1a56d3b907707222"
     },
     "revenue": {
-      "version": "1.3.2",
-      "hash": "f61467a135054e51"
+      "version": "1.5.0",
+      "hash": "da6dc6408410ef75"
     },
     "map": {
-      "version": "1.1.0",
-      "hash": "af7d107ee32d5922"
+      "version": "1.2.0",
+      "hash": "2b0284e0ce799521"
     },
     "weather": {
       "version": "1.6.0",
       "hash": "46c51646b4edfb0d"
     },
     "zones": {
-      "version": "1.3.3",
-      "hash": "e6314389fa8bc198"
+      "version": "1.4.0",
+      "hash": "182d59669ae9d76f"
     },
     "desktop": {
       "version": "1.1.1",

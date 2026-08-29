@@ -79,8 +79,9 @@ class SubscriptionsRepository implements SubscriptionsFacade {
       );
       final subResponse = _parseSubscriptionList(response.data);
 
-      // Cache the active subscription (status + allowed subjects) locally so
-      // offline consumers like BackgroundAssetOrchestrator can read it.
+      // Cache the active subscription (status + title + allowed subjects)
+      // locally so offline consumers like BackgroundAssetOrchestrator can
+      // read it.
       if (subResponse.data != null && subResponse.data!.isNotEmpty) {
         final activeSub = subResponse.data!.firstWhere(
           (element) => element.active == true,
@@ -156,6 +157,9 @@ class SubscriptionsRepository implements SubscriptionsFacade {
         'userId': userId,
         'status': activeSub.type ?? 'inactive',
         'active': activeSub.active ?? false,
+        // The plan's display title, so offline consumers (the lms profile
+        // header's plan row) can NAME the plan, not just flag it active.
+        'title': activeSub.title ?? activeSub.subscription?.title,
         'expiryDate': activeSub.expiredAt?.toIso8601String(),
         'allowedSubjects': subjectsJson,
       });

@@ -25,6 +25,53 @@ class TrKeys {
   // @sdk-tr-keys-start
   static const String kitchen = 'kitchen';
   static const String kitchens = 'kitchens';
+  static const String scan = 'Scan';
+  static const String addItems = 'Add Items';
+  static const String items = 'Items';
+  static const String editQuantity = 'Edit quantity';
+  static const String qrPayLink = 'QR / Pay link';
+  static const String letCustomerScanQr = 'Let the customer scan this QR to pay online.';
+  static const String iveScannedWaitForCode = 'I\'ve Scanned, Wait for Code';
+  static const String printReceipt = 'Print Receipt & Finish';
+  static const String finish = 'Finish without Receipt';
+  static const String activeTransaction = 'Active Transaction';
+  static const String tillOfflineBanner = 'Till offline — payment confirms by code. The customer pays the link on their phone and reads you the 6-digit code from their payment screen; the sale syncs when you are back online.';
+  static const String confirmByCode = 'Confirm by Code';
+  static const String enterSixDigitCode = 'Enter the 6-digit verification code shown on the customer\'s payment screen after successful payment.';
+  static const String sixDigitCode = '6-Digit Code';
+  static const String paymentConfirmed = 'Payment confirmed';
+  static const String invalidCode = 'That code doesn\'t match. Check it with the customer and try again.';
+  static const String printFailed = 'Printing failed — the sale was NOT recorded. Fix the printer or finish without a receipt.';
+  static const String saleCompleted = 'Sale completed';
+  static const String inStore = 'In-store';
+  static const String sendForDelivery = 'Send for delivery';
+  static const String billingTo = 'Billing to';
+  static const String addCustomer = 'Add customer';
+  static const String changeCustomer = 'Change';
+  static const String owes = 'owes';
+  static const String searchCustomers = 'Search customers';
+  static const String amountPayingNow = 'Amount paying now';
+  static const String payingOf = 'of';
+  static const String fullAmount = 'Full';
+  static const String allOnCredit = '— all on credit';
+  static const String creditRemainder = 'remains — the sale completes as a CREDIT order on the customer\'s account and auto-collects in full from their next wallet top-up (oldest debt first).';
+  static const String creditAvailableFronts = 'Credit available — shop fronts the';
+  static const String commissionAllowanceCovers = 'commission; allowance covers it.';
+  static const String creditUnavailable = 'Credit unavailable — completing on credit would breach the shop\'s credit allowance.';
+  static const String deliversTo = 'Delivers to';
+  static const String deliveryFeeJoins = 'delivery fee joins the order';
+  static const String addDeliveryAddress = 'Add the delivery address';
+  static const String deliveryNeedsAddress = 'Add a delivery address to send this order out.';
+  static const String deliveryNeedsCustomer = 'Attach a customer to send this order for delivery.';
+  static const String sendForDeliveryFinish = 'Send for delivery & Finish';
+  static const String entersOrderQueue = 'enters the order queue · mark Ready when packed';
+  static const String takes = 'takes';
+  static const String nowWord = 'now';
+  static const String records = 'records';
+  static const String due = 'due';
+  static const String payingNow = 'Paying now';
+  static const String onCredit = 'On credit';
+  static const String pendingSync = 'pending sync';
   static const String theRestaurantIsClosedToday = 'the_restaurant_is_closed_today';
   static const String before = 'before';
   static const String after = 'after';
@@ -735,6 +782,15 @@ class TrKeys {
   // Dotted key so the humanized fallback reads "Days in app this week"
   // when neither the served map nor a bundled map carries a row.
   static const String daysInAppThisWeek = 'days.in.app.this.week';
+  // Small-count variants for the AppUsageBadge: the singular row for
+  // exactly one recorded day, and the sub-day copy shown instead of
+  // "0 days in app ..." while no day has been recorded yet.
+  static const String dayInAppThisYear = 'day.in.app.this.year';
+  static const String dayInAppThisWeek = 'day.in.app.this.week';
+  static const String lessThanADayInAppThisYear =
+      'less.than.a.day.in.app.this.year';
+  static const String lessThanADayInAppThisWeek =
+      'less.than.a.day.in.app.this.week';
   static const String goodMorning = 'good.Morning';
   static const String goodAfternoon = 'goodAfternoon';
   static const String goodEvening = 'good.Evening';
