@@ -2,6 +2,12 @@
 
 A new Flutter project for the ROKCT Manager application.
 
+<!-- @generated-store-description-start -->
+<!-- @generated-store-description-end -->
+
+<!-- @generated-tour-gallery-start -->
+<!-- @generated-tour-gallery-end -->
+
 ## Building & Release (CI/CD)
 
 The project uses GitHub Actions for automated builds and releases. To enable signed builds, you must configure the following **Secrets** in your repository settings (`Settings > Secrets and variables > Actions`).
