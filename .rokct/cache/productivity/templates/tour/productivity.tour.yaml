@@ -1,0 +1,22 @@
+# Guided-tour fragment for productivity_sdk.
+#
+# Brand-neutral by rule: app names, taglines and any per-app wording live in
+# the app shell's tour/app.tour.yaml ({app_name}/{app_tagline} placeholders
+# are substituted at merge time). This fragment owns the one screen
+# productivity_sdk installs: the tasks planner at /tasks (manifest.json
+# routes, TasksRoute — the SDK's own home_page).
+#
+# No demo seed needed: tasks live in the app's local drift database
+# (manifest.json "database" tables), so the screen renders its own
+# add-a-task surface on a fresh install and every entry made during the
+# tour persists locally without any backend.
+#
+# Format: RokctAI/shared-workflows scripts/tour/README.md
+sdk: productivity
+steps:
+  - key: productivity_tasks
+    title: "Plan your day in seconds"
+    caption: "Capture to-dos with subtasks and categories - *your day, planned* before it starts."
+    action: route
+    route: /tasks
+    settle: 7

@@ -18,13 +18,17 @@
 #
 # Fragment order mirrors the composed SDKs that ship manager-role fragments
 # today (composer profile: The-Rokct-Protocol core/utils/flutter/composer/
-# manager.json): merchants -> products -> orders (all commerce/*), then
-# promotions (registered empty until promotions_sdk routes a screen of its
-# own). users_sdk's fragment is deliberately NOT listed: this compose has
-# no /profile route (the account surface is the profile tab inside /main),
-# and the users fragment documents that such apps should leave it out until
-# /profile resolves. Other composed SDKs (kitchen, payments, comms, ...)
-# ship no fragment yet - coverage grows with the SDKs.
+# manager.json): merchants -> products -> orders -> kitchen (all
+# commerce/*), then promotions (registered empty until promotions_sdk
+# routes a screen of its own), then comms (the language sheet), revenue
+# (corporate/revenue - /income), subscriptions (agent/subscriptions -
+# /subscriptions), productivity (productivity/productivity - /tasks) and
+# calc (productivity/calc - /calc). users_sdk's fragment is deliberately
+# NOT listed: this compose has no /profile route (the account surface is
+# the profile tab inside /main), and the users fragment documents that such
+# apps should leave it out until /profile resolves. payments_sdk is
+# headless and base_sdk's status screens are toured by the minilauncher
+# shell, so neither is chained - coverage grows with the SDKs.
 #
 # Video colours are intentionally NOT declared here: the assembler derives
 # brand/accent colours from the composed AppStyle when the manifest carries
@@ -133,14 +137,45 @@ tour:
         } finally {
           subscription.close();
         }
-  # Chapter 1 - the manager home shell (/main) and the offline sync-issues
-  # safety net (merchants_sdk).
+  # Chapter 1 - the manager home shell (/main): the POS till, the
+  # restaurant hub (tab 4, demo-grounded since merchants_sdk 1.22.0) and
+  # the offline sync-issues safety net (merchants_sdk).
   - fragment: merchants
   # Chapter 2 - the menu: foods tab + create-product modal (products_sdk).
   - fragment: products
   # Chapter 3 - the order queue and order history (orders_sdk).
   - fragment: orders
+  # Chapter 4 - the kitchen queue: the home shell's tab 2 (kitchen_sdk).
+  # Sits here because it is the same shell tab row the two chapters above
+  # walk, and it reads as the next step of the same order's life. Chained
+  # since kitchen_sdk 1.4.0 demo-gated KitchenOrdersRepositoryFacade to its
+  # own DemoKitchenOrdersRepository - before that the step would have
+  # captured the screen's "no orders" empty state.
+  - fragment: kitchen
   # promotions_sdk's fragment is registered empty on purpose (it owns no
   # navigable parameter-less screen yet); listing it keeps the chapter slot
   # so steps land here the moment the SDK routes one.
   - fragment: promotions
+  # Chapter 5 - the language sheet (comms_sdk). Fully demo-grounded: its
+  # list comes from comms_sdk's own MockSettingsRepository under
+  # --dart-define=IS_DEMO=true. It is a modal over whatever screen the tour
+  # is on, and its own second step closes it again, so it sits between the
+  # in-shop chapters and the money chapters where the sheet's "every screen
+  # follows" promise reads naturally.
+  - fragment: comms
+  # Chapter 6 - the money: revenue_sdk's /income dashboard
+  # (app_type.manager ManagerIncomeRoute). In demo builds
+  # DemoSellerStatisticsRepository serves a fictional week of store revenue
+  # so the tiles, chart and order rows render stocked.
+  - fragment: revenue
+  # Chapter 7 - the plan: subscriptions_sdk's /subscriptions list
+  # (ManagerSubscriptionsRoute). In demo builds its riverpod providers fall
+  # back to DemoSubscriptionsRepository, so the grid shows two plans
+  # without the host payment adapters.
+  - fragment: subscriptions
+  # Chapter 8 - the day plan: productivity_sdk's /tasks (local drift
+  # database; renders its add-a-task surface with no backend).
+  - fragment: productivity
+  # Chapter 9 - the pocket calculator: calc_sdk's /calc (composed on
+  # manager and driver alike per Ray's decision recorded in its manifest).
+  - fragment: calc
