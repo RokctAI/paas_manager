@@ -226,18 +226,18 @@
       "boot_hooks": []
     },
     "merchants_sdk": {
-      "version": "1.20.0",
+      "version": "1.21.0",
       "files": {
         "assets/audio/notification.wav": "9d62af6f1c8df010941d1daa17162175d87293bd78371c787803b5a11f95cb9d",
         "assets/svgs/menu.svg": "9767d04ac4d157e423f972259a9c2c455a6a629c4098cc9c2fe8f9722451441b",
         "lib/presentation/pages/main/main_page.dart": "bdbda66185b48300d5d653342323ccc553f37fe269567e5be623ec8e3c2c9b62",
         "lib/presentation/pages/main/widgets/bottom_navigator_item.dart": "c6228cb9956755e414a182039c327307657248e4f43375808a3cc320d8cedcac",
         "lib/presentation/pages/main/widgets/buttons_bouncing_effect.dart": "eba448616df6943286848341e85beb0be47e0240077c4e3e67ac1c80fa71c9d4",
-        "lib/presentation/pages/restaurant/restaurant_page.dart": "56c13c3100e480f678fae35911bafd9649c98d1262aa43c0e23e33bba5cbf6ef",
+        "lib/presentation/pages/restaurant/restaurant_page.dart": "ff31cd176918a840fbd42f4e82d468947c05712aa2813b4ff7ba682e36232ccc",
         "lib/presentation/pages/restaurant/widgets/edit_restaurant_modal.dart": "d63ee830c4ab72f17a9ecec828f90f626c0ad3dc8f14199a329592578bb317f2",
         "lib/presentation/pages/restaurant/widgets/logout_button.dart": "248139cde18fd5b40be4b92be540132741146019d1a7ae436b006343339c81c9",
         "lib/presentation/pages/restaurant/widgets/working_time_modal.dart": "8399eebad8e5cef072e8ec6888ebd3673e4c704093c37a1e8b9d82216f5ca1b3",
-        "lib/presentation/pages/restaurant/widgets/sections_item.dart": "fdb20055dd6001aa725bed0633460c4b5568b9dece76d8bfb5204e80c21c665f",
+        "lib/presentation/pages/restaurant/widgets/sections_item.dart": "0aa4d2ef72a68da80faf1ba0903aade613254296dd073345c87fb127be28bd0f",
         "lib/presentation/pages/restaurant/widgets/logout_modal.dart": "4b1756f01e004a54b8c95a8df50d9c362a02ebe6b6080be03555d2855f598021",
         "lib/presentation/pages/restaurant/widgets/shop_page_banner.dart": "14e4883da1ff9eee769166f684a8a424762aeb5f767e8362dac7d6008614f1af",
         "lib/presentation/components/restaurant/small_weekday_item.dart": "fe2135a54c32ab7e50076e038eaa20018e0cacaa5eca12793a79dd81bf547345",
@@ -245,7 +245,7 @@
         "lib/presentation/component/helper/horizontal_image_picker.dart": "24ed37cf01ef6935e00411311f50b535061ed632142f688cfeddd3151f029248",
         "lib/presentation/pages/sync_issues/sync_issues_page.dart": "fe88b49ef16d513ba5d1e2f3747d045fafdde2c9b973795dd98dcfc4f7228dad",
         "lib/presentation/pages/billing/billing_page.dart": "d91bcf7d87d9a559754e26c614d4bf4313b2daf94227b4fa15a6dac64d816b8c",
-        "lib/presentation/pages/billing/checkout_page.dart": "8212311cbc5556e58b66b7cb4eec479e609ae09c41741ba070c65d1c10217426",
+        "lib/presentation/pages/billing/checkout_page.dart": "116165d10a832dc4e8c8e767c1c59fdd4ea148953b165aaecd207c34a9f93925",
         "lib/presentation/adapters/pos_orders_adapter.dart": "a52920067b029f1c02a3195730e3d715b43aa5b258c68cfce3e7415c114d3796",
         "lib/presentation/pages/quick_flow/quick_flow_page.dart": "39f68ef36510cc9f81b9a85aeaa2f1605d108c910dbbf735db373502a208b658"
       },
@@ -303,6 +303,7 @@
       "embedded_widgets": [],
       "tr_keys": {
         "scan": "Scan",
+        "calculator": "calculator",
         "addItems": "Add Items",
         "items": "Items",
         "editQuantity": "Edit quantity",
@@ -556,7 +557,7 @@
       "boot_hooks": []
     },
     "orders_sdk": {
-      "version": "1.13.0",
+      "version": "1.14.0",
       "files": {
         "lib/presentation/pages/orders/orders_home_page.dart": "af17739854bd801fb9651809a53c8fa845cd16c90f336e09ea042c2bb49819b0",
         "lib/presentation/pages/orders/details/order_details_modal.dart": "101e680f6f5cb1bb0b6bdd3d5b06e255634674b19e25183bd9f349a34e7e8f6b",
@@ -1431,16 +1432,16 @@
       "hash": "53b6b5a46cb8187f"
     },
     "merchants": {
-      "version": "1.20.0",
-      "hash": "8754249a06ae083c"
+      "version": "1.21.0",
+      "hash": "0c183627dc5242fc"
     },
     "products": {
       "version": "1.6.0",
       "hash": "86dbce25d8f8062c"
     },
     "orders": {
-      "version": "1.13.0",
-      "hash": "2a62494a623fc466"
+      "version": "1.14.0",
+      "hash": "e5ed7a954f259e55"
     },
     "kitchen": {
       "version": "1.3.0",
