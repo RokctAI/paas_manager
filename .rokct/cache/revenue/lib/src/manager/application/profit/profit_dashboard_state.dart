@@ -1,0 +1,101 @@
+// Copyright (c) 2026 ROKCT INTELLIGENCE (PTY) LTD
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+
+import 'package:revenue_sdk/src/common/infrastructure/models/response/profit_report_response.dart';
+import 'package:revenue_sdk/src/common/infrastructure/models/response/statistics_response.dart';
+import 'package:revenue_sdk/src/manager/application/profit/revenue_period.dart';
+
+/// Plain immutable state, hand-written `copyWith` like the sibling
+/// `StatisticsState` (revenue_sdk stays analyzable without build_runner).
+///
+/// Three data sources ride together, failing independently so the dashboard
+/// degrades honestly instead of all-or-nothing:
+///  * [report] — the new profit endpoint, current window;
+///  * [previous] — the same endpoint, shifted window (delta pills);
+///  * [payout] — the SHIPPED `get_order_report` (payout strip 662 and the
+///    "N today" sub-line), which keeps answering on backends that predate
+///    the profit endpoint.
+class ProfitDashboardState {
+  const ProfitDashboardState({
+    this.isLoading = false,
+    this.hasReportError = false,
+    this.report,
+    this.previous,
+    this.payout,
+    this.period = RevenuePeriod.week,
+    this.customFrom,
+    this.customTo,
+    this.selectedProductId,
+  });
+
+  final bool isLoading;
+
+  /// True when the CURRENT window's profit report failed (backend not yet
+  /// deployed, network) — the dashboard shows its error card with retry;
+  /// a missing [previous] alone only hides the delta pills.
+  final bool hasReportError;
+  final ProfitReport? report;
+  final ProfitReport? previous;
+  final StatisticsModel? payout;
+  final RevenuePeriod period;
+  final DateTime? customFrom;
+  final DateTime? customTo;
+
+  /// The drill-down selection (chip 670) — plane pushes are selection
+  /// driven, exactly like the kitchen/catalog flows.
+  final String? selectedProductId;
+
+  ProductProfit? get selectedProduct {
+    final id = selectedProductId;
+    if (id == null) return null;
+    for (final product in report?.products ?? const <ProductProfit>[]) {
+      if (product.id == id) return product;
+    }
+    return null;
+  }
+
+  ProfitDashboardState copyWith({
+    bool? isLoading,
+    bool? hasReportError,
+    ProfitReport? report,
+    bool clearReport = false,
+    ProfitReport? previous,
+    bool clearPrevious = false,
+    StatisticsModel? payout,
+    RevenuePeriod? period,
+    DateTime? customFrom,
+    DateTime? customTo,
+    String? selectedProductId,
+    bool clearSelection = false,
+  }) =>
+      ProfitDashboardState(
+        isLoading: isLoading ?? this.isLoading,
+        hasReportError: hasReportError ?? this.hasReportError,
+        report: clearReport ? null : (report ?? this.report),
+        previous: clearPrevious ? null : (previous ?? this.previous),
+        payout: payout ?? this.payout,
+        period: period ?? this.period,
+        customFrom: customFrom ?? this.customFrom,
+        customTo: customTo ?? this.customTo,
+        selectedProductId: clearSelection
+            ? null
+            : (selectedProductId ?? this.selectedProductId),
+      );
+}

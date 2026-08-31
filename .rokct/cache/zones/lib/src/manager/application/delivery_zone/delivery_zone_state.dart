@@ -31,7 +31,26 @@ abstract class DeliveryZoneState with _$DeliveryZoneState {
     @Default([]) List<List<double>> deliveryZones,
     @Default([]) List<LatLng> tappedPoints,
     @Default({}) Set<Polygon> polygon,
+
+    /// Undo stack for vertex edits (section 39's approved correction
+    /// affordances, chips 737/742): every add/move pushes the PREVIOUS
+    /// [tappedPoints] snapshot here, undo pops the newest snapshot back.
+    /// Cleared on fetch and on a successful save, so an empty stack means
+    /// "what the map shows is what the server holds".
+    @Default([]) List<List<LatLng>> pointsHistory,
   }) = _DeliveryZoneState;
 
   const DeliveryZoneState._();
+
+  /// Whether there is a vertex edit to undo.
+  bool get canUndo => pointsHistory.isNotEmpty;
+
+  /// The shipped Save gate: a zone is a closed, saveable shape only once
+  /// it has more than three vertices.
+  bool get isShapeClosed => tappedPoints.length > 3;
+
+  /// True while the drawn shape has edits the server has not seen — the
+  /// panel's Drawing state. An untouched fetched zone (or a fresh save)
+  /// reads as Saved.
+  bool get isDirty => pointsHistory.isNotEmpty;
 }

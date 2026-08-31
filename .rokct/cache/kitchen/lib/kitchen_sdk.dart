@@ -39,3 +39,13 @@ export 'src/common/di/kitchen_di.dart';
 export 'src/common/domain/interface/kitchens.dart';
 export 'src/common/infrastructure/models/data/kitchen_data.dart';
 export 'src/common/infrastructure/models/response/kitchens_paginate_response.dart';
+
+// The manager KITCHEN screen (1.3.0): the paas_pos KitchenPage behaviour
+// as a manager destination in the approved design (frames 34a-34d).
+// Deliberately NOT exported here: a customer compose strips
+// lib/src/manager/, so the barrel cannot reference the slice (orders_sdk
+// precedent). The installed page template, the shell, and the manifest
+// di_hooks import these files by their direct src/ paths:
+//   src/manager/presentation/kitchen/kitchen_workspace.dart
+//   src/manager/application/kitchen/kitchen_provider.dart
+//   src/manager/di/manager_kitchen_di.dart

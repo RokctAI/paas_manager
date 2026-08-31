@@ -49,5 +49,6 @@ export 'src/common/domain/interface/seller_statistics.dart';
 export 'src/common/infrastructure/models/response/courier_statistics_income_response.dart';
 export 'src/common/infrastructure/models/response/courier_statistics_order_response.dart';
 export 'src/common/infrastructure/models/response/courier_statistics_response.dart';
+export 'src/common/infrastructure/models/response/profit_report_response.dart';
 export 'src/common/infrastructure/models/response/statistics_order_response.dart';
 export 'src/common/infrastructure/models/response/statistics_response.dart';

@@ -1,7 +1,7 @@
 {
   "packages": {
     "base_sdk": {
-      "version": "1.42.0",
+      "version": "1.49.0",
       "files": {
         "flutter_native_splash.yaml": "d469a133b5e1631d6ba811b048d290449224075edad2153189cfb2edc3f4d100",
         "android/app/src/main/res/font/montserrat_extrabolditalic.ttf": "d38bac61eda8d8c002b1a852f5368901a085fbe1d844b5e0a149b674e22e2cdd",
@@ -70,7 +70,14 @@
         "lib/presentation/app_widget.dart": "1deab8c8cd7b2988a99b557d7492d85ab70d58a086afb7a7ca679ad2d04a5f68",
         "lib/presentation/routes/app_router.dart": "a3f4d5db5deab2ef09734b3d48a22957c96906a14368ea452c594ed92c6a0411",
         "lib/presentation/routes/route_pages.dart": "49d80533970d4eec6fdc9e5e938f42cb9534a34e364ab0c5f00521dbea44ba46",
-        "android/app/src/main/kotlin/com/app/demo/JuvoApplication.kt": "18870e8ca0b87482d3ad45fecc6211762fde11d19fd46791aba40a49b4d31d07"
+        "android/app/src/main/kotlin/com/app/demo/JuvoApplication.kt": "18870e8ca0b87482d3ad45fecc6211762fde11d19fd46791aba40a49b4d31d07",
+        "android/app/src/main/res/xml/backup_rules.xml": "a977a3552bb8c4facc634f4060ce11d623366bc310f5b119d390feb51b2f9409",
+        "android/app/src/main/res/xml/data_extraction_rules.xml": "ea351530e8fc2c342abc9798bca781ab3cabb9245b328b32ea113ed6bf1531ac",
+        "android/app/src/main/kotlin/com/app/demo/RestoreCredentialBridge.kt": "623f61a4aba5ec0798c632f11f0d218eed2e50dbedb63e75c3b22502203decd1",
+        "android/app/src/main/kotlin/com/app/demo/DeviceMemoryBridge.kt": "40ddee5aafb84b0933ca392055f9bf8eb94a3da9ba7badfaafc4bdba604f08bc",
+        "android/app/src/main/kotlin/com/app/demo/RokctBackupAgent.kt": "626d4f65db2c83b0153a732d222dab5376211e3c978ae7b848fc97b0eeffe1b7",
+        "assets/audio/tap.wav": "577a7e6beb2958269cc5daecb2529cad154ba9cebe5eff988530affb9aff5eb0",
+        "assets/audio/wrong.wav": "a2352725dcffd5505dec676a26db5ef2f299cb5ae4340a91ecd1cef55637223f"
       },
       "routes": [
         {
@@ -150,6 +157,8 @@
       "registration_steps": [],
       "embedded_widgets": [],
       "app_assets": [
+        "assets/audio/tap.wav",
+        "assets/audio/wrong.wav",
         "assets/images/app_logo.png",
         "assets/images/card.png",
         "assets/images/cardBg.png",
@@ -217,27 +226,28 @@
       "boot_hooks": []
     },
     "merchants_sdk": {
-      "version": "1.13.1",
+      "version": "1.19.0",
       "files": {
         "assets/audio/notification.wav": "9d62af6f1c8df010941d1daa17162175d87293bd78371c787803b5a11f95cb9d",
         "assets/svgs/menu.svg": "9767d04ac4d157e423f972259a9c2c455a6a629c4098cc9c2fe8f9722451441b",
-        "lib/presentation/pages/main/main_page.dart": "f330a7f7b490847252b2f398a6d8a4f0506f25945b7203615dbdd8f42c764cfa",
+        "lib/presentation/pages/main/main_page.dart": "bdbda66185b48300d5d653342323ccc553f37fe269567e5be623ec8e3c2c9b62",
         "lib/presentation/pages/main/widgets/bottom_navigator_item.dart": "c6228cb9956755e414a182039c327307657248e4f43375808a3cc320d8cedcac",
         "lib/presentation/pages/main/widgets/buttons_bouncing_effect.dart": "eba448616df6943286848341e85beb0be47e0240077c4e3e67ac1c80fa71c9d4",
-        "lib/presentation/pages/restaurant/restaurant_page.dart": "c680b62e74797c4812583d6510aada575b5ebe9d87c721b2bc0e1d08c4a3a3e0",
+        "lib/presentation/pages/restaurant/restaurant_page.dart": "56c13c3100e480f678fae35911bafd9649c98d1262aa43c0e23e33bba5cbf6ef",
         "lib/presentation/pages/restaurant/widgets/edit_restaurant_modal.dart": "d63ee830c4ab72f17a9ecec828f90f626c0ad3dc8f14199a329592578bb317f2",
         "lib/presentation/pages/restaurant/widgets/logout_button.dart": "248139cde18fd5b40be4b92be540132741146019d1a7ae436b006343339c81c9",
         "lib/presentation/pages/restaurant/widgets/working_time_modal.dart": "8399eebad8e5cef072e8ec6888ebd3673e4c704093c37a1e8b9d82216f5ca1b3",
-        "lib/presentation/pages/restaurant/widgets/sections_item.dart": "c61d495900611cde8312fa2b3a5c06653bb72462ba23e5d2965a6822a2a744c8",
+        "lib/presentation/pages/restaurant/widgets/sections_item.dart": "fdb20055dd6001aa725bed0633460c4b5568b9dece76d8bfb5204e80c21c665f",
         "lib/presentation/pages/restaurant/widgets/logout_modal.dart": "4b1756f01e004a54b8c95a8df50d9c362a02ebe6b6080be03555d2855f598021",
         "lib/presentation/pages/restaurant/widgets/shop_page_banner.dart": "14e4883da1ff9eee769166f684a8a424762aeb5f767e8362dac7d6008614f1af",
         "lib/presentation/components/restaurant/small_weekday_item.dart": "fe2135a54c32ab7e50076e038eaa20018e0cacaa5eca12793a79dd81bf547345",
         "lib/presentation/routes/merchants_adapters.dart": "6903a6527ee7cff5f52ab42ad52c781c1d382fe51e7c465f2835ef7b2395ecd4",
         "lib/presentation/component/helper/horizontal_image_picker.dart": "24ed37cf01ef6935e00411311f50b535061ed632142f688cfeddd3151f029248",
-        "lib/presentation/pages/sync_issues/sync_issues_page.dart": "691854f7ba472b9f1fcc86834085542d4ca2d845b84e2b316363c7b8e7bcc459",
-        "lib/presentation/pages/billing/billing_page.dart": "a637dc0a2647af84dae7fd603ef16179f2e6e8e2b938d621e27c01e4f7b851bb",
-        "lib/presentation/pages/billing/checkout_page.dart": "9cf8c3cb2dd2d3f43ca2eb10ebe5c5013d74e9e8d958ca4eac24cea2259faaca",
-        "lib/presentation/adapters/pos_orders_adapter.dart": "a52920067b029f1c02a3195730e3d715b43aa5b258c68cfce3e7415c114d3796"
+        "lib/presentation/pages/sync_issues/sync_issues_page.dart": "fe88b49ef16d513ba5d1e2f3747d045fafdde2c9b973795dd98dcfc4f7228dad",
+        "lib/presentation/pages/billing/billing_page.dart": "d91bcf7d87d9a559754e26c614d4bf4313b2daf94227b4fa15a6dac64d816b8c",
+        "lib/presentation/pages/billing/checkout_page.dart": "8212311cbc5556e58b66b7cb4eec479e609ae09c41741ba070c65d1c10217426",
+        "lib/presentation/adapters/pos_orders_adapter.dart": "a52920067b029f1c02a3195730e3d715b43aa5b258c68cfce3e7415c114d3796",
+        "lib/presentation/pages/quick_flow/quick_flow_page.dart": "39f68ef36510cc9f81b9a85aeaa2f1605d108c910dbbf735db373502a208b658"
       },
       "routes": [
         {
@@ -253,6 +263,13 @@
           "type": "CupertinoRoute",
           "import": "package:${package}/presentation/pages/sync_issues/sync_issues_page.dart",
           "_comment": "Sync-issues screen (park-and-surface): parked needs_attention records across the three manager boxes with per-record Retry/Discard. New path, no legacy paas_manager counterpart; route name follows the Manager prefix convention. Reached from the restaurant tab's sections list."
+        },
+        {
+          "path": "/quick-flow",
+          "page": "ManagerQuickFlowRoute.page",
+          "type": "CupertinoRoute",
+          "import": "package:${package}/presentation/pages/quick_flow/quick_flow_page.dart",
+          "_comment": "Quick flow \u2014 the shop's order-automation surface (approved design strip section 42, frames 42a/42b): auto-accept incoming orders (the LIVE Shop.auto_approve_orders field, surfaced and nothing more), auto-complete at Ready (new Shop field + new Order-controller rule), and keypad autodial with its digit->product presets (new per-shop map, read by the till). New path, no legacy paas_manager counterpart; route name follows the Manager prefix convention. Reached from the restaurant tab's sections list (chip 795, inserted second). The installed page carries @RoutePage(name: 'ManagerQuickFlowRoute')."
         },
         {
           "path": "/pos-checkout",
@@ -341,7 +358,37 @@
         "shopName": "shop_name",
         "accessDenied": "access.denied",
         "syncIssues": "sync_issues",
-        "discard": "discard"
+        "discard": "discard",
+        "parked": "parked",
+        "needsAttention": "needs_attention",
+        "productivity": "Productivity",
+        "tasks": "Tasks",
+        "quickFlow": "Quick flow",
+        "quickFlowExplainer": "Let the till run itself between customers \u2014 every switch here is per-shop",
+        "autoAcceptOrders": "Auto-accept incoming orders",
+        "autoAcceptOrdersExplainer": "New orders land as Accepted instead of waiting for a tap on the board",
+        "liveServer": "LIVE \u00b7 SERVER",
+        "autoAcceptPlatformGate": "Also needs the platform switch Auto Approve All Orders \u2014 with both on, checkout writes the order straight to Accepted",
+        "autoCompleteAtReady": "Auto-complete at Ready",
+        "autoCompleteAtReadyExplainer": "The moment an order is marked Ready it completes itself",
+        "autoCompleteAtReadyWarning": "Orders complete without anyone handing them over \u2014 nobody taps to confirm the customer took it, so only turn this on where the customer is already standing at the counter, and only pickup orders are completed",
+        "newFlag": "NEW",
+        "keypadAutodial": "Keypad autodial",
+        "keypadAutodialExplainer": "With nothing on the ticket, a digit key adds its preset item \u2014 cash-register style",
+        "digitPresets": "Digit presets",
+        "ofNineSet": "of 9 set",
+        "addItem": "Add item",
+        "chooseItemForKey": "Choose an item for key",
+        "quickFlowAllThreeOn": "A shop with all three on",
+        "whatTheAttendantDoes": "what the attendant actually does",
+        "quickFlowStep1Title": "Money in",
+        "quickFlowStep1Body": "The customer pays, and a digit key puts the item on the ticket \u2014 no menu hunting",
+        "quickFlowStep2Title": "Order auto-flows",
+        "quickFlowStep2Body": "It is born Accepted \u2014 never sits in the New column waiting for a tap",
+        "quickFlowStep3Title": "No per-order taps",
+        "quickFlowStep3Body": "Ready completes itself \u2014 staff serve the customer while the board clears behind them",
+        "autodialArmedHint": "Autodial is on \u2014 tap a digit to drop its preset straight on the ticket, and once an item is on the keys are money again",
+        "keysAreMoneyAgain": "Ticket has an item \u2014 the keys are money again"
       },
       "app_assets": [
         "assets/audio/notification.wav",
@@ -396,10 +443,10 @@
       ]
     },
     "products_sdk": {
-      "version": "1.5.0",
+      "version": "1.6.0",
       "files": {
-        "lib/presentation/pages/foods/foods_page.dart": "68f150dde6da7506a7ff6fe8910509450fa7d6304c10ea9d282cccde706ec002",
-        "lib/presentation/pages/foods/foods/foods_body.dart": "5f09f898150f6225a2c1193058607d6ec404767ad1e361efe02b01847d55bd44",
+        "lib/presentation/pages/foods/foods_page.dart": "41c20d16ecc1770727c161f061d9d101d1543be4732e019258b6c5e675238108",
+        "lib/presentation/pages/foods/foods/foods_body.dart": "b867562f571fa79ac9913a54bab9533f8ba03489fbd5605d708bc6366785cd40",
         "lib/presentation/pages/foods/addons/addons_body.dart": "af2c5e96e3fb125d7b3ebfa45fdeb4e7c5a41e389585b69aac9c82f7c249b657",
         "lib/presentation/pages/foods/addons/create/create_addon_units_modal.dart": "05260160fb4e21c30a34d1c49195651a1cde0dbe7a31a85ac7ee655af4c67e05",
         "lib/presentation/pages/foods/addons/create/create_addon_modal.dart": "6e3993476c395b037c5820d9bc5c5d6ee400cca37e01ed12eae0d4397c8af2dd",
@@ -426,22 +473,23 @@
         "lib/presentation/pages/foods/create/stocks/create_food_stocks_body.dart": "3edee2aecd2be358d449912e84847f7f44f11962e9d99f7399e2a34069a6b53a",
         "lib/presentation/pages/foods/edit/edit_product_modal.dart": "db50e92bbf6d58bc3b32288b45b194e646691151e5a807269a8e5188f1351e5a",
         "lib/presentation/pages/foods/edit/details/edit_food_categories_modal.dart": "f0546890b4238f66290d84118768fb30c434592809a71cc168272c5a0af8adb0",
-        "lib/presentation/pages/foods/edit/details/edit_food_details_body.dart": "81ce8737edf331de9107fc6c320aa0a93c84230ee764fa6d23b64df3c72037ee",
+        "lib/presentation/pages/foods/edit/details/edit_food_details_body.dart": "01a51dce318c4ee7fb3d9895e125f2207e0cce0240128f5ecb5b393091573063",
         "lib/presentation/pages/foods/edit/details/edit_food_units_modal.dart": "48d7f1db22efced55a493e11fe2ca27b490faec4bd063d1cf707dd2b3e7c7e51",
         "lib/presentation/pages/foods/edit/stocks/edit_group_extras_modal.dart": "e9d1699d0a604291d716b0316fe2668493fb06935f01ac6db1614a6f2e5565bc",
         "lib/presentation/pages/foods/edit/stocks/edit_food_addons_modal.dart": "f225b528180596e75e9a501a21eb8c1e023df29d57e8e53209378fa57119792d",
-        "lib/presentation/pages/foods/edit/stocks/edit_food_stocks_body.dart": "f78d3f2e594de1082e8039eecfe68d50e224be086ab64c140c60facae9d4f30c",
+        "lib/presentation/pages/foods/edit/stocks/edit_food_stocks_body.dart": "5c842f328cc4452c7a7fcb9ee83b6454d2f5d7fb98c6d54ac3b063b54056deaa",
         "lib/presentation/pages/foods/widgets/food_kitchens_modal.dart": "322d6898cac7c4fdde679ebec7067ca286e2644eb9c4d27310a2be780a5d8943",
         "lib/presentation/components/foods/food_item.dart": "35c0de78b3bad6b5ae353eb1c01470c1ae3b47b1d8cb33d0e3c0e4de224260a1",
         "lib/presentation/components/foods/products_body.dart": "e8eed76a58dbf9743fe382b175696d162dda89639a04d864eac064bd8b7952c8",
         "lib/presentation/components/foods/food_category_item.dart": "55800c4c4810cc350281a2b66befde0f3e6f9c7c5146d4552dcd9ed418232ee8",
         "lib/presentation/components/foods/food_unit_item.dart": "81b57c76bcfea91b597dee0f40712d15dd01629f47ed944acd6a9361043e9b74",
         "lib/presentation/components/foods/food_kitchen_item.dart": "5d45bf06bf6f72c3c9b4ae868d6228202f315be44dad5eade8a5aa7cd92b3ba8",
-        "lib/presentation/components/foods/extras_item.dart": "94d37e46c32dbb3d0480c9574344d9de25ab20f91fc3b76081e66c502a72794f",
+        "lib/presentation/components/foods/extras_item.dart": "457591d84fa83c66f25f638ac72a60aad852d8a8a98e53d094c7f34618e1052e",
         "lib/presentation/components/foods/group_extras_item.dart": "4a0636500302a42293b03ed3360dcca428f0fc12d5a2c7d08086b17394f029a8",
         "lib/presentation/components/foods/selectable_addon_item.dart": "d965efc0216af2a0188626b338fcf451c8e6256fb65d5d5f966e6ccb0248b533",
-        "lib/presentation/components/foods/editable_food_stock_item.dart": "ff6d63847bd4dc02e16099d245b87dae06eef00a6ad3963e9e66319aad75ba56",
-        "lib/presentation/components/foods/multi_image_picker.dart": "b3bbb04a12a7680f9f9369d7b59fdf216658b03625e772aa5972154f45304886"
+        "lib/presentation/components/foods/editable_food_stock_item.dart": "e6d132c4be15058b558a4c6c18658c90fd5c3f3ee423699baaec0bb7eb839d12",
+        "lib/presentation/components/foods/multi_image_picker.dart": "b3bbb04a12a7680f9f9369d7b59fdf216658b03625e772aa5972154f45304886",
+        "lib/presentation/pages/foods/edit/product_edit_page.dart": "b78aa01f6c8df700fe198e0fb7872c999b60c5ad9f447640772ec9b875bc46b2"
       },
       "routes": [],
       "app_routes": [],
@@ -450,6 +498,31 @@
       "embedded_widgets": [],
       "tr_keys": {
         "addNewCategory": "add_new_category",
+        "addVariant": "add_variant",
+        "belowTheLowStockLine": "below_the_low_stock_line",
+        "changes": "changes",
+        "cost": "cost",
+        "costNotSet": "cost_not_set",
+        "costPriceHelper": "feeds_profit_on_every_sale_set_it_to_see_margins",
+        "countsOnly": "counts_only",
+        "details": "details",
+        "extrasGroupsHint": "extras_groups_make_one_stock_row_per_combination",
+        "inStock": "in_stock",
+        "inactive": "inactive",
+        "leftWord": "left",
+        "lowStock": "low_stock",
+        "lowWord": "low",
+        "margin": "margin",
+        "newProduct": "new_product",
+        "noProducts": "no_products",
+        "nothingToCountHere": "nothing_to_count_here",
+        "outWord": "out",
+        "quickStockHint": "tap_to_adjust_counts_prices_and_variants_stay_in_the_product_form",
+        "quickStockUpdate": "quick_stock_update",
+        "saveDetails": "save_details",
+        "saveStocks": "save_stocks",
+        "stockWord": "stock",
+        "variants": "variants",
         "addNewExtras": "add_new_extras",
         "addNewExtrasGroup": "add_new_extras_group",
         "addProduct": "add_product",
@@ -483,10 +556,10 @@
       "boot_hooks": []
     },
     "orders_sdk": {
-      "version": "1.10.0",
+      "version": "1.12.0",
       "files": {
-        "lib/presentation/pages/orders/orders_home_page.dart": "4ccbba2387ae047f0bb9d13c31e3fd563704c0eb78aa8500c40c3be672f584be",
-        "lib/presentation/pages/orders/details/order_details_modal.dart": "7bafe0be570b8e856149a09e58915e0005b7c7e0f9755921c8a937df90cb3879",
+        "lib/presentation/pages/orders/orders_home_page.dart": "af17739854bd801fb9651809a53c8fa845cd16c90f336e09ea042c2bb49819b0",
+        "lib/presentation/pages/orders/details/order_details_modal.dart": "4b542b4e477f1916aa6b51297aa52c4e50d87398d0c1fa149e9bc381978040e5",
         "lib/presentation/pages/orders/details/price_information.dart": "81333e74ac12e6ea8c1d833e64b25a1c6d6ba2ad7bfa2f1314a5fbcf50518f02",
         "lib/presentation/pages/orders/details/image_dialog.dart": "9ab24d5c56f5e0217958d51a0f708c957ada73cda9981d84a30414b31738f035",
         "lib/presentation/pages/orders/widgets/new_orders_body.dart": "d64b1aa091ca791933fd19383701e8014505d5d6afd15fade5350846507aba51",
@@ -516,7 +589,7 @@
         "lib/presentation/pages/create_order/shipping/select_user/widgets/user_item.dart": "cde5b746d40bb3338e608781cd739051ba8040e8bfac1799ba166c360394628d",
         "lib/presentation/pages/create_order/order/order_page.dart": "fc756c0fb28d73123f2f6aff56b82c5aedcc7e8215d2722201e4c9449b8a37b5",
         "lib/presentation/pages/create_order/order/widgets/title_price.dart": "34c50ab69f36fd17a6e6528c902a8977121611ddef7325d0b0d2333a076391e8",
-        "lib/presentation/pages/order_history/order_history.dart": "ef37802ec8edeb0b4fe9e1407dc9c0936e67cb83c6958b38310aa810d290a8db",
+        "lib/presentation/pages/order_history/order_history.dart": "fc87571d7114b0b2cddf9c0209bdb4d9fe04324774d68e2902c67c1055e9f9b0",
         "lib/presentation/components/orders/orders_item.dart": "27b681bdcfef86115382c4bf835799eb384f99199466f7c2d88b64b8bf8d021c",
         "lib/presentation/components/orders/order_item.dart": "f8b722a9ba88506695b4e9902f00c4219d5cce777f0403a62f60dc21b32dd776",
         "lib/presentation/components/orders/order_food_item.dart": "d6f9a265cc3c59221146d111d1d524ea3c01b66e2fc24b608376485d9792fa8a",
@@ -525,13 +598,13 @@
         "lib/presentation/components/orders/products_body.dart": "26f9dfc16439578a6583939fe14071ce0b236bc68ac7ed1ff88381c261b23913",
         "lib/presentation/components/orders/food_item.dart": "6707bafb735d67cd2194edf9113874112bbe7df443b1f657135b866c5a3fa672",
         "lib/presentation/components/orders/food_stock_item.dart": "44109d7055e9c45d70ef242e3ce534328317758a2df5b6de02cbf0b2e79b4b80",
-        "lib/presentation/routes/orders_adapters.dart": "13b87c32dad83723edb6aa901e4b2391c428bfd3003595534a84d842d17d2f02",
+        "lib/presentation/routes/orders_adapters.dart": "50a0d2a6b1f6eef7a7f4a268445bc8dc9b13c7c15a2f80a7bd164269c5100beb",
         "assets/images/no_orders.png": "40dee5619d6b6167dd5fcbec9ad4739738f0c6f8d98dc41857dc49ab01d08ed0",
         "lib/presentation/component/buttons/custom_icon_button.dart": "7c5ac68bbe550997e3221cf1694bca32090efbaed1377e786ff5908cf4f5c0bd",
         "lib/presentation/component/loading/text_loading.dart": "c049cd3e254b9374bbbb21fb03bb8cc72375235fd7339aa57f36173129a5b7ce",
         "lib/presentation/component/select_date_modal.dart": "05a3dfc6b779b92f5a58f21db64996cf37e7a880c3fac092418b0d2d2ad70fc7",
-        "lib/presentation/pages/orders/widgets/board/orders_board_view.dart": "d5af1df62fa414325d947b93a953c859e5a59b525a6dce1579044301dc93dd78",
-        "lib/presentation/pages/orders/widgets/board/board_order_column.dart": "19501ab8a4e49b21c6514140d9a107ba61409790e5d5e855a951c9a2056835d9",
+        "lib/presentation/pages/orders/widgets/board/orders_board_view.dart": "e2a6d9b698a95b7c0023ed72cf146fe4c177e4f62182cc8e5eeb3764fe4724f2",
+        "lib/presentation/pages/orders/widgets/board/board_order_column.dart": "08e296216731e68fb2778c1dcb889a9f299896c248b66043f897c726d4c51c60",
         "lib/presentation/pages/create_order/order/widgets/order_pane.dart": "e8eb9aaf8f1ac6f34ac80bce71abc86713f35d74b1661d5659a11f3b1c8fd8fc"
       },
       "routes": [
@@ -596,10 +669,21 @@
       "registration_steps": [],
       "embedded_widgets": [],
       "tr_keys": {
+        "accepted": "accepted",
         "addUser": "add.user",
         "juvoBenefit": "juvo_benefit",
         "approximateTime": "spproximate_preparation_time: ",
         "canceled": "canceled",
+        "cooking": "cooking",
+        "dropHere": "drop_here",
+        "pickupSkipsOnAWay": "pickup_skips_on_a_way",
+        "ready": "ready",
+        "onAWay": "on_a_way",
+        "startEnd": "start_end",
+        "reprintReceipt": "reprint_receipt",
+        "receiptReprinted": "receipt_reprinted",
+        "receiptReprintFailed": "receipt_reprint_failed",
+        "viewMore": "view_more",
         "clearAllOrders": "clear_all_orders",
         "delivered": "delivered",
         "customerInformation": "customer.information",
@@ -666,8 +750,10 @@
       "boot_hooks": []
     },
     "kitchen_sdk": {
-      "version": "1.2.0",
-      "files": {},
+      "version": "1.3.0",
+      "files": {
+        "lib/presentation/pages/kitchen/kitchen_page.dart": "3f3a83b2781ca56e424bff77d9ca12880311f951e27f79a7e9e79de10bbbbb72"
+      },
       "routes": [],
       "app_routes": [],
       "onboarding_slides": [],
@@ -675,9 +761,29 @@
       "embedded_widgets": [],
       "tr_keys": {
         "kitchen": "kitchen",
-        "kitchens": "kitchens"
+        "kitchens": "kitchens",
+        "live": "live",
+        "justIn": "just_in",
+        "delayed": "delayed",
+        "preparing": "preparing",
+        "dish": "dish",
+        "dishes": "dishes",
+        "customerNote": "customer_note",
+        "markOrderReady": "mark_order_ready",
+        "startCooking": "start_cooking",
+        "handOver": "hand_over",
+        "tapDishHint": "tap_a_dish_to_advance_double_tap_cancels"
       },
-      "di_hooks": [],
+      "di_hooks": [
+        {
+          "id": "kitchen-manager-role-di",
+          "order": 12,
+          "body": "ManagerKitchenDependencies.register(GetIt.instance);",
+          "imports": [
+            "import 'package:kitchen_sdk/src/manager/di/manager_kitchen_di.dart';"
+          ]
+        }
+      ],
       "boot_hooks": [
         {
           "id": "kitchen-af-bundled-translations",
@@ -703,7 +809,7 @@
       "boot_hooks": []
     },
     "payments_sdk": {
-      "version": "1.1.1",
+      "version": "1.2.0",
       "files": {},
       "routes": [],
       "app_routes": [],
@@ -714,12 +820,12 @@
       "boot_hooks": []
     },
     "subscriptions_sdk": {
-      "version": "1.2.0",
+      "version": "1.3.0",
       "files": {
-        "lib/presentation/pages/subscriptions/subscriptions_page.dart": "c60a9c75dd19ba9a0da62bb841658f7d794a9928ab4753aeb0959889d70c311e",
-        "lib/presentation/pages/subscriptions/widgets/have_subscription.dart": "0764c1e76b810d8a27b10114db0251db5953607c19eb4b7013a0dbf297621612",
-        "lib/presentation/pages/subscriptions/widgets/subscriptions_item.dart": "5e93d0e999f510870ebf54b2082c5f872a5508e758ed20d7d940b8f2334ca335",
-        "lib/presentation/pages/subscriptions/widgets/payment_dialog.dart": "3301b541ac54968c443799c34640c08233ce42c23c36508553f91fcf2165992b"
+        "lib/presentation/pages/subscriptions/subscriptions_page.dart": "01ddefdee2ff018141b8f5eab043b65360e6fb0df60bc14fa10a4e05adf33d8b",
+        "lib/presentation/pages/subscriptions/widgets/have_subscription.dart": "b8b7264c73c5642e086a448a57cb80d8d399a6617e547ea8c47c5a683ba52439",
+        "lib/presentation/pages/subscriptions/widgets/subscriptions_item.dart": "73947a654660cadf93fb79bac377f877d4e28dbe9834d48d1834afb32f14be12",
+        "lib/presentation/pages/subscriptions/widgets/payment_dialog.dart": "cfee85a5b1d5502825ba7d76f7b70cec4ccac960884ab806ba3d38d3256843e9"
       },
       "routes": [
         {
@@ -749,9 +855,9 @@
       "boot_hooks": []
     },
     "comms_sdk": {
-      "version": "1.12.0",
+      "version": "1.13.0",
       "files": {
-        "lib/presentation/pages/notification/notification_list_page.dart": "97bcd5d8c81529136503eae25d94fd25bf1c2f81ef555b12900995db801316eb",
+        "lib/presentation/pages/notification/notification_list_page.dart": "054ed11681da9b43bf7eefca6ede5c46bc831ac6e8c5819b835ec8ff53d86d05",
         "lib/application/notification/notification_state.dart": "9c656e1bc05122717549b9f72a3d143f59eabbb817791afc87fcf2f5a9a15f15",
         "lib/application/notification/notification_notifier.dart": "58505bc713d9551826894f0fa31cd38acb02b4653c11f524c13ff23d1a11deb0",
         "lib/application/notification/notification_provider.dart": "867555234e4da9bf922c26f72dd95cbc686c9d27bc931f7c637e6505b31416f4"
@@ -808,6 +914,9 @@
           "android.permission.VIBRATE"
         ],
         "ios": {}
+      },
+      "tr_keys": {
+        "unread": "unread"
       }
     },
     "processing_sdk": {
@@ -822,9 +931,9 @@
       "boot_hooks": []
     },
     "productivity_sdk": {
-      "version": "1.0.0",
+      "version": "1.0.2",
       "files": {
-        "lib/presentation/pages/tasks/tasks_page.dart": "2c370be2c0377cc6162b3e68a69ddacb5d5d6f3c61839533c3fa73cb3b2405da"
+        "lib/presentation/pages/tasks/tasks_page.dart": "568036392ccb544f8817193253e55d9b65773447399c55d5892ba5f561072ea6"
       },
       "routes": [
         {
@@ -885,9 +994,9 @@
       "boot_hooks": []
     },
     "calc_sdk": {
-      "version": "1.0.1",
+      "version": "1.1.0",
       "files": {
-        "lib/presentation/pages/calc/calculator_page.dart": "b112fa519e0fe405915cf8cf69ec3796c24bca885f1f0ff44606a39f0e72b1f0"
+        "lib/presentation/pages/calc/calculator_page.dart": "8d6105c1ada2c2fa43f28b650207ccdc26a6c8bd4c9f95b0c7a87571514caf7d"
       },
       "routes": [
         {
@@ -902,7 +1011,15 @@
       "registration_steps": [],
       "embedded_widgets": [],
       "di_hooks": [],
-      "boot_hooks": []
+      "boot_hooks": [],
+      "tr_keys": {
+        "calculator": "calculator",
+        "tape": "tape",
+        "clearTheTape": "clear_the_tape",
+        "tapeKeepsLast10": "the_tape_keeps_the_last_10_calculations",
+        "useAsTheAmount": "use_{amount}_as_the_amount",
+        "fillsTheAmountNeverTheCart": "fills_the_amount_display_it_never_touches_the_cart"
+      }
     },
     "corporate_sdk": {
       "version": "1.1.2",
@@ -996,9 +1113,9 @@
       }
     },
     "revenue_sdk": {
-      "version": "1.5.0",
+      "version": "1.6.0",
       "files": {
-        "lib/presentation/pages/income/income_page.dart": "6d2b59e1e19dd172f0aa0a7103bf3d708debfef3395d58f7834f87f84937393c",
+        "lib/presentation/pages/income/income_page.dart": "a4f05611c76198d2c02fb2f266e321693073a3379ff614f721aab1359827c8cf",
         "lib/presentation/pages/income/app_bar_screen.dart": "da70222a0db114f137b0a48e9c8c5086cc369e151d48406913263e4f73c5628a",
         "lib/presentation/pages/income/widgets/chart.dart": "10a75d42a029fa2a7ec3e719ef33d0b237eff4bfe9cb4f168f3a9c29ff6e2428",
         "lib/presentation/pages/income/widgets/statistics_item.dart": "e775cf8160b264c292c9cb5ba6bb0b7c7d0e95fd6911a04f49c8ed27116fc105",
@@ -1018,20 +1135,53 @@
       "registration_steps": [],
       "embedded_widgets": [],
       "tr_keys": {
-        "needOrder": "need.order",
-        "cancelOrders": "cancel_orders",
-        "deliveredOrdersCount": "delivered.orders.count",
-        "restaurantRevenue": "restaurant_revenue",
-        "fMRevenue": "fm_revenue",
-        "moreAboutOrders": "more_about_orders"
+        "moreAboutOrders": "more_about_orders",
+        "revenue": "revenue",
+        "profit": "profit",
+        "margin": "margin",
+        "orders": "orders",
+        "avgOrder": "avg_order",
+        "asSold": "as_sold",
+        "ofWord": "of",
+        "ordersCosted": "orders_costed",
+        "ofCostedRevenue": "of_costed_revenue",
+        "vsPreviousPeriod": "vs_previous_period",
+        "payout": "payout",
+        "grossRevenue": "gross_revenue",
+        "platformFee": "platform_fee",
+        "yourPayout": "your_payout",
+        "revenueVsProfit": "revenue_vs_profit",
+        "ordersByStatus": "orders_by_status",
+        "totalWord": "total",
+        "moreWord": "more",
+        "profitByProduct": "profit_by_product",
+        "thisPeriod": "this_period",
+        "thisWeek": "this_week",
+        "thisMonth": "this_month",
+        "customRange": "custom_range",
+        "week": "week",
+        "month": "month",
+        "soldWord": "sold",
+        "byVariant": "by_variant",
+        "standardWord": "standard",
+        "editCostPrice": "edit_cost_price",
+        "orderHistory": "order_history",
+        "setCosts": "set_costs",
+        "ordersExcludedFromProfit": "orders_excluded_from_profit",
+        "noCostRecordedAtSale": "no_cost_recorded_at_sale",
+        "unknownCostRevenueExplainer": "of_revenue_sold_without_a_cost_price_it_is_left_out_of_profit_and_margin_never_counted_as_pure_profit",
+        "costFrozenAtSaleNote": "as_sold_profit_uses_the_cost_frozen_on_each_order_line_at_sale_changing_cost_later_never_rewrites_old_orders",
+        "profitabilityCouldNotBeLoaded": "profitability_could_not_be_loaded",
+        "retry": "retry",
+        "noData": "no_data"
       },
       "di_hooks": [],
       "boot_hooks": []
     },
     "zones_sdk": {
-      "version": "1.4.0",
+      "version": "1.5.0",
       "files": {
-        "lib/presentation/pages/merchant/delivery_zone/delivery_zone_page.dart": "15fb0f9f5a79a4bd4cc02fb1a700a93f16f5181134416db55fdb7ec8df88c691",
+        "lib/presentation/pages/merchant/delivery_zone/delivery_zone_page.dart": "f81db75049aca2e90f2295f9171785052b4cff68bb8312208fbf6b397a1e0ebd",
         "lib/presentation/routes/zones_adapters.dart": "6ed148db5997a0b91959983f1230f9556c7b8e4be7130b10b81036c5850a559d"
       },
       "routes": [
@@ -1057,7 +1207,34 @@
           ]
         }
       ],
-      "boot_hooks": []
+      "boot_hooks": [
+        {
+          "id": "zones-en-bundled-translations",
+          "order": 64,
+          "body": "BundledTranslations.register('en', kZonesEnTranslations);",
+          "imports": [
+            "import 'package:base_sdk/src/services/bundled_translations.dart';",
+            "import 'package:zones_sdk/src/translations/zones_en_translations.dart';"
+          ],
+          "_comment": "Registers this SDK's bundled English map for its manifest tr_keys into base_sdk's BundledTranslations registry at boot (weather_sdk's af pattern, applied to en). Needed because the approved section-39 zone-editor copy carries punctuation and casing the humanized-key fallback cannot reproduce. Backend-served translation rows still win; the map is only the offline/unseeded fallback consulted before the humanized-key fallback. Top-level (not app_type-gated) because translations are role-agnostic."
+        }
+      ],
+      "tr_keys": {
+        "drawing": "drawing",
+        "points": "points",
+        "pointsPlaced": "points.placed",
+        "shapeNotClosedYet": "shape.not.closed.yet",
+        "km2": "km2",
+        "covered": "covered",
+        "whereThisShopDelivers": "where.this.shop.delivers",
+        "tapMapNewPointsExtendShape": "tap.the.map.to.add.a.point.new.points.extend.the.shape",
+        "tapMapSaveUnlocksAt4": "tap.the.map.to.add.a.point.save.unlocks.at.4",
+        "undoLastPoint": "undo.last.point",
+        "saveDeliveryZone": "save.delivery.zone",
+        "oneMorePointToCloseTheShape": "1.more.point.to.close.the.shape",
+        "twoMorePointsToCloseTheShape": "2.more.points.to.close.the.shape",
+        "threeMorePointsToCloseTheShape": "3.more.points.to.close.the.shape"
+      }
     },
     "auth_sdk": {
       "version": "1.9.1",
@@ -1139,7 +1316,7 @@
       ]
     },
     "desktop_sdk": {
-      "version": "1.1.1",
+      "version": "1.2.0",
       "files": {
         "windows/CMakeLists.txt": "f56eb803753a78cf5f2494822e2bb226e590ecc7ff05ae43115bda46919842d6",
         "windows/.gitignore": "96345475f1a3c66bd32d28178fba151ab1506b35b1f7857b8f7651863093ea11",
@@ -1204,12 +1381,12 @@
   },
   "sdk_cache": {
     "base": {
-      "version": "1.42.0",
-      "hash": "ef91ef9bbbf470ae"
+      "version": "1.49.0",
+      "hash": "aa10f24e8848d919"
     },
     "comms": {
-      "version": "1.12.0",
-      "hash": "0608f1252da820d4"
+      "version": "1.13.0",
+      "hash": "d4cfe9139bb38af5"
     },
     "auth": {
       "version": "1.9.1",
@@ -1220,20 +1397,20 @@
       "hash": "53b6b5a46cb8187f"
     },
     "merchants": {
-      "version": "1.13.1",
-      "hash": "1c4abeee4d506047"
+      "version": "1.19.0",
+      "hash": "b8c7922296efe342"
     },
     "products": {
-      "version": "1.5.0",
-      "hash": "1a664bbfa87ed834"
+      "version": "1.6.0",
+      "hash": "86dbce25d8f8062c"
     },
     "orders": {
-      "version": "1.10.0",
-      "hash": "46e2c512de62f657"
+      "version": "1.12.0",
+      "hash": "19f72ef6192bea4f"
     },
     "kitchen": {
-      "version": "1.2.0",
-      "hash": "3004820d96c56a27"
+      "version": "1.3.0",
+      "hash": "b9c71ad97d92f2c7"
     },
     "promotions": {
       "version": "1.1.0",
@@ -1244,32 +1421,32 @@
       "hash": "ebe10d948fd28edc"
     },
     "payments": {
-      "version": "1.1.1",
-      "hash": "8fce7a6563da7906"
+      "version": "1.2.0",
+      "hash": "d0ca1a60baf67ca5"
     },
     "subscriptions": {
-      "version": "1.2.0",
-      "hash": "7e305a08af24044f"
+      "version": "1.3.0",
+      "hash": "54cc05dae55e01b2"
     },
     "processing": {
       "version": "1.0.1",
       "hash": "a547adc9e15d961c"
     },
     "productivity": {
-      "version": "1.0.0",
-      "hash": "263a66f164ca712b"
+      "version": "1.0.2",
+      "hash": "0270552bcc1e8c14"
     },
     "calc": {
-      "version": "1.0.1",
-      "hash": "4b342062ee23dfaf"
+      "version": "1.1.0",
+      "hash": "91bde72f54c94f99"
     },
     "corporate": {
       "version": "1.1.2",
       "hash": "1a56d3b907707222"
     },
     "revenue": {
-      "version": "1.5.0",
-      "hash": "da6dc6408410ef75"
+      "version": "1.6.0",
+      "hash": "95db6b9413b08a78"
     },
     "map": {
       "version": "1.2.0",
@@ -1280,12 +1457,12 @@
       "hash": "46c51646b4edfb0d"
     },
     "zones": {
-      "version": "1.4.0",
-      "hash": "182d59669ae9d76f"
+      "version": "1.5.0",
+      "hash": "408d14685a7d2721"
     },
     "desktop": {
-      "version": "1.1.1",
-      "hash": "f89d6e3d39a2d809"
+      "version": "1.2.0",
+      "hash": "d3cb813ce7daee1e"
     },
     "hms": {
       "version": "1.0.0",

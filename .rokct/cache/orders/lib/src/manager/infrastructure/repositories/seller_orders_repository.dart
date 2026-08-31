@@ -88,6 +88,7 @@ class SellerOrdersRepository implements SellerOrdersRepositoryFacade {
   @override
   Future<ApiResult<OrdersPaginateResponse>> getOrders({
     OrderStatus? status,
+    String? rawStatus,
     int? page,
     String? from,
     String? to,
@@ -99,7 +100,10 @@ class SellerOrdersRepository implements SellerOrdersRepositoryFacade {
         queryParameters: {
           if (page != null) 'limit_start': (page - 1) * 10,
           'limit_page_length': 10,
-          if (status != null) 'status': _statusText(status),
+          if (rawStatus != null)
+            'status': rawStatus
+          else if (status != null)
+            'status': _statusText(status),
           if (from != null) 'from_date': from,
           if (to != null) 'to_date': to,
           'lang': LocalStorage.getLanguage()?.locale,
@@ -167,10 +171,16 @@ class SellerOrdersRepository implements SellerOrdersRepositoryFacade {
 
   @override
   Future<ApiResult<OrderStatusResponse>> updateOrderStatus({
-    required OrderStatus status,
+    OrderStatus? status,
+    String? rawStatus,
     required String orderId,
   }) async {
-    final data = {'order_id': orderId, 'status': _statusText(status)};
+    assert(status != null || rawStatus != null,
+        'updateOrderStatus needs a status or a rawStatus');
+    final data = {
+      'order_id': orderId,
+      'status': rawStatus ?? _statusText(status),
+    };
     debugPrint('===> update order status request ${jsonEncode(data)}');
     try {
       final client = dioHttp.client(requireAuth: true);

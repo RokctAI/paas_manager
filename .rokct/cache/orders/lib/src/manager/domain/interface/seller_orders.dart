@@ -44,8 +44,12 @@ import 'package:orders_sdk/src/manager/infrastructure/models/response/single_ord
 /// they are order-scoped in every call site (POS checkout). If payments_sdk
 /// grows a seller-side facade, these two are the seam to move.
 abstract class SellerOrdersRepositoryFacade {
+  /// [rawStatus] carries a wire status base_sdk's [OrderStatus] cannot
+  /// express (the board's `cooking` column); when both are passed,
+  /// [rawStatus] wins.
   Future<ApiResult<OrdersPaginateResponse>> getOrders({
     OrderStatus? status,
+    String? rawStatus,
     int? page,
     String? from,
     String? to,
@@ -64,8 +68,12 @@ abstract class SellerOrdersRepositoryFacade {
     required String orderId,
   });
 
+  /// Pass exactly one of [status] / [rawStatus] ([rawStatus] exists for
+  /// the board's `cooking` transition, which [OrderStatus] cannot express;
+  /// it wins when both are passed).
   Future<ApiResult<OrderStatusResponse>> updateOrderStatus({
-    required OrderStatus status,
+    OrderStatus? status,
+    String? rawStatus,
     required String orderId,
   });
 

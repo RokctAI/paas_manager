@@ -1,3 +1,23 @@
+// Copyright (c) 2026 ROKCT INTELLIGENCE (PTY) LTD
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+
 import 'package:flutter/material.dart';
 import 'package:base_sdk/src/di/injection.dart';
 import 'package:base_sdk/src/domain/interface/payments.dart';
@@ -90,7 +110,10 @@ class PaymentsRepository implements PaymentsRepositoryFacade {
           'cvc': cvc,
         },
       );
-      return ApiResult.success(data: response.data['data']['token']);
+      // The gateway reuse credential stays on the server. What comes
+      // back is the Saved Card docname, which is what the charge
+      // endpoints take.
+      return ApiResult.success(data: response.data['data']['name']);
     } catch (e) {
       debugPrint('==> tokenize card failure: $e');
       return ApiResult.failure(
@@ -112,7 +135,9 @@ class PaymentsRepository implements PaymentsRepositoryFacade {
   ]) async {
     // Backend actually handles saving if save_card=True.
     // But we have a specific endpoint save_payfast_card (or generic)
-    // Let's use the tokenize_card endpoint which returns a token and saves it.
+    // Let's use the tokenize_card endpoint, which saves the card and
+    // returns its Saved Card docname. The gateway reuse credential stays
+    // on the server and never reaches this client.
     return tokenizeCard(
       cardNumber: cardNumber,
       cardName: cardName,
@@ -149,13 +174,16 @@ class PaymentsRepository implements PaymentsRepositoryFacade {
   @override
   Future<ApiResult<String>> processTokenPayment(
     OrderBodyData orderData,
-    String token,
+    String savedCardId,
   ) async {
     try {
       final client = dioHttp.client(requireAuth: true);
+      // `saved_card`, not `token`: the gateway reuse credential is
+      // server-side only, so the card is named by its docname (the `name`
+      // that get_saved_cards / tokenize_card return).
       await client.post(
         '/api/method/paas.api.payment.process_token_payment',
-        data: {'order_id': orderData.cartId, 'token': token},
+        data: {'order_id': orderData.cartId, 'saved_card': savedCardId},
       );
       return const ApiResult.success(data: "Success");
     } catch (e) {

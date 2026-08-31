@@ -23,6 +23,7 @@ import 'package:base_sdk/src/handlers/handlers.dart';
 import 'package:base_sdk/src/handlers/platform_gateway.dart';
 import 'package:base_sdk/src/services/app_helpers.dart';
 import 'package:revenue_sdk/src/common/domain/interface/seller_statistics.dart';
+import 'package:revenue_sdk/src/common/infrastructure/models/response/profit_report_response.dart';
 import 'package:revenue_sdk/src/common/infrastructure/models/response/statistics_order_response.dart';
 import 'package:revenue_sdk/src/common/infrastructure/models/response/statistics_response.dart';
 
@@ -97,6 +98,37 @@ class SellerStatisticsRepository implements SellerStatisticsRepositoryFacade {
       );
     } catch (e) {
       debugPrint('===> get statistics order error $e');
+      return ApiResult.failure(
+        error: AppHelpers.errorHandler(e),
+        statusCode: NetworkExceptions.getDioStatus(e),
+      );
+    }
+  }
+
+  @override
+  Future<ApiResult<ProfitReportResponse>> getProfitReport({
+    required DateTime from,
+    required DateTime to,
+  }) async {
+    try {
+      // Routed through the universal platform gateway; the prefix-free cmd
+      // mirrors the merchants manifest whitelisted-method key
+      // `api.seller_report.get_seller_profit_report`. Until a backend
+      // carrying merchants >= 1.15.0 is deployed the gateway answers with
+      // an unknown-cmd error — surfaced as the failure branch, which the
+      // dashboard renders as its honest error state (never fake zeros).
+      final response = await _gateway.tenant(
+        '$_cmd.get_seller_profit_report',
+        {
+          'from_date': _date(from),
+          'to_date': _date(to),
+        },
+      );
+      return ApiResult.success(
+        data: ProfitReportResponse.fromJson(response),
+      );
+    } catch (e) {
+      debugPrint('===> get profit report error $e');
       return ApiResult.failure(
         error: AppHelpers.errorHandler(e),
         statusCode: NetworkExceptions.getDioStatus(e),

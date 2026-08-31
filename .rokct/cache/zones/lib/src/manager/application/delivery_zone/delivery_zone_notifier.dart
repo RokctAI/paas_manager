@@ -51,17 +51,25 @@ class DeliveryZoneNotifier extends StateNotifier<DeliveryZoneState> {
 
   /// The drawn polygon, styled the same whether it came from the server or
   /// from taps. Kept private so both paths cannot drift apart visually.
+  ///
+  /// A CLOSED shape (more than three vertices — the Save gate) wears the
+  /// shipped styling verbatim: primary fill at 0.30, primary stroke 4. An
+  /// OPEN shape (section 39b, chip 741) keeps only a faint fill and no
+  /// stroke — the page draws the tapped edges solid and the closing edge
+  /// dashed itself, so the polygon's self-closing edge must not paint a
+  /// solid line underneath the dash.
   Set<Polygon> _polygonFor(List<LatLng> points) {
     final Set<Polygon> polygon = HashSet<Polygon>();
     if (points.isEmpty) return polygon;
+    final bool closed = points.length > 3;
     polygon.add(
       Polygon(
         polygonId: const PolygonId('1'),
         points: points,
-        fillColor: AppStyle.primary.withOpacity(0.3),
-        strokeColor: AppStyle.primary,
+        fillColor: AppStyle.primary.withValues(alpha: closed ? 0.3 : 0.15),
+        strokeColor: closed ? AppStyle.primary : AppStyle.transparent,
         geodesic: false,
-        strokeWidth: 4,
+        strokeWidth: closed ? 4 : 0,
       ),
     );
     return polygon;
@@ -76,7 +84,9 @@ class DeliveryZoneNotifier extends StateNotifier<DeliveryZoneState> {
     );
     response.when(
       success: (data) {
-        state = state.copyWith(isSaving: false);
+        // The saved shape IS the drawn shape now — clearing the undo stack
+        // flips the panel back to Saved without touching the vertices.
+        state = state.copyWith(isSaving: false, pointsHistory: []);
         updateSuccess?.call();
       },
       failure: (fail, status) {
@@ -86,13 +96,52 @@ class DeliveryZoneNotifier extends StateNotifier<DeliveryZoneState> {
     );
   }
 
+  /// Applies a vertex edit: snapshots the current ring onto the undo stack,
+  /// then swaps in [points]. Every mutation goes through here so add, drag
+  /// and undo can never disagree about what one undo step is.
+  void _applyPoints(List<LatLng> points) {
+    state = state.copyWith(
+      tappedPoints: points,
+      polygon: _polygonFor(points),
+      pointsHistory: [...state.pointsHistory, state.tappedPoints],
+    );
+  }
+
   void addTappedPoint(LatLng point) {
-    final List<LatLng> points = List.from(state.tappedPoints)..add(point);
-    state = state.copyWith(tappedPoints: points, polygon: _polygonFor(points));
+    _applyPoints(List.from(state.tappedPoints)..add(point));
+  }
+
+  /// Drags an existing vertex to [position] (chip 737's grab affordance).
+  /// Out-of-range indices are ignored — a drag callback racing a concurrent
+  /// undo must not throw.
+  void moveTappedPoint(int index, LatLng position) {
+    if (index < 0 || index >= state.tappedPoints.length) return;
+    final List<LatLng> points = List.from(state.tappedPoints);
+    points[index] = position;
+    _applyPoints(points);
+  }
+
+  /// Undoes the newest vertex edit (chip 742) — pops the latest snapshot
+  /// off the stack. No-op when there is nothing to undo.
+  void undoLastPoint() {
+    if (state.pointsHistory.isEmpty) return;
+    final points = state.pointsHistory.last;
+    state = state.copyWith(
+      tappedPoints: points,
+      polygon: _polygonFor(points),
+      pointsHistory: state.pointsHistory.sublist(
+        0,
+        state.pointsHistory.length - 1,
+      ),
+    );
   }
 
   Future<void> fetchDeliveryZone() async {
-    state = state.copyWith(isLoading: true, tappedPoints: []);
+    state = state.copyWith(
+      isLoading: true,
+      tappedPoints: [],
+      pointsHistory: [],
+    );
     final response = await _zones.fetchDeliveryZones();
     response.when(
       success: (addresses) {
@@ -101,8 +150,13 @@ class DeliveryZoneNotifier extends StateNotifier<DeliveryZoneState> {
               .where((a) => a.length >= 2)
               .map((a) => LatLng(a[0], a[1]))
               .toList();
+          // The saved ring is seeded as the editable ring (section 39a's
+          // approved reading: "tap the map to add a point; new points
+          // EXTEND the shape") — so a fetched zone can be extended and its
+          // vertices dragged, instead of the first tap starting over.
           state = state.copyWith(
             deliveryZones: addresses,
+            tappedPoints: points,
             polygon: _polygonFor(points),
           );
         }

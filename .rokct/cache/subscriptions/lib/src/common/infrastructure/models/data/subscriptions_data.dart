@@ -44,6 +44,25 @@ class SubscriptionData {
   DateTime? expiredAt;
   SubscriptionData? subscription;
 
+  /// On a Shop Subscription row served by the composed backend the
+  /// `subscription` field is a LINK STRING — the held plan's Frappe docname
+  /// — rather than a nestable object. It is kept here so the plan cards can
+  /// tell which catalog row the shop already holds (the current-plan guard)
+  /// without inventing a nested object the API never sent.
+  String? subscriptionRef;
+
+  /// Free-trial length in days, when the catalog row carries one
+  /// (`trial_period_days`). Null means the API did not send the field — the
+  /// tenant `Subscription` doctype has no trial column today, so this stays
+  /// null there and the trial badge simply never renders.
+  int? trialPeriodDays;
+
+  /// The plan's advertised feature lines, when the catalog row carries them
+  /// (`features`). Null means the field was not sent; the plan card then
+  /// falls back to the legacy limit fields (product/order limits, report)
+  /// for its includes list.
+  List<String>? features;
+
   /// Subject slugs unlocked by this plan (e.g. maths, science).
   /// Null means the API did not send the field; an empty list means the
   /// plan explicitly has no subjects.
@@ -97,6 +116,9 @@ class SubscriptionData {
     this.subscriptionId,
     this.expiredAt,
     this.subscription,
+    this.subscriptionRef,
+    this.trialPeriodDays,
+    this.features,
     this.allowedSubjects,
     this.payer,
     this.bundlesHoliday,
@@ -155,6 +177,9 @@ class SubscriptionData {
     int? subscriptionId,
     DateTime? expiredAt,
     SubscriptionData? subscription,
+    String? subscriptionRef,
+    int? trialPeriodDays,
+    List<String>? features,
     List<String>? allowedSubjects,
     String? payer,
     bool? bundlesHoliday,
@@ -179,6 +204,9 @@ class SubscriptionData {
     expiredAt: expiredAt ?? this.expiredAt,
     subscription: subscription ?? this.subscription,
     subscriptionId: subscriptionId ?? this.subscriptionId,
+    subscriptionRef: subscriptionRef ?? this.subscriptionRef,
+    trialPeriodDays: trialPeriodDays ?? this.trialPeriodDays,
+    features: features ?? this.features,
     allowedSubjects: allowedSubjects ?? this.allowedSubjects,
     payer: payer ?? this.payer,
     bundlesHoliday: bundlesHoliday ?? this.bundlesHoliday,
@@ -225,7 +253,15 @@ class SubscriptionData {
         subscription: json["subscription"] is Map<String, dynamic>
             ? SubscriptionData.fromJson(json["subscription"])
             : null,
+        // The Frappe link-string form of the same field (see
+        // [subscriptionRef]); a nested object keeps this null.
+        subscriptionRef:
+            json["subscription"] is String ? json["subscription"] : null,
         subscriptionId: json["subscription_id"],
+        trialPeriodDays: json["trial_period_days"] is int
+            ? json["trial_period_days"]
+            : int.tryParse(json["trial_period_days"]?.toString() ?? ''),
+        features: parseAllowedSubjects(json["features"]),
         allowedSubjects: parseAllowedSubjects(json["allowed_subjects"]),
         payer: json["payer"]?.toString(),
         bundlesHoliday: parseFlag(json["bundles_holiday"]),
@@ -253,7 +289,11 @@ class SubscriptionData {
     "subscription_id": subscriptionId,
     "expired_at": expiredAt?.toIso8601String(),
     "shop_id": shopId,
-    "subscription": subscription?.toJson(),
+    // Object and link-string forms are mutually exclusive on the wire;
+    // round-trip whichever one this row carried.
+    "subscription": subscription?.toJson() ?? subscriptionRef,
+    "trial_period_days": trialPeriodDays,
+    "features": features,
     "allowed_subjects": allowedSubjects,
     "payer": payer,
     "bundles_holiday": bundlesHoliday,

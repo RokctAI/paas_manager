@@ -29,4 +29,17 @@
 const Map<String, String> kKitchenAfTranslations = {
   'kitchen': 'Kombuis',
   'kitchens': 'Kombuise',
+  // Manager Kitchen screen (1.3.0, approved frames 34a-34d).
+  'live': 'lewendig',
+  'just_in': 'Pas ontvang',
+  'delayed': 'Vertraag',
+  'preparing': 'Berei voor',
+  'dish': 'gereg',
+  'dishes': 'geregte',
+  'customer_note': 'Klantnota',
+  'mark_order_ready': 'Merk bestelling gereed',
+  'start_cooking': 'Begin kook',
+  'hand_over': 'Oorhandig',
+  'tap_a_dish_to_advance_double_tap_cancels':
+      'Tik \'n gereg om aan te beweeg · dubbeltik kanselleer dit',
 };
