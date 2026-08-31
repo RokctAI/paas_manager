@@ -1,6 +1,6 @@
 {
   "name": "kitchen_sdk",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "_comment_requires": "kitchen_sdk >= 1.3.0 requires base_sdk >= 1.43.0 (PlaneHost/Planes/PlaneSpan and FloatingBackPill from the approved plane model — the manager Kitchen screen declares ALL planes per approved frame 34a and folds to the corner back pill on phones per 34c). The composer manifest schema has no machine-readable minimum-version field, so this is the declaration (orders_sdk's convention).",
   "boot_hooks": [
     {
