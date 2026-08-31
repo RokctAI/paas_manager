@@ -22,6 +22,7 @@ import 'package:base_sdk/src/handlers/handlers.dart';
 import 'package:base_sdk/src/models/data/location.dart';
 import 'package:base_sdk/src/models/response/transactions_response.dart';
 import 'package:base_sdk/src/services/enums.dart';
+import 'package:orders_sdk/src/manager/infrastructure/models/data/collect_conversion.dart';
 import 'package:orders_sdk/src/manager/infrastructure/models/data/order_calculate_data.dart';
 import 'package:orders_sdk/src/manager/infrastructure/models/data/stock.dart';
 import 'package:orders_sdk/src/manager/infrastructure/models/data/user_data.dart';
@@ -74,6 +75,22 @@ abstract class SellerOrdersRepositoryFacade {
   Future<ApiResult<OrderStatusResponse>> updateOrderStatus({
     OrderStatus? status,
     String? rawStatus,
+    required String orderId,
+  });
+
+  /// The customer turned up and collected an order she had placed for
+  /// DELIVERY (design strip section 43). ONE atomic seller call, never a
+  /// client-orchestrated sequence: the whole conversion — delivery type,
+  /// driver assignment, the fee's fate and the hand-over — lands or none
+  /// of it does.
+  ///
+  /// Offline the branch is undecidable (driver assignment and wallet
+  /// balance are both server state), so the goods still go over the
+  /// counter and the conversion is QUEUED: the returned
+  /// [CollectConversion] carries `deferred` and promises nothing about
+  /// the money. A conversion the backend later refuses parks in Sync
+  /// issues rather than silently reverting.
+  Future<ApiResult<CollectConversion>> convertDeliveryToCollected({
     required String orderId,
   });
 

@@ -32,7 +32,9 @@ import 'package:base_sdk/src/services/local_storage.dart';
 import 'package:base_sdk/src/sync/sync_engine.dart';
 import 'package:orders_sdk/src/manager/domain/interface/seller_orders.dart';
 import 'package:orders_sdk/src/manager/infrastructure/services/manager_orders_local_store.dart';
+import 'package:orders_sdk/src/manager/infrastructure/services/collect_conversion_sync_handler.dart';
 import 'package:orders_sdk/src/manager/infrastructure/services/order_create_sync_handler.dart';
+import 'package:orders_sdk/src/manager/infrastructure/models/data/collect_conversion.dart';
 import 'package:orders_sdk/src/manager/infrastructure/models/data/order_calculate_data.dart';
 import 'package:orders_sdk/src/manager/infrastructure/models/data/stock.dart';
 import 'package:orders_sdk/src/manager/infrastructure/models/data/user_data.dart';
@@ -193,6 +195,47 @@ class SellerOrdersRepository implements SellerOrdersRepositoryFacade {
       );
     } catch (e) {
       return _fail(e, 'update seller order status');
+    }
+  }
+
+  @override
+  Future<ApiResult<CollectConversion>> convertDeliveryToCollected({
+    required String orderId,
+  }) async {
+    // ONE call. The conversion flips the delivery type, stands the driver
+    // down, settles the fee (back to her wallet, or to him as a callout)
+    // and completes the order — all inside one server transaction, in an
+    // order that matters: the driver is unassigned BEFORE the order
+    // reaches Delivered, or the settlement pays him the fee a second
+    // time. Orchestrating that from here would leave half-converted
+    // orders behind every dropped connection.
+    try {
+      final response = await _gateway.call(
+        'api.seller_order.convert_delivery_to_collected',
+        payload: {'order_id': orderId},
+      );
+      return ApiResult.success(
+        data: CollectConversion.fromJson(
+          (response as Map).cast<String, dynamic>(),
+        ),
+      );
+    } catch (e) {
+      final status = NetworkExceptions.getDioStatus(e);
+      if (status >= 400 && status < 500 && status != 408) {
+        // Backend reachable and said no (not a delivery order, not this
+        // shop's, already delivered): a real refusal, surfaced as one.
+        return _fail(e, 'convert delivery order to collected');
+      }
+      // Backend unreachable / transient. The goods are already going
+      // over the counter — that never waits on a network — so the
+      // conversion is queued and reported as DEFERRED. Nothing is
+      // claimed about the fee: which branch applies is server state.
+      await SyncEngine().enqueue(
+        opType: CollectConversionSyncHandler.opType,
+        sdk: CollectConversionSyncHandler.sdkName,
+        payload: {'order_id': orderId},
+      );
+      return const ApiResult.success(data: CollectConversion.deferred());
     }
   }
 

@@ -1,7 +1,7 @@
 {
   "packages": {
     "base_sdk": {
-      "version": "1.49.0",
+      "version": "1.51.0",
       "files": {
         "flutter_native_splash.yaml": "d469a133b5e1631d6ba811b048d290449224075edad2153189cfb2edc3f4d100",
         "android/app/src/main/res/font/montserrat_extrabolditalic.ttf": "d38bac61eda8d8c002b1a852f5368901a085fbe1d844b5e0a149b674e22e2cdd",
@@ -226,7 +226,7 @@
       "boot_hooks": []
     },
     "merchants_sdk": {
-      "version": "1.19.0",
+      "version": "1.20.0",
       "files": {
         "assets/audio/notification.wav": "9d62af6f1c8df010941d1daa17162175d87293bd78371c787803b5a11f95cb9d",
         "assets/svgs/menu.svg": "9767d04ac4d157e423f972259a9c2c455a6a629c4098cc9c2fe8f9722451441b",
@@ -556,10 +556,10 @@
       "boot_hooks": []
     },
     "orders_sdk": {
-      "version": "1.12.0",
+      "version": "1.13.0",
       "files": {
         "lib/presentation/pages/orders/orders_home_page.dart": "af17739854bd801fb9651809a53c8fa845cd16c90f336e09ea042c2bb49819b0",
-        "lib/presentation/pages/orders/details/order_details_modal.dart": "4b542b4e477f1916aa6b51297aa52c4e50d87398d0c1fa149e9bc381978040e5",
+        "lib/presentation/pages/orders/details/order_details_modal.dart": "101e680f6f5cb1bb0b6bdd3d5b06e255634674b19e25183bd9f349a34e7e8f6b",
         "lib/presentation/pages/orders/details/price_information.dart": "81333e74ac12e6ea8c1d833e64b25a1c6d6ba2ad7bfa2f1314a5fbcf50518f02",
         "lib/presentation/pages/orders/details/image_dialog.dart": "9ab24d5c56f5e0217958d51a0f708c957ada73cda9981d84a30414b31738f035",
         "lib/presentation/pages/orders/widgets/new_orders_body.dart": "d64b1aa091ca791933fd19383701e8014505d5d6afd15fade5350846507aba51",
@@ -669,6 +669,40 @@
       "registration_steps": [],
       "embedded_widgets": [],
       "tr_keys": {
+        "aDriverWasAlreadyOnThisOneSoThe": "a_driver_was_already_on_this_one_so_the",
+        "assignedToDriver": "assigned",
+        "collectedInPerson": "collected_in_person",
+        "conversionQueuedForSync": "conversion_queued_for_sync",
+        "customerIsHereConvertToPickup": "customer_is_here_convert_to_pickup",
+        "deliveryFeeGoesBackToTheCustomersWallet": "delivery_fee_goes_back_to_the_customers_wallet",
+        "deliveryTypeRow": "delivery_type",
+        "driverTask": "driver_task",
+        "feeComesBackIfNoDriverWasOnItYet": "fee_comes_back_if_no_driver_was_on_it_yet",
+        "feeIsKept": "fee_is_kept",
+        "feeKeptCoversTheDriversCallout": "fee_kept_covers_the_drivers_callout",
+        "feeRefundedToWallet": "fee_refunded_to_wallet",
+        "goods": "goods",
+        "handOverAndConvert": "hand_over_and_convert",
+        "handOverAndConvertToPickup": "hand_over_and_convert_to_pickup",
+        "handOverNowConvertWhenBackOnline": "hand_over_now_convert_when_back_online",
+        "handedToTheCustomerNow": "handed_to_the_customer_now",
+        "isUnassignedAndHisTaskCancels": "is_unassigned_and_his_task_cancels_in_the_driver_app",
+        "itCoversTheCalloutAndHisTaskCancels": "it_covers_the_callout_and_his_task_cancels",
+        "itCoversTheDriversCallout": "it_covers_the_drivers_callout_he_already_drove_for_it",
+        "keptNotRefunded": "kept_not_refunded",
+        "neverWithheldNeverForfeited": "never_withheld_never_forfeited_whatever_else_happens_here",
+        "noDriverAssignedYet": "no_driver_assigned_yet",
+        "noDriverWasEverOnIt": "no_driver_was_ever_on_it",
+        "noDriverWasOnItYetSoThe": "no_driver_was_on_it_yet_so_the",
+        "nobodyDispatched": "nobody_has_been_dispatched_for_this_order",
+        "nobodyToStandDown": "nobody_to_stand_down",
+        "offlineHandOverNote": "the_customer_gets_the_order_now_either_way_the_driver_check_and_the_wallet_credit_live_on_the_server",
+        "onACallout": "on_a_callout",
+        "onThisOrder": "on_this_order",
+        "pickedUp": "picked_up",
+        "refundedToTheCustomersWallet": "refunded_to_the_customers_wallet",
+        "theMomentYouConvert": "the_moment_you_convert",
+        "thisOneHadADriverOnItSoItDoesNot": "this_one_had_a_driver_on_it_so_it_does_not",
         "accepted": "accepted",
         "addUser": "add.user",
         "juvoBenefit": "juvo_benefit",
@@ -1113,7 +1147,7 @@
       }
     },
     "revenue_sdk": {
-      "version": "1.6.0",
+      "version": "1.9.0",
       "files": {
         "lib/presentation/pages/income/income_page.dart": "a4f05611c76198d2c02fb2f266e321693073a3379ff614f721aab1359827c8cf",
         "lib/presentation/pages/income/app_bar_screen.dart": "da70222a0db114f137b0a48e9c8c5086cc369e151d48406913263e4f73c5628a",
@@ -1381,8 +1415,8 @@
   },
   "sdk_cache": {
     "base": {
-      "version": "1.49.0",
-      "hash": "aa10f24e8848d919"
+      "version": "1.51.0",
+      "hash": "dddf98e95753f17f"
     },
     "comms": {
       "version": "1.13.0",
@@ -1397,16 +1431,16 @@
       "hash": "53b6b5a46cb8187f"
     },
     "merchants": {
-      "version": "1.19.0",
-      "hash": "b8c7922296efe342"
+      "version": "1.20.0",
+      "hash": "8754249a06ae083c"
     },
     "products": {
       "version": "1.6.0",
       "hash": "86dbce25d8f8062c"
     },
     "orders": {
-      "version": "1.12.0",
-      "hash": "19f72ef6192bea4f"
+      "version": "1.13.0",
+      "hash": "2a62494a623fc466"
     },
     "kitchen": {
       "version": "1.3.0",
@@ -1445,8 +1479,8 @@
       "hash": "1a56d3b907707222"
     },
     "revenue": {
-      "version": "1.6.0",
-      "hash": "95db6b9413b08a78"
+      "version": "1.9.0",
+      "hash": "ed29b1e535ad218d"
     },
     "map": {
       "version": "1.2.0",

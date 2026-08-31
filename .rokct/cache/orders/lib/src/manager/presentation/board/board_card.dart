@@ -26,6 +26,8 @@ import 'package:base_sdk/src/presentation/theme/app_style.dart';
 import 'package:base_sdk/src/services/app_helpers.dart';
 import 'package:orders_sdk/src/manager/infrastructure/models/models.dart';
 
+import 'package:orders_sdk/src/manager/presentation/collect/collect_keys.dart';
+
 import 'board_status.dart';
 import 'order_clock.dart';
 
@@ -64,7 +66,11 @@ class BoardOrderCard extends StatelessWidget {
     final type = order.deliveryType ?? '';
     if (type == BoardRules.deliveryType) return FlutterRemix.e_bike_2_fill;
     if (type == BoardRules.dineType) return FlutterRemix.restaurant_line;
-    return FlutterRemix.walk_line;
+    // Pickup reads as a BAG, never a truck and never a walker (section
+    // 43, frame 43d): it is the same glyph the convert action and the
+    // confirm guard use, so a converted card and the action that made it
+    // are recognisably the same thing.
+    return FlutterRemix.shopping_bag_3_line;
   }
 
   String get _initials {
@@ -89,6 +95,25 @@ class BoardOrderCard extends StatelessWidget {
 
   DateTime? get _updatedAt =>
       order.updatedAt == null ? null : DateTime.tryParse(order.updatedAt!);
+
+  /// Section 43: this order was placed for delivery and collected over
+  /// the counter, and the fee went back to the customer's wallet. The
+  /// STRUCK fee and the dropped total are the visible proof — fee-kept
+  /// versus fee-returned is legible from the card alone, without
+  /// opening the order.
+  bool get _feeRefunded =>
+      order.collectedInPerson && order.collectFeeRefunded > 0;
+
+  /// The same conversion, the other branch: a driver was already on it,
+  /// so the fee is kept to cover his callout and nothing is struck.
+  bool get _feeKept =>
+      order.collectedInPerson && order.collectFeeRefunded <= 0 &&
+      (order.deliveryFee ?? 0) > 0;
+
+  String _money(num? value) => AppHelpers.numberFormat(
+    number: value ?? 0,
+    symbol: order.currency?.symbol,
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -186,11 +211,21 @@ class BoardOrderCard extends StatelessWidget {
           ),
           _infoRow(
             FlutterRemix.money_dollar_circle_line,
-            AppHelpers.numberFormat(
-              number: order.totalPrice ?? 0,
-              symbol: order.currency?.symbol,
-            ),
+            _money(order.totalPrice),
+            // 820: the total dropped by the returned fee, and says so.
+            struckPrefix: _feeRefunded
+                ? _money((order.totalPrice ?? 0) + order.collectFeeRefunded)
+                : null,
           ),
+          if ((order.deliveryFee ?? 0) > 0 || _feeRefunded)
+            _infoRow(
+              FlutterRemix.e_bike_2_fill,
+              _feeRefunded ? '' : _money(order.deliveryFee),
+              label: AppHelpers.getTranslation(CollectKeys.deliveryFeeRow),
+              // 820: struck, because it is not on this order any more.
+              struckPrefix:
+                  _feeRefunded ? _money(order.collectFeeRefunded) : null,
+            ),
           _infoRow(
             FlutterRemix.bank_card_line,
             order.transaction?.paymentSystem?.tag ?? '- -',
@@ -199,6 +234,10 @@ class BoardOrderCard extends StatelessWidget {
             _infoRow(Icons.table_restaurant_outlined, order.table?.name ?? ''),
           const SizedBox(height: 4),
           _typeChip(statusColor),
+          if (order.collectedInPerson) ...[
+            const SizedBox(height: 8),
+            _collectNote(),
+          ],
           const SizedBox(height: 8),
           OrderClockRow(
             createdAt: _createdAt,
@@ -220,26 +259,94 @@ class BoardOrderCard extends StatelessWidget {
     return Transform.rotate(angle: 0.03, child: interactive);
   }
 
-  Widget _infoRow(IconData icon, String value) => Padding(
-    padding: const EdgeInsets.only(bottom: 5),
-    child: Row(
-      children: [
-        Icon(icon, size: 14, color: AppStyle.textDarkSecondary),
-        const SizedBox(width: 7),
-        Expanded(
-          child: Text(
-            value,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: AppStyle.interNormal(
-              size: 12,
-              color: AppStyle.textDarkSecondary,
+  /// [label] prefixes the value ("Delivery fee R35.00"); [struckPrefix]
+  /// renders an amount that no longer applies, struck through, ahead of
+  /// the value that replaced it — the one structural difference between
+  /// the two converted card states (820 / 821).
+  Widget _infoRow(
+    IconData icon,
+    String value, {
+    String? label,
+    String? struckPrefix,
+  }) {
+    final TextStyle base = AppStyle.interNormal(
+      size: 12,
+      color: AppStyle.textDarkSecondary,
+    );
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 5),
+      child: Row(
+        children: [
+          Icon(icon, size: 14, color: AppStyle.textDarkSecondary),
+          const SizedBox(width: 7),
+          Expanded(
+            child: RichText(
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              text: TextSpan(
+                style: base,
+                children: [
+                  if (label != null) TextSpan(text: '$label '),
+                  if (struckPrefix != null)
+                    TextSpan(
+                      text: struckPrefix,
+                      style: base.copyWith(
+                        decoration: TextDecoration.lineThrough,
+                        decorationColor: AppStyle.textDarkSecondary,
+                      ),
+                    ),
+                  if (struckPrefix != null && value.isNotEmpty)
+                    const TextSpan(text: ' '),
+                  if (value.isNotEmpty) TextSpan(text: value),
+                ],
+              ),
             ),
           ),
-        ),
-      ],
-    ),
-  );
+        ],
+      ),
+    );
+  }
+
+  /// 820 / 821 — the note slot. ONE component with a two-value note:
+  /// green when the fee went back to the customer, amber when it was
+  /// kept to cover a driver's callout. Nothing else about the card
+  /// changes between the two.
+  Widget _collectNote() {
+    final Color accent = _feeKept ? AppStyle.rate : AppStyle.green;
+    final String text = AppHelpers.getTranslation(
+      _feeKept
+          ? CollectKeys.feeKeptCoversTheDriversCallout
+          : (_feeRefunded
+                ? CollectKeys.feeRefundedToWallet
+                : CollectKeys.collectedInPerson),
+    );
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+      decoration: BoxDecoration(
+        color: accent.withValues(alpha: 0.08),
+        borderRadius: BorderRadius.circular(9),
+        border: Border.all(color: accent.withValues(alpha: 0.26)),
+      ),
+      child: Row(
+        children: [
+          Container(
+            width: 6,
+            height: 6,
+            decoration: BoxDecoration(color: accent, shape: BoxShape.circle),
+          ),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Text(
+              text,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: AppStyle.interSemi(size: 11, color: accent),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 
   /// The order-type chip: label + progress % over a partial colour fill,
   /// with the type glyph in a circle at the end (POS
