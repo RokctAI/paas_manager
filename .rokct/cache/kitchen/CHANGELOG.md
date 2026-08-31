@@ -1,5 +1,29 @@
 # Changelog
 
+## 1.4.0
+
+* `DemoKitchenOrdersRepository` — demo data behind the manager Kitchen tab.
+  `ManagerKitchenDependencies.register` now selects it over
+  `KitchenOrdersRepository` under `--dart-define=IS_DEMO=true`, the same
+  `AppConstants.isDemo` split merchants_sdk's POS seams and products_sdk's
+  catalog facades use. Nothing about the production path changed.
+  * WHY: this SDK's tour fragment shipped in 1.3.0 but was not worth
+    chaining into an app tour, because a demo build rendered the screen's
+    "no orders" empty state.
+  * WHAT IT SERVES: five fictional tickets across accepted / cooking /
+    ready, with dish lines at mixed prep states, cook-visible notes on two
+    of them, and creation times a few to thirty minutes back so the cards'
+    flip clocks tick. Filter counts are computed off the live queue.
+  * WRITES are acknowledged in memory: advancing a dish, starting a cook,
+    marking ready or handing over sticks for the session and resets on the
+    next launch. A hand-over status the kitchen vocabulary cannot express
+    ('on_a_way' / 'delivered') drops the ticket out of the queue, exactly
+    as a real refetch would. No HTTP client is ever constructed.
+  * The seeded dishes deliberately match orders_sdk's demo order board.
+    Duplicated rather than shared (ADR-005).
+* Tour fragment: the demo-grounding note is rewritten; the step is now a
+  live-queue capture rather than an empty state.
+
 ## 1.3.0
 
 * The manager KITCHEN screen — the APPROVED design (Ray 2026-08-29:

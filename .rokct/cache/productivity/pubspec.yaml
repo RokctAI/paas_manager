@@ -11,6 +11,13 @@ dependencies:
   uuid: ^4.5.3
   share_plus: ^10.1.1
   path_provider: ^2.1.5
+  # This SDK's own lib/ imports both (the section-44 task components:
+  # task_card.dart, task_list_controls.dart), as does the installed tasks
+  # page template. They must be declared here rather than leaned on
+  # transitively through base_sdk, or the day base_sdk drops either one
+  # this package stops resolving. Same constraints as base_sdk.
+  flutter_screenutil: ^5.9.0
+  intl: ^0.19.0
   # The installed tasks page template (templates/pages/tasks) imports this;
   # it must be declared here or the composed app fails to build.
   table_calendar: ^3.1.0

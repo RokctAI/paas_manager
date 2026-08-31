@@ -1,6 +1,6 @@
 {
   "name": "productivity_sdk",
-  "version": "1.0.2",
+  "version": "1.0.4",
   "home_page": "templates/pages/tasks/tasks_page.dart",
   "installs": [
     {

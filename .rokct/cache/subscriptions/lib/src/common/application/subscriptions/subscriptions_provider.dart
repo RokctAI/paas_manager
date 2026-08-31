@@ -19,44 +19,69 @@
 // SOFTWARE.
 
 
+import 'package:base_sdk/src/constants/app_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../domain/interface/subscription_facade.dart';
 import '../../domain/interface/subscription_payments_provider.dart';
+import '../../infrastructure/repository/demo_subscriptions_repository.dart';
 import 'subscriptions_state.dart';
 import 'subscriptions_notifier.dart';
 
+// Demo note (--dart-define=IS_DEMO=true): each provider below keeps its
+// host-must-override contract in production, but falls back to a local
+// demo implementation in demo builds — the same AppConstants.isDemo split
+// delivery_sdk's DriverDeliveryDependencies uses. Without this, a demo
+// build that composes subscriptions_sdk without the host adapters would
+// throw on the /subscriptions screen's first build instead of rendering
+// the demo plans. Zero behavior change when IS_DEMO is off.
+
 final subscriptionRepositoryProvider = Provider<SubscriptionsFacade>(
-  (ref) => throw UnimplementedError(),
+  (ref) => AppConstants.isDemo
+      ? DemoSubscriptionsRepository()
+      : throw UnimplementedError(
+          'subscriptionRepositoryProvider is not overridden',
+        ),
 );
 
 /// The host app overrides this with an adapter implementing
 /// [SubscriptionPaymentsProvider] around its real payments facade (see the
 /// commented example in `src/di/subscriptions_di.dart`).
 final paymentsRepositoryProvider = Provider<SubscriptionPaymentsProvider>(
-  (ref) => throw UnimplementedError(
-    'paymentsRepositoryProvider is not overridden',
-  ),
+  (ref) => AppConstants.isDemo
+      ? DemoSubscriptionPaymentsProvider()
+      : throw UnimplementedError(
+          'paymentsRepositoryProvider is not overridden',
+        ),
 );
 
 final walletPriceProvider = Provider<num Function()>(
-  (ref) => throw UnimplementedError('walletPriceProvider is not overridden'),
+  (ref) => AppConstants.isDemo
+      ? () => 0
+      : throw UnimplementedError('walletPriceProvider is not overridden'),
 );
 
 final navigateToWebViewProvider =
     Provider<Future<void> Function(BuildContext, String)>(
-      (ref) => throw UnimplementedError(
-        'navigateToWebViewProvider is not overridden',
-      ),
+      (ref) => AppConstants.isDemo
+          ? (BuildContext context, String url) async {}
+          : throw UnimplementedError(
+              'navigateToWebViewProvider is not overridden',
+            ),
     );
 
 final errorNotificationProvider = Provider<void Function(BuildContext, String)>(
-  (ref) =>
-      throw UnimplementedError('errorNotificationProvider is not overridden'),
+  (ref) => AppConstants.isDemo
+      ? (BuildContext context, String message) {}
+      : throw UnimplementedError(
+          'errorNotificationProvider is not overridden',
+        ),
 );
 
 final translationProvider = Provider<String Function(String)>(
-  (ref) => throw UnimplementedError('translationProvider is not overridden'),
+  (ref) => AppConstants.isDemo
+      ? (String key) => key
+      : throw UnimplementedError('translationProvider is not overridden'),
 );
 
 final subscriptionProvider =

@@ -34,3 +34,10 @@ export 'src/common/application/recovery/recovery_state.dart';
 export 'src/common/application/recovery/recovery_notifier.dart';
 export 'src/common/application/recovery/recovery_provider.dart';
 export 'src/common/di/productivity_di.dart';
+
+// Design strip section 44 — the /tasks workspace components. Exported so
+// the installed `tasks_page.dart` template can compose them: the page is
+// host code and reaches the SDK through this barrel.
+export 'src/common/presentation/tasks/task_view_model.dart';
+export 'src/common/presentation/tasks/task_card.dart';
+export 'src/common/presentation/tasks/task_list_controls.dart';
