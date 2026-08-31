@@ -20,6 +20,7 @@ import 'package:base_sdk/src/models/response/languages_response.dart';
 import 'package:base_sdk/src/services/app_helpers.dart';
 import 'package:base_sdk/src/services/local_storage.dart';
 import 'package:base_sdk/src/services/tr_keys.dart';
+import 'package:comms_sdk/src/common/presentation/pages/setting/language_page.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:merchants_sdk/src/manager/application/main/main_provider.dart';
 import 'package:merchants_sdk/src/manager/application/pos_cart/pos_cart_provider.dart';
@@ -195,6 +196,28 @@ final List<TourStep> tourSteps = <TourStep>[
   TourStep('pos_checkout', 8000, true, (WidgetTester tester, StackRouter router) async {
     router.replaceNamed('/pos-checkout');
   }),
+  TourStep('restaurant_hub', 8000, true, (WidgetTester tester, StackRouter router) async {
+    // Land the manager home shell and select the restaurant tab (index 4
+    // since merchants_sdk 1.14.0 - POS till 0, order queue 1, kitchen 2,
+    // foods 3) through the shell's own mainProvider, the same state the
+    // bottom-navigation buttons drive. Route first: an earlier fragment
+    // may have left the app elsewhere, and mainProvider's selection
+    // persists across routes.
+    //
+    // The tab is preload: false in the shell's IndexedStack, so selecting
+    // it is what first builds RestaurantPage - whose initState fetches
+    // the shop through SellerShopRepositoryFacade. In demo builds that is
+    // this SDK's DemoSellerShopRepository (see the demo-grounding note at
+    // the top of this file), so the header renders with the demo shop's
+    // name and rating rather than empty; the rows below it carry their
+    // own isDemo subtitles. The settle covers that first fetch.
+    router.replaceNamed('/main');
+    await Future<void>.delayed(const Duration(seconds: 3));
+    final Element element = tester.element(find.byType(Navigator).first);
+    final ProviderContainer container =
+        ProviderScope.containerOf(element, listen: false);
+    container.read(mainProvider.notifier).selectIndex(4);
+  }),
   TourStep('sync_issues', 6000, true, (WidgetTester tester, StackRouter router) async {
     router.replaceNamed('/sync-issues');
   }),
@@ -247,6 +270,46 @@ final List<TourStep> tourSteps = <TourStep>[
   }),
   TourStep('order_history', 6000, true, (WidgetTester tester, StackRouter router) async {
     router.replaceNamed('/order-history');
+  }),
+  TourStep('kitchen_queue', 8000, true, (WidgetTester tester, StackRouter router) async {
+    // Land the manager home shell and select the Kitchen tab (index 2
+    // since merchants_sdk 1.14.0 - the POS till is 0, the order queue 1)
+    // explicitly - an earlier fragment may have left another tab
+    // selected, and mainProvider's selection persists across routes.
+    router.replaceNamed('/main');
+    await Future<void>.delayed(const Duration(seconds: 3));
+    final Element element = tester.element(find.byType(Navigator).first);
+    final ProviderContainer container =
+        ProviderScope.containerOf(element, listen: false);
+    container.read(mainProvider.notifier).selectIndex(2);
+  }),
+  TourStep('comms_language', 6000, true, (WidgetTester tester, StackRouter router) async {
+    // Open the language sheet the way the app's own screens do: the same
+    // AppHelpers.showCustomModalBottomSheet call auth's login page and
+    // marketplace's profile use for EmbeddedWidgets.I.languageScreen.
+    // LanguageScreen is comms_sdk's own widget; in demo builds its list
+    // comes from MockSettingsRepository.getLanguages().
+    final BuildContext sheetContext =
+        tester.element(find.byType(Navigator).first);
+    AppHelpers.showCustomModalBottomSheet(
+      context: sheetContext,
+      modal: LanguageScreen(
+        onSave: () =>
+            Navigator.of(sheetContext, rootNavigator: true).pop(),
+      ),
+      isDarkMode: false,
+    );
+  }),
+  TourStep('comms_language_close', 3000, false, (WidgetTester tester, StackRouter router) async {
+    // Tolerant: pop only when the sheet from the step above is actually
+    // on screen, so this can never pop a real app route.
+    if (find.byType(LanguageScreen).evaluate().isNotEmpty) {
+      final NavigatorState navigator =
+          tester.state(find.byType(Navigator).first);
+      if (navigator.canPop()) {
+        navigator.pop();
+      }
+    }
   }),
   TourStep('revenue_income', 8000, true, (WidgetTester tester, StackRouter router) async {
     router.replaceNamed('/income');

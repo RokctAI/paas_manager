@@ -9,12 +9,12 @@
 # — per its install contract, so it declares no route). Include it only in
 # manager-family app manifests.
 #
-# Demo grounding (--dart-define=IS_DEMO=true): the
-# KitchenOrdersRepositoryFacade is NOT demo-gated yet, so a demo build
-# renders the screen's real empty state ("no orders") — truthful for a
-# brand-new shop, and the caption below owns that framing. Follow-up (the
-# orders fragment's rule #59 note): demo-gate the kitchen facade so the
-# tour shows a live queue with ticking flip clocks and dish pills.
+# Demo grounding (--dart-define=IS_DEMO=true): since 1.4.0
+# ManagerKitchenDependencies demo-gates KitchenOrdersRepositoryFacade to
+# this SDK's own DemoKitchenOrdersRepository, which serves a seeded service
+# of five tickets across accepted/cooking/ready from memory. So the step
+# below captures a live queue with ticking flip clocks, dish pills and
+# populated filter counts, with zero backend contact.
 #
 # The cross-SDK import below is the established shell contract: the
 # Kitchen tab is selected through merchants_sdk's mainProvider, the same
