@@ -1,7 +1,7 @@
 {
   "packages": {
     "base_sdk": {
-      "version": "1.51.0",
+      "version": "1.52.0",
       "files": {
         "flutter_native_splash.yaml": "d469a133b5e1631d6ba811b048d290449224075edad2153189cfb2edc3f4d100",
         "android/app/src/main/res/font/montserrat_extrabolditalic.ttf": "d38bac61eda8d8c002b1a852f5368901a085fbe1d844b5e0a149b674e22e2cdd",
@@ -66,7 +66,7 @@
         "assets/svgs/adress.svg": "774120f4d4cd801898852fc3062683a456a8c07bf8253a0c608fc5429f604697",
         "lib/presentation/theme/theme.dart": "a2b2ac2e4e90abdcac4247ea6d29ced0e58922a99a1c65c3d12639bfb6949f27",
         "lib/presentation/theme/app_style.dart": "c9dc27c1648d67478f2c4633753141715735c97773b775b3a215292071521e30",
-        "lib/main.dart": "9c287268ebed26bbc0512b83f09ce6ba4d091d25e8848091b9942d70da3a028a",
+        "lib/main.dart": "86623027e0ce8c38125b25c22320dba732f4f91b351c891a3f32df544dc74ae9",
         "lib/presentation/app_widget.dart": "1deab8c8cd7b2988a99b557d7492d85ab70d58a086afb7a7ca679ad2d04a5f68",
         "lib/presentation/routes/app_router.dart": "a3f4d5db5deab2ef09734b3d48a22957c96906a14368ea452c594ed92c6a0411",
         "lib/presentation/routes/route_pages.dart": "49d80533970d4eec6fdc9e5e938f42cb9534a34e364ab0c5f00521dbea44ba46",
@@ -1272,7 +1272,7 @@
       }
     },
     "auth_sdk": {
-      "version": "1.9.1",
+      "version": "1.9.2",
       "files": {
         "lib/presentation/routes/auth_route_pages.dart": "ebb28ea83140b03a62e0023027dce5cd840a1301e5414475545f40f61fb5937b",
         "lib/presentation/routes/registration_step_pages.dart": "0688256171defa4e5aadaa38b010cb754d0a4ca19bc517b9a6f192d4afdd4e6f",
@@ -1347,6 +1347,11 @@
           "id": "auth_pending_otp_gate",
           "order": 0,
           "body": "PendingOtpGate.install();"
+        },
+        {
+          "id": "auth_restore_credential_gate",
+          "order": 1,
+          "body": "RestoreCredentialGate.install(); SessionEndHooks.register('restore_credentials', RestoreCredentialGate.clear);"
         }
       ]
     },
@@ -1416,16 +1421,16 @@
   },
   "sdk_cache": {
     "base": {
-      "version": "1.51.0",
-      "hash": "dddf98e95753f17f"
+      "version": "1.52.0",
+      "hash": "fcee12420c07d122"
     },
     "comms": {
       "version": "1.13.0",
       "hash": "d4cfe9139bb38af5"
     },
     "auth": {
-      "version": "1.9.1",
-      "hash": "f537756d8e1fceea"
+      "version": "1.9.2",
+      "hash": "0c3e3707df9e01b9"
     },
     "users": {
       "version": "1.3.1",
