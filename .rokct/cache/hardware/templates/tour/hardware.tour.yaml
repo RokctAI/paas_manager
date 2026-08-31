@@ -1,0 +1,16 @@
+# Guided-tour fragment for hardware_sdk.
+#
+# Registered EMPTY on purpose - this file claims the fleet-registry fragment
+# name `hardware` (fragment file names must be unique across composed SDKs)
+# and documents why there are no steps, so the merge's "SDK has not adopted
+# guided tours" warning does not hide a real decision.
+#
+# hardware_sdk is a headless device-hardware layer: manifest.json declares
+# no installs and no routes, so there is no screen a tour step could ever
+# capture. Its camera/scanner widgets appear inside the embedding SDKs'
+# screens - and therefore inside those SDKs' tours - not in one of its own.
+#
+# Brand-neutral by rule; format: RokctAI/shared-workflows
+# scripts/tour/README.md
+sdk: hardware
+steps: []

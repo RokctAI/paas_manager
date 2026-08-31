@@ -18,8 +18,10 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+import 'package:base_sdk/src/constants/app_constants.dart';
 import 'package:get_it/get_it.dart';
 import 'package:revenue_sdk/src/common/domain/interface/seller_statistics.dart';
+import 'package:revenue_sdk/src/manager/infrastructure/repositories/demo_seller_statistics_repository.dart';
 import 'package:revenue_sdk/src/manager/infrastructure/repositories/seller_statistics_repository.dart';
 
 /// Manager-role DI hook. Not exported by the barrel and not called by the
@@ -31,9 +33,15 @@ import 'package:revenue_sdk/src/manager/infrastructure/repositories/seller_stati
 /// idempotently so hand-wired hosts can call it too.
 class ManagerRevenueDependencies {
   static void register(GetIt getIt) {
+    // Demo mode (--dart-define=IS_DEMO=true) swaps the HTTP facade for its
+    // Demo* twin serving fictional store revenue offline — the same isDemo
+    // split delivery_sdk's DriverDeliveryDependencies applies to every
+    // courier facade. Zero behavior change when IS_DEMO is off.
     if (!getIt.isRegistered<SellerStatisticsRepositoryFacade>()) {
       getIt.registerSingleton<SellerStatisticsRepositoryFacade>(
-        SellerStatisticsRepository(),
+        AppConstants.isDemo
+            ? DemoSellerStatisticsRepository()
+            : SellerStatisticsRepository(),
       );
     }
   }
