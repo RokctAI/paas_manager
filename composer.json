@@ -12,7 +12,7 @@
       "path": "../core/base/dart",
       "ref": "main",
       "sha256": "909d60c5455993693ad4169653e961e99f683ecfa1c8f8f714f787fc2d39c740",
-      "_sha256_comment": "SHA-256 of base/dart/install.py at core@4793dfa; required by the composer's unpinned-installer gate. Update when upstream install.py changes.",
+      "_sha256_comment": "SHA-256 of base/dart/install.py at core@573d570; required by the composer's unpinned-installer gate. Update when upstream install.py changes.",
       "_comment": "Shared kernel (replaces retired core_sdk); provides the app shell templates."
     },
     {
@@ -125,7 +125,7 @@
       "path": "../core/comms/dart",
       "ref": "main",
       "sha256": "02b841bed985380ade9885a4c61b150db9e6c6eb635183018ac21b02e30126fb",
-      "_sha256_comment": "SHA-256 of comms/dart/install.py at core@4793dfa; required by the composer's unpinned-installer gate. Update when upstream install.py changes."
+      "_sha256_comment": "SHA-256 of comms/dart/install.py at core@573d570; required by the composer's unpinned-installer gate. Update when upstream install.py changes."
     },
     {
       "name": "telemetry_sdk",
@@ -197,7 +197,7 @@
       "git": "https://github.com/RokctAI/zones",
       "ref": "main",
       "sha256": "ff3ad0528ba51bc7fb4f5dd8da5e0225ee0f110c7fb0443ee5e46035739371d6",
-      "_sha256_comment": "SHA-256 of map/dart/install.py at zones@083dd8f; required by the composer's unpinned-installer gate. Update when upstream install.py changes."
+      "_sha256_comment": "SHA-256 of map/dart/install.py at zones@a8df800; required by the composer's unpinned-installer gate. Update when upstream install.py changes."
     },
     {
       "name": "weather_sdk",
@@ -207,7 +207,7 @@
       "git": "https://github.com/RokctAI/zones",
       "ref": "main",
       "sha256": "01c9a6473238f581f5286e3d0ab2be1acac6d9623201c67dfa7437a53c05c2ab",
-      "_sha256_comment": "SHA-256 of weather/dart/install.py at zones@083dd8f; required by the composer's unpinned-installer gate. Update when upstream install.py changes.",
+      "_sha256_comment": "SHA-256 of weather/dart/install.py at zones@a8df800; required by the composer's unpinned-installer gate. Update when upstream install.py changes.",
       "_comment": "Rebuilt at 1.1.0 (zones PR #4) with adaptive layout: minimal widget on phones, interactive view on large screens. Mirrors launch_manager.json."
     },
     {
@@ -240,7 +240,7 @@
       "path": "../zones/zones/dart",
       "ref": "main",
       "sha256": "b93a62716df1d06619dbe847b6cdbb0333f0e38f0f8ab207ba8d6c1bf6aaaf74",
-      "_sha256_comment": "SHA-256 of zones/dart/install.py at zones@083dd8f; required by the composer's unpinned-installer gate. Update when upstream install.py changes.",
+      "_sha256_comment": "SHA-256 of zones/dart/install.py at zones@a8df800; required by the composer's unpinned-installer gate. Update when upstream install.py changes.",
       "_comment": "Manager merchant delivery-zone page, declared under app_type.manager. Shared with driver.json, which takes the app_type.driver page from the same manifest."
     },
     {
