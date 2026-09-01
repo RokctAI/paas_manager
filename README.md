@@ -6,6 +6,41 @@ A new Flutter project for the ROKCT Manager application.
 <!-- @generated-store-description-end -->
 
 <!-- @generated-tour-gallery-start -->
+## App tour
+
+Styled stills from the committed guided tour - regenerated on every
+tour run, so new screens appear here automatically.
+
+| Pos Scan | Pos Cart | Pos Checkout |
+| :---: | :---: | :---: |
+| ![Pos Scan][s05] | ![Pos Cart][s06] | ![Pos Checkout][s07] |
+| **Restaurant Hub** | **Sync Issues** | **Menu** |
+| ![Restaurant Hub][s08] | ![Sync Issues][s09] | ![Menu][s10] |
+| **Add Product** | **Order Queue** | **Order History** |
+| ![Add Product][s11] | ![Order Queue][s12] | ![Order History][s13] |
+| **Kitchen Queue** | **Comms Language** | **Revenue Income** |
+| ![Kitchen Queue][s14] | ![Comms Language][s15] | ![Revenue Income][s16] |
+| **Subscriptions Plans** | **Productivity Tasks** | **Calc Keypad** |
+| ![Plans][s17] | ![Productivity Tasks][s18] | ![Calc Keypad][s19] |
+
+The full tour lives in the [feature guide](marketing/tour/feature-guide.md),
+with walkthrough videos alongside it in [`marketing/tour/`](marketing/tour).
+
+[s05]: marketing/tour/store/05-pos_scan.png
+[s06]: marketing/tour/store/06-pos_cart.png
+[s07]: marketing/tour/store/07-pos_checkout.png
+[s08]: marketing/tour/store/08-restaurant_hub.png
+[s09]: marketing/tour/store/09-sync_issues.png
+[s10]: marketing/tour/store/10-menu.png
+[s11]: marketing/tour/store/11-add_product.png
+[s12]: marketing/tour/store/12-order_queue.png
+[s13]: marketing/tour/store/13-order_history.png
+[s14]: marketing/tour/store/14-kitchen_queue.png
+[s15]: marketing/tour/store/15-comms_language.png
+[s16]: marketing/tour/store/16-revenue_income.png
+[s17]: marketing/tour/store/17-subscriptions_plans.png
+[s18]: marketing/tour/store/18-productivity_tasks.png
+[s19]: marketing/tour/store/19-calc_keypad.png
 <!-- @generated-tour-gallery-end -->
 
 ## Building & Release (CI/CD)
