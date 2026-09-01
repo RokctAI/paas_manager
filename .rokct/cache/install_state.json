@@ -1,7 +1,7 @@
 {
   "packages": {
     "base_sdk": {
-      "version": "1.54.0",
+      "version": "1.55.0",
       "files": {
         "flutter_native_splash.yaml": "d469a133b5e1631d6ba811b048d290449224075edad2153189cfb2edc3f4d100",
         "android/app/src/main/res/font/montserrat_extrabolditalic.ttf": "d38bac61eda8d8c002b1a852f5368901a085fbe1d844b5e0a149b674e22e2cdd",
@@ -1272,7 +1272,7 @@
       }
     },
     "auth_sdk": {
-      "version": "1.9.3",
+      "version": "1.9.4",
       "files": {
         "lib/presentation/routes/auth_route_pages.dart": "ebb28ea83140b03a62e0023027dce5cd840a1301e5414475545f40f61fb5937b",
         "lib/presentation/routes/registration_step_pages.dart": "0688256171defa4e5aadaa38b010cb754d0a4ca19bc517b9a6f192d4afdd4e6f",
@@ -1421,16 +1421,16 @@
   },
   "sdk_cache": {
     "base": {
-      "version": "1.54.0",
-      "hash": "07ba11da500d725f"
+      "version": "1.55.0",
+      "hash": "1d5eb53c15e91479"
     },
     "comms": {
       "version": "1.14.0",
       "hash": "c566d302e8b27f19"
     },
     "auth": {
-      "version": "1.9.3",
-      "hash": "41a63585db461695"
+      "version": "1.9.4",
+      "hash": "4fbbbc6af3aacceb"
     },
     "users": {
       "version": "1.3.2",
