@@ -7,14 +7,21 @@
 # RokctAI/shared-workflows .github/workflows/universal-guided-tour.yml;
 # format documentation lives in that repo at scripts/tour/README.md.
 #
-# Role chaining: auth_sdk's fragment ends with its generic demo sign-in
-# (demo.student@example.com). Manager's session policy (merchants_sdk
-# manifest, app_type.manager) admits ONLY the seller role, so that attempt
-# is rejected back to /login without a session; the back_to_login step
-# below then resets defensively and the tour signs in as
+# Demo account: setup.demo_email below is substituted into auth_sdk's
+# shared fragment, so its demo sign-in signs straight in as
 # manager@demo.rokct.ai - in demo builds MockAuthRepository maps that email
-# to the seller role, which the policy lands on /main, exactly where the
-# merchants fragment starts.
+# to the seller role, and Manager's session policy (merchants_sdk manifest,
+# app_type.manager) admits ONLY seller, landing it on /main exactly where
+# the merchants fragment starts. Left unset, the fragment falls back to
+# demo.student@example.com, which maps to 'customer'; the policy rejects
+# that back to /login with access.denied and the tour ends a few
+# screenshots in.
+#
+# The back_to_login + manager_sign_in steps below predate setup.demo_email
+# and are no longer what carries the tour to /main. They are kept as a
+# defensive reset - they tear any session down and sign in as the seller
+# again, which stays correct and keeps this tour working if the session
+# policy or the demo role map changes later.
 #
 # Fragment order mirrors the composed SDKs that ship manager-role fragments
 # today (composer profile: The-Rokct-Protocol core/utils/flutter/composer/
@@ -57,6 +64,9 @@ store:
   # order-queue tab, the screen sellers land on after sign-in.
   feature_step: order_queue
 setup:
+  # Account auth_sdk's shared tour fragment signs in as ({demo_email} in
+  # that fragment). Manager admits only the seller role - see header note.
+  demo_email: manager@demo.rokct.ai
   imports:
     - "import 'package:base_sdk/src/models/response/languages_response.dart';"
     - "import 'package:base_sdk/src/services/local_storage.dart';"
