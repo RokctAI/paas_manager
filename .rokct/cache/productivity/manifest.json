@@ -1,6 +1,6 @@
 {
   "name": "productivity_sdk",
-  "version": "1.0.4",
+  "version": "1.1.0",
   "home_page": "templates/pages/tasks/tasks_page.dart",
   "installs": [
     {
@@ -40,8 +40,8 @@
       }
     ],
     "migration": {
-      "version": 14,
-      "step": "if (from < 13) { await m.createTable(tasksTable); } if (from < 14) { await m.createTable(recoveryProfilesTable); await m.createTable(avoidedHabitsTable); await m.createTable(urgeLogsTable); await m.createTable(dailyRitualsTable); await m.createTable(ritualLogsTable); await m.createTable(procrastinationLogsTable); }"
+      "version": 15,
+      "step": "if (from < 13) { await m.createTable(tasksTable); } if (from < 14) { await m.createTable(recoveryProfilesTable); await m.createTable(avoidedHabitsTable); await m.createTable(urgeLogsTable); await m.createTable(dailyRitualsTable); await m.createTable(ritualLogsTable); await m.createTable(procrastinationLogsTable); } if (from < 15) { await m.addColumn(tasksTable, tasksTable.clientId); await m.addColumn(tasksTable, tasksTable.remoteId); }"
     }
   },
   "routes": [
@@ -50,8 +50,15 @@
       "page": "TasksRoute.page",
       "type": "CupertinoRoute",
       "import": "package:${package}/presentation/pages/tasks/tasks_page.dart"
+    },
+    {
+      "path": "/tasks/run",
+      "page": "TaskRunRoute.page",
+      "type": "CupertinoRoute",
+      "import": "package:${package}/presentation/pages/tasks/task_run_page.dart"
     }
   ],
+  "_comment_routes": "Design strip section 46: /tasks/run?task=<id> hosts a task's guided run as a page of its own. On a wide window /tasks hosts the same TaskRunView in its detail plane (frame 46a, no new push); at one plane the workspace pushes this route (46f). Other SDKs open a run by route path and never import productivity_sdk (ADR-005). It pops true when the user marks the task done from the finished card.",
   "_comment_integrations": "When the host also composes launch_sdk (its installed home page ships the '// @launcher-glance' marker at lib/presentation/pages/launch/home.dart), inject a permanent glance entry that opens this SDK's /tasks page - otherwise the launcher home has no visible way to reach tasks. The placeholder is the marker line INCLUDING its 12-space indent: update_layout_integrations() does a plain substring replace, and the bare marker text is also a prefix of the separate '// @launcher-glance-imports' marker at column 0, which must not match. GlanceCard/GlanceCardItem (base_sdk), RemixIcons and context.router are already imported by the launch home template, so no import injection is needed; navigation is by route path so this SDK still never imports launch_sdk (ADR-005). In hosts without launch_sdk the target file does not exist and the integration is skipped.",
   "integrations": [
     {

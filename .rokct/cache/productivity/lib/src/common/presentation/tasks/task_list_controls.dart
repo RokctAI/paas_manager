@@ -226,69 +226,6 @@ class TaskSortSegment extends StatelessWidget {
   }
 }
 
-/// CHIP 828 — the local-only strip, and FLAG (a) of the whole section.
-///
-/// IT SITS ABOVE THE FIRST CARD AT EVERY WIDTH, phone included: the
-/// headline fact is not a wide-read luxury.
-///
-/// NOT A WARNING TINT, AND NOT DISMISSIBLE. The fact does not change
-/// between sessions — these tasks live on this device only. There is no
-/// remote store and no sync: `TasksTable` is a local drift table and
-/// `TodoRepositoryImpl` reads and writes it, and nothing else. The strip
-/// names both in code type so a reader can go and check.
-class LocalOnlyStrip extends StatelessWidget {
-  const LocalOnlyStrip({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 8.h),
-      decoration: BoxDecoration(
-        color: AppStyle.cardDarkAlt,
-        borderRadius: BorderRadius.circular(10.r),
-        border: Border.all(color: AppStyle.strokeDarkSubtle),
-      ),
-      child: Row(
-        children: [
-          Icon(Icons.wifi_off, size: 14.r, color: AppStyle.textDarkFaint),
-          8.horizontalSpace,
-          Expanded(
-            child: RichText(
-              text: TextSpan(
-                style: AppStyle.interNormal(
-                  size: 11,
-                  color: AppStyle.textDarkSecondary,
-                ),
-                children: [
-                  const TextSpan(text: 'These tasks live on this device '),
-                  const TextSpan(text: 'only — no remote store, no sync. '),
-                  TextSpan(
-                    text: 'TasksTable',
-                    style: AppStyle.interNormal(
-                      size: 11,
-                      color: AppStyle.textPrimary,
-                    ).copyWith(fontFamily: 'monospace'),
-                  ),
-                  const TextSpan(text: ' and '),
-                  TextSpan(
-                    text: 'TodoRepositoryImpl',
-                    style: AppStyle.interNormal(
-                      size: 11,
-                      color: AppStyle.textPrimary,
-                    ).copyWith(fontFamily: 'monospace'),
-                  ),
-                  const TextSpan(text: ' are the whole story.'),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
 /// CHIP 831 — the subtask composer row.
 ///
 /// DASHED MEANS NOTHING COMMITTED YET — the rule frame 43a used for the

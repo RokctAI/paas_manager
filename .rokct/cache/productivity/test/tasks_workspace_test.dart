@@ -27,9 +27,12 @@
 //   * `recurrence` is stored and NOTHING acts on it (flag b). The chip
 //     is drawn because the field is real — but "None" must never be
 //     drawn as a repeat label, because an absent repeat is not a label.
-//   * the local-only strip names TasksTable and TodoRepositoryImpl in
-//     code type and is NOT dismissible: the fact does not change between
-//     sessions.
+//   * the local-only strip (828) is GONE, and deliberately: it said
+//     "no remote store, no sync", which stopped being true when the
+//     workspace was wired to the personal-task endpoints. Do not
+//     reinstate it. What DID stay true is that every read and every
+//     write on this page hits the local store first - see
+//     test/task_sync_test.dart, which pins that with no backend at all.
 //   * the sort control shows all three values at once. It was promoted
 //     from a DropdownButton precisely because a dropdown hid two of
 //     three behind a tap; a later "tidy-up" back to a dropdown would
@@ -392,34 +395,6 @@ void main() {
         ),
       );
       expect(find.byKey(const Key('cal')), findsOneWidget);
-    });
-  });
-
-  group('chip 828 - the local-only strip', () {
-    testWidgets('it names both classes in code type', (tester) async {
-      await _pump(tester, const LocalOnlyStrip());
-      final spans = tester
-          .widgetList<RichText>(find.byType(RichText))
-          .map((r) => r.text.toPlainText())
-          .join(' ');
-      expect(spans, contains('TasksTable'));
-      expect(spans, contains('TodoRepositoryImpl'));
-      expect(spans, contains('no sync'));
-    });
-
-    testWidgets('IT IS NOT DISMISSIBLE - the fact does not change', (
-      tester,
-    ) async {
-      await _pump(tester, const LocalOnlyStrip());
-      expect(find.byIcon(Icons.close), findsNothing);
-      expect(find.byType(GestureDetector), findsNothing);
-    });
-
-    testWidgets('it is not a warning tint', (tester) async {
-      await _pump(tester, const LocalOnlyStrip());
-      final container = tester.widget<Container>(find.byType(Container).first);
-      final decoration = container.decoration as BoxDecoration;
-      expect(decoration.color, isNot(AppStyle.red));
     });
   });
 

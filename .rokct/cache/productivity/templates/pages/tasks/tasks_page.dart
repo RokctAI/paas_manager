@@ -24,6 +24,7 @@ import 'package:base_sdk/base_sdk.dart';
 import 'package:base_sdk/src/presentation/theme/app_style.dart';
 import 'package:productivity_sdk/productivity_sdk.dart';
 import 'package:auto_route/auto_route.dart';
+import 'dart:async';
 import 'dart:math';
 
 @RoutePage()
@@ -41,6 +42,11 @@ class _TasksPageState extends State<TasksPage> {
   final TextEditingController _controller = TextEditingController();
   final TextEditingController _categoryController = TextEditingController();
   final TextEditingController _subtaskController = TextEditingController();
+  // Section 46: a step may carry an instruction and a duration (minutes).
+  final TextEditingController _subtaskInstructionController =
+      TextEditingController();
+  final TextEditingController _subtaskMinutesController =
+      TextEditingController();
   final TextEditingController _searchController = TextEditingController();
 
   DateTime? _selectedDeadline;
@@ -54,6 +60,20 @@ class _TasksPageState extends State<TasksPage> {
   DateTime? _selectedDay;
 
   String? _editingId;
+
+  /// Section 46: the task whose run holds the detail plane, if any.
+  String? _runningId;
+
+  /// Section 46: `stepsAreSequential` for the task being composed.
+  bool _stepsInOrder = false;
+
+  /// Section 47m: `isLongTerm` for the task being composed.
+  bool _isLongTerm = false;
+
+  /// Section 47n: where each task stands with the server, by client id.
+  /// Read from the outbox beside the list and redrawn as a badge; never
+  /// waited on.
+  Map<String, TaskSyncState> _syncStates = <String, TaskSyncState>{};
 
   String? _selectedCategory;
   List<Map<String, dynamic>> _currentSubtasks = [];
@@ -78,6 +98,30 @@ class _TasksPageState extends State<TasksPage> {
     _selectedDay = _focusedDay;
     _initNotifications();
     _loadTodos();
+    // Sync runs BESIDE the page, never in front of it. The list above is
+    // already being read from the local store; this asks the backend for
+    // anything it knows that this device does not, and redraws only if the
+    // answer actually changed something. Unawaited on purpose: there is no
+    // spinner, no gate, and no failure path — a device with no network or no
+    // backend simply never gets an answer, and the page never notices.
+    unawaited(_syncInBackground());
+  }
+
+  /// Drains queued task pushes and pulls down whatever changed elsewhere.
+  ///
+  /// Nothing waits for this and nothing depends on it. `syncNow` swallows an
+  /// unreachable backend rather than throwing, so the only visible effect it
+  /// can ever have is MORE tasks appearing.
+  Future<void> _syncInBackground() async {
+    final bool changed = await _repository.syncNow();
+    if (!mounted) return;
+    if (changed) {
+      await _loadTodos();
+    } else {
+      // Nothing new came down, but pushes may have gone up: the badges
+      // move from "this device" to "synced" on their own facts.
+      await _refreshSyncStates();
+    }
   }
 
   Future<void> _initNotifications() async {
@@ -91,10 +135,27 @@ class _TasksPageState extends State<TasksPage> {
         _todos = todos;
       });
     }
+    await _refreshSyncStates();
   }
 
   Future<void> _saveTodos() async {
     await _repository.saveTodos(_todos);
+    // The save queued a push; the badge says so until the push lands.
+    await _refreshSyncStates();
+  }
+
+  /// Section 47n — one query for the whole list. Local only, and never in
+  /// front of anything: an unreadable outbox leaves every badge reading
+  /// "this device", which is then the truth.
+  Future<void> _refreshSyncStates() async {
+    final Map<String, bool> byClientId = <String, bool>{
+      for (final t in _todos)
+        if ((t['clientId'] ?? '').toString().isNotEmpty)
+          t['clientId'].toString(): (t['remoteId'] ?? '').toString().isNotEmpty,
+    };
+    final Map<String, TaskSyncState> states =
+        await TaskSyncQueue.statesFor(byClientId);
+    if (mounted) setState(() => _syncStates = states);
   }
 
   Future<void> _exportData() async {
@@ -121,7 +182,12 @@ class _TasksPageState extends State<TasksPage> {
 
           LocalNotifications.cancelNotification(notifId);
 
+          // Spread the stored map first: the form does not show remindAt,
+          // snoozeCount, reminderFired, the sync ids or the step
+          // timestamps, and rebuilding the map from the form alone
+          // silently dropped every one of them on each edit.
           _todos[index] = {
+            ..._todos[index],
             'id': id,
             'notifId': notifId,
             'title': title,
@@ -131,6 +197,8 @@ class _TasksPageState extends State<TasksPage> {
             'priority': _selectedPriority,
             'category': category,
             'recurrence': _recurrence,
+            'stepsAreSequential': _stepsInOrder,
+            'isLongTerm': _isLongTerm,
             'createdAt':
                 _todos[index]['createdAt'] ?? DateTime.now().toIso8601String(),
             'subtasks': _currentSubtasks
@@ -162,6 +230,8 @@ class _TasksPageState extends State<TasksPage> {
           'priority': _selectedPriority,
           'category': category,
           'recurrence': _recurrence,
+          'stepsAreSequential': _stepsInOrder,
+          'isLongTerm': _isLongTerm,
           'createdAt': DateTime.now().toIso8601String(),
           'subtasks': _currentSubtasks
               .map((s) => Map<String, dynamic>.from(s))
@@ -182,10 +252,14 @@ class _TasksPageState extends State<TasksPage> {
       _controller.clear();
       _categoryController.clear();
       _subtaskController.clear();
+      _subtaskInstructionController.clear();
+      _subtaskMinutesController.clear();
       _selectedDeadline = null;
       _isReminderSet = false;
       _selectedPriority = 'Medium';
       _recurrence = 'None';
+      _stepsInOrder = false;
+      _isLongTerm = false;
       _selectedCategory = null;
       _currentSubtasks = [];
     });
@@ -194,12 +268,21 @@ class _TasksPageState extends State<TasksPage> {
 
   void _addSubtask() {
     if (_subtaskController.text.trim().isNotEmpty) {
+      // Section 46: the step's instruction and duration. Minutes on the
+      // form, seconds on the map and the wire; 0 is an untimed step.
+      final String instruction = _subtaskInstructionController.text.trim();
+      final int minutes =
+          int.tryParse(_subtaskMinutesController.text.trim()) ?? 0;
       setState(() {
         _currentSubtasks.add({
           'title': _subtaskController.text.trim(),
           'isDone': false,
+          if (instruction.isNotEmpty) 'instruction': instruction,
+          'durationSeconds': minutes < 0 ? 0 : minutes * 60,
         });
         _subtaskController.clear();
+        _subtaskInstructionController.clear();
+        _subtaskMinutesController.clear();
       });
     }
   }
@@ -231,6 +314,8 @@ class _TasksPageState extends State<TasksPage> {
       _selectedPriority = task['priority'] ?? 'Medium';
       _isReminderSet = task['reminder'] ?? false;
       _recurrence = task['recurrence'] ?? 'None';
+      _stepsInOrder = task['stepsAreSequential'] == true;
+      _isLongTerm = task['isLongTerm'] == true;
       _selectedCategory = task['category'];
       _categoryController.text = task['category'] ?? '';
 
@@ -257,10 +342,14 @@ class _TasksPageState extends State<TasksPage> {
       _controller.clear();
       _categoryController.clear();
       _subtaskController.clear();
+      _subtaskInstructionController.clear();
+      _subtaskMinutesController.clear();
       _selectedDeadline = null;
       _isReminderSet = false;
       _selectedPriority = 'Medium';
       _recurrence = 'None';
+      _stepsInOrder = false;
+      _isLongTerm = false;
       _selectedCategory = null;
       _currentSubtasks = [];
     });
@@ -304,12 +393,15 @@ class _TasksPageState extends State<TasksPage> {
       'category': task['category'],
       'recurrence': recurrence,
       'createdAt': DateTime.now().toIso8601String(),
+      'stepsAreSequential': task['stepsAreSequential'] == true,
+      'isLongTerm': task['isLongTerm'] == true,
+      // The next instance starts with the PROCEDURE (title, instruction,
+      // duration) and none of the run's progress: isDone cleared as
+      // before, and the step timestamps with it.
       'subtasks':
-          (task['subtasks'] as List?)?.map((s) {
-            final copy = Map<String, dynamic>.from(s);
-            copy['isDone'] = false;
-            return copy;
-          }).toList() ??
+          (task['subtasks'] as List?)
+              ?.map((s) => TaskRunStep.freshCopy(Map<String, dynamic>.from(s)))
+              .toList() ??
           [],
     });
 
@@ -510,10 +602,18 @@ class _TasksPageState extends State<TasksPage> {
   // 38 list flow, whose lists already declare two and whose corner back
   // pill (canonical 347) is raised only while a pane is open.
   //
-  // THREE FLAGS RIDE THIS SCREEN AND ARE DRAWN, NOT HIDDEN:
-  //   (a) these tasks live on this device only — no remote store, no
-  //       sync. The local-only strip (828) says so above the first
-  //       card at EVERY width, phone included.
+  // TWO FLAGS RIDE THIS SCREEN AND ARE DRAWN, NOT HIDDEN. A THIRD IS
+  // GONE:
+  //   (a) WAS "these tasks live on this device only — no remote store,
+  //       no sync", drawn by the local-only strip (828) above the first
+  //       card. It is no longer true and the strip is no longer drawn:
+  //       the workspace now syncs against the personal-task endpoints
+  //       in `projects/frappe/src/task_sync.py` through the SyncEngine
+  //       outbox. The local store is still the source of truth for
+  //       every read on this page and every write still lands there
+  //       first, so a device with no backend behaves exactly as it did
+  //       when the strip was accurate — that part did not change, and
+  //       must not.
   //   (b) `recurrence` is stored and NOTHING ever acts on it: no
   //       scheduler, no rollover, no next-instance creation anywhere in
   //       the SDK. A task marked Daily is a label. The REPEATS quad is
@@ -556,32 +656,188 @@ class _TasksPageState extends State<TasksPage> {
 
   @override
   Widget build(BuildContext context) {
+    final String? runningId = _runningId;
     return ListPlaneFlow(
       backIcon: Icons.arrow_back,
       listSpan: PlaneSpan.two,
-      detailName: _editingId ?? (_paneOpen ? 'compose' : null),
-      detailBuilder: _paneOpen ? (context) => _composePane(context) : null,
+      detailName: runningId != null
+          ? 'run-$runningId'
+          : _editingId ?? (_paneOpen ? 'compose' : null),
+      detailBuilder: runningId != null
+          ? (context) => _runPane(context, runningId)
+          : _paneOpen
+          ? (context) => _composePane(context)
+          : null,
       onCloseDetail: _closePane,
       listBuilder: _listPlane,
     );
   }
 
   /// True while the last plane is carrying something — an edit (the
-  /// detail pane, 829) or a new task (the compose lane, 830). Create and
-  /// edit are ONE component with an empty model, exactly as the shipped
-  /// page already treats them via `_editingId`.
-  bool get _paneOpen => _editingId != null || _composing;
+  /// detail pane, 829), a new task (the compose lane, 830), or a run
+  /// (section 46). Create and edit are ONE component with an empty
+  /// model, exactly as the shipped page already treats them via
+  /// `_editingId`.
+  bool get _paneOpen => _editingId != null || _composing || _runningId != null;
 
   bool _composing = false;
 
   void _openCompose() {
     _cancelEditing();
-    setState(() => _composing = true);
+    setState(() {
+      _composing = true;
+      _runningId = null;
+    });
   }
 
   void _closePane() {
     _cancelEditing();
-    setState(() => _composing = false);
+    setState(() {
+      _composing = false;
+      _runningId = null;
+    });
+  }
+
+  // ===================================================================
+  // DESIGN STRIP SECTION 46 — the guided run, hosted here.
+  //
+  // FRAME 46a: "the run is 44a's detail plane — no new push". On a wide
+  // window the run takes the LAST plane exactly as the compose lane
+  // does, so it claims no new plane and the corner Back (347) still pops
+  // /tasks back to the hub. FRAME 46f: at one plane there is no detail
+  // plane to land in, so the phone pushes the /tasks/run route with the
+  // same view filling the screen.
+  //
+  // THE PAGE OWNS NO RUN STATE. TaskRunView derives everything from the
+  // task map and hands the map back with progress written onto it; this
+  // page puts it in the list and saves it the way it saves everything —
+  // drift first, the outbox push unawaited behind it.
+  // ===================================================================
+
+  /// Chip 859 — open a task's run. The run pill on the card leads here.
+  Future<void> _openRun(int index) async {
+    final Map<String, dynamic> task = _todos[index];
+    final String id = '${task['id'] ?? ''}';
+    if (id.isEmpty) return;
+    if (!_isSinglePlane(context)) {
+      _cancelEditing();
+      setState(() {
+        _composing = false;
+        _runningId = id;
+      });
+      return;
+    }
+    // The pushed page persists through the same repository; reload on
+    // return so the badge on the card reads the run's new position, and
+    // tick the task when the finished card asked for it.
+    final Object? result = await context.router.pushNamed(
+      '/tasks/run?task=$id',
+    );
+    if (!mounted) return;
+    await _loadTodos();
+    if (result == true) {
+      final int again = _todos.indexWhere((t) => t['id'] == id);
+      if (again != -1 && _todos[again]['isDone'] != true) _toggleTodo(again);
+    }
+  }
+
+  /// The run wrote progress onto its task: put the map back and save.
+  void _onRunChanged(Map<String, dynamic> task) {
+    final int index = _todos.indexWhere((t) => t['id'] == task['id']);
+    if (index == -1) return;
+    setState(() => _todos[index] = task);
+    _saveTodos();
+  }
+
+  /// PLANE 3 (the LAST plane) — the run, in place of the static detail.
+  Widget _runPane(BuildContext context, String id) {
+    final int index = _todos.indexWhere((t) => t['id'] == id);
+    if (index == -1) {
+      return const SizedBox.shrink();
+    }
+    final Map<String, dynamic> task = _todos[index];
+    return Scaffold(
+      backgroundColor: AppStyle.transparent,
+      body: SafeArea(
+        child: TaskRunView(
+          key: ValueKey<String>('run-$id'),
+          task: task,
+          onChanged: _onRunChanged,
+          // Chip 866 — Leave, progress kept: nothing is written on the
+          // way out, and the corner pill (347) does the same.
+          onLeave: _closePane,
+          onMarkDone: () {
+            final int again = _todos.indexWhere((t) => t['id'] == id);
+            if (again != -1 && _todos[again]['isDone'] != true) {
+              _toggleTodo(again);
+            }
+            _closePane();
+          },
+        ),
+      ),
+    );
+  }
+
+  /// The words on a card's run pill: "Run" for an untouched run, else
+  /// where it stopped — "Resume · Step 3 of 9" — unless that run is the
+  /// one open in the plane right now, where "Resume" would be wrong.
+  String _runLabelFor(TaskViewModel task) {
+    final TaskRun run = task.run;
+    final String? position = run.positionLabel;
+    if (position == null) return 'Run';
+    return task.id == _runningId ? position : 'Resume · $position';
+  }
+
+  // ===================================================================
+  // DESIGN STRIP SECTION 47 — snooze (47k / 47l), the long-term band
+  // (47m) and the sync-state badge (47n). Properties of THE TASK, every
+  // task; no vertical has a privilege here.
+  // ===================================================================
+
+  /// CHIPS 1060 / 1062 — snooze this task's reminder. The sheet hands
+  /// back a reminder time and nothing else; `snoozeReminder` writes it
+  /// and NEVER the deadline; the device-local notification moves with it
+  /// (47n: it reminds on this device until the push lands).
+  Future<void> _snooze(int index) async {
+    final Map<String, dynamic> todo = _todos[index];
+    final TaskViewModel task = TaskViewModel.fromMap(todo);
+    final DateTime? remindAt = await showSnoozeSheet(context, task: task);
+    if (remindAt == null || !mounted) return;
+    final bool applied = await _repository.snoozeReminder(task.id, remindAt);
+    if (!applied || !mounted) return;
+    final int notifId = todo['notifId'] ?? Random().nextInt(100000);
+    LocalNotifications.cancelNotification(notifId);
+    LocalNotifications.scheduleNotification(
+      id: notifId,
+      title: 'Task Reminder',
+      body: task.title,
+      scheduledDate: remindAt,
+    );
+    unawaited(
+      TelemetryClient.I.track(
+        'task_reminder_snoozed',
+        properties: <String, dynamic>{
+          'minutes_ahead': remindAt.difference(DateTime.now()).inMinutes,
+          'snooze_count': task.snoozeCount + 1,
+        },
+      ),
+    );
+    // The repository wrote the row; read it back rather than guessing at
+    // what it holds now.
+    await _loadTodos();
+  }
+
+  /// CHIP 1064 — the day's list, split into the long-term band and the
+  /// rest. Both halves keep the filter and sort the list already has.
+  ({List<MapEntry<int, Map<String, dynamic>>> longTerm,
+  List<MapEntry<int, Map<String, dynamic>>> rest})
+  _banded(List<MapEntry<int, Map<String, dynamic>>> displayed) {
+    final longTerm = <MapEntry<int, Map<String, dynamic>>>[];
+    final rest = <MapEntry<int, Map<String, dynamic>>>[];
+    for (final entry in displayed) {
+      (entry.value['isLongTerm'] == true ? longTerm : rest).add(entry);
+    }
+    return (longTerm: longTerm, rest: rest);
   }
 
   // -------------------------------------------------------------- list
@@ -660,10 +916,6 @@ class _TasksPageState extends State<TasksPage> {
                 ),
               ),
               12.verticalSpace,
-              // CHIP 828 — flag (a), above the first card at every
-              // width. The headline fact is not a wide-read luxury.
-              const LocalOnlyStrip(),
-              12.verticalSpace,
               if (_showCalendar) ...[
                 _calendar(),
                 12.verticalSpace,
@@ -671,27 +923,37 @@ class _TasksPageState extends State<TasksPage> {
               Expanded(
                 child: displayedTodos.isEmpty
                     ? _emptyList()
-                    : ListView.separated(
-                        padding: EdgeInsets.only(bottom: 88.h),
-                        itemCount: displayedTodos.length,
-                        separatorBuilder: (_, __) => 8.verticalSpace,
-                        itemBuilder: (context, index) {
-                          final originalIndex = displayedTodos[index].key;
-                          final todo = displayedTodos[index].value;
-                          final task = TaskViewModel.fromMap(todo);
-                          return TaskCard(
-                            task: task,
-                            selected: _editingId == task.id,
-                            // FRAME 44d: on one plane the card expands
-                            // in place instead of pushing a pane.
-                            expanded: singlePlane && _expandedId == task.id,
-                            onToggleDone: () => _toggleTodo(originalIndex),
-                            onTap: () => singlePlane
-                                ? setState(() => _expandedId =
-                                    _expandedId == task.id ? null : task.id)
-                                : _startEditing(originalIndex),
-                            onToggleSubtask: (i) =>
-                                _toggleSubtaskStatus(originalIndex, i),
+                    : Builder(
+                        builder: (context) {
+                          // CHIP 1064 — the long-term band sits above
+                          // the day's work; the rest keep their list.
+                          final banded = _banded(displayedTodos);
+                          final rows = <Widget>[
+                            if (banded.longTerm.isNotEmpty) ...[
+                              LongTermBandHeader(
+                                count: banded.longTerm.length,
+                              ),
+                              for (final entry in banded.longTerm) ...[
+                                _card(entry.key, entry.value, singlePlane),
+                                8.verticalSpace,
+                              ],
+                              if (banded.rest.isNotEmpty) ...[
+                                4.verticalSpace,
+                                _bandLabel('EVERYTHING ELSE'),
+                              ],
+                            ],
+                            for (var i = 0; i < banded.rest.length; i++) ...[
+                              if (i > 0) 8.verticalSpace,
+                              _card(
+                                banded.rest[i].key,
+                                banded.rest[i].value,
+                                singlePlane,
+                              ),
+                            ],
+                          ];
+                          return ListView(
+                            padding: EdgeInsets.only(bottom: 88.h),
+                            children: rows,
                           );
                         },
                       ),
@@ -702,6 +964,52 @@ class _TasksPageState extends State<TasksPage> {
       ),
     );
   }
+
+  /// One card of the list, with everything sections 44, 46 and 47 hang
+  /// on it. [originalIndex] is the task's index in `_todos`.
+  Widget _card(int originalIndex, Map<String, dynamic> todo, bool singlePlane) {
+    final task = TaskViewModel.fromMap(todo);
+    final String clientId = (todo['clientId'] ?? '').toString();
+    return TaskCard(
+      task: task,
+      selected: _editingId == task.id || _runningId == task.id,
+      // CHIP 859 — the run pill, for a task with steps that is not done.
+      onRun: task.hasSubtasks && !task.isDone
+          ? () => _openRun(originalIndex)
+          : null,
+      runLabel: _runLabelFor(task),
+      // CHIPS 1066 / 1067 / 1068 — where the task stands with the server.
+      syncState: clientId.isEmpty
+          ? TaskSyncState.thisDevice
+          : _syncStates[clientId] ?? TaskSyncState.thisDevice,
+      // CHIP 1060 — snooze, on the expanded card at the fold.
+      onSnooze: task.hasReminder && !task.isDone
+          ? () => _snooze(originalIndex)
+          : null,
+      // FRAME 44d: on one plane the card expands in place instead of
+      // pushing a pane.
+      expanded: singlePlane && _expandedId == task.id,
+      onToggleDone: () => _toggleTodo(originalIndex),
+      onTap: () => singlePlane
+          ? setState(
+              () => _expandedId = _expandedId == task.id ? null : task.id,
+            )
+          : _startEditing(originalIndex),
+      onToggleSubtask: (i) => _toggleSubtaskStatus(originalIndex, i),
+    );
+  }
+
+  Widget _bandLabel(String label) => Padding(
+        padding: EdgeInsets.only(bottom: 6.h),
+        child: Text(
+          label,
+          style: AppStyle.interNormal(
+            size: 11,
+            color: AppStyle.textDarkFaint,
+            letterSpacing: 0.8,
+          ),
+        ),
+      );
 
   Widget _headerAction({
     required IconData icon,
@@ -882,8 +1190,19 @@ class _TasksPageState extends State<TasksPage> {
               // FLAG (c) — a local notification at the deadline, and
               // nothing more. The sub-line says exactly that.
               _reminderToggle(),
+              // CHIPS 1061 / 1060 — for a saved task with a reminder, the
+              // two clocks and the snooze control, right under the toggle
+              // that made the reminder.
+              if (_editingId != null) ..._editingReminderRow(),
               14.verticalSpace,
-              _fieldLabel('SUBTASKS'),
+              // CHIP 1064 — the long-term band is a property of the task.
+              _longTermToggle(),
+              14.verticalSpace,
+              _fieldLabel('STEPS'),
+              // Section 46: the order rule. Off is today's any-order
+              // checklist; on, a run opens the steps one at a time.
+              _stepsInOrderToggle(),
+              8.verticalSpace,
               for (var i = 0; i < _currentSubtasks.length; i++)
                 SubtaskCheckLine(
                   subtask: SubtaskViewModel.fromMap(_currentSubtasks[i]),
@@ -1076,27 +1395,137 @@ class _TasksPageState extends State<TasksPage> {
     );
   }
 
-  /// CHIP 831 — dashed means nothing committed yet.
+  /// Section 46 — the order rule, drawn as the toggle it is.
+  Widget _stepsInOrderToggle() {
+    return Row(
+      children: [
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                'Steps in order',
+                style: AppStyle.interSemi(
+                  size: 13,
+                  color: AppStyle.textPrimary,
+                ),
+              ),
+              2.verticalSpace,
+              Text(
+                _stepsInOrder
+                    ? 'a run opens them one at a time; the next unlocks when the one before is done'
+                    : 'a checklist — tick them in any order',
+                style: AppStyle.interNormal(
+                  size: 11,
+                  color: AppStyle.textDarkFaint,
+                ),
+              ),
+            ],
+          ),
+        ),
+        Switch(
+          value: _stepsInOrder,
+          activeThumbColor: AppStyle.primary,
+          onChanged: (value) => setState(() => _stepsInOrder = value),
+        ),
+      ],
+    );
+  }
+
+  /// The two-clock row for the task being edited, when it has a reminder.
+  List<Widget> _editingReminderRow() {
+    final int index = _todos.indexWhere((t) => t['id'] == _editingId);
+    if (index == -1) return const <Widget>[];
+    final TaskViewModel task = TaskViewModel.fromMap(_todos[index]);
+    if (!task.hasReminder) return const <Widget>[];
+    return <Widget>[
+      10.verticalSpace,
+      TaskReminderRow(
+        task: task,
+        onSnooze: task.isDone ? null : () => _snooze(index),
+      ),
+    ];
+  }
+
+  /// CHIP 1064 — keep the task in the long-term band above the day's
+  /// work. Set by hand: the surfacing rule frame 47m proposed awaits the
+  /// owner's word and nothing derives it.
+  Widget _longTermToggle() {
+    return Row(
+      children: [
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                'Long term',
+                style: AppStyle.interSemi(
+                  size: 13,
+                  color: AppStyle.textPrimary,
+                ),
+              ),
+              2.verticalSpace,
+              Text(
+                'kept in a band of its own above the day\'s work',
+                style: AppStyle.interNormal(
+                  size: 11,
+                  color: AppStyle.textDarkFaint,
+                ),
+              ),
+            ],
+          ),
+        ),
+        Switch(
+          value: _isLongTerm,
+          activeThumbColor: LongTermBandHeader.tint,
+          onChanged: (value) => setState(() => _isLongTerm = value),
+        ),
+      ],
+    );
+  }
+
+  /// CHIP 831 — dashed means nothing committed yet. Section 46 gave the
+  /// composer two more fields: what to do on the step, and how long it
+  /// takes (minutes; blank or 0 is an untimed step with no clock).
   Widget _subtaskComposer() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        TextField(
-          controller: _subtaskController,
+        _composerField(
+          _subtaskController,
+          'Name the step, then add it',
           onSubmitted: (_) => _addSubtask(),
-          style: AppStyle.interNormal(size: 12, color: AppStyle.textPrimary),
-          decoration: InputDecoration(
-            hintText: 'Name the step, then add it',
-            hintStyle:
-                AppStyle.interNormal(size: 12, color: AppStyle.textDarkFaint),
-            filled: true,
-            fillColor: AppStyle.cardDarkAlt,
-            isDense: true,
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8.r),
-              borderSide: BorderSide.none,
+        ),
+        6.verticalSpace,
+        _composerField(
+          _subtaskInstructionController,
+          'What to do on this step (optional)',
+        ),
+        6.verticalSpace,
+        Row(
+          children: [
+            SizedBox(
+              width: 110.w,
+              child: _composerField(
+                _subtaskMinutesController,
+                'Minutes',
+                keyboardType: TextInputType.number,
+                onSubmitted: (_) => _addSubtask(),
+              ),
             ),
-          ),
+            8.horizontalSpace,
+            Expanded(
+              child: Text(
+                'blank or 0 = no clock, just a confirmation',
+                style: AppStyle.interNormal(
+                  size: 11,
+                  color: AppStyle.textDarkFaint,
+                ),
+              ),
+            ),
+          ],
         ),
         8.verticalSpace,
         SubtaskComposerRow(
@@ -1104,6 +1533,32 @@ class _TasksPageState extends State<TasksPage> {
           onTap: _addSubtask,
         ),
       ],
+    );
+  }
+
+  Widget _composerField(
+    TextEditingController controller,
+    String hint, {
+    TextInputType? keyboardType,
+    ValueChanged<String>? onSubmitted,
+  }) {
+    return TextField(
+      controller: controller,
+      onSubmitted: onSubmitted,
+      keyboardType: keyboardType,
+      style: AppStyle.interNormal(size: 12, color: AppStyle.textPrimary),
+      decoration: InputDecoration(
+        hintText: hint,
+        hintStyle:
+            AppStyle.interNormal(size: 12, color: AppStyle.textDarkFaint),
+        filled: true,
+        fillColor: AppStyle.cardDarkAlt,
+        isDense: true,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8.r),
+          borderSide: BorderSide.none,
+        ),
+      ),
     );
   }
 

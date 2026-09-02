@@ -26,11 +26,20 @@
 //
 // The check line is DELIBERATELY the same shape as 41c's ToDo check line
 // so that a task's subtasks and a mastery goal's todos read alike.
+//
+// Sections 46 and 47 add to the card without changing its shape: chip 859
+// (the run badge and the Run pill, drawn only for a task with steps), the
+// 47n sync-state badge in the meta run, the 47m long-term marker, and —
+// when the card is expanded on the fold — the 47k two-clock row with its
+// snooze control. Every one of them is derived from the task map.
 
 import 'package:base_sdk/src/presentation/theme/app_style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
+import 'package:productivity_sdk/src/common/application/run/task_run.dart';
+import 'package:productivity_sdk/src/common/application/sync/task_sync_state.dart';
+import 'package:productivity_sdk/src/common/presentation/tasks/task_reminder_controls.dart';
 import 'package:productivity_sdk/src/common/presentation/tasks/task_view_model.dart';
 
 /// The shipped deadline format, kept verbatim.
@@ -59,11 +68,32 @@ class TaskCard extends StatelessWidget {
     this.expanded = false,
     this.onToggleSubtask,
     this.onRemoveSubtask,
+    this.onRun,
+    this.runLabel,
+    this.syncState,
+    this.onSnooze,
   });
 
   final TaskViewModel task;
   final VoidCallback onToggleDone;
   final VoidCallback? onTap;
+
+  /// CHIP 859 — opens the guided run. Drawn only for an open task with
+  /// steps; null hides the pill.
+  final VoidCallback? onRun;
+
+  /// The words on the run pill: "Run" for an untouched run, "Resume ·
+  /// Step 3 of 6" for one mid-way. Derived by the host from [TaskRun];
+  /// null falls back to "Run".
+  final String? runLabel;
+
+  /// CHIPS 1066 / 1067 / 1068 — where this task stands with the server.
+  /// Null draws no badge.
+  final TaskSyncState? syncState;
+
+  /// CHIP 1060 — snooze, offered on the expanded card. Null hides the
+  /// control; the two clocks are still drawn for a task with a reminder.
+  final VoidCallback? onSnooze;
 
   /// Lit while this card's task holds the detail or compose plane.
   final bool selected;
@@ -137,6 +167,13 @@ class TaskCard extends StatelessWidget {
                 ],
               ),
               if (task.hasSubtasks) ...[8.verticalSpace, _subtaskProgress()],
+              if (expanded && task.hasReminder) ...[
+                8.verticalSpace,
+                TaskReminderRow(
+                  task: task,
+                  onSnooze: task.isDone ? null : onSnooze,
+                ),
+              ],
               if (expanded && task.hasSubtasks) ...[
                 8.verticalSpace,
                 for (var i = 0; i < task.subtasks.length; i++)
@@ -160,6 +197,9 @@ class TaskCard extends StatelessWidget {
   /// The key on the done checkbox, so a caller (and this SDK's tests)
   /// can reach it without depending on widget-tree order.
   static const Key doneCheckboxKey = Key('task-card-done-checkbox');
+
+  /// The key on the run pill (859).
+  static const Key runKey = Key('task-card-run');
 
   /// The 19px round checkbox on `isDone`.
   Widget _checkbox() {
@@ -215,10 +255,27 @@ class TaskCard extends StatelessWidget {
       chips.add(_chip(icon: Icons.repeat, label: task.recurrence));
     }
     // FLAG (c): a reminder is a LOCAL notification at the deadline and
-    // nothing more.
+    // nothing more — until it syncs (47n), and the badge below says which.
     if (task.hasReminder) {
-      chips.add(_chip(icon: Icons.notifications_none, label: null));
+      chips.add(
+        _chip(
+          icon: Icons.notifications_none,
+          label: task.snoozeCount > 0 ? '×${task.snoozeCount}' : null,
+        ),
+      );
     }
+    // CHIP 1064's marker on the card, in the band's own tint.
+    if (task.isLongTerm) {
+      chips.add(
+        _chip(
+          icon: Icons.horizontal_rule,
+          label: 'Long term',
+          tint: LongTermBandHeader.tint,
+        ),
+      );
+    }
+    final TaskSyncState? sync = syncState;
+    if (sync != null) chips.add(TaskSyncBadge(state: sync));
     return chips;
   }
 
@@ -244,28 +301,75 @@ class TaskCard extends StatelessWidget {
   }
 
   /// "N of M" over a 3px bar. Both numbers are counted from the list.
+  /// Beside it, chip 859: the run pill, which says where a run stopped
+  /// without the task being opened.
   Widget _subtaskProgress() {
     final progress = task.subtaskProgress ?? 0;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisSize: MainAxisSize.min,
+    final TaskRun run = task.run;
+    final String position = run.positionLabel ?? '';
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.end,
       children: [
-        Text(
-          '${task.subtasksDone} of ${task.subtasks.length}',
-          style: AppStyle.interNormal(size: 11, color: AppStyle.textDarkFaint),
-        ),
-        4.verticalSpace,
-        ClipRRect(
-          borderRadius: BorderRadius.circular(2.r),
-          child: SizedBox(
-            height: 3.h,
-            child: LinearProgressIndicator(
-              value: progress,
-              backgroundColor: AppStyle.strokeDarkSubtle,
-              valueColor: AlwaysStoppedAnimation<Color>(AppStyle.primary),
-            ),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                position.isEmpty
+                    ? '${task.subtasksDone} of ${task.subtasks.length}'
+                    : '${task.subtasksDone} of ${task.subtasks.length} · $position',
+                style: AppStyle.interNormal(
+                  size: 11,
+                  color: AppStyle.textDarkFaint,
+                ),
+              ),
+              4.verticalSpace,
+              ClipRRect(
+                borderRadius: BorderRadius.circular(2.r),
+                child: SizedBox(
+                  height: 3.h,
+                  child: LinearProgressIndicator(
+                    value: progress,
+                    backgroundColor: AppStyle.strokeDarkSubtle,
+                    valueColor: AlwaysStoppedAnimation<Color>(AppStyle.primary),
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
+        if (onRun != null && !task.isDone) ...[
+          10.horizontalSpace,
+          GestureDetector(
+            key: runKey,
+            onTap: onRun,
+            behavior: HitTestBehavior.opaque,
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
+              decoration: BoxDecoration(
+                color: AppStyle.primary.withValues(alpha: 0.16),
+                borderRadius: BorderRadius.circular(20.r),
+                border: Border.all(color: AppStyle.primary),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    run.isInProgress ? Icons.play_circle_outline : Icons.play_arrow,
+                    size: 13.r,
+                    color: AppStyle.primary,
+                  ),
+                  4.horizontalSpace,
+                  Text(
+                    runLabel ?? (run.isInProgress ? 'Resume' : 'Run'),
+                    style: AppStyle.interSemi(size: 11, color: AppStyle.primary),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
       ],
     );
   }
@@ -313,21 +417,38 @@ class SubtaskCheckLine extends StatelessWidget {
           ),
           8.horizontalSpace,
           Expanded(
-            child: Text(
-              subtask.title,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style:
-                  AppStyle.interNormal(
-                    size: 12,
-                    color: subtask.isDone
-                        ? AppStyle.textDarkFaint
-                        : AppStyle.textDarkSecondary,
-                  ).copyWith(
-                    decoration: subtask.isDone
-                        ? TextDecoration.lineThrough
-                        : TextDecoration.none,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  subtask.title,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style:
+                      AppStyle.interNormal(
+                        size: 12,
+                        color: subtask.isDone
+                            ? AppStyle.textDarkFaint
+                            : AppStyle.textDarkSecondary,
+                      ).copyWith(
+                        decoration: subtask.isDone
+                            ? TextDecoration.lineThrough
+                            : TextDecoration.none,
+                      ),
+                ),
+                // Section 46: a step's duration and instruction, when set.
+                if (subtask.detailLine.isNotEmpty)
+                  Text(
+                    subtask.detailLine,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: AppStyle.interNormal(
+                      size: 10,
+                      color: AppStyle.textDarkFaint,
+                    ),
                   ),
+              ],
             ),
           ),
           if (onRemove != null)

@@ -19,24 +19,62 @@
 // small value types sit between them.
 //
 // THEY ADD NO FIELDS. Every field below already exists in the shipped
-// page's task map (`tasks_page.dart` `_saveTask`) or in `TasksTable`:
-// id, title, isDone, deadline, reminder, priority, category, recurrence,
-// createdAt, subtasks. Nothing is invented, and nothing is dropped —
-// `notifId` stays on the map because it is storage bookkeeping, not
-// something a card draws.
+// page's task map (`tasks_page.dart` `_saveTask`), in `TasksTable`, or in
+// the sync contract (`task_request.dart` / `task_response.dart`): id,
+// title, isDone, deadline, reminder, remindAt, reminderFired, snoozeCount,
+// priority, category, recurrence, isLongTerm, stepsAreSequential,
+// createdAt, clientId, remoteId, subtasks — and on a subtask title,
+// isDone, instruction, durationSeconds, startedAt, completedAt. Nothing is
+// invented, and nothing is dropped — `notifId` stays on the map because it
+// is storage bookkeeping, not something a card draws.
+
+import 'package:productivity_sdk/src/common/application/run/task_run.dart';
 
 /// One entry of a task's `subtasks` list.
 class SubtaskViewModel {
-  const SubtaskViewModel({required this.title, this.isDone = false});
+  const SubtaskViewModel({
+    required this.title,
+    this.isDone = false,
+    this.instruction,
+    this.durationSeconds = 0,
+    this.startedAt,
+    this.completedAt,
+  });
 
   final String title;
   final bool isDone;
 
-  factory SubtaskViewModel.fromMap(Map<String, dynamic> map) =>
-      SubtaskViewModel(
-        title: '${map['title'] ?? ''}',
-        isDone: map['isDone'] == true,
-      );
+  /// Section 46: the four generic step fields. A subtask IS a step.
+  final String? instruction;
+  final int durationSeconds;
+  final DateTime? startedAt;
+  final DateTime? completedAt;
+
+  bool get isTimed => durationSeconds > 0;
+
+  bool get hasInstruction => (instruction ?? '').trim().isNotEmpty;
+
+  /// The sub-line a check line draws under the title: the instruction and
+  /// the duration, whichever are set. Empty when neither is.
+  String get detailLine {
+    final List<String> parts = <String>[
+      if (isTimed) formatRunDuration(Duration(seconds: durationSeconds)),
+      if (hasInstruction) instruction!.trim(),
+    ];
+    return parts.join(' · ');
+  }
+
+  factory SubtaskViewModel.fromMap(Map<String, dynamic> map) {
+    final TaskRunStep step = TaskRunStep.fromMap(map);
+    return SubtaskViewModel(
+      title: step.title,
+      isDone: step.isDone,
+      instruction: step.instruction,
+      durationSeconds: step.durationSeconds,
+      startedAt: step.startedAt,
+      completedAt: step.completedAt,
+    );
+  }
 }
 
 /// One task, as the section-44 components read it.
@@ -47,10 +85,17 @@ class TaskViewModel {
     this.isDone = false,
     this.deadline,
     this.hasReminder = false,
+    this.remindAt,
+    this.reminderFired = false,
+    this.snoozeCount = 0,
     this.priority = 'Medium',
     this.category,
     this.recurrence = 'None',
+    this.isLongTerm = false,
+    this.stepsAreSequential = false,
     this.createdAt,
+    this.clientId,
+    this.remoteId,
     this.subtasks = const [],
   });
 
@@ -59,6 +104,16 @@ class TaskViewModel {
   final bool isDone;
   final DateTime? deadline;
   final bool hasReminder;
+
+  /// Section 47k: when the reminder fires — a value of its own, separate
+  /// from [deadline]. Null means "at the deadline" (never snoozed).
+  final DateTime? remindAt;
+
+  /// The server's one-shot latch, echoed back by the handshake.
+  final bool reminderFired;
+
+  /// Chip 1060 counts itself: how many times this reminder has been pushed.
+  final int snoozeCount;
 
   /// One of Low / Medium / High — the shipped `_priorities` list.
   final String priority;
@@ -74,7 +129,20 @@ class TaskViewModel {
   /// because the field does nothing.
   final String recurrence;
 
+  /// Section 47m: kept in the long-term band above the day's work. A
+  /// property of the task, set by hand — nothing derives it.
+  final bool isLongTerm;
+
+  /// Section 46: the subtasks are steps in order.
+  final bool stepsAreSequential;
+
   final DateTime? createdAt;
+
+  /// The sync ids, read off the columns. [remoteId] present means the
+  /// server has this task.
+  final String? clientId;
+  final String? remoteId;
+
   final List<SubtaskViewModel> subtasks;
 
   /// DERIVED, never read from a field — the same honesty rule section 41
@@ -87,11 +155,35 @@ class TaskViewModel {
   double? get subtaskProgress =>
       subtasks.isEmpty ? null : subtasksDone / subtasks.length;
 
+  /// The moment the reminder will fire: a snoozed time, else the deadline.
+  DateTime? get effectiveRemindAt => remindAt ?? deadline;
+
+  /// The subtasks read as a run — the derivation chip 859 draws from.
+  TaskRun get run => TaskRun(
+    steps: <TaskRunStep>[
+      for (final SubtaskViewModel s in subtasks)
+        TaskRunStep(
+          title: s.title,
+          instruction: s.instruction,
+          durationSeconds: s.durationSeconds,
+          startedAt: s.startedAt,
+          completedAt: s.completedAt,
+          isDone: s.isDone,
+        ),
+    ],
+    sequential: stepsAreSequential,
+  );
+
   factory TaskViewModel.fromMap(Map<String, dynamic> map) {
     DateTime? parse(dynamic value) {
       if (value is DateTime) return value;
       if (value is String && value.isNotEmpty) return DateTime.tryParse(value);
       return null;
+    }
+
+    int count(dynamic value) {
+      if (value is num) return value < 0 ? 0 : value.toInt();
+      return int.tryParse('${value ?? ''}') ?? 0;
     }
 
     return TaskViewModel(
@@ -100,12 +192,23 @@ class TaskViewModel {
       isDone: map['isDone'] == true,
       deadline: parse(map['deadline']),
       hasReminder: map['reminder'] == true,
+      remindAt: parse(map['remindAt']),
+      reminderFired: map['reminderFired'] == true,
+      snoozeCount: count(map['snoozeCount']),
       priority: '${map['priority'] ?? 'Medium'}',
       category: (map['category'] as String?)?.trim().isEmpty ?? true
           ? null
           : '${map['category']}',
       recurrence: '${map['recurrence'] ?? 'None'}',
+      isLongTerm: map['isLongTerm'] == true,
+      stepsAreSequential: map['stepsAreSequential'] == true,
       createdAt: parse(map['createdAt']),
+      clientId: (map['clientId'] as String?)?.isEmpty ?? true
+          ? null
+          : '${map['clientId']}',
+      remoteId: (map['remoteId'] as String?)?.isEmpty ?? true
+          ? null
+          : '${map['remoteId']}',
       subtasks: List<Map<String, dynamic>>.from(
         map['subtasks'] ?? const [],
       ).map(SubtaskViewModel.fromMap).toList(),

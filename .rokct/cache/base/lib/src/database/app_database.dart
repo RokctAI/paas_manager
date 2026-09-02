@@ -104,7 +104,7 @@ class AppDatabase extends _$AppDatabase {
         }
         // @sdk-database-migrations-start
         if (from < 16) { await m.createTable(offlineUsersTable); }
-        if (from < 13) { await m.createTable(tasksTable); } if (from < 14) { await m.createTable(recoveryProfilesTable); await m.createTable(avoidedHabitsTable); await m.createTable(urgeLogsTable); await m.createTable(dailyRitualsTable); await m.createTable(ritualLogsTable); await m.createTable(procrastinationLogsTable); }
+        if (from < 13) { await m.createTable(tasksTable); } if (from < 14) { await m.createTable(recoveryProfilesTable); await m.createTable(avoidedHabitsTable); await m.createTable(urgeLogsTable); await m.createTable(dailyRitualsTable); await m.createTable(ritualLogsTable); await m.createTable(procrastinationLogsTable); } if (from < 15) { await m.addColumn(tasksTable, tasksTable.clientId); await m.addColumn(tasksTable, tasksTable.remoteId); }
         if (from < 15) { await m.createTable(userSubscriptionsTable); }
         // @sdk-database-migrations-end
       },

@@ -32,4 +32,28 @@ abstract class TodoRepositoryFacade {
 
   /// Exports the tasks to a file and triggers a share dialog
   Future<void> exportTodos(List<Map<String, dynamic>> todos);
+
+  /// Moves one task's reminder to [remindAt] and NEVER its deadline.
+  ///
+  /// That separation is the whole reason the server keeps `remind_at` in its
+  /// own column: pushing Saturday's reminder to Sunday has not renegotiated
+  /// when the work is due. The push goes through `snooze_task_reminder`,
+  /// which makes the same promise and echoes back a `deadline_moved` flag
+  /// for the client to assert.
+  ///
+  /// Returns whether the snooze was applied locally. False for an unknown
+  /// task or a time already past - never for an unreachable backend, which
+  /// this call does not wait on.
+  Future<bool> snoozeReminder(String id, DateTime remindAt);
+
+  /// Drains queued task pushes and pulls whatever changed on the server into
+  /// the local store. Returns whether the pull actually wrote anything, so a
+  /// caller can decide whether a reload is worth doing.
+  ///
+  /// OPTIONAL BY DESIGN, and safe to never call. Nothing else here depends
+  /// on it: [loadTodos] answers from the local store whether or not this has
+  /// ever succeeded, and this call swallows an unreachable backend rather
+  /// than surfacing one. It is what makes a task typed on ANOTHER device
+  /// appear on this one.
+  Future<bool> syncNow();
 }

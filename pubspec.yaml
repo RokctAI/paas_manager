@@ -45,6 +45,8 @@ dependencies:
     path: .rokct/cache/corporate
   promotions_sdk:
     path: .rokct/cache/promotions
+  booking_sdk:
+    path: .rokct/cache/booking
   map_sdk:
     path: .rokct/cache/map
   weather_sdk:

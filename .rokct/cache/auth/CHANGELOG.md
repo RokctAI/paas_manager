@@ -1,3 +1,19 @@
+## 1.9.5
+
+* `manifest.json` `app_routes` gains `pushLoginRoute` -> `context.router
+  .push(LoginRoute())`. base_sdk's `AppRoutes` seam has declared
+  `pushLoginRoute` all along and three customer-side callers use it
+  (merchants_sdk shop page, products_sdk, marketplace_sdk: the "sign in to
+  continue" prompts on screens the user returns to), but only
+  `replaceLoginRoute` was ever filled, so the pushed variant fell through
+  to `_UnsetAppRoutes.noSuchMethod` and threw a StateError in every
+  customer composition. Same page, same wrapper (`LoginRouteView` in
+  `auth_route_pages.dart`), pushed instead of replaced. Manifest-only
+  (route map 2026-09-02, row 3). New `test/manifest_wiring_test.dart`
+  (radio_sdk pattern) guards that every declared route has its
+  `@RoutePage` shell in `templates/routes/` and that both login seams are
+  declared and target a route this SDK ships.
+
 ## 1.9.1
 
 * `LoginPage`: the guest Skip button now sits pinned in the top-end

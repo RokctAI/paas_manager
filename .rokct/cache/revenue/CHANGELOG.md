@@ -1,3 +1,108 @@
+## 1.10.3
+
+* **The driver income page's chart dependency now travels with the SDK.**
+  `templates/pages/driver/income/income_page.dart` imports
+  `charts_flutter` to build the earnings `Series` in the host package, but
+  neither this pubspec nor the generated host pubspec
+  (`core/base/dart/templates/pubspec.yaml`) declared it — the manifest
+  comment said it "stays in the host pubspec", and only the pre-fork
+  `paas_driver` happened to pin it by hand. Every other composed driver
+  host failed to resolve the import. `charts_flutter` is now a dependency
+  of `revenue_sdk` (the same discontinued-upstream git fork `paas_driver`
+  pinned), so it reaches every composed host transitively.
+* The fork pins `intl ^0.20.2` while `base_sdk` and this SDK declare
+  `^0.19.0`; a `dependency_overrides` entry mirrors the host template's
+  own `intl: ^0.20.2` arbitration so standalone resolution matches what
+  every composed build already uses. The manifest `_comment_app_type`
+  no longer claims the host owns the pin.
+* New `test/driver_income_template_deps_test.dart`: `templates/` is
+  excluded from analysis and compiles only after install, so the guard is
+  structural — every `package:` a template imports must be declared in
+  this pubspec, be the SDK or Flutter itself, or be a named composition
+  peer (`merchants_sdk`, `products_sdk`, resolved by the manager income
+  page in a composed manager host).
+* Medium-term follow-up (not this change): port the chart to `fl_chart`
+  and drop the discontinued `charts_flutter` fork.
+
+## 1.10.2
+
+* **The composed manager build compiles again.** 1.10.0 grew
+  `SellerStatisticsRepositoryFacade.getProfitReport` for the section-36
+  profit dashboard and added it to `SellerStatisticsRepository`, but not to
+  `DemoSellerStatisticsRepository`. A demo class is only ever reached
+  through the facade at runtime, so nothing surfaced it until the composed
+  `paas_manager` guided tour died at "Build Demo Debug APK":
+  `The non-abstract class 'DemoSellerStatisticsRepository' is missing
+  implementations for these members: -
+  SellerStatisticsRepositoryFacade.getProfitReport` → `Target
+  kernel_snapshot_program failed`. The build failing meant the manager tour
+  never ran a single test.
+* **The fix is additive**: `DemoSellerStatisticsRepository.getProfitReport`,
+  the exact interface signature (`{required DateTime from, required DateTime
+  to}` → `Future<ApiResult<ProfitReportResponse>>`), answering from the same
+  fictional store week the demo's `getStatistics` already serves. The
+  interface is untouched — no optional member, no default implementation —
+  and `SellerStatisticsRepository` is untouched. `getStatistics` and
+  `getStatisticsOrder` keep their previous answers byte for byte.
+* The demo report is honest rather than flattering: one product row carries
+  no cost snapshot, so the "cost not set" state and the unknown bucket both
+  render, and excluded revenue is never counted as pure profit. Per-day
+  figures key off the calendar date rather than position in the window, so
+  the dashboard's second call — the shifted previous window — comes back
+  with different numbers and the vs-previous-period delta pills actually
+  appear. A single-day window answers per hour, matching what the endpoint
+  does when `from == to`.
+* `test/demo_seller_statistics_test.dart` is the structural guard: it binds
+  `DemoSellerStatisticsRepository` to a variable typed as the FACADE, so the
+  SDK's own test run stops compiling the moment a member is added to the
+  interface and not to the demo — before a composed app ever builds. It
+  also pins the coherence rules above.
+* Every other implementer of the facade was checked: `SellerStatisticsRepository`
+  (real, complete) is the only other one, and both implementers of the
+  sibling `CourierStatisticsRepositoryFacade` were already whole.
+* No interface change, no change to any real repository, no rendered pixel
+  change outside demo builds.
+
+## 1.10.0
+
+* **The manager income page can now resolve its repository.** Composed
+  `paas_manager` builds crashed on first paint of `/income` with
+  `Bad state: GetIt: Object/factory with type
+  SellerStatisticsRepositoryFacade is not registered inside GetIt`
+  (`income_page.dart` → `statisticsProvider`). The registration was never
+  missing: `ManagerRevenueDependencies.register`
+  (`lib/src/manager/di/manager_revenue_di.dart`) registers the facade
+  correctly, under both sides of the `AppConstants.isDemo` split. It was
+  never **called**. `app_type.manager` had no `di_hooks` entry, so the
+  installer injected nothing into the composed app's generated `main.dart`,
+  and no host wired it by hand either — the class compiled perfectly while
+  nothing on earth invoked it.
+* **The fix is one manifest entry**: `revenue-manager-role-di`, order 14,
+  body `ManagerRevenueDependencies.register(GetIt.instance);`, shipping the
+  direct `src/manager/di/manager_revenue_di.dart` import the barrel
+  deliberately does not export. It mirrors this SDK's own
+  `revenue-driver-role-di` and `merchants_sdk`'s
+  `merchants-manager-role-di`. Order 14 rather than 12 because
+  `kitchen_sdk` and `merchants_sdk` already both sit at 12 in the manager
+  flavour; the injector keeps every colliding hook but warns per shared
+  order, and these registrations are independent of each other.
+* **This is the third app to be bitten by the same shape** — `paas_driver`
+  died the same way on `CourierStatisticsRepositoryFacade` (delivery_sdk's
+  driver hook, zones#85) — so the guard added here is structural rather
+  than role-specific. `test/role_di_hooks_test.dart` walks
+  `lib/src/<role>/di/` and fails if any class it finds there is not named
+  by a `di_hooks` body under its own role, with the matching direct `src/`
+  import. Add a new role DI file without the manifest entry and the test
+  fails before a composed app ever boots. It also pins that `register()`
+  really does put `SellerStatisticsRepositoryFacade` (and the three driver
+  facades) into GetIt, and that calling it twice is harmless.
+* Class docs on `ManagerRevenueDependencies` and `RevenueSdkDependencies`
+  corrected: they described the manager hook as something "a manager host
+  calls from its own DI setup", which was the plan and never the practice.
+  They now name the manifest hook that actually calls it.
+* No behaviour change for the driver role, no interface change, no rendered
+  pixel change.
+
 ## 1.9.2
 
 * **Correction to the record on `DriverWalletPage`: frame 49g IS approved.**

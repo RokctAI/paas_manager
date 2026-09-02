@@ -1,6 +1,6 @@
 name: productivity_sdk
 description: "Team task tracking, checklists, workflow management, and operational action items."
-version: 1.0.2
+version: 1.1.0
 publish_to: 'none'
 environment:
   sdk: '>=3.10.0 <4.0.0'
@@ -27,6 +27,12 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  # Test-only. lib/ deliberately does NOT import dio: the sync handlers go
+  # through base_sdk's PlatformGateway and never touch a client directly.
+  # The sync tests stand a fake HttpService in front of that gateway so the
+  # push and pull paths can be driven end to end without a server, and the
+  # Dio/HttpClientAdapter types for that fake come from here.
+  dio: ^5.7.0
 
 # Workspace-relative overrides so this package resolves standalone for
 # codegen/analysis. Ignored when a host app is the resolution root.

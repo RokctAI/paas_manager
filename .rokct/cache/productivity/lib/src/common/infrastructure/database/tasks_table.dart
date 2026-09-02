@@ -29,6 +29,29 @@ class TasksTable extends Table {
   TextColumn get createdBy => text().nullable()();
   TextColumn get data => text().nullable()(); // JSON blob fallback
 
+  /// The device-minted id the server upserts on
+  /// (`projects/frappe/src/task_sync.py`'s `client_id`).
+  ///
+  /// Separate from [id] on purpose. [id] is whatever the writing surface
+  /// chose — the tasks page mints a uuid, another writer may not — whereas
+  /// `client_id` is unique on the Task doctype and is the ONLY key the
+  /// server has to recognise a task it has seen before. Minting it here,
+  /// once, is what makes the push idempotent: a create retried after a
+  /// dropped connection updates the same Task instead of making a second
+  /// one.
+  ///
+  /// Nullable because rows written before this column existed have none;
+  /// they gain one the first time they are saved.
+  TextColumn get clientId => text().nullable()();
+
+  /// The server's `name` for this task, learned from the handshake.
+  ///
+  /// Null until the first successful push (or pull) — which is the normal,
+  /// permanent state on a device that never reaches a backend. Nothing on
+  /// the local read path consults it, so a task with no [remoteId] behaves
+  /// exactly like one that has never heard of a server.
+  TextColumn get remoteId => text().nullable()();
+
   @override
   Set<Column> get primaryKey => {id};
 }

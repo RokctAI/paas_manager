@@ -1,3 +1,163 @@
+## 1.1.0
+
+* Design strip **section 46 — the guided run** (frames 46a, 46b, 46c,
+  46f, 46g, 46i's badge) and the visible half of **section 47** (47k,
+  47l, 47m, 47n). Both are GENERIC ON THE TASK: per the owner's ruling
+  a maintenance run "is just a normal multi step task with reminder, it
+  doesnt have any privilege", so there is no field, screen or string
+  for any vertical anywhere in this release.
+  * **The run is DERIVED state.** `TaskRun` (pure Dart, no store)
+    reads a task's subtasks as steps: the current step is the first
+    one not complete, a timed step's remaining time is
+    `duration_seconds − (now − started_at)` recomputed on every read,
+    and "finished" is every step done. Nothing is counted down in
+    memory, so a run resumes after the app is killed with its
+    wall-clock credit intact (ruling three). One `Timer.periodic` per
+    page, alive only while a clock is running, asks for a repaint and
+    nothing else. paas_pos's stage dialog — two timers per stage,
+    ~2× fast, and an elapsed credit computed then discarded on resume —
+    is deliberately NOT ported.
+  * **Four generic step fields on a subtask** (server: `Task Subtask`
+    in the projects module): `instruction` (shown under the active
+    step's title), `durationSeconds` (0 = untimed, confirm-only — its
+    Continue is live at once and it never auto-completes), `startedAt`
+    (written once, never rewritten; no pause in v1) and `completedAt`.
+    One flag on the task, `stepsAreSequential` (default false = the
+    any-order checklist of today), gates the next step on the one
+    before it. All travel through `TaskRequest` / `TaskResponse` and
+    the existing `task.upsert` op; the server writes them through a
+    meta-checked whitelist.
+  * **Rulings rendered.** A blocked step cannot be skipped: the only
+    block in the generic model is a clock, `TaskRun.complete` refuses
+    while it runs, and chip 857 keeps Continue on screen, disabled,
+    locked — never hidden — with the reason (856) naming the clock and
+    the route out (858) honestly saying there is none but time; amber,
+    never red. Abandoning keeps progress: Leave (866) writes nothing
+    and `restart()` is the one destructive act, named Start over and
+    tinted so on the resume card (860). Back (855) moves ONE step and
+    keeps the reopened step's start.
+  * **852 / 865** the step rail — "STEP 3 OF 9", "6 left", a
+    three-state hairline, each done step with its outcome kept beside
+    it; on one plane it folds to the compact rail (46f). **853** the
+    step card, **872** its clock, **862** Skip for now — offered only
+    on an any-order run, because a sequential run has no skip and a
+    blocked step has none either. **859** the run badge on the task
+    card, "Step 3 of 9" beside the derived progress, and a Run / Resume
+    pill.
+  * **Two hosts, one view.** On a wide window /tasks hosts
+    `TaskRunView` in its detail plane (46a: "the run is 44a's detail
+    plane, no new push"); at one plane the workspace pushes the new
+    `/tasks/run?task=<id>` route (`TaskRunRoute`, template
+    `task_run_page.dart`), which other SDKs may open by path without
+    importing this one. Finishing a run does not tick the task by
+    itself: the finished card offers "Mark task done", the route pops
+    `true`, and the workspace acts on it.
+  * **47k / 47l snooze**, wired to the shipped `snoozeReminder`:
+    `TaskReminderRow` draws REMIND and DUE side by side (1061) with the
+    invariant in words (1063) and the snooze control that counts itself
+    (1060, `snoozeCount` is device bookkeeping); `showSnoozeSheet` offers
+    three fixed offsets and a free pick with tomorrow morning
+    pre-selected (1062) and hands back a reminder time and NOTHING else.
+    The device-local notification moves with it. The deadline is not
+    written anywhere on this path.
+  * **47m the long-term band** (`LongTermBandHeader`, 1064): tasks with
+    `isLongTerm` sit in a labelled band above the day's work, and the
+    compose pane gains the toggle. The surfacing rule frame 47m
+    proposed (recurrence ≠ None and cycle ≥ 7 days) awaits the owner's
+    word and is NOT derived.
+  * **47n the sync-state badge** (`TaskSyncBadge`, 1066 / 1067 / 1068
+    plus the parked failure): derived by `taskSyncStateFor` from the
+    two facts the device holds — a queued outbox op's status, and
+    whether the row carries the server's id. There is no synced flag
+    and none is invented; a pushed row's absence is the success signal.
+    `TaskSyncQueue.statesFor` answers for the whole list in one query.
+  * **The compose pane** lets a step carry an instruction and a
+    duration in minutes (chip 831's composer grew two fields) and the
+    task carry STEPS IN ORDER and LONG TERM. Editing an existing task
+    now keeps the fields the form does not show (`remindAt`,
+    `snoozeCount`, `stepsAreSequential`, the sync ids) instead of
+    rebuilding the map from scratch; a rolled-over recurrence copies
+    the procedure and clears the step timestamps
+    (`TaskRunStep.freshCopy`). Nothing else about recurrence changed and
+    no scheduling was added.
+  * **Not built here, on purpose:** 46d / 46h first-run setup on the
+    runner (onboarding_sdk, another repo), 46i's mid-run line on the
+    hub's Tasks row (merchants_sdk, another repo — `TaskRun.isInProgress`
+    and `positionLabel` are exported for it), 47d / 47e / 47h readings
+    and setup gates and 47i's photo tile (the water thread's own
+    doctypes, linked to Task by name; nothing of theirs lives on a
+    subtask).
+  * **Tests.** `test/task_run_test.dart` pins the derivation as plain
+    Dart: current step, the sequential gate, remaining time from
+    timestamps, resume after a kill, the confirm-only step, Back,
+    Skip, Start over and the map round trip. `test/manifest_wiring_test.dart`
+    pins the route declaration (the radio pattern).
+    `test/task_section_47_test.dart` pins the snooze arithmetic, the
+    sync-state derivation and the reminder row. The build environment
+    had a Dart SDK but no Flutter toolchain: the pure run derivation
+    and the models were analyzed and their tests executed, while the
+    widget files and widget tests were parse-checked and read by hand.
+    The PR body says so.
+
+## 1.0.5
+
+* **Task sync, client side.** The four personal-task endpoints landed
+  server-side on 2026-08-31 (`projects/frappe/src/task_sync.py`) and
+  nothing on the client called them; that commit said so itself. This is
+  the wiring. The /tasks workspace now pushes to `sync_personal_task`
+  and `delete_personal_task`, pulls from `list_personal_tasks`, and
+  moves a reminder through `snooze_task_reminder`.
+  * **IT IS ADDITIVE, AND THAT IS THE POINT.** The local store is still
+    the source of truth for every read, and every write still lands in
+    drift FIRST and returns. Not one user-facing path awaits a network
+    round trip: a save queues an op on the SyncEngine outbox and asks
+    the engine to drain WITHOUT waiting for it. There is no offline
+    branch — the same code runs with a live backend and with none ever
+    configured, and the only difference is how long an op sits in the
+    outbox. A device that never reaches a server behaves exactly as it
+    did before this change, and `test/task_sync_test.dart` pins that
+    with no `HttpService` registered at all.
+  * **The handshake is orders', copied rather than reinvented.** A task
+    is born on the device with a locally minted `client_id`; that id
+    travels with every push; the server upserts on it and hands back its
+    real `name`, which lands on the local row. Retrying a create after a
+    dropped connection therefore updates the same Task instead of making
+    a second one — the same property `OrderCreateSyncHandler` relies on,
+    reached the same way.
+  * **`TasksTable` gains `client_id` and `remote_id`** (schema 15,
+    `addColumn`). `client_id` is deliberately NOT the engine's
+    `offline:<uuid>` temp-id convention: the engine rewrites those
+    tokens inside pending payloads once it learns a mapping, which for a
+    task would rewrite a queued upsert's key into the server's name and
+    duplicate the task on the next push.
+  * **Pushes coalesce.** The page saves the whole list on every action,
+    so ops are queued with `enqueueOrReplace` keyed on `client_id` and
+    only when the WIRE payload actually changed. Ten edits before the
+    first successful push cost one outbox row carrying the latest
+    snapshot.
+  * **A pull never overwrites an unsent local edit.** A task with a
+    queued op is skipped, because the device's copy is the newer one.
+    Pulled tasks are merged onto the local row, so device-local
+    bookkeeping the server does not carry (the notification id) survives.
+  * **Snooze moves the reminder and NEVER the deadline.** The op carries
+    no deadline field at all, the local write does not touch the
+    `dueDate` column, and a response claiming `deadline_moved` is
+    refused rather than applied.
+  * **`TaskRequest` / `TaskResponse` rewritten** against the endpoints
+    they were supposed to describe. They previously matched nothing:
+    `TaskRequest` had no `clientId`, no `remindAt` and no subtasks.
+    Absent fields are now OMITTED rather than sent as null, because the
+    server reads a present key as an instruction and an absent one as
+    silence.
+  * **828 `LocalOnlyStrip` is REMOVED**, and only because it stopped
+    being true. It said "no remote store, no sync"; there is now both.
+    Nothing replaces it: a claim that these tasks ARE synced would be
+    just as wrong for a host that composes this SDK without a backend.
+    The flag it drew is struck from the page's own header comment rather
+    than quietly dropped.
+  * `ProductivitySdkDependencies.register` is now idempotent, matching
+    every other SDK's hook — it threw on a second call.
+
 ## 1.0.4
 
 * Design strip section 44 — **the /tasks workspace**, frames **44a**

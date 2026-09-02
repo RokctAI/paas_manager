@@ -127,7 +127,7 @@ packages:
       path: ".rokct/cache/auth"
       relative: true
     source: path
-    version: "1.0.0"
+    version: "1.0.1"
   auto_route:
     dependency: "direct main"
     description:
@@ -175,6 +175,13 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.2"
+  booking_sdk:
+    dependency: "direct main"
+    description:
+      path: ".rokct/cache/booking"
+      relative: true
+    source: path
+    version: "1.1.0"
   boolean_selector:
     dependency: transitive
     description:
@@ -318,6 +325,24 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.4.0"
+  charts_common:
+    dependency: transitive
+    description:
+      path: charts_common
+      ref: HEAD
+      resolved-ref: "0895820bdae3f48ff83631935dda718eab12092e"
+      url: "https://github.com/Muhammadyunusxon/charts.git"
+    source: git
+    version: "0.12.0"
+  charts_flutter:
+    dependency: transitive
+    description:
+      path: charts_flutter
+      ref: HEAD
+      resolved-ref: "0895820bdae3f48ff83631935dda718eab12092e"
+      url: "https://github.com/Muhammadyunusxon/charts.git"
+    source: git
+    version: "0.12.0"
   checked_yaml:
     dependency: transitive
     description:
@@ -427,7 +452,7 @@ packages:
       path: ".rokct/cache/corporate"
       relative: true
     source: path
-    version: "1.0.0"
+    version: "1.2.0"
   cross_file:
     dependency: transitive
     description:
@@ -482,7 +507,7 @@ packages:
       path: ".rokct/cache/desktop"
       relative: true
     source: path
-    version: "1.1.0"
+    version: "1.2.2"
   device_info_plus:
     dependency: "direct main"
     description:
@@ -1635,10 +1660,10 @@ packages:
     dependency: transitive
     description:
       name: logging
-      sha256: "623a88c9594aa774443aa3eb2d41807a48486b5613e67599fb4c41c0ad47c340"
+      sha256: c8245ada5f1717ed44271ed1c26b8ce85ca3228fd2ffdb75468ab01979309d61
       url: "https://pub.dev"
     source: hosted
-    version: "1.2.0"
+    version: "1.3.0"
   lottie:
     dependency: "direct main"
     description:
@@ -1653,7 +1678,7 @@ packages:
       path: ".rokct/cache/map"
       relative: true
     source: path
-    version: "1.0.0"
+    version: "1.1.0"
   matcher:
     dependency: transitive
     description:
@@ -1984,7 +2009,7 @@ packages:
       path: ".rokct/cache/productivity"
       relative: true
     source: path
-    version: "1.0.2"
+    version: "1.1.0"
   products_sdk:
     dependency: "direct main"
     description:
@@ -2519,7 +2544,7 @@ packages:
       path: ".rokct/cache/users"
       relative: true
     source: path
-    version: "1.0.0"
+    version: "1.0.1"
   uuid:
     dependency: transitive
     description:

@@ -18,13 +18,16 @@ import 'package:revenue_sdk/src/common/domain/interface/seller_statistics.dart';
 import 'package:revenue_sdk/src/manager/infrastructure/repositories/demo_seller_statistics_repository.dart';
 import 'package:revenue_sdk/src/manager/infrastructure/repositories/seller_statistics_repository.dart';
 
-/// Manager-role DI hook. Not exported by the barrel and not called by the
-/// generated `main.dart` — the common `RevenueSdkDependencies.register` cannot
-/// import this file because a driver app's cache has `lib/src/manager/`
-/// stripped. A manager host calls this from its own DI setup, importing it via
-/// this direct `src/` path, before the installed income page first builds
-/// `statisticsProvider` (which resolves the facade from GetIt). Registers
-/// idempotently so hand-wired hosts can call it too.
+/// Manager-role DI hook. Not exported by the barrel — the common
+/// `RevenueSdkDependencies.register` cannot import this file because a driver
+/// app's cache has `lib/src/manager/` stripped. The manifest's
+/// app_type.manager `di_hooks` entry (`revenue-manager-role-di`) injects the
+/// call into the generated `main.dart` via this direct `src/` path, mirroring
+/// the driver side's `revenue-driver-role-di`, so the facade is registered
+/// before the installed income page first builds `statisticsProvider` /
+/// `profitDashboardProvider` (both resolve it from GetIt). A host mid
+/// migration may still call it from its own DI setup too; registers
+/// idempotently so both call sites can coexist.
 class ManagerRevenueDependencies {
   static void register(GetIt getIt) {
     // Demo mode (--dart-define=IS_DEMO=true) swaps the HTTP facade for its

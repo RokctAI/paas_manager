@@ -2092,6 +2092,28 @@ class $TasksTableTable extends TasksTable
     type: DriftSqlType.string,
     requiredDuringInsert: false,
   );
+  static const VerificationMeta _clientIdMeta = const VerificationMeta(
+    'clientId',
+  );
+  @override
+  late final GeneratedColumn<String> clientId = GeneratedColumn<String>(
+    'client_id',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _remoteIdMeta = const VerificationMeta(
+    'remoteId',
+  );
+  @override
+  late final GeneratedColumn<String> remoteId = GeneratedColumn<String>(
+    'remote_id',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
   @override
   List<GeneratedColumn> get $columns => [
     id,
@@ -2103,6 +2125,8 @@ class $TasksTableTable extends TasksTable
     updatedAt,
     createdBy,
     data,
+    clientId,
+    remoteId,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -2175,6 +2199,18 @@ class $TasksTableTable extends TasksTable
         this.data.isAcceptableOrUnknown(data['data']!, _dataMeta),
       );
     }
+    if (data.containsKey('client_id')) {
+      context.handle(
+        _clientIdMeta,
+        clientId.isAcceptableOrUnknown(data['client_id']!, _clientIdMeta),
+      );
+    }
+    if (data.containsKey('remote_id')) {
+      context.handle(
+        _remoteIdMeta,
+        remoteId.isAcceptableOrUnknown(data['remote_id']!, _remoteIdMeta),
+      );
+    }
     return context;
   }
 
@@ -2220,6 +2256,14 @@ class $TasksTableTable extends TasksTable
         DriftSqlType.string,
         data['${effectivePrefix}data'],
       ),
+      clientId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}client_id'],
+      ),
+      remoteId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}remote_id'],
+      ),
     );
   }
 
@@ -2239,6 +2283,29 @@ class TaskEntity extends DataClass implements Insertable<TaskEntity> {
   final DateTime updatedAt;
   final String? createdBy;
   final String? data;
+
+  /// The device-minted id the server upserts on
+  /// (`projects/frappe/src/task_sync.py`'s `client_id`).
+  ///
+  /// Separate from [id] on purpose. [id] is whatever the writing surface
+  /// chose — the tasks page mints a uuid, another writer may not — whereas
+  /// `client_id` is unique on the Task doctype and is the ONLY key the
+  /// server has to recognise a task it has seen before. Minting it here,
+  /// once, is what makes the push idempotent: a create retried after a
+  /// dropped connection updates the same Task instead of making a second
+  /// one.
+  ///
+  /// Nullable because rows written before this column existed have none;
+  /// they gain one the first time they are saved.
+  final String? clientId;
+
+  /// The server's `name` for this task, learned from the handshake.
+  ///
+  /// Null until the first successful push (or pull) — which is the normal,
+  /// permanent state on a device that never reaches a backend. Nothing on
+  /// the local read path consults it, so a task with no [remoteId] behaves
+  /// exactly like one that has never heard of a server.
+  final String? remoteId;
   const TaskEntity({
     required this.id,
     required this.title,
@@ -2249,6 +2316,8 @@ class TaskEntity extends DataClass implements Insertable<TaskEntity> {
     required this.updatedAt,
     this.createdBy,
     this.data,
+    this.clientId,
+    this.remoteId,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -2270,6 +2339,12 @@ class TaskEntity extends DataClass implements Insertable<TaskEntity> {
     if (!nullToAbsent || data != null) {
       map['data'] = Variable<String>(data);
     }
+    if (!nullToAbsent || clientId != null) {
+      map['client_id'] = Variable<String>(clientId);
+    }
+    if (!nullToAbsent || remoteId != null) {
+      map['remote_id'] = Variable<String>(remoteId);
+    }
     return map;
   }
 
@@ -2290,6 +2365,12 @@ class TaskEntity extends DataClass implements Insertable<TaskEntity> {
           ? const Value.absent()
           : Value(createdBy),
       data: data == null && nullToAbsent ? const Value.absent() : Value(data),
+      clientId: clientId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(clientId),
+      remoteId: remoteId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(remoteId),
     );
   }
 
@@ -2308,6 +2389,8 @@ class TaskEntity extends DataClass implements Insertable<TaskEntity> {
       updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
       createdBy: serializer.fromJson<String?>(json['createdBy']),
       data: serializer.fromJson<String?>(json['data']),
+      clientId: serializer.fromJson<String?>(json['clientId']),
+      remoteId: serializer.fromJson<String?>(json['remoteId']),
     );
   }
   @override
@@ -2323,6 +2406,8 @@ class TaskEntity extends DataClass implements Insertable<TaskEntity> {
       'updatedAt': serializer.toJson<DateTime>(updatedAt),
       'createdBy': serializer.toJson<String?>(createdBy),
       'data': serializer.toJson<String?>(data),
+      'clientId': serializer.toJson<String?>(clientId),
+      'remoteId': serializer.toJson<String?>(remoteId),
     };
   }
 
@@ -2336,6 +2421,8 @@ class TaskEntity extends DataClass implements Insertable<TaskEntity> {
     DateTime? updatedAt,
     Value<String?> createdBy = const Value.absent(),
     Value<String?> data = const Value.absent(),
+    Value<String?> clientId = const Value.absent(),
+    Value<String?> remoteId = const Value.absent(),
   }) => TaskEntity(
     id: id ?? this.id,
     title: title ?? this.title,
@@ -2346,6 +2433,8 @@ class TaskEntity extends DataClass implements Insertable<TaskEntity> {
     updatedAt: updatedAt ?? this.updatedAt,
     createdBy: createdBy.present ? createdBy.value : this.createdBy,
     data: data.present ? data.value : this.data,
+    clientId: clientId.present ? clientId.value : this.clientId,
+    remoteId: remoteId.present ? remoteId.value : this.remoteId,
   );
   TaskEntity copyWithCompanion(TasksTableCompanion data) {
     return TaskEntity(
@@ -2362,6 +2451,8 @@ class TaskEntity extends DataClass implements Insertable<TaskEntity> {
       updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
       createdBy: data.createdBy.present ? data.createdBy.value : this.createdBy,
       data: data.data.present ? data.data.value : this.data,
+      clientId: data.clientId.present ? data.clientId.value : this.clientId,
+      remoteId: data.remoteId.present ? data.remoteId.value : this.remoteId,
     );
   }
 
@@ -2376,7 +2467,9 @@ class TaskEntity extends DataClass implements Insertable<TaskEntity> {
           ..write('createdAt: $createdAt, ')
           ..write('updatedAt: $updatedAt, ')
           ..write('createdBy: $createdBy, ')
-          ..write('data: $data')
+          ..write('data: $data, ')
+          ..write('clientId: $clientId, ')
+          ..write('remoteId: $remoteId')
           ..write(')'))
         .toString();
   }
@@ -2392,6 +2485,8 @@ class TaskEntity extends DataClass implements Insertable<TaskEntity> {
     updatedAt,
     createdBy,
     data,
+    clientId,
+    remoteId,
   );
   @override
   bool operator ==(Object other) =>
@@ -2405,7 +2500,9 @@ class TaskEntity extends DataClass implements Insertable<TaskEntity> {
           other.createdAt == this.createdAt &&
           other.updatedAt == this.updatedAt &&
           other.createdBy == this.createdBy &&
-          other.data == this.data);
+          other.data == this.data &&
+          other.clientId == this.clientId &&
+          other.remoteId == this.remoteId);
 }
 
 class TasksTableCompanion extends UpdateCompanion<TaskEntity> {
@@ -2418,6 +2515,8 @@ class TasksTableCompanion extends UpdateCompanion<TaskEntity> {
   final Value<DateTime> updatedAt;
   final Value<String?> createdBy;
   final Value<String?> data;
+  final Value<String?> clientId;
+  final Value<String?> remoteId;
   final Value<int> rowid;
   const TasksTableCompanion({
     this.id = const Value.absent(),
@@ -2429,6 +2528,8 @@ class TasksTableCompanion extends UpdateCompanion<TaskEntity> {
     this.updatedAt = const Value.absent(),
     this.createdBy = const Value.absent(),
     this.data = const Value.absent(),
+    this.clientId = const Value.absent(),
+    this.remoteId = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   TasksTableCompanion.insert({
@@ -2441,6 +2542,8 @@ class TasksTableCompanion extends UpdateCompanion<TaskEntity> {
     this.updatedAt = const Value.absent(),
     this.createdBy = const Value.absent(),
     this.data = const Value.absent(),
+    this.clientId = const Value.absent(),
+    this.remoteId = const Value.absent(),
     this.rowid = const Value.absent(),
   }) : title = Value(title);
   static Insertable<TaskEntity> custom({
@@ -2453,6 +2556,8 @@ class TasksTableCompanion extends UpdateCompanion<TaskEntity> {
     Expression<DateTime>? updatedAt,
     Expression<String>? createdBy,
     Expression<String>? data,
+    Expression<String>? clientId,
+    Expression<String>? remoteId,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
@@ -2465,6 +2570,8 @@ class TasksTableCompanion extends UpdateCompanion<TaskEntity> {
       if (updatedAt != null) 'updated_at': updatedAt,
       if (createdBy != null) 'created_by': createdBy,
       if (data != null) 'data': data,
+      if (clientId != null) 'client_id': clientId,
+      if (remoteId != null) 'remote_id': remoteId,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -2479,6 +2586,8 @@ class TasksTableCompanion extends UpdateCompanion<TaskEntity> {
     Value<DateTime>? updatedAt,
     Value<String?>? createdBy,
     Value<String?>? data,
+    Value<String?>? clientId,
+    Value<String?>? remoteId,
     Value<int>? rowid,
   }) {
     return TasksTableCompanion(
@@ -2491,6 +2600,8 @@ class TasksTableCompanion extends UpdateCompanion<TaskEntity> {
       updatedAt: updatedAt ?? this.updatedAt,
       createdBy: createdBy ?? this.createdBy,
       data: data ?? this.data,
+      clientId: clientId ?? this.clientId,
+      remoteId: remoteId ?? this.remoteId,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -2525,6 +2636,12 @@ class TasksTableCompanion extends UpdateCompanion<TaskEntity> {
     if (data.present) {
       map['data'] = Variable<String>(data.value);
     }
+    if (clientId.present) {
+      map['client_id'] = Variable<String>(clientId.value);
+    }
+    if (remoteId.present) {
+      map['remote_id'] = Variable<String>(remoteId.value);
+    }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
     }
@@ -2543,6 +2660,8 @@ class TasksTableCompanion extends UpdateCompanion<TaskEntity> {
           ..write('updatedAt: $updatedAt, ')
           ..write('createdBy: $createdBy, ')
           ..write('data: $data, ')
+          ..write('clientId: $clientId, ')
+          ..write('remoteId: $remoteId, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -6367,6 +6486,8 @@ typedef $$TasksTableTableCreateCompanionBuilder =
       Value<DateTime> updatedAt,
       Value<String?> createdBy,
       Value<String?> data,
+      Value<String?> clientId,
+      Value<String?> remoteId,
       Value<int> rowid,
     });
 typedef $$TasksTableTableUpdateCompanionBuilder =
@@ -6380,6 +6501,8 @@ typedef $$TasksTableTableUpdateCompanionBuilder =
       Value<DateTime> updatedAt,
       Value<String?> createdBy,
       Value<String?> data,
+      Value<String?> clientId,
+      Value<String?> remoteId,
       Value<int> rowid,
     });
 
@@ -6434,6 +6557,16 @@ class $$TasksTableTableFilterComposer
 
   ColumnFilters<String> get data => $composableBuilder(
     column: $table.data,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get clientId => $composableBuilder(
+    column: $table.clientId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get remoteId => $composableBuilder(
+    column: $table.remoteId,
     builder: (column) => ColumnFilters(column),
   );
 }
@@ -6491,6 +6624,16 @@ class $$TasksTableTableOrderingComposer
     column: $table.data,
     builder: (column) => ColumnOrderings(column),
   );
+
+  ColumnOrderings<String> get clientId => $composableBuilder(
+    column: $table.clientId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get remoteId => $composableBuilder(
+    column: $table.remoteId,
+    builder: (column) => ColumnOrderings(column),
+  );
 }
 
 class $$TasksTableTableAnnotationComposer
@@ -6532,6 +6675,12 @@ class $$TasksTableTableAnnotationComposer
 
   GeneratedColumn<String> get data =>
       $composableBuilder(column: $table.data, builder: (column) => column);
+
+  GeneratedColumn<String> get clientId =>
+      $composableBuilder(column: $table.clientId, builder: (column) => column);
+
+  GeneratedColumn<String> get remoteId =>
+      $composableBuilder(column: $table.remoteId, builder: (column) => column);
 }
 
 class $$TasksTableTableTableManager
@@ -6574,6 +6723,8 @@ class $$TasksTableTableTableManager
                 Value<DateTime> updatedAt = const Value.absent(),
                 Value<String?> createdBy = const Value.absent(),
                 Value<String?> data = const Value.absent(),
+                Value<String?> clientId = const Value.absent(),
+                Value<String?> remoteId = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => TasksTableCompanion(
                 id: id,
@@ -6585,6 +6736,8 @@ class $$TasksTableTableTableManager
                 updatedAt: updatedAt,
                 createdBy: createdBy,
                 data: data,
+                clientId: clientId,
+                remoteId: remoteId,
                 rowid: rowid,
               ),
           createCompanionCallback:
@@ -6598,6 +6751,8 @@ class $$TasksTableTableTableManager
                 Value<DateTime> updatedAt = const Value.absent(),
                 Value<String?> createdBy = const Value.absent(),
                 Value<String?> data = const Value.absent(),
+                Value<String?> clientId = const Value.absent(),
+                Value<String?> remoteId = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => TasksTableCompanion.insert(
                 id: id,
@@ -6609,6 +6764,8 @@ class $$TasksTableTableTableManager
                 updatedAt: updatedAt,
                 createdBy: createdBy,
                 data: data,
+                clientId: clientId,
+                remoteId: remoteId,
                 rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0

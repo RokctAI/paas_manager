@@ -21,6 +21,14 @@ export 'src/common/infrastructure/database/recovery_tables.dart';
 export 'src/common/infrastructure/repositories/todo_repository_impl.dart';
 export 'src/common/infrastructure/repositories/recovery_repository_impl.dart';
 export 'src/common/infrastructure/services/task_service.dart';
+// Task sync (2026-09-01): the client half of the personal-task endpoints
+// that landed server-side on 2026-08-31. Exported so a host can register the
+// handlers, trigger a sync or read the queue state without reaching into
+// src/.
+export 'src/common/infrastructure/services/task_sync_handlers.dart';
+export 'src/common/infrastructure/services/task_sync_queue.dart';
+export 'src/common/infrastructure/services/task_sync_store.dart';
+export 'src/common/infrastructure/services/task_pull_service.dart';
 export 'src/common/models/data/task_data.dart';
 export 'src/common/models/request/task_request.dart';
 export 'src/common/models/response/task_response.dart';
@@ -35,3 +43,14 @@ export 'src/common/di/productivity_di.dart';
 export 'src/common/presentation/tasks/task_view_model.dart';
 export 'src/common/presentation/tasks/task_card.dart';
 export 'src/common/presentation/tasks/task_list_controls.dart';
+
+// Design strip section 46 — the guided run: the derivation (pure Dart,
+// no store) and the view the installed `tasks_page.dart` and
+// `task_run_page.dart` templates host.
+export 'src/common/application/run/task_run.dart';
+export 'src/common/presentation/run/task_run_view.dart';
+
+// Design strip section 47 — snooze, the long-term band and the sync-state
+// badge, generic to every task.
+export 'src/common/application/sync/task_sync_state.dart';
+export 'src/common/presentation/tasks/task_reminder_controls.dart';
