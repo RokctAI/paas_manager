@@ -1,5 +1,27 @@
 # Play phone screenshots: one marketing/tour/store/ filename per line (with or without .png).
 # This order IS the Play Store order; at most 8 are pushed; missing keys are skipped with a log.
-# While this file holds only comments, the first 8 stills in filename order are pushed.
-# Curate by listing your app's step keys here, e.g.:
-#   01-welcome
+# Consumed by RokctAI/shared-workflows scripts/play/upload_listing_assets.py
+# (read_curated_keys/curate_screenshots). While this file holds only comments,
+# the first 8 stills in filename order are pushed instead.
+#
+# Curated 2026-09-02. This list is the DEFAULT first-eight minus 08-restaurant_hub,
+# with 09-sync_issues promoted into the freed slot.
+#
+# Why 08-restaurant_hub is not listed: that still shows the restaurant hub with
+# two subtitle counters - "3 open - 1 due today" and "Memory holds 1 240.50".
+# Both are hardcoded literals behind AppConstants.isDemo (RokctAI/commerce
+# merchants/dart/templates/pages/manager/restaurant/restaurant_page.dart:493
+# and :515), and IS_DEMO=true is set only by the guided-tour workflow. A real
+# installed build renders those subtitles null, so the still advertises numbers
+# the shipped app never shows. It stays a captured tour artifact in
+# marketing/tour/store/ - it is only kept out of the Play listing.
+#
+# Keep this list at 8 entries: Play's per-type cap (PHONE_MAX_COUNT).
+01-welcome
+02-auth_login
+03-auth_register
+04-auth_reset_password
+05-pos_scan
+06-pos_cart
+07-pos_checkout
+09-sync_issues
