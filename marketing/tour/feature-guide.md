@@ -49,9 +49,8 @@ for when the customer changes their mind.
 
 ![Cash, QR - or offline by code](screenshots/07-pos_checkout.png)
 
-Take cash or a pay-link QR the customer scans on their own phone; if the till
-drops offline they still pay the link and a 6-digit code confirms it at the
-counter - the sale syncs itself later.
+Take cash or a pay-link QR the customer scans on their own phone; offline, a
+6-digit code confirms it and the sale syncs itself later.
 
 ## 8. Everything else, one tap away
 
