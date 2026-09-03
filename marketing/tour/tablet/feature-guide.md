@@ -37,3 +37,10 @@ Forgot your password? Manager gets you back in with a secure reset.
 The till is the first thing a store owner sees - point it at any barcode and
 every scan lands the product in the cart, with torch and battery-saving auto-
 pause built in.
+
+## 6. The cart keeps up
+
+![The cart keeps up](screenshots/06-pos_cart.png)
+
+Steppers, decimal weights for loose goods, live formatted totals - and Clear All
+for when the customer changes their mind.
