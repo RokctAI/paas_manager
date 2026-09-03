@@ -42,11 +42,11 @@ void main() {
           .cast<Map<String, dynamic>>()
           .toList();
 
-  // Route classes declared by SDKs auth_sdk may legitimately navigate to
-  // without owning them: base_sdk ships UiTypeRoute in every composed app
-  // (replaceUiTypeRoute is filled here as well as in base; both bodies are
-  // identical, first-wins makes the duplicate harmless).
-  const baseOwnedRoutes = {'UiTypeRoute'};
+  // Route classes declared by other SDKs that auth_sdk may legitimately
+  // navigate to without owning them. Empty since auth_sdk stopped declaring
+  // replaceUiTypeRoute: base_sdk's /ui-type picker is removed in base_sdk
+  // 1.58.0, so every app_routes body below targets a route this SDK declares.
+  const baseOwnedRoutes = <String>{};
 
   group('auth_sdk manifest navigation wiring', () {
     test('fills both login seams base_sdk\'s AppRoutes declares', () {

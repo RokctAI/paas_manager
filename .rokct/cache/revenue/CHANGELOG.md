@@ -1,3 +1,165 @@
+## 1.12.0
+
+Design strip frames 49f (chip 973) and 49i, manager side — the bank-deposit
+route reaches revenue_sdk. The driver's screens for it (49g/49h/49i) live
+in delivery_sdk >= 1.18.0; the backend in RokctAI/pay's wallet module.
+
+* **Top up on the driver's wallet plane (chip 973).** `DriverWalletPage`
+  now draws Top up under Withdraw. It pushes delivery_sdk's
+  `/driver-deposits?choose=1` — the deposit status plane with the method
+  chooser opened over it — by PATH, because revenue imports only base
+  (ADR-005). A composition without the route hears one friendly line
+  instead of seeing nothing, which is why the pill could ship at all: the
+  page's doc comment used to list the two build-state facts that kept it
+  out (no card surface composed, no deposit doctype), and the second is
+  now false.
+* **The deposit approval queue (frame 49i, manager side).** New, exported
+  from the barrel: `DepositApprovalsPage` (plane 2 of the manager hub —
+  each Pending request with the driver's name, amount, reference, when it
+  was sent, the wallet it was sent against stated as a sentence, the slip
+  in a viewer, and Approve / Reject; chip 347's back pill),
+  `DepositRejectSheet` (a reason is required — the driver reads it under
+  his row), `depositApprovalsProvider` with `DepositApprovalsNotifier` /
+  `DepositApprovalsState` (drops a row the server accepted, one decision
+  in flight at a time, friendly-line errors),
+  `DepositApprovalRepositoryFacade` / `DepositApprovalRepository`
+  (`api.wallet.list_pending_deposit_requests / approve_deposit_request /
+  reject_deposit_request` over the platform gateway) and the typed
+  `DepositRequestRecord` / `DepositResolution`. `ManagerWalletPane` gains
+  a "Deposits to approve" entry under the debit notice
+  (`showDepositApprovals`, default true) — a row, not a second action on
+  the card's strip. The facade is registered by the manager role hook
+  only: approve/reject are role-gated server-side and no driver surface
+  draws the queue.
+* Guarded by `test/deposit_approvals_test.dart` and
+  `test/deposit_approval_repository_gateway_test.dart`; the 49l pane
+  test still passes with the new row. Manifest 1.11.1 -> 1.12.0.
+
+## 1.11.1
+
+* **Frame 49l, the commerce seam declared (no code change).** Two
+  `integrations` entries target the manager hub
+  (`lib/presentation/pages/manager/restaurant/restaurant_page.dart`, the
+  installed copy of merchants_sdk >= 1.25.0's restaurant page):
+  `// @revenue-manager-wallet-imports` (column 0) receives
+  `import 'package:revenue_sdk/revenue_sdk.dart';` and
+  `// @revenue-manager-wallet` (six-space indent, first in
+  `MerchantWalletSection`'s candidate list, which renders `.first`) receives
+  `ManagerWalletPane(scope: ManagerWalletScope(shopId:
+  merchantWalletScope(ref).shopId, shopName: merchantWalletScope(ref).shopName))`,
+  so the pane wins over base's bare `BaseWalletCard` without deleting it.
+  The placeholder keeps its indent because the bare text is a prefix of the
+  imports marker and the installer replaces every occurrence. On an older
+  merchants_sdk the installer warns "marker not found" and the hub is
+  unchanged. `test/manager_wallet_integration_test.dart` pins the strings
+  (byte-for-byte twin of merchants' `test/hub_markers_test.dart`) and that
+  every symbol the replacement names outside the host is on the barrel.
+  Manifest 1.11.0 -> 1.11.1; pubspec on its own rail.
+
+## 1.11.0
+
+* **Design strip frame 49l — the manager withdraws (revenue half).** Ray
+  approved 49l on 2026-08-31 ("49d, 49f-l approved"). The frame puts ONE
+  action on the manager hub's `BaseWalletCard` strip (chip 989) beside the
+  same debit-at-request notice the driver's sheet carries (chip 986); the
+  request sheet, no-account sheet, sent sheet and payout trail are
+  49j/49n/49r/49k reused, because the endpoint, doctype, debit timing and
+  credit-back are identical for both actors. New, exported from the
+  barrel: `ManagerWalletPane` (the card with the action, the history arrow
+  into the trail and the notice), `ManagerWithdrawAction` (the action on
+  its own, for a host that keeps its own card), `managerWalletProvider`
+  keyed by `ManagerWalletScope(shopId, shopName)`, with
+  `ManagerWalletNotifier` / `ManagerWalletState`. The commerce half — the
+  merchants restaurant page passing the pane where it passes
+  `actions: []` today — is a separate PR and needs no further revenue
+  change.
+* **The shared payout surface moved from `src/driver/` to `src/common/`**
+  so a manager cache (whose `src/driver/` the composer strips) can reach
+  it: `DriverPayoutRepository`, the withdraw / bank / payouts application
+  slices, `WithdrawSheet`, the bank-details pages and sheets (49n-49s),
+  the payout trail page and widgets (49k), and `wallet_grammar.dart` (pure
+  arithmetic and wording the trail shares with the wallet plane). Files are
+  moved, not rewritten; only import paths changed. The driver wallet plane
+  (49f), `DriverWalletRepository`, courier statistics and the driver DI
+  stay in `src/driver/`. No re-export shims at the old paths: nothing
+  outside this SDK imported them (fleet clones and the driver host grep to
+  zero); the driver income template and this SDK's tests now import the
+  new paths.
+* `ManagerRevenueDependencies.register` now also registers
+  `DriverPayoutRepositoryFacade` -> `DriverPayoutRepository` (guarded, so
+  a host that runs both role hooks double-boots safely). The seam keeps
+  the driver's name: wallet's `api.payout.*` is USER-scoped and serves any
+  signed-in user, and renaming it would churn the driver's shipped code
+  for no behaviour change — follow-up, not this PR.
+* `ManagerWalletScope` is NOT sent on the wire. `request_payout` reads
+  the session user (`payout.py:350`) and debits that user's wallet; the
+  merchants page already treats the profile wallet as the seller balance.
+  Whether a shop withdraws to the shop's own account or to the manager's
+  personal one is the question frame 49l flagged for Ray; the scope sits
+  at the seam so the host does not change when he rules.
+* New `test/manager_wallet_pane_test.dart`: the pane renders the card,
+  the action and the notice; an empty or negative balance leaves the
+  action inert; a tap reads the bank accounts BEFORE anything opens, meets
+  frame 49n's explanation with none on file and sends nothing; with an
+  account on file the fleet-keypad sheet opens and the request delegates
+  the typed amount and the named account to the repository, the sent
+  sheet states the subtraction and the card draws the post-hold balance.
+  `role_di_hooks_test` pins the manager hook's payout registration.
+* Known compose-order collision, NOT resolved here (core, not this repo):
+  `core/base/frappe/manifest.json:12` maps the same
+  `{app_name}.api.payout.request_payout` key to a nonexistent
+  `merchants.tenant.api.payout.payout.request_payout`, while
+  `pay/wallet/frappe/manifest.json:42` maps it to the real
+  `wallet.tenant.api.payout.request_payout`. Which one wins depends on
+  compose order. Follow-up in core.
+
+## 1.10.4
+
+* **The manager revenue dashboard renders again.** Every scrolling column
+  that carried the paired KPI tiles collapsed to nothing. The guided tour
+  photographed it on both legs of `paas_manager` run 33623501812 (commit
+  `3543a6b6`): the phone's `16-revenue_income` came back one flat empty
+  fill — no header, no period selector, no chart, no product rows, not even
+  a zero state — and the tablet's kept its profit-by-product list on the
+  right while the whole left column, where the revenue-vs-profit chart
+  belongs, went blank.
+* **The cause was the pairing row, not the chart.**
+  `_kpiTiles(paired: true)` put profit|margin and orders|avg into a
+  `Row(crossAxisAlignment: CrossAxisAlignment.stretch)`, and all three
+  callers drop those rows straight into a `ListView`. A stretch row hands
+  its children its own incoming maxHeight as a TIGHT height, and a
+  ListView's incoming maxHeight is infinite — so each tile was asked to be
+  infinitely tall and layout threw `BoxConstraints forces an infinite
+  height` (`revenue_workspace.dart:530`, `BoxConstraints(0.0<=w<=Infinity,
+  h=Infinity)`). Flutter catches that at the row's own `layout()`, which
+  then has no size, and the failure walks up through `SliverList` to the
+  viewport. A viewport is `sizedByParent`, so it keeps its own size while
+  its sliver has no geometry: the column renders nothing while everything
+  beside it renders fine — exactly the two frames above. The 45 repeats of
+  `'!semantics.parentDataDirty': is not true` that then failed the run's
+  `flutter test` are downstream of the same abandoned layout — they begin
+  after the revenue screen, and every rendering error in both legs' logs is
+  raised by `revenue_workspace.dart`.
+* **The fix**: `_pair()` wraps each pairing row in `IntrinsicHeight`, which
+  measures the taller tile first and gives the row a FINITE height to
+  stretch against. The approved equal-height pairing is preserved — that is
+  what `stretch` was there for — it simply has something real to match now.
+  Two tiles per row, so the intrinsic pass is negligible.
+* `test/revenue_workspace_layout_test.dart` is the guard, and it asserts
+  GEOMETRY rather than the widget tree: a `ListView` builds lazily during
+  layout, so when layout is abandoned the children after the failure are
+  never built at all and a "the chart exists" check would have passed on a
+  blank screen. It pumps the real `RevenueWorkspace` at one-, two- and
+  three-plane widths and requires the trend chart and every KPI tile to
+  come back with a finite, positive size, no `forces an infinite height`
+  and no `was not laid out`, and the paired tiles to agree on height. All
+  four cases fail on 1.10.3.
+* Nothing else changed: no interface, no repository, no state, no chart
+  code. `RevenueTrendChart` was never at fault — it is a `CustomPainter`
+  with no charting dependency (the `charts_flutter` 1.10.3 declares is the
+  DRIVER income template's, a different page), and it was simply downstream
+  of the row that broke its column.
+
 ## 1.10.3
 
 * **The driver income page's chart dependency now travels with the SDK.**

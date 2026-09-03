@@ -169,6 +169,15 @@ void main() {
       expect(identical(getIt<SellerStatisticsRepositoryFacade>(), first), isTrue);
     });
 
+    test(
+        'ManagerRevenueDependencies registers the payout seam the manager '
+        'wallet pane resolves (design strip frame 49l)', () {
+      expect(getIt.isRegistered<DriverPayoutRepositoryFacade>(), isFalse);
+      ManagerRevenueDependencies.register(getIt);
+      expect(getIt.isRegistered<DriverPayoutRepositoryFacade>(), isTrue);
+      expect(getIt<DriverPayoutRepositoryFacade>(), isNotNull);
+    });
+
     test('DriverRevenueDependencies registers its three courier facades', () {
       DriverRevenueDependencies.register(getIt);
       expect(getIt.isRegistered<CourierStatisticsRepositoryFacade>(), isTrue);
@@ -181,6 +190,8 @@ void main() {
       DriverRevenueDependencies.register(getIt);
       expect(getIt.isRegistered<SellerStatisticsRepositoryFacade>(), isTrue);
       expect(getIt.isRegistered<CourierStatisticsRepositoryFacade>(), isTrue);
+      // Both hooks name the payout seam; the guard keeps the first.
+      expect(getIt.isRegistered<DriverPayoutRepositoryFacade>(), isTrue);
     });
   });
 }

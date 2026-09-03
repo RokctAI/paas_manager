@@ -527,24 +527,38 @@ class _Dashboard extends ConsumerWidget {
     return [
       revenue,
       const SizedBox(height: 12),
-      Row(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Expanded(child: profit),
-          const SizedBox(width: 12),
-          Expanded(child: margin),
-        ],
-      ),
+      _pair(profit, margin),
       const SizedBox(height: 12),
-      Row(
+      _pair(orders, avg),
+    ];
+  }
+
+  /// Two KPI tiles side by side, the SAME height — the approved frames pair
+  /// profit|margin and orders|avg as equal cards whatever their sub-lines.
+  ///
+  /// [IntrinsicHeight] is load-bearing, not decoration. Every caller of
+  /// [_kpiTiles] drops these pairs straight into a `ListView`, so the row
+  /// arrives with `maxHeight: Infinity`; a bare
+  /// `Row(crossAxisAlignment: CrossAxisAlignment.stretch)` passes its
+  /// incoming maxHeight to the children as a TIGHT height, which asks each
+  /// tile to be infinitely tall. That threw "BoxConstraints forces an
+  /// infinite height", Flutter abandoned the row's layout, and the failure
+  /// walked up the sliver until the WHOLE scrolling column rendered
+  /// nothing — the blank revenue screens the 2026-09-02 guided tour
+  /// photographed (paas_manager run 33623501812). IntrinsicHeight measures
+  /// the taller tile first and hands the row a FINITE height, so stretch
+  /// means "match your sibling" again instead of "be infinite".
+  Widget _pair(Widget left, Widget right) {
+    return IntrinsicHeight(
+      child: Row(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Expanded(child: orders),
+          Expanded(child: left),
           const SizedBox(width: 12),
-          Expanded(child: avg),
+          Expanded(child: right),
         ],
       ),
-    ];
+    );
   }
 
   Widget _payout(ProfitDashboardState state) {

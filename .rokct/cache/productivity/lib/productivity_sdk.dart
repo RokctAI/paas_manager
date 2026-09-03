@@ -30,6 +30,12 @@ export 'src/common/infrastructure/services/task_sync_queue.dart';
 export 'src/common/infrastructure/services/task_sync_store.dart';
 export 'src/common/infrastructure/services/task_pull_service.dart';
 export 'src/common/models/data/task_data.dart';
+// Design strip frame 44c — the M2 bridge: the plan read for the objective
+// picker, and the picker itself. Read-only over the gateway.
+export 'src/common/models/data/objective_data.dart';
+export 'src/common/domain/interface/objectives_repository_facade.dart';
+export 'src/common/infrastructure/repositories/objectives_repository_impl.dart';
+export 'src/common/presentation/tasks/objective_picker_pane.dart';
 export 'src/common/models/request/task_request.dart';
 export 'src/common/models/response/task_response.dart';
 export 'src/common/application/recovery/recovery_state.dart';
@@ -49,8 +55,14 @@ export 'src/common/presentation/tasks/task_list_controls.dart';
 // `task_run_page.dart` templates host.
 export 'src/common/application/run/task_run.dart';
 export 'src/common/presentation/run/task_run_view.dart';
+// Design strip frame 46i — the paused run on the hub's Tasks row: the
+// derivation and its provider, and the line the host composes through the
+// manifest's `// @productivity-tasks-row` integration.
+export 'src/common/application/run/paused_run.dart';
+export 'src/common/presentation/hub/paused_run_line.dart';
 
 // Design strip section 47 — snooze, the long-term band and the sync-state
 // badge, generic to every task.
 export 'src/common/application/sync/task_sync_state.dart';
 export 'src/common/presentation/tasks/task_reminder_controls.dart';
+export 'src/common/presentation/tasks/task_sync_notice.dart';

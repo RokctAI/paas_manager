@@ -1,6 +1,6 @@
 {
   "name": "productivity_sdk",
-  "version": "1.1.0",
+  "version": "1.3.0",
   "home_page": "templates/pages/tasks/tasks_page.dart",
   "installs": [
     {
@@ -60,11 +60,22 @@
   ],
   "_comment_routes": "Design strip section 46: /tasks/run?task=<id> hosts a task's guided run as a page of its own. On a wide window /tasks hosts the same TaskRunView in its detail plane (frame 46a, no new push); at one plane the workspace pushes this route (46f). Other SDKs open a run by route path and never import productivity_sdk (ADR-005). It pops true when the user marks the task done from the finished card.",
   "_comment_integrations": "When the host also composes launch_sdk (its installed home page ships the '// @launcher-glance' marker at lib/presentation/pages/launch/home.dart), inject a permanent glance entry that opens this SDK's /tasks page - otherwise the launcher home has no visible way to reach tasks. The placeholder is the marker line INCLUDING its 12-space indent: update_layout_integrations() does a plain substring replace, and the bare marker text is also a prefix of the separate '// @launcher-glance-imports' marker at column 0, which must not match. GlanceCard/GlanceCardItem (base_sdk), RemixIcons and context.router are already imported by the launch home template, so no import injection is needed; navigation is by route path so this SDK still never imports launch_sdk (ADR-005). In hosts without launch_sdk the target file does not exist and the integration is skipped.",
+  "_comment_integrations_tasks_row": "Design strip frame 46i (approved 2026-08-30; 47j folded into it 2026-08-31): the paused run announces itself on the door it lives behind - ONE LINE on the hub's existing Tasks row, not a new row and not a new group, gone when no run is paused. When the host composes merchants_sdk (its installed manager hub ships the '// @productivity-tasks-row' marker under the Tasks row of lib/presentation/pages/manager/restaurant/restaurant_page.dart, plus '// @productivity-tasks-row-imports' at column 0 among its imports), inject PausedRunLine there. Two entries because the line is this SDK's widget and the hub does not import productivity_sdk on its own: the imports marker takes the import, the row marker takes the widget. Same substring-replace rules as the launcher glance: the row placeholder carries its 8-space indent so it cannot match the column-0 imports marker, of which the bare marker text is a prefix. The line opens the run by ROUTE PATH ('/tasks/run?task=<id>', this SDK's own route) through context.router, which the hub already imports, so the hub never imports a page (ADR-005). Both markers are the COMMERCE side of the frame and land in the merchants repo; until they do, the composer reports the marker missing and skips the wiring, exactly as it does for a host without launch_sdk.",
   "integrations": [
     {
       "target": "lib/presentation/pages/launch/home.dart",
       "placeholder": "            // @launcher-glance",
       "replacement": "            GlanceCard(\n              items: [\n                GlanceCardItem(\n                  icon: RemixIcons.task_line,\n                  text: 'Tasks - plan your day',\n                  onTap: () => context.router.pushNamed('/tasks'),\n                ),\n              ],\n            ),"
+    },
+    {
+      "target": "lib/presentation/pages/manager/restaurant/restaurant_page.dart",
+      "placeholder": "// @productivity-tasks-row-imports",
+      "replacement": "import 'package:productivity_sdk/productivity_sdk.dart';"
+    },
+    {
+      "target": "lib/presentation/pages/manager/restaurant/restaurant_page.dart",
+      "placeholder": "        // @productivity-tasks-row",
+      "replacement": "        PausedRunLine(\n          onOpen: (taskId) => context.router.pushNamed('/tasks/run?task=$taskId'),\n        ),"
     }
   ]
 }

@@ -1,7 +1,7 @@
 {
   "packages": {
     "base_sdk": {
-      "version": "1.55.0",
+      "version": "1.60.0",
       "files": {
         "flutter_native_splash.yaml": "d469a133b5e1631d6ba811b048d290449224075edad2153189cfb2edc3f4d100",
         "android/app/src/main/res/font/montserrat_extrabolditalic.ttf": "d38bac61eda8d8c002b1a852f5368901a085fbe1d844b5e0a149b674e22e2cdd",
@@ -69,7 +69,7 @@
         "lib/main.dart": "b70b3fbcdf15f87bdfe8e52543dd3f76866b531f3170296d8b917356a3d55cfe",
         "lib/presentation/app_widget.dart": "fbaf379174bb6d0bb53413ab6b35f833f9a4746d8e75b10910ce14b6ff9bd00e",
         "lib/presentation/routes/app_router.dart": "3b99e50c60dab1161ccf14aa381f7481ab1baad0223575df04e4bda89a20464b",
-        "lib/presentation/routes/route_pages.dart": "65568ac91c6908102e2f305f4e95eaa7442c0c0fc0cc44658d35ae596ab260d0",
+        "lib/presentation/routes/route_pages.dart": "73c0b8cbf05823b865c35381355c9361c37135618d36e0ed3ea839f8d86af76d",
         "android/app/src/main/kotlin/com/app/demo/JuvoApplication.kt": "18870e8ca0b87482d3ad45fecc6211762fde11d19fd46791aba40a49b4d31d07",
         "android/app/src/main/res/xml/backup_rules.xml": "a977a3552bb8c4facc634f4060ce11d623366bc310f5b119d390feb51b2f9409",
         "android/app/src/main/res/xml/data_extraction_rules.xml": "ea351530e8fc2c342abc9798bca781ab3cabb9245b328b32ea113ed6bf1531ac",
@@ -95,12 +95,6 @@
         {
           "path": "/maintenance",
           "page": "MaintenanceRoute.page",
-          "type": "MaterialRoute",
-          "import": "package:${package}/presentation/routes/route_pages.dart"
-        },
-        {
-          "path": "/ui-type",
-          "page": "UiTypeRoute.page",
           "type": "MaterialRoute",
           "import": "package:${package}/presentation/routes/route_pages.dart"
         },
@@ -137,14 +131,6 @@
           ]
         },
         {
-          "method": "replaceUiTypeRoute",
-          "body": "context.router.replace(UiTypeRoute());",
-          "imports": [
-            "import 'package:auto_route/auto_route.dart';",
-            "import 'package:${package}/presentation/routes/app_router.dart';"
-          ]
-        },
-        {
           "method": "pushGenericProfileRoute",
           "body": "context.router.push(GenericProfileRoute());",
           "imports": [
@@ -173,10 +159,6 @@
         "assets/images/splash.png",
         "assets/images/splash1.png",
         "assets/images/splash2.png",
-        "assets/images/ui0.png",
-        "assets/images/ui1.png",
-        "assets/images/ui2.png",
-        "assets/images/ui3.png",
         "assets/images/visa.png",
         "assets/lottie/girl_empty.json",
         "assets/lottie/not-found.json",
@@ -226,14 +208,14 @@
       "boot_hooks": []
     },
     "merchants_sdk": {
-      "version": "1.23.0",
+      "version": "1.28.0",
       "files": {
         "assets/audio/notification.wav": "9d62af6f1c8df010941d1daa17162175d87293bd78371c787803b5a11f95cb9d",
         "assets/svgs/menu.svg": "9767d04ac4d157e423f972259a9c2c455a6a629c4098cc9c2fe8f9722451441b",
-        "lib/presentation/pages/main/main_page.dart": "d8c8453862d78379f7be21fa73f4915ff9d16721ea51710f725843d1f1f8d881",
+        "lib/presentation/pages/main/main_page.dart": "9b938f2f69115a49591174deae79f9363b97a37e8f57041779f5d1a4743947a9",
         "lib/presentation/pages/main/widgets/bottom_navigator_item.dart": "9086f84d83295ec9eedec3eff18595ef23af14346c339fb1d46b6aa36da23387",
         "lib/presentation/pages/main/widgets/buttons_bouncing_effect.dart": "861cc919c2b45ddfe407ea86abbea7cc9cced4052f2bab06850770111c26fa94",
-        "lib/presentation/pages/restaurant/restaurant_page.dart": "6e9e50e738fb12dce9956ee960f3cc85e35c895e1b95c1918c157b074ba828d1",
+        "lib/presentation/pages/restaurant/restaurant_page.dart": "31cd86a5861b0527d2aa8683e07a8441cfb0d32758e61b7d607f205bed23d95b",
         "lib/presentation/pages/restaurant/widgets/edit_restaurant_modal.dart": "cf13f6efb610bf2e541d549d198060ed4082e1f3894ed1b8af9a4392c66c7e14",
         "lib/presentation/pages/restaurant/widgets/logout_button.dart": "0df8924813e55822c8dd914833c96a4e16e4a8bc7c6b673e3e1856442ed17d7d",
         "lib/presentation/pages/restaurant/widgets/working_time_modal.dart": "e027c9f314b5dd2414daeea290d499c6003971b1458d59524c1b6811eb83c137",
@@ -244,8 +226,8 @@
         "lib/presentation/routes/merchants_adapters.dart": "213d5b9b38f3fe77afed0a7b92f3e90e6fddc1cbd3adc8e529f190b2f9a5fc13",
         "lib/presentation/component/helper/horizontal_image_picker.dart": "3d3899881badec29e56a192b721aa6761568cf988cbefe42f4035d76175e9f21",
         "lib/presentation/pages/sync_issues/sync_issues_page.dart": "02bfe90c8487f738fe1b744443d3cdc5be21b4b574edc3e07ff7fdbe8feeee7a",
-        "lib/presentation/pages/billing/billing_page.dart": "f00ab43aa75a7f2a064b3ee08a924e8b8161bdb932fcf6bc3432b7c5f58b7886",
-        "lib/presentation/pages/billing/checkout_page.dart": "6581c61c9410dfab1c98d0f5dc7709d975e0cb482e5b30e4e9040004f693b588",
+        "lib/presentation/pages/billing/billing_page.dart": "af080822ed1b18b6c4fd3d8b3e554388a3e995f84e1b125b10ea9e6b4e1e0f01",
+        "lib/presentation/pages/billing/checkout_page.dart": "b874a52c47c04e92669ed611bbccf83a652e80ec6fc6414a2855829bfaf03457",
         "lib/presentation/adapters/pos_orders_adapter.dart": "7eb832beff4a217f477fbe598c69c2277e8922181297ddc6944b82c032ed8e82",
         "lib/presentation/pages/quick_flow/quick_flow_page.dart": "6616f819341643a7952c63e53afc25abc58bd2281366710ee03e3325467438ff"
       },
@@ -358,6 +340,7 @@
         "shopSetupExplainer": "a_few_details_to_open_your_shop_you_can_change_everything_later",
         "shopName": "shop_name",
         "accessDenied": "access.denied",
+        "signedInAs": "Signed in as",
         "syncIssues": "sync_issues",
         "discard": "discard",
         "parked": "parked",
@@ -403,6 +386,14 @@
           {
             "role": "seller",
             "landing_route": "/main"
+          },
+          {
+            "role": "admin",
+            "landing_route": "/main"
+          },
+          {
+            "role": "System Manager",
+            "landing_route": "/main"
           }
         ],
         "rejection_message_tr_key": "access.denied",
@@ -444,9 +435,9 @@
       ]
     },
     "products_sdk": {
-      "version": "1.7.0",
+      "version": "1.10.0",
       "files": {
-        "lib/presentation/pages/foods/foods_page.dart": "5b62195021f3691099c3b0f5bf2a669362a8cbcfc9e805e150d8949f1776d438",
+        "lib/presentation/pages/foods/foods_page.dart": "b36c73ac7acb4e47e3bd3b4d84787810bf7bd87ade32c0b890e8eff7844bdcf9",
         "lib/presentation/pages/foods/foods/foods_body.dart": "ff4b16be770dc51ab54686f085030d8f2914b13d935c558829af1e70b976c92c",
         "lib/presentation/pages/foods/addons/addons_body.dart": "d1149be3d15e489f33bde50dc4974ca6976b385671c48a5df3e17a891c3d2033",
         "lib/presentation/pages/foods/addons/create/create_addon_units_modal.dart": "b3d0fc39aad11dd4abd98c4d18f5bc0aa2ab2e0b86f628ad880063b28a545031",
@@ -466,7 +457,7 @@
         "lib/presentation/pages/foods/extras/widgets/main_group_item.dart": "cccc4a4465a7ed675442a00912fd33f8dc0248edf7cabf94f60051d694293056",
         "lib/presentation/pages/foods/create/create_product_modal.dart": "b109d11f337530d4d3d4175cebbd7b811782b5254a0f2f62d847f4c82fd83650",
         "lib/presentation/pages/foods/create/details/create_food_units_modal.dart": "859a141484ab99e46df405a9aeb5ec839632ee7f640252a63af660df55a7e30a",
-        "lib/presentation/pages/foods/create/details/create_food_details_body.dart": "0845e861f9c02a37b6138349b161aee0cdd495ed6db8b3946a3ce0207c1b193f",
+        "lib/presentation/pages/foods/create/details/create_food_details_body.dart": "403707409b4a2085b020a1a19a6275d0162a0d37ba44c217943e892933d5a30c",
         "lib/presentation/pages/foods/create/details/add_category_modal.dart": "605d80d2f7255a01eda6d5dc02e27e9068292d09da7fb17ad6c0e121f16a9d79",
         "lib/presentation/pages/foods/create/details/food_categories_modal.dart": "39a022cd6148698aa08efb616ef61c992c26540a302638e6bdf3cd250e85056e",
         "lib/presentation/pages/foods/create/stocks/create_food_edit_extras_modal.dart": "bcedd44bf4673780ecec76b16cc0a5febeeea3735e682f2be63d8e2f4d93cc9e",
@@ -490,7 +481,7 @@
         "lib/presentation/components/foods/selectable_addon_item.dart": "ad65375e4329bd722cb20a650e182b17828abc5ae5af559f87ae5afad043d26d",
         "lib/presentation/components/foods/editable_food_stock_item.dart": "fdad783414f457be70f363cde852983f7cc9f47079ceb163a6db81b946b35ece",
         "lib/presentation/components/foods/multi_image_picker.dart": "8cf394ff077c9f2472ad48884936421f6ef2d7ac382d18096c31113189f4e8a6",
-        "lib/presentation/pages/foods/edit/product_edit_page.dart": "8e5fcfb3745680aeb1c7694c330accaa6e0cc5a16e12c752ee9471a8bd61983b"
+        "lib/presentation/pages/foods/edit/product_edit_page.dart": "44444196c2b4034a274240adbf5ec7b54eb3fe30da54b64a0643c6e107e0a799"
       },
       "routes": [],
       "app_routes": [],
@@ -557,9 +548,9 @@
       "boot_hooks": []
     },
     "orders_sdk": {
-      "version": "1.15.0",
+      "version": "1.18.1",
       "files": {
-        "lib/presentation/pages/orders/orders_home_page.dart": "9fc846bcbf872a5b1fef819ed945d43765f48319e469187cb71d5d5788e3c490",
+        "lib/presentation/pages/orders/orders_home_page.dart": "9586e95c9e3c6135434bf47eeae635b775057ae9e729f264e87c41350b22331a",
         "lib/presentation/pages/orders/details/order_details_modal.dart": "04220f29685b4f3f91e82b1b103d76ec0805c8d8316713917c59d3d8dfedc1ba",
         "lib/presentation/pages/orders/details/price_information.dart": "3a431b5b160442db6f6a62b5db6e82e0af38f974c3ea66d0de3230ae795256d7",
         "lib/presentation/pages/orders/details/image_dialog.dart": "2e07b31689ad02db9bd55e7f06d30377572000265201dbb41e7e03f60caf2548",
@@ -590,7 +581,7 @@
         "lib/presentation/pages/create_order/shipping/select_user/widgets/user_item.dart": "71289007495f34ae9a4441a826be4ce99b9d6f5347d96cb0f10a775df5174aa6",
         "lib/presentation/pages/create_order/order/order_page.dart": "5eaa80d50c2ea760df7f4c5b186f617fa3d33c4d9955d47bc75eb32fcba4159e",
         "lib/presentation/pages/create_order/order/widgets/title_price.dart": "b9c4dc096f3f03e2e8470659669d4fad0edd024199adec81b5d4c1c02a315293",
-        "lib/presentation/pages/order_history/order_history.dart": "987e45ffb445a2f2d09651c7d81e93cc8eef02f6de0bde1c0dc7cf8a33c4c444",
+        "lib/presentation/pages/order_history/order_history.dart": "44deaa58a541766b230bad9b466803bfe1f4ef5b8f0f286d32793984be04c9be",
         "lib/presentation/components/orders/orders_item.dart": "69781a9e66291af2380c42cf796137ce97c3daa6df18a33b728681d0c76cf18d",
         "lib/presentation/components/orders/order_item.dart": "3e057f705708acb5d3fa1769e92fca4f67c253b9680d670e9c48b42d95534247",
         "lib/presentation/components/orders/order_food_item.dart": "956a5372e9d58eab3ee86201a7c8b30d38fa630bce49cd13cf33670f366b86fa",
@@ -599,7 +590,7 @@
         "lib/presentation/components/orders/products_body.dart": "223c75d23e361270d6a44d04a821f59db274f16a953f4c307d0bc10e90a948b9",
         "lib/presentation/components/orders/food_item.dart": "4c38fe3a0a48c317df37058312eed292fcdd06017ca6f155cbfd5291711764ab",
         "lib/presentation/components/orders/food_stock_item.dart": "e4f03be24a594149bdcda50df9e7fb2811d81bf60c392879f5f92c08571b246d",
-        "lib/presentation/routes/orders_adapters.dart": "0c5c5d0d88baec646b057ec0e38f2f85d12a9772c9b95132ca9f2184a85d7519",
+        "lib/presentation/routes/orders_adapters.dart": "2044e89a5af83133b3e42b6dd64b7da355570e1df40953037a498775ee34972c",
         "assets/images/no_orders.png": "40dee5619d6b6167dd5fcbec9ad4739738f0c6f8d98dc41857dc49ab01d08ed0",
         "lib/presentation/component/buttons/custom_icon_button.dart": "97f6c0c345022aac2b1bb459ebb71807c3391b5e362520789aab2d1df0a38f3c",
         "lib/presentation/component/loading/text_loading.dart": "35d7fb69050309542792ccd08d662e1a1ca54617950f540e895d3a742c2e8975",
@@ -966,9 +957,9 @@
       "boot_hooks": []
     },
     "productivity_sdk": {
-      "version": "1.1.0",
+      "version": "1.3.0",
       "files": {
-        "lib/presentation/pages/tasks/tasks_page.dart": "a9ead6754ecb5af3d0772a18722e27267bc326d4ad07c5240e001625ad02a59f",
+        "lib/presentation/pages/tasks/tasks_page.dart": "ead476551da1fec6afeb111a38946bc851b9b70ebb026c5f84f1213a878800bf",
         "lib/presentation/pages/tasks/task_run_page.dart": "bbaade0735be015d501945371eaff1278d3774e3264c071bf1cfe52456beba3c"
       },
       "routes": [
@@ -1030,6 +1021,16 @@
           "target": "lib/presentation/pages/launch/home.dart",
           "placeholder": "            // @launcher-glance",
           "replacement": "            GlanceCard(\n              items: [\n                GlanceCardItem(\n                  icon: RemixIcons.task_line,\n                  text: 'Tasks - plan your day',\n                  onTap: () => context.router.pushNamed('/tasks'),\n                ),\n              ],\n            ),"
+        },
+        {
+          "target": "lib/presentation/pages/manager/restaurant/restaurant_page.dart",
+          "placeholder": "// @productivity-tasks-row-imports",
+          "replacement": "import 'package:productivity_sdk/productivity_sdk.dart';"
+        },
+        {
+          "target": "lib/presentation/pages/manager/restaurant/restaurant_page.dart",
+          "placeholder": "        // @productivity-tasks-row",
+          "replacement": "        PausedRunLine(\n          onOpen: (taskId) => context.router.pushNamed('/tasks/run?task=$taskId'),\n        ),"
         }
       ],
       "di_hooks": [],
@@ -1101,10 +1102,29 @@
       "boot_hooks": []
     },
     "promotions_sdk": {
-      "version": "1.1.1",
-      "files": {},
-      "routes": [],
-      "app_routes": [],
+      "version": "1.2.2",
+      "files": {
+        "lib/presentation/routes/promotions_route_pages.dart": "0dc5d4de524957c7fd906b18a65e639082ddb94d18dc94b8859b5ebcceb7f77b"
+      },
+      "routes": [
+        {
+          "path": "/storyList",
+          "page": "StoryListRoute.page",
+          "type": "MaterialRoute",
+          "import": "package:${package}/presentation/routes/promotions_route_pages.dart",
+          "_comment": "Pre-fork story viewer route recovered (fix-wave 2026-09-02, route map row 17): `/storyList?index=<n>` deep links keep resolving via @QueryParam; the shell lives in promotions_route_pages.dart. Top-level: this manifest has no flavour blocks and promotions_sdk composes only into customer-family apps."
+        }
+      ],
+      "app_routes": [
+        {
+          "method": "pushStoryListRoute",
+          "params": "BuildContext context, {dynamic controller, dynamic index}",
+          "body": "context.router.push(StoryListRoute(index: (index is int) ? index : int.tryParse('$index') ?? 0, controller: controller));",
+          "imports": [
+            "import 'package:${package}/presentation/routes/app_router.dart';"
+          ]
+        }
+      ],
       "onboarding_slides": [],
       "registration_steps": [],
       "embedded_widgets": [],
@@ -1170,7 +1190,7 @@
       }
     },
     "revenue_sdk": {
-      "version": "1.10.3",
+      "version": "1.12.0",
       "files": {
         "lib/presentation/pages/income/income_page.dart": "8add9980d1fb052986e656ed17cadcf3db532f7842a4d7ca003fce774f8338f8",
         "lib/presentation/pages/income/app_bar_screen.dart": "da70222a0db114f137b0a48e9c8c5086cc369e151d48406913263e4f73c5628a",
@@ -1242,7 +1262,21 @@
           ]
         }
       ],
-      "boot_hooks": []
+      "boot_hooks": [],
+      "integrations": [
+        {
+          "target": "lib/presentation/pages/manager/restaurant/restaurant_page.dart",
+          "placeholder": "// @revenue-manager-wallet-imports",
+          "replacement": "import 'package:revenue_sdk/revenue_sdk.dart';",
+          "_comment": "Design strip frame 49l, commerce half of the seam (merchants_sdk >= 1.25.0): the merchants restaurant page never imports revenue_sdk (ADR-005 - SDKs import only base), so the pane arrives through the composer's substring-insert integration, the same mechanism productivity_sdk uses for its tasks-row line. This entry lands the barrel import under the column-0 imports marker; the pane entry below lands the widget. On a merchants_sdk without the markers the installer only warns (wiring NOT applied) and the hub keeps base's bare BaseWalletCard."
+        },
+        {
+          "target": "lib/presentation/pages/manager/restaurant/restaurant_page.dart",
+          "placeholder": "      // @revenue-manager-wallet",
+          "replacement": "      ManagerWalletPane(\n        scope: ManagerWalletScope(\n          shopId: merchantWalletScope(ref).shopId,\n          shopName: merchantWalletScope(ref).shopName,\n        ),\n      ),",
+          "_comment": "The placeholder carries its six-space indent ON PURPOSE: the bare text is a prefix of the -imports marker above, and the installer replaces every occurrence. The marker sits first inside MerchantWalletSection's candidate list and the section renders `.first`, so the inserted pane WINS over base's BaseWalletCard(actions: [], onHistory: null) that follows it; nothing is deleted. merchantWalletScope(ref) is the host page's own seam function (shop id + display name from restaurantProvider, cached shop JSON as fallback), so this replacement names no merchants internals beyond it. Byte-for-byte twin of merchants_sdk's markers - test/hub_markers_test.dart there pins both strings."
+        }
+      ]
     },
     "zones_sdk": {
       "version": "1.5.0",
@@ -1303,11 +1337,11 @@
       }
     },
     "auth_sdk": {
-      "version": "1.9.5",
+      "version": "1.10.1",
       "files": {
         "lib/presentation/routes/auth_route_pages.dart": "2ac2b6adab56b09a0eff1aa19478717f2c632e0415c46ac0c06f04549e77602c",
-        "lib/presentation/routes/registration_step_pages.dart": "9e17e1999a762b131b144cdc2224f8252dd0256019d55621fa51b7c7cd031734",
-        "lib/presentation/routes/auth_session_policy.dart": "86023311fc4778d076c90b18f46fc03283709336f8a6cd7b72d3d3ea684b7d75"
+        "lib/presentation/routes/registration_step_pages.dart": "d18f7e35878721c688c4f0964db42c97148e1f2e9d225cd1a6bb7490e2628347",
+        "lib/presentation/routes/auth_session_policy.dart": "9524d696f956a99c2964ce0866cbab0cb282e868247d5f08b050e94bb9f5df5a"
       },
       "routes": [
         {
@@ -1352,13 +1386,6 @@
         {
           "method": "pushLoginRoute",
           "body": "context.router.push(LoginRoute());",
-          "imports": [
-            "import 'package:${package}/presentation/routes/app_router.dart';"
-          ]
-        },
-        {
-          "method": "replaceUiTypeRoute",
-          "body": "context.router.replace(UiTypeRoute());",
           "imports": [
             "import 'package:${package}/presentation/routes/app_router.dart';"
           ]
@@ -1568,40 +1595,40 @@
   },
   "sdk_cache": {
     "base": {
-      "version": "1.55.0",
-      "hash": "1d5eb53c15e91479"
+      "version": "1.60.0",
+      "hash": "1e02ca98d22c0bf6"
     },
     "comms": {
       "version": "1.15.0",
       "hash": "8dd0bf00a569a50a"
     },
     "auth": {
-      "version": "1.9.5",
-      "hash": "f7dbfe3b6da0d088"
+      "version": "1.10.1",
+      "hash": "efd373d74ae9f6b4"
     },
     "users": {
       "version": "1.3.3",
       "hash": "893b5ab83ae76de6"
     },
     "merchants": {
-      "version": "1.23.0",
-      "hash": "274883b7a86832a9"
+      "version": "1.28.0",
+      "hash": "96765b1c298cc84c"
     },
     "products": {
-      "version": "1.7.0",
-      "hash": "94855b8fb1f4b731"
+      "version": "1.10.0",
+      "hash": "0f3a4452babc677b"
     },
     "orders": {
-      "version": "1.15.0",
-      "hash": "3a2c28a70f8c89ec"
+      "version": "1.18.1",
+      "hash": "d2d9dfc5d03af908"
     },
     "kitchen": {
       "version": "1.4.0",
       "hash": "631d0f1775b0a1f0"
     },
     "promotions": {
-      "version": "1.1.1",
-      "hash": "f507beac62b6bc16"
+      "version": "1.2.2",
+      "hash": "87c734593daab096"
     },
     "hardware": {
       "version": "1.0.1",
@@ -1620,8 +1647,8 @@
       "hash": "83864d75f80cd5e1"
     },
     "productivity": {
-      "version": "1.1.0",
-      "hash": "3b8759cee16ee155"
+      "version": "1.3.0",
+      "hash": "a0e52ce4fd78e412"
     },
     "calc": {
       "version": "1.1.1",
@@ -1632,8 +1659,8 @@
       "hash": "ef378600c400e1cf"
     },
     "revenue": {
-      "version": "1.10.3",
-      "hash": "9e16969699b140a1"
+      "version": "1.12.0",
+      "hash": "104aa35a28079adb"
     },
     "map": {
       "version": "1.3.0",

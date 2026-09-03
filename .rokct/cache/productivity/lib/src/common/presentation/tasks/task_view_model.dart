@@ -23,7 +23,9 @@
 // the sync contract (`task_request.dart` / `task_response.dart`): id,
 // title, isDone, deadline, reminder, remindAt, reminderFired, snoozeCount,
 // priority, category, recurrence, isLongTerm, stepsAreSequential,
-// createdAt, clientId, remoteId, subtasks — and on a subtask title,
+// strategicObjective (+ the strategicObjectiveTitle / -Pillar display
+// pair the surface keeps beside it), createdAt, clientId, remoteId,
+// subtasks — and on a subtask title,
 // isDone, instruction, durationSeconds, startedAt, completedAt. Nothing is
 // invented, and nothing is dropped — `notifId` stays on the map because it
 // is storage bookkeeping, not something a card draws.
@@ -93,6 +95,9 @@ class TaskViewModel {
     this.recurrence = 'None',
     this.isLongTerm = false,
     this.stepsAreSequential = false,
+    this.strategicObjective,
+    this.strategicObjectiveTitle,
+    this.strategicObjectivePillar,
     this.createdAt,
     this.clientId,
     this.remoteId,
@@ -135,6 +140,20 @@ class TaskViewModel {
 
   /// Section 46: the subtasks are steps in order.
   final bool stepsAreSequential;
+
+  /// Frame 44c — the M2 bridge: the `Strategic Objective` name this task
+  /// is linked to, or null. The typed column on the server.
+  final String? strategicObjective;
+
+  /// The linked objective's title and pillar title as they read when the
+  /// link was made: display bookkeeping kept on the map (the server holds
+  /// only the name, and a Frappe name is a hash). Null on a device that
+  /// pulled the link and has not opened the picker since; chip 833 falls
+  /// back to the name then.
+  final String? strategicObjectiveTitle;
+  final String? strategicObjectivePillar;
+
+  bool get hasStrategicObjective => (strategicObjective ?? '').isNotEmpty;
 
   final DateTime? createdAt;
 
@@ -186,6 +205,11 @@ class TaskViewModel {
       return int.tryParse('${value ?? ''}') ?? 0;
     }
 
+    String? text(dynamic value) {
+      final String trimmed = (value ?? '').toString().trim();
+      return trimmed.isEmpty ? null : trimmed;
+    }
+
     return TaskViewModel(
       id: '${map['id'] ?? ''}',
       title: '${map['title'] ?? ''}',
@@ -202,6 +226,9 @@ class TaskViewModel {
       recurrence: '${map['recurrence'] ?? 'None'}',
       isLongTerm: map['isLongTerm'] == true,
       stepsAreSequential: map['stepsAreSequential'] == true,
+      strategicObjective: text(map['strategicObjective']),
+      strategicObjectiveTitle: text(map['strategicObjectiveTitle']),
+      strategicObjectivePillar: text(map['strategicObjectivePillar']),
       createdAt: parse(map['createdAt']),
       clientId: (map['clientId'] as String?)?.isEmpty ?? true
           ? null

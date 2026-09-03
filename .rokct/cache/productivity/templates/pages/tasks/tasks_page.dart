@@ -70,10 +70,35 @@ class _TasksPageState extends State<TasksPage> {
   /// Section 47m: `isLongTerm` for the task being composed.
   bool _isLongTerm = false;
 
+  /// Frame 44c: the objective link on the task being composed — the
+  /// `Strategic Objective` name (the typed column the server keeps) and
+  /// the title / pillar pair chip 833 reads, kept beside it because a
+  /// Frappe name is a hash and the row has to say something.
+  String? _strategicObjective;
+  String? _strategicObjectiveTitle;
+  String? _strategicObjectivePillar;
+
+  /// Frame 44c: the objective picker (834) holds the last plane.
+  bool _pickingObjective = false;
+
+  /// The plan, read once per page through the productivity module's own
+  /// `get_strategic_objectives` / `get_pillars` / `get_kpis`, on the first
+  /// open of the picker. Never in front of anything: the picker draws a
+  /// spinner, then the cards or the backend's own error.
+  late final ObjectivesRepositoryFacade _objectives;
+  ObjectiveCatalog? _objectiveCatalog;
+  bool _objectivesLoading = false;
+  String? _objectivesError;
+
   /// Section 47n: where each task stands with the server, by client id.
   /// Read from the outbox beside the list and redrawn as a badge; never
   /// waited on.
   Map<String, TaskSyncState> _syncStates = <String, TaskSyncState>{};
+
+  /// Whether the last pull failed (`TaskPullService.lastFailure`). Read by
+  /// the empty state and nowhere else: a list with rows in it says nothing
+  /// about the backend, and this page never names a cmd or an error.
+  bool _syncFailed = TaskPullService.syncFailed;
 
   String? _selectedCategory;
   List<Map<String, dynamic>> _currentSubtasks = [];
@@ -95,23 +120,42 @@ class _TasksPageState extends State<TasksPage> {
   void initState() {
     super.initState();
     _repository = TodoRepositoryImpl(AppDatabase());
+    _objectives = const ObjectivesRepositoryImpl();
     _selectedDay = _focusedDay;
     _initNotifications();
     _loadTodos();
+    TaskPullService.lastFailure.addListener(_onPullStatusChanged);
     // Sync runs BESIDE the page, never in front of it. The list above is
     // already being read from the local store; this asks the backend for
     // anything it knows that this device does not, and redraws only if the
     // answer actually changed something. Unawaited on purpose: there is no
-    // spinner, no gate, and no failure path — a device with no network or no
-    // backend simply never gets an answer, and the page never notices.
+    // spinner and no gate — a device with no network or no backend simply
+    // never gets an answer. What the page DOES notice is a pull that
+    // failed: `TaskPullService.lastFailure` is watched above, and the empty
+    // state says one friendly line when the list is empty because of it.
     unawaited(_syncInBackground());
+  }
+
+  @override
+  void dispose() {
+    TaskPullService.lastFailure.removeListener(_onPullStatusChanged);
+    super.dispose();
+  }
+
+  /// A pull completed or failed; redraw only if the answer changed.
+  void _onPullStatusChanged() {
+    final bool failed = TaskPullService.syncFailed;
+    if (!mounted || failed == _syncFailed) return;
+    setState(() => _syncFailed = failed);
   }
 
   /// Drains queued task pushes and pulls down whatever changed elsewhere.
   ///
-  /// Nothing waits for this and nothing depends on it. `syncNow` swallows an
-  /// unreachable backend rather than throwing, so the only visible effect it
-  /// can ever have is MORE tasks appearing.
+  /// Nothing waits for this and nothing depends on it. `syncNow` never
+  /// throws on an unreachable backend — the pull records its failure on
+  /// `TaskPullService.lastFailure` and in telemetry instead — so the only
+  /// visible effects it can have are MORE tasks appearing, or the empty
+  /// state's one line when nothing came down because the pull failed.
   Future<void> _syncInBackground() async {
     final bool changed = await _repository.syncNow();
     if (!mounted) return;
@@ -199,6 +243,7 @@ class _TasksPageState extends State<TasksPage> {
             'recurrence': _recurrence,
             'stepsAreSequential': _stepsInOrder,
             'isLongTerm': _isLongTerm,
+            ..._objectiveLinkFields(existing: _todos[index]),
             'createdAt':
                 _todos[index]['createdAt'] ?? DateTime.now().toIso8601String(),
             'subtasks': _currentSubtasks
@@ -232,6 +277,7 @@ class _TasksPageState extends State<TasksPage> {
           'recurrence': _recurrence,
           'stepsAreSequential': _stepsInOrder,
           'isLongTerm': _isLongTerm,
+          ..._objectiveLinkFields(),
           'createdAt': DateTime.now().toIso8601String(),
           'subtasks': _currentSubtasks
               .map((s) => Map<String, dynamic>.from(s))
@@ -260,6 +306,10 @@ class _TasksPageState extends State<TasksPage> {
       _recurrence = 'None';
       _stepsInOrder = false;
       _isLongTerm = false;
+      _strategicObjective = null;
+      _strategicObjectiveTitle = null;
+      _strategicObjectivePillar = null;
+      _pickingObjective = false;
       _selectedCategory = null;
       _currentSubtasks = [];
     });
@@ -316,6 +366,10 @@ class _TasksPageState extends State<TasksPage> {
       _recurrence = task['recurrence'] ?? 'None';
       _stepsInOrder = task['stepsAreSequential'] == true;
       _isLongTerm = task['isLongTerm'] == true;
+      _strategicObjective = _linkText(task['strategicObjective']);
+      _strategicObjectiveTitle = _linkText(task['strategicObjectiveTitle']);
+      _strategicObjectivePillar = _linkText(task['strategicObjectivePillar']);
+      _pickingObjective = false;
       _selectedCategory = task['category'];
       _categoryController.text = task['category'] ?? '';
 
@@ -350,6 +404,10 @@ class _TasksPageState extends State<TasksPage> {
       _recurrence = 'None';
       _stepsInOrder = false;
       _isLongTerm = false;
+      _strategicObjective = null;
+      _strategicObjectiveTitle = null;
+      _strategicObjectivePillar = null;
+      _pickingObjective = false;
       _selectedCategory = null;
       _currentSubtasks = [];
     });
@@ -395,6 +453,13 @@ class _TasksPageState extends State<TasksPage> {
       'createdAt': DateTime.now().toIso8601String(),
       'stepsAreSequential': task['stepsAreSequential'] == true,
       'isLongTerm': task['isLongTerm'] == true,
+      // Frame 44c: the objective is part of the procedure, not of the
+      // progress — the next instance serves the same objective.
+      if (task.containsKey('strategicObjective')) ...<String, dynamic>{
+        'strategicObjective': task['strategicObjective'],
+        'strategicObjectiveTitle': task['strategicObjectiveTitle'],
+        'strategicObjectivePillar': task['strategicObjectivePillar'],
+      },
       // The next instance starts with the PROCEDURE (title, instruction,
       // duration) and none of the run's progress: isDone cleared as
       // before, and the step timestamps with it.
@@ -598,9 +663,11 @@ class _TasksPageState extends State<TasksPage> {
   // Expanded rows of chips and dropdowns competing with the list for
   // the same column.
   //
-  // The mechanism is base_sdk's ListPlaneFlow, unchanged — the section
-  // 38 list flow, whose lists already declare two and whose corner back
-  // pill (canonical 347) is raised only while a pane is open.
+  // The mechanism is base_sdk's PlaneHost — the section 38 list flow
+  // ListPlaneFlow wraps, spelled out here because frame 44c pushes a
+  // THIRD step (the objective picker) that the wrapper cannot express.
+  // The list still declares two, and the corner back pill (canonical
+  // 347) is raised only while a pane is open.
   //
   // TWO FLAGS RIDE THIS SCREEN AND ARE DRAWN, NOT HIDDEN. A THIRD IS
   // GONE:
@@ -657,20 +724,46 @@ class _TasksPageState extends State<TasksPage> {
   @override
   Widget build(BuildContext context) {
     final String? runningId = _runningId;
-    return ListPlaneFlow(
-      backIcon: Icons.arrow_back,
-      listSpan: PlaneSpan.two,
-      detailName: runningId != null
-          ? 'run-$runningId'
-          : _editingId ?? (_paneOpen ? 'compose' : null),
-      detailBuilder: runningId != null
-          ? (context) => _runPane(context, runningId)
-          : _paneOpen
-          ? (context) => _composePane(context)
-          : null,
-      onCloseDetail: _closePane,
-      listBuilder: _listPlane,
+    final String? detailName = runningId != null
+        ? 'run-$runningId'
+        : _editingId ?? (_paneOpen ? 'compose' : null);
+    final WidgetBuilder? detailBuilder = runningId != null
+        ? (context) => _runPane(context, runningId)
+        : _paneOpen
+        ? (context) => _composePane(context)
+        : null;
+    // The section-38 list flow, spelled out as the PlaneHost stack
+    // ListPlaneFlow builds — same page names, same corner Back (347) —
+    // because FRAME 44c pushes a THIRD step: the objective picker (834)
+    // is a 1-plane push that wins the last plane, and "newest wins" then
+    // slides list + detail left (the detail compresses into plane 2, the
+    // list into plane 1). ListPlaneFlow carries exactly one detail and
+    // cannot express that push; PlaneHost is what it wraps.
+    return PlaneHost(
+      back: FloatingNavBack(
+        icon: Icons.arrow_back,
+        label: AppHelpers.getTranslation(TrKeys.back),
+        // The pill pops the NEWEST step: the picker while it is open,
+        // else the detail / compose / run pane.
+        onTap: _popPlane,
+      ),
+      stack: [
+        PlanePage(name: 'list', span: PlaneSpan.two, builder: _listPlane),
+        if (detailBuilder != null)
+          PlanePage(name: 'list-detail-${detailName ?? ''}', builder: detailBuilder),
+        if (detailBuilder != null && _pickingObjective && runningId == null)
+          PlanePage(name: 'objective-picker', builder: _objectivePickerPane),
+      ],
     );
+  }
+
+  /// Canonical 347 — back pops one step.
+  void _popPlane() {
+    if (_pickingObjective) {
+      setState(() => _pickingObjective = false);
+      return;
+    }
+    _closePane();
   }
 
   /// True while the last plane is carrying something — an edit (the
@@ -696,6 +789,120 @@ class _TasksPageState extends State<TasksPage> {
       _composing = false;
       _runningId = null;
     });
+  }
+
+  // ===================================================================
+  // DESIGN STRIP FRAME 44c — the M2 bridge, hosted here.
+  //
+  // Chip 833 (the link row in the detail pane) opens chip 834 (the
+  // picker) as a further push with the default 1-plane claim. The plan
+  // is read through the productivity module's own get_* endpoints; the
+  // link is written onto the TASK MAP as `strategicObjective` and
+  // travels through the existing `task.upsert` op to Task's typed
+  // `strategic_objective` column. Nothing here can reach commit_plan.
+  //
+  // For a task being EDITED, Link objective writes at once — the row is
+  // already a saved task and the link is a fact about it. For a task
+  // being COMPOSED, the link waits on Save task with every other field.
+  // ===================================================================
+
+  static String? _linkText(Object? value) {
+    final String text = (value ?? '').toString().trim();
+    return text.isEmpty ? null : text;
+  }
+
+  /// The link as it goes onto the task map.
+  ///
+  /// Absent is silence: a task that never had a link gets NO key, so the
+  /// sync never mentions the column. A key present with null is an
+  /// UNLINK — the wire sends the empty string that clears the column —
+  /// which is why a task that had one keeps the key when it is removed.
+  Map<String, dynamic> _objectiveLinkFields({Map<String, dynamic>? existing}) {
+    final bool had = existing?.containsKey('strategicObjective') ?? false;
+    if (_strategicObjective == null && !had) return const <String, dynamic>{};
+    return <String, dynamic>{
+      'strategicObjective': _strategicObjective,
+      'strategicObjectiveTitle': _strategicObjectiveTitle,
+      'strategicObjectivePillar': _strategicObjectivePillar,
+    };
+  }
+
+  /// Chip 833 — open the picker. Reads the plan on the first open.
+  void _openObjectivePicker() {
+    setState(() => _pickingObjective = true);
+    if (_objectiveCatalog == null && !_objectivesLoading) {
+      unawaited(_loadObjectives());
+    }
+  }
+
+  Future<void> _loadObjectives() async {
+    setState(() {
+      _objectivesLoading = true;
+      _objectivesError = null;
+    });
+    final ApiResult<ObjectiveCatalog> result = await _objectives.loadCatalog();
+    if (!mounted) return;
+    setState(() {
+      _objectivesLoading = false;
+      switch (result) {
+        case Success<ObjectiveCatalog>(:final data):
+          _objectiveCatalog = data;
+        case Failure<ObjectiveCatalog>(:final error):
+          _objectivesError = error;
+      }
+    });
+  }
+
+  /// Chip 834's Link objective (or its clear, for null): the link lands
+  /// on the form, and — for a saved task — on the task map and the store.
+  void _applyObjectiveLink(StrategicObjective? objective) {
+    final Pillar? pillar = _objectiveCatalog?.pillarNamed(objective?.pillar);
+    setState(() {
+      _strategicObjective = objective?.name;
+      _strategicObjectiveTitle = objective?.title;
+      _strategicObjectivePillar = pillar?.title;
+      _pickingObjective = false;
+      final String? id = _editingId;
+      if (id != null) {
+        final int index = _todos.indexWhere((t) => t['id'] == id);
+        if (index != -1) {
+          _todos[index] = <String, dynamic>{
+            ..._todos[index],
+            ..._objectiveLinkFields(existing: _todos[index]),
+          };
+        }
+      }
+    });
+    if (_editingId != null) _saveTodos();
+  }
+
+  /// The task being composed, as chip 833 reads it: only the link fields
+  /// matter to the row, and they come off the form state.
+  TaskViewModel get _composedTask => TaskViewModel(
+        id: _editingId ?? '',
+        title: _controller.text,
+        strategicObjective: _strategicObjective,
+        strategicObjectiveTitle: _strategicObjectiveTitle,
+        strategicObjectivePillar: _strategicObjectivePillar,
+      );
+
+  /// PLANE 3 (the LAST plane) — chip 834, the objective picker.
+  Widget _objectivePickerPane(BuildContext context) {
+    return Scaffold(
+      backgroundColor: AppStyle.transparent,
+      body: SafeArea(
+        child: ObjectivePickerPane(
+          key: const ValueKey<String>('objective-picker'),
+          catalog: _objectiveCatalog,
+          loading: _objectivesLoading,
+          error: _objectivesError,
+          initialSelection: _strategicObjective,
+          onCancel: () => setState(() => _pickingObjective = false),
+          onLink: _applyObjectiveLink,
+          onRetry: _loadObjectives,
+        ),
+      ),
+    );
   }
 
   // ===================================================================
@@ -1048,9 +1255,22 @@ class _TasksPageState extends State<TasksPage> {
 
   Widget _emptyList() {
     return Center(
-      child: Text(
-        'Nothing here yet.',
-        style: AppStyle.interNormal(size: 13, color: AppStyle.textDarkFaint),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            'Nothing here yet.',
+            style: AppStyle.interNormal(size: 13, color: AppStyle.textDarkFaint),
+          ),
+          // The one line about a failed pull. `_todos`, not the filtered
+          // view: a filter that hides every row is not an empty list, and
+          // the notice draws nothing unless the LOCAL list is empty AND
+          // the last pull failed.
+          TaskSyncNotice(
+            localListEmpty: _todos.isEmpty,
+            lastPullFailed: _syncFailed,
+          ),
+        ],
       ),
     );
   }
@@ -1212,6 +1432,17 @@ class _TasksPageState extends State<TasksPage> {
                 ),
               8.verticalSpace,
               _subtaskComposer(),
+              14.verticalSpace,
+              // CHIP 833 — the M2 link row: what objective of the plan
+              // this task serves, and the door to the picker (834).
+              _fieldLabel('OBJECTIVE'),
+              ObjectiveLinkRow(
+                task: _composedTask,
+                onTap: _openObjectivePicker,
+                onClear: _strategicObjective == null
+                    ? null
+                    : () => _applyObjectiveLink(null),
+              ),
               20.verticalSpace,
               _paneActions(),
             ],

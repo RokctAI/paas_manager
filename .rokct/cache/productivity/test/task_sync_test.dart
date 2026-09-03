@@ -134,7 +134,19 @@ void main() {
     repository = TodoRepositoryImpl(database);
   });
 
+  /// Every telemetry event the code under test emitted, through
+  /// base_sdk's injection seam ([TelemetryClient.configure]) so nothing
+  /// rides the stub backend and a test can read the exact wire body.
+  final List<_Call> telemetry = <_Call>[];
+
   setUp(() async {
+    telemetry.clear();
+    TelemetryClient.configure(
+      transport: (String cmd, Map<String, dynamic> payload) async {
+        telemetry.add(_Call(cmd, payload));
+      },
+    );
+    TaskPullService.lastFailure.value = null;
     await database.delete(database.tasksTable).go();
     await database.delete(database.outboxTable).go();
     await database.delete(database.keyValueTable).go();
@@ -148,6 +160,10 @@ void main() {
       GetIt.I.registerSingleton<AppDatabase>(database);
     }
     ProductivitySdkDependencies.register(GetIt.I);
+  });
+
+  tearDown(() {
+    TelemetryClient.configure(transport: null);
   });
 
   tearDownAll(() async {
@@ -657,6 +673,91 @@ void main() {
         (await repository.loadTodos()).single['title'],
         'Ship the client half',
       );
+    });
+
+    // A failed pull used to vanish in a catch: no event, no state. These
+    // pin that it is now SEEN without becoming a throw — syncNow keeps its
+    // never-throws contract (the test above), the local list keeps its
+    // rows, and what leaves the device is the cmd and the error's class,
+    // never its text.
+    test(
+      'a failed pull emits one telemetry event carrying the cmd and the '
+      'error class, and nothing else',
+      () async {
+        final _StubBackend backend = useBackend();
+        backend.replies['api.projects.list_personal_tasks'] = 500;
+
+        expect(await TaskPullService.pull(), 0);
+        // logError is fire-and-forget; let the transport receive it.
+        await pumpEventQueue();
+
+        expect(telemetry, hasLength(1));
+        final _Call event = telemetry.single;
+        expect(event.cmd, TelemetryClient.cmd);
+        expect(event.payload['error_message'], 'task_pull_failed');
+        final Map<String, dynamic> context =
+            (jsonDecode(event.payload['context'] as String) as Map)
+                .cast<String, dynamic>();
+        expect(
+          context['context'],
+          <String, dynamic>{
+            'cmd': 'api.projects.list_personal_tasks',
+            'error_class': 'DioException',
+          },
+        );
+        // The class, never the text: no status line, no URL, no body.
+        final String wire = jsonEncode(event.payload);
+        expect(wire, isNot(contains('500')));
+        expect(wire, isNot(contains('tasks.invalid')));
+        expect(wire, isNot(contains('ValidationError')));
+      },
+    );
+
+    test('a failed pull lands on lastFailure and a good one clears it',
+        () async {
+      final _StubBackend backend = useBackend();
+      backend.replies['api.projects.list_personal_tasks'] = 500;
+
+      expect(TaskPullService.syncFailed, isFalse);
+      final List<TaskPullFailure?> seen = <TaskPullFailure?>[];
+      void watch() => seen.add(TaskPullService.lastFailure.value);
+      TaskPullService.lastFailure.addListener(watch);
+      addTearDown(() => TaskPullService.lastFailure.removeListener(watch));
+
+      expect(await TaskPullService.pull(), 0);
+      expect(TaskPullService.syncFailed, isTrue);
+      final TaskPullFailure failure = TaskPullService.lastFailure.value!;
+      expect(failure.cmd, 'api.projects.list_personal_tasks');
+      expect(failure.errorClass, 'DioException');
+      expect(seen, hasLength(1));
+
+      // The server comes back: the next completed pull clears the flag,
+      // and the page hears about that too.
+      backend.replies['api.projects.list_personal_tasks'] =
+          <String, dynamic>{'tasks': <Object>[], 'server_time': null};
+      expect(await TaskPullService.pull(), 0);
+      expect(TaskPullService.syncFailed, isFalse);
+      expect(seen, hasLength(2));
+      expect(seen.last, isNull);
+    });
+
+    test('a pull with no backend in existence is reported the same way',
+        () async {
+      // The strongest form of "no server": nothing registered at all,
+      // which is what an uncomposed host looks like.
+      expect(await TaskPullService.pull(), 0);
+      await pumpEventQueue();
+
+      expect(TaskPullService.syncFailed, isTrue);
+      expect(telemetry, hasLength(1));
+      final Map<String, dynamic> context =
+          (jsonDecode(telemetry.single.payload['context'] as String) as Map)
+              .cast<String, dynamic>();
+      final Map<String, dynamic> fields =
+          (context['context'] as Map).cast<String, dynamic>();
+      expect(fields['cmd'], 'api.projects.list_personal_tasks');
+      expect(fields['error_class'], TaskPullService.lastFailure.value!.errorClass);
+      expect(fields.keys, unorderedEquals(<String>['cmd', 'error_class']));
     });
   });
 

@@ -19,7 +19,7 @@
 ///
 ///     client_id, title, description, deadline, remind_at, priority,
 ///     category, recurrence, is_long_term, is_done, subtasks,
-///     steps_are_sequential
+///     steps_are_sequential, strategic_objective
 ///
 /// Three details of that signature are load-bearing and are honoured here:
 ///
@@ -49,6 +49,7 @@ class TaskRequest {
     this.isDone,
     this.subtasks,
     this.stepsAreSequential,
+    this.strategicObjective,
   });
 
   /// Device-minted id the server upserts on. Required.
@@ -91,12 +92,23 @@ class TaskRequest {
   /// Task's `steps_are_sequential`: the subtasks are steps in order.
   final bool? stepsAreSequential;
 
+  /// Task's `strategic_objective` — the M2 bridge (design strip frame
+  /// 44c): the `Strategic Objective` name this task serves. Three states,
+  /// and the wire tells them apart: null is silence (the key is omitted),
+  /// the empty string is an UNLINK, and a name links.
+  final String? strategicObjective;
+
   /// Builds a request from the map the /tasks surface keeps a task in.
   ///
   /// That map is the surface's own vocabulary (`title`, `isDone`,
   /// `deadline`, `remindAt`, `reminder`, `priority`, `category`,
-  /// `recurrence`, `isLongTerm`, `stepsAreSequential`, `subtasks`); this is
-  /// the single place it is translated to the wire.
+  /// `recurrence`, `isLongTerm`, `stepsAreSequential`, `subtasks`,
+  /// `strategicObjective`); this is the single place it is translated to
+  /// the wire.
+  ///
+  /// `strategicObjective` is sent only when the map CARRIES the key: a
+  /// task that never had one stays silent, one whose link was cleared
+  /// (the key present, null) sends the empty string that unlinks.
   factory TaskRequest.fromTodo(Map<String, dynamic> todo, String clientId) {
     DateTime? parse(Object? value) {
       if (value == null) return null;
@@ -134,6 +146,9 @@ class TaskRequest {
       isDone: todo['isDone'] == true,
       subtasks: subtasks,
       stepsAreSequential: todo['stepsAreSequential'] == true,
+      strategicObjective: todo.containsKey('strategicObjective')
+          ? (todo['strategicObjective'] ?? '').toString().trim()
+          : null,
     );
   }
 
@@ -163,6 +178,7 @@ class TaskRequest {
         ],
       if (stepsAreSequential != null)
         'steps_are_sequential': stepsAreSequential! ? 1 : 0,
+      if (strategicObjective != null) 'strategic_objective': strategicObjective,
     };
   }
 }

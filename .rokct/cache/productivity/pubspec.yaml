@@ -1,6 +1,6 @@
 name: productivity_sdk
 description: "Team task tracking, checklists, workflow management, and operational action items."
-version: 1.1.0
+version: 1.3.0
 publish_to: 'none'
 environment:
   sdk: '>=3.10.0 <4.0.0'

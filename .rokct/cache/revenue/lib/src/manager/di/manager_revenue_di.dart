@@ -14,7 +14,11 @@
 
 import 'package:base_sdk/src/constants/app_constants.dart';
 import 'package:get_it/get_it.dart';
+import 'package:revenue_sdk/src/common/domain/interface/deposit_approval.dart';
+import 'package:revenue_sdk/src/common/domain/interface/driver_payout.dart';
 import 'package:revenue_sdk/src/common/domain/interface/seller_statistics.dart';
+import 'package:revenue_sdk/src/common/infrastructure/repositories/deposit_approval_repository.dart';
+import 'package:revenue_sdk/src/common/infrastructure/repositories/driver_payout_repository.dart';
 import 'package:revenue_sdk/src/manager/infrastructure/repositories/demo_seller_statistics_repository.dart';
 import 'package:revenue_sdk/src/manager/infrastructure/repositories/seller_statistics_repository.dart';
 
@@ -39,6 +43,28 @@ class ManagerRevenueDependencies {
         AppConstants.isDemo
             ? DemoSellerStatisticsRepository()
             : SellerStatisticsRepository(),
+      );
+    }
+    // Design strip frame 49l (approved 2026-08-31): the manager hub's
+    // Withdraw. `managerWalletProvider`, and the bank-details / payout-trail
+    // slices it opens, resolve the payout seam from GetIt exactly as the
+    // driver's do. The concrete repository is the same class the driver
+    // registers — wallet's `api.payout.*` is USER-scoped and serves any
+    // signed-in user — so a manager host gets it here, and a host that
+    // composes both roles double-boots safely on the guard.
+    if (!getIt.isRegistered<DriverPayoutRepositoryFacade>()) {
+      getIt.registerSingleton<DriverPayoutRepositoryFacade>(
+        DriverPayoutRepository(),
+      );
+    }
+    // Design strip frame 49i, manager side: the deposit approval queue the
+    // manager hub's wallet pane opens (`depositApprovalsProvider` resolves
+    // this seam). Manager-only by design — the server gates approve/reject
+    // by role, and no driver surface draws the queue — so it is registered
+    // here and not by the driver hook.
+    if (!getIt.isRegistered<DepositApprovalRepositoryFacade>()) {
+      getIt.registerSingleton<DepositApprovalRepositoryFacade>(
+        DepositApprovalRepository(),
       );
     }
   }

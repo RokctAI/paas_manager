@@ -14,7 +14,9 @@
 
 import 'package:get_it/get_it.dart';
 import 'package:base_sdk/base_sdk.dart';
+import '../domain/interface/objectives_repository_facade.dart';
 import '../domain/interface/recovery_repository_facade.dart';
+import '../infrastructure/repositories/objectives_repository_impl.dart';
 import '../infrastructure/repositories/recovery_repository_impl.dart';
 import '../infrastructure/services/task_sync_handlers.dart';
 
@@ -27,6 +29,13 @@ class ProductivitySdkDependencies {
     if (!getIt.isRegistered<RecoveryRepositoryFacade>()) {
       getIt.registerLazySingleton<RecoveryRepositoryFacade>(
         () => RecoveryRepositoryImpl(getIt<AppDatabase>()),
+      );
+    }
+    // The plan reader behind the M2 bridge (frame 44c). Read-only, over
+    // the gateway, no database of its own; guarded like the one above.
+    if (!getIt.isRegistered<ObjectivesRepositoryFacade>()) {
+      getIt.registerLazySingleton<ObjectivesRepositoryFacade>(
+        () => const ObjectivesRepositoryImpl(),
       );
     }
     // Attach the task push handlers so tasks written on the device drain to

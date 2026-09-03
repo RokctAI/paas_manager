@@ -14,18 +14,19 @@
 
 import 'package:flutter/material.dart';
 
-import 'package:base_sdk/src/di/injection.dart';
 import 'package:base_sdk/src/handlers/handlers.dart';
+import 'package:base_sdk/src/handlers/platform_gateway.dart';
 import 'package:base_sdk/src/services/app_helpers.dart';
 import 'package:merchants_sdk/src/manager/domain/interface/quick_flow.dart';
 
 /// Quick flow settings over `seller_shop.py`'s two endpoints (design strip
-/// section 42). Same host neighbourhood and same failure discipline as
+/// section 42), reached as `api.seller_shop.*` cmds through the universal
+/// gateway. Same host neighbourhood and same failure discipline as
 /// [SellerShopRepository]: a call the backend cannot answer fails through
 /// [ApiResult.failure] rather than being faked.
-const _shop = '/api/method/paas.api.seller_shop.seller_shop';
-
 class QuickFlowRepository implements QuickFlowRepositoryFacade {
+  static const _gateway = PlatformGateway();
+
   ApiResult<T> _fail<T>(Object e, String label) {
     debugPrint('==> $label failure: $e');
     return ApiResult.failure(
@@ -37,10 +38,11 @@ class QuickFlowRepository implements QuickFlowRepositoryFacade {
   @override
   Future<ApiResult<QuickFlowSettings>> getQuickFlowSettings() async {
     try {
-      final client = dioHttp.client(requireAuth: true);
-      final response = await client.get('$_shop.get_quick_flow_settings');
+      final response = await _gateway.tenant(
+        'api.seller_shop.get_quick_flow_settings',
+      );
       return ApiResult.success(
-        data: QuickFlowSettings.fromJson(response.data),
+        data: QuickFlowSettings.fromJson(response),
       );
     } catch (e) {
       return _fail(e, 'get quick flow settings');
@@ -66,13 +68,12 @@ class QuickFlowRepository implements QuickFlowRepositoryFacade {
         'digit_presets': presets.map((p) => p.toJson()).toList(),
     };
     try {
-      final client = dioHttp.client(requireAuth: true);
-      final response = await client.post(
-        '$_shop.update_quick_flow_settings',
-        data: {'settings': settings},
+      final response = await _gateway.tenant(
+        'api.seller_shop.update_quick_flow_settings',
+        {'settings': settings},
       );
       return ApiResult.success(
-        data: QuickFlowSettings.fromJson(response.data),
+        data: QuickFlowSettings.fromJson(response),
       );
     } catch (e) {
       return _fail(e, 'update quick flow settings');

@@ -1,3 +1,96 @@
+## 1.3.0
+
+* **A failed task pull is no longer silent.** `TaskPullService.pull`
+  used to catch every failure of the `api.projects.list_personal_tasks`
+  pull and drop it, so a dead or uncomposed backend produced no
+  telemetry and no visible state. Tasks stay local-first and the read
+  path is untouched (`TodoRepositoryImpl` is not changed; `syncNow`
+  still never throws and the page still kicks sync off unawaited) —
+  what changed is that the failure is now observable:
+  * **Telemetry.** Every failed pull emits one event on base_sdk's
+    error lane (`TelemetryClient.I.logError`) with type
+    `task_pull_failed` and a context of exactly two fields: `cmd`
+    (the gateway cmd the pull was issued under) and `error_class`
+    (`e.runtimeType.toString()`). Never the error text, which can
+    carry a URL, a token or server-authored copy.
+  * **A typed status.** `TaskPullService.lastFailure`
+    (`ValueNotifier<TaskPullFailure?>`, plus the `syncFailed` getter)
+    records the same cmd + error class and is cleared by the next
+    pull that completes.
+  * **One friendly line.** New `TaskSyncNotice` widget; the installed
+    tasks page watches `lastFailure` and draws, in its empty state
+    only, "Sync paused. Your tasks will sync when the connection is
+    back." when the LOCAL list is empty and the last
+    pull failed. A list with rows in it shows nothing new — no banner —
+    and no cmd name, error class or error text ever reaches the screen.
+* Version bumped past the open 1.2.0 (PR #33) so the two do not collide.
+
+## 1.2.0
+
+* Design strip **frame 44c — the M2 bridge**: linking a task to a
+  strategic objective. Approved 2026-08-30; the amber NOT-IN-BACKEND
+  flag the frame carried is now obsolete and is NOT drawn — both of
+  its preconditions exist (`sync_personal_task` carries the link;
+  tasks push through the outbox), so the link is real.
+  * **834 the objective picker pane**, a 1-plane push that wins the
+    last plane: header + count pill, the provenance note naming
+    `get_strategic_objectives` / `get_pillars`, pillar filter tabs
+    with counts (All pillars / one per pillar), the objective cards
+    with a round radio, Cancel / Link objective at 2 : 3.
+  * **787 the approved 41a objective card**, reused verbatim: title,
+    pillar tag with its accent, KPI count — nothing added. The accent
+    is DERIVED from the pillar's position in the pillar list (a pillar
+    has no colour column) and the KPI count is DERIVED by counting
+    `get_kpis`; there is no count field to read.
+  * **833 the link row** in the task detail pane: what objective the
+    task serves (pillar › title), and the door to the picker. A saved
+    task is linked the moment Link objective is tapped; a task being
+    composed keeps the link on the form until Save task, like every
+    other field.
+  * **`ObjectivesRepositoryFacade` / `ObjectivesRepositoryImpl`** over
+    the productivity module's own read cmds through the platform
+    gateway (`tenant.api.get_strategic_objectives` / `get_pillars` /
+    `get_kpis`) — zero Dart callers before this. Read-only by
+    construction: `commit_plan` is a destructive whole-plan replace
+    and nothing in this SDK can reach it.
+  * **`strategicObjective` on the task map** travels the way
+    `stepsAreSequential` does — `TaskRequest` / `TaskResponse` and the
+    existing `task.upsert` op — to Task's typed `strategic_objective`
+    column (projects module, this release). Three wire states: absent
+    is silence, `""` unlinks, a name links. A pull that unlinked wins
+    over a stale local link; the handshake, which never carries the
+    column, clears nothing. The title / pillar pair chip 833 reads is
+    device bookkeeping beside the name and never goes to the wire.
+  * The tasks page now builds the section-38 list flow as the
+    `PlaneHost` stack `ListPlaneFlow` wraps, with the same page names
+    and corner Back, because the picker is a THIRD step: list + detail
+    slide left and the picker takes plane 3, as the frame draws.
+* Design strip **frame 46i — the paused run on the hub's Tasks row**
+  (approved 2026-08-30; 2026-08-31: 47j folds into it). Chip 859
+  promoted to the hub row: ONE LINE on the existing Tasks row — not a
+  new row, not a new group — naming which run is paused, which task it
+  belongs to and where it stopped ("1 run paused · Month-end stock
+  count, step 3 of 6", "kept from Thursday — resumes where it
+  stopped"), and gone when no run is paused. Productivity half only.
+  * **`PausedRunSummary`**, DERIVED from the task list through
+    `TodoRepositoryFacade.loadTodos()` and `TaskRun.isInProgress` /
+    `positionLabel`: no table, no flag anybody sets, most recently
+    touched first. A paused maintenance run surfaces on identical
+    terms to any other task.
+  * **`pausedRunProvider`** (Riverpod, auto-disposed, the local store
+    and nothing else) and **`PausedRunLine`** over it; loading and
+    failure draw nothing. `PausedRunLineView` for a host or test that
+    holds the derivation already.
+  * **Two manifest integrations** for the merchants manager hub,
+    declared exactly as the launcher glance is: the
+    `// @productivity-tasks-row` marker (with its 8-space indent) takes
+    the widget, `// @productivity-tasks-row-imports` at column 0 takes
+    the import. The run opens by route path (`/tasks/run?task=<id>`)
+    through `context.router`, so the hub never imports a page. The
+    markers themselves are the COMMERCE side of the frame and are not
+    in this release; until they land the composer reports the marker
+    missing and skips the wiring.
+
 ## 1.1.0
 
 * Design strip **section 46 — the guided run** (frames 46a, 46b, 46c,

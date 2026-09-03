@@ -12,6 +12,7 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
+import 'package:base_sdk/src/constants/demo_images.dart';
 import 'package:base_sdk/src/handlers/api_result.dart';
 import 'package:base_sdk/src/domain/interface/banners.dart';
 import 'package:base_sdk/src/models/data/shop_data.dart';
@@ -24,14 +25,14 @@ class MockBannersRepository implements BannersRepositoryFacade {
     shops: [
       ShopData(
         id: "demo_shop_1",
-        translation: Translation(title: "Demo Pizza Shop"),
+        translation: Translation(title: "Nonna's Pizzeria"),
       ),
     ],
-    img: "https://via.placeholder.com/800x400",
+    img: DemoImages.promoBanner,
     active: true,
     translation: Translation(
-      title: "Demo Offer",
-      description: "Get 50% off on all items!",
+      title: "Weeknight deals",
+      description: "Up to 50% off at kitchens near you",
       locale: "en",
     ),
     createdAt: DateTime.now().toString(),

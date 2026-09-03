@@ -40,6 +40,8 @@ class TaskResponse {
     this.recurrence,
     this.isLongTerm,
     this.stepsAreSequential,
+    this.strategicObjective,
+    this.hasStrategicObjective = false,
     this.deadline,
     this.remindAt,
     this.reminderFired = false,
@@ -73,6 +75,17 @@ class TaskResponse {
   /// Task's `steps_are_sequential`. Null on the handshake, which does not
   /// carry it.
   final bool? stepsAreSequential;
+
+  /// Task's `strategic_objective` — the M2 bridge (frame 44c): the
+  /// `Strategic Objective` name, or null for no link. Null ALSO when the
+  /// shape did not carry the column at all (the handshake never does), so
+  /// [hasStrategicObjective] says which of the two this is.
+  final String? strategicObjective;
+
+  /// Whether the server said anything about the link. A pull carries the
+  /// column (null included, which means "unlinked" and must win over a
+  /// stale local link); the handshake does not, and must not clear one.
+  final bool hasStrategicObjective;
 
   /// Task's `exp_end_date` — the commitment.
   final DateTime? deadline;
@@ -115,6 +128,8 @@ class TaskResponse {
       stepsAreSequential: map.containsKey('steps_are_sequential')
           ? _asBool(map['steps_are_sequential'])
           : null,
+      strategicObjective: _asName(map['strategic_objective']),
+      hasStrategicObjective: map.containsKey('strategic_objective'),
       deadline: _asDate(map['exp_end_date']),
       remindAt: _asDate(map['remind_at']),
       reminderFired: _asBool(map['reminder_fired']),
@@ -147,6 +162,17 @@ class TaskResponse {
       'isLongTerm': isLongTerm ?? existing?['isLongTerm'] ?? false,
       'stepsAreSequential':
           stepsAreSequential ?? existing?['stepsAreSequential'] ?? false,
+      // The link, when the server spoke about it. The display fields the
+      // surface keeps beside it (title, pillar) are device bookkeeping
+      // the server does not carry; they survive from `existing` unless
+      // the objective itself changed, when they would be lies.
+      if (hasStrategicObjective) ...<String, dynamic>{
+        'strategicObjective': strategicObjective,
+        if (existing?['strategicObjective'] != strategicObjective) ...<String, dynamic>{
+          'strategicObjectiveTitle': null,
+          'strategicObjectivePillar': null,
+        },
+      },
       'clientId': clientId,
       'remoteId': name,
     };
@@ -273,6 +299,13 @@ class TaskSnoozeResponse {
       deadlineMoved: _asBool(map['deadline_moved']),
     );
   }
+}
+
+/// A Link column: the linked name, or null for empty. Trimmed, because a
+/// name is an id and an id with a stray space matches nothing.
+String? _asName(Object? value) {
+  final String text = (value ?? '').toString().trim();
+  return text.isEmpty ? null : text;
 }
 
 /// Frappe hands Check fields back as 0/1 and JSON booleans survive a

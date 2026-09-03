@@ -1,9 +1,22 @@
 {
   "name": "revenue_sdk",
-  "version": "1.10.3",
+  "version": "1.12.0",
   "installs": [],
   "routes": [],
-  "integrations": [],
+  "integrations": [
+    {
+      "target": "lib/presentation/pages/manager/restaurant/restaurant_page.dart",
+      "placeholder": "// @revenue-manager-wallet-imports",
+      "replacement": "import 'package:revenue_sdk/revenue_sdk.dart';",
+      "_comment": "Design strip frame 49l, commerce half of the seam (merchants_sdk >= 1.25.0): the merchants restaurant page never imports revenue_sdk (ADR-005 - SDKs import only base), so the pane arrives through the composer's substring-insert integration, the same mechanism productivity_sdk uses for its tasks-row line. This entry lands the barrel import under the column-0 imports marker; the pane entry below lands the widget. On a merchants_sdk without the markers the installer only warns (wiring NOT applied) and the hub keeps base's bare BaseWalletCard."
+    },
+    {
+      "target": "lib/presentation/pages/manager/restaurant/restaurant_page.dart",
+      "placeholder": "      // @revenue-manager-wallet",
+      "replacement": "      ManagerWalletPane(\n        scope: ManagerWalletScope(\n          shopId: merchantWalletScope(ref).shopId,\n          shopName: merchantWalletScope(ref).shopName,\n        ),\n      ),",
+      "_comment": "The placeholder carries its six-space indent ON PURPOSE: the bare text is a prefix of the -imports marker above, and the installer replaces every occurrence. The marker sits first inside MerchantWalletSection's candidate list and the section renders `.first`, so the inserted pane WINS over base's BaseWalletCard(actions: [], onHistory: null) that follows it; nothing is deleted. merchantWalletScope(ref) is the host page's own seam function (shop id + display name from restaurantProvider, cached shop JSON as fallback), so this replacement names no merchants internals beyond it. Byte-for-byte twin of merchants_sdk's markers - test/hub_markers_test.dart there pins both strings."
+    }
+  ],
   "app_type": {
     "driver": {
       "installs": [
@@ -34,7 +47,8 @@
           ]
         }
       ],
-      "_comment_di_hooks": "Driver migration M4: the driver-role revenue DI (CourierStatisticsRepositoryFacade for the installed profile/income pages) moved out of paas_driver's tracked dependency_manager.dart into the #160 di_hooks mechanism, mirroring commerce#17's manager role-DI entries. Direct src/ import by design - DriverRevenueDependencies is role code kept out of the barrel so a manager app's stripped cache still compiles (see driver_revenue_di.dart). register() is isRegistered-guarded, so a host that still calls it by hand during its own migration window double-boots safely."
+      "_comment_di_hooks": "Driver migration M4: the driver-role revenue DI (CourierStatisticsRepositoryFacade for the installed profile/income pages) moved out of paas_driver's tracked dependency_manager.dart into the #160 di_hooks mechanism, mirroring commerce#17's manager role-DI entries. Direct src/ import by design - DriverRevenueDependencies is role code kept out of the barrel so a manager app's stripped cache still compiles (see driver_revenue_di.dart). register() is isRegistered-guarded, so a host that still calls it by hand during its own migration window double-boots safely.",
+      "_comment_top_up": "Design strip frame 49f chip 973, since 1.12.0: DriverWalletPage draws Top up, which pushes delivery_sdk's /driver-deposits?choose=1 by PATH (ADR-005: revenue imports only base, so the two SDKs meet on the route). delivery_sdk >= 1.18.0 declares the route; on an older composition the push fails and the driver hears one friendly line instead of seeing nothing."
     },
     "manager": {
       "installs": [
@@ -102,6 +116,8 @@
           ]
         }
       ],
+      "_comment_wallet_pane": "Design strip frame 49l (manager withdraw, approved 2026-08-31 \"49d, 49f-l approved\"), revenue half since 1.11.0: the barrel exports ManagerWalletPane / ManagerWithdrawAction (src/common/presentation/manager_wallet/) and managerWalletProvider keyed by ManagerWalletScope(shopId, shopName). The merchants restaurant page (the commerce half, NOT in this SDK) mounts ManagerWalletPane(scope: ...) where it renders BaseWalletCard(actions: []) today; nothing else in revenue changes for that. The payout seam it resolves (DriverPayoutRepositoryFacade) is registered by the revenue-manager-role-di hook below as well as the driver hook. The server call is USER-scoped (wallet api.payout.request_payout, payout.py:350) and the scope is not sent - whether a shop withdraws to the shop's account or the manager's personal one is Ray's open question, flagged on the frame.",
+      "_comment_deposit_approvals": "Design strip frame 49i, manager side, since 1.12.0: ManagerWalletPane draws a Deposits to approve entry (showDepositApprovals, default true) that pushes DepositApprovalsPage on the root navigator - the queue of Pending Wallet Deposit Request rows with Approve / Reject (reason required). depositApprovalsProvider resolves DepositApprovalRepositoryFacade, registered by the revenue-manager-role-di hook only (approve/reject are role-gated server-side and no driver surface draws the queue). Server: RokctAI/pay wallet frappe api.wallet.list_pending_deposit_requests / approve_deposit_request / reject_deposit_request; a tenant without that backend answers 404 and the page states the failure.",
       "_comment_di_hooks": "Manager migration: the manager-role revenue DI (SellerStatisticsRepositoryFacade, resolved by the installed income page's statisticsProvider and profitDashboardProvider) was defined in src/manager/di/manager_revenue_di.dart but never CALLED at boot - no host wired it by hand and this block had no di_hooks entry, so paas_manager's /income crashed with 'GetIt: Object/factory with type SellerStatisticsRepositoryFacade is not registered inside GetIt'. This entry mirrors the app_type.driver revenue-driver-role-di hook above and merchants_sdk's merchants-manager-role-di. Order 14 rather than 12 because kitchen_sdk and merchants_sdk already both declare 12 in the manager flavour - the injector keeps every hook but prints an order-collision warning per shared order, and these role registrations are independent, so a free slot inside the same role-DI band (before orders_sdk's pos-facades at 20) keeps the compose log clean. Direct src/ import by design - ManagerRevenueDependencies is role code kept out of the barrel so a driver app's stripped cache still compiles. register() is isRegistered-guarded, so a host that also calls it by hand double-boots safely.",
       "_comment": "Manager income rewrite (approved design section 36, chips 654-674): the old non-compiling income templates (app_bar_screen + widgets/) are replaced by one template shell; all machinery lives in lib/src/manager (profit application slice + presentation/revenue). Keys the sibling SDKs already declare (today, delivered, cancelled, cooking, accepted, new, on_a_way, price, cost, cost_not_set, back) are intentionally NOT redeclared - the installer keeps the first declaring SDK (products_sdk/orders_sdk/base). The route stays /income ManagerIncomeRoute (CupertinoRoute) - the profile hub's entry is unchanged."
     }

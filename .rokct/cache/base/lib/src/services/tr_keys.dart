@@ -145,6 +145,7 @@ class TrKeys {
   static const String shopSetupExplainer = 'a_few_details_to_open_your_shop_you_can_change_everything_later';
   static const String shopName = 'shop_name';
   static const String accessDenied = 'access.denied';
+  static const String signedInAs = 'Signed in as';
   static const String syncIssues = 'sync_issues';
   static const String discard = 'discard';
   static const String parked = 'parked';
@@ -372,7 +373,6 @@ class TrKeys {
   static const String documents = 'documents';
   static const String uploadDocuments = 'upload.documents';
   static const String helpInfo = 'help.info';
-  static const String uiType = 'ui_type';
   static const String orderImage = 'order.image';
   static const String especiallyForYou = 'especially_for_you';
   static const String workForYou = 'work_for_you';

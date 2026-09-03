@@ -13,8 +13,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 import 'package:flutter/material.dart';
-import 'package:base_sdk/src/di/injection.dart';
 import 'package:base_sdk/src/handlers/handlers.dart';
+import 'package:base_sdk/src/handlers/platform_gateway.dart';
 import 'package:base_sdk/src/models/data/shop_data.dart';
 import 'package:base_sdk/src/models/data/translation.dart';
 import 'package:base_sdk/src/services/app_helpers.dart';
@@ -27,17 +27,19 @@ import 'package:merchants_sdk/src/manager/infrastructure/services/shop_create_sy
 
 /// Port of the shop-management half of `paas_manager`'s `UsersRepository`,
 /// repointed from the legacy `/api/v1/dashboard/seller/...` paths to
-/// `seller_shop.py` / `seller_shop_settings.py` in the merchants Frappe app.
-/// Endpoint-by-endpoint state (including the recorded gaps: `order_payment`,
-/// seller wallet, `rating_avg` in the shop payload) lives in
-/// `docs/frappe-endpoint-contract.md`. A call the backend cannot answer yet
-/// fails through [ApiResult.failure] rather than being faked.
-const _shop = '/api/method/paas.api.seller_shop.seller_shop';
-const _shops = '/api/method/paas.api.shop.shop';
-const _settings =
-    '/api/method/paas.api.seller_shop_settings.seller_shop_settings';
-
+/// `seller_shop.py` / `seller_shop_settings.py` in the merchants Frappe app,
+/// reached as `api.shop.*` / `api.seller_shop.*` / `api.seller_shop_settings.*`
+/// cmds through the universal gateway. Endpoint-by-endpoint state (including
+/// the recorded gaps: `order_payment`, seller wallet, `rating_avg` in the shop
+/// payload) lives in `docs/frappe-endpoint-contract.md`. A call the backend
+/// cannot answer yet fails through [ApiResult.failure] rather than being
+/// faked.
 class SellerShopRepository implements SellerShopRepositoryFacade {
+  /// Universal platform gateway (fleet rule 2026-08-15): cmds mirror this
+  /// module's `manifest.json` whitelisted-method keys with the app segment
+  /// dropped.
+  static const _gateway = PlatformGateway();
+
   ApiResult<T> _fail<T>(Object e, String label) {
     debugPrint('==> $label failure: $e');
     return ApiResult.failure(
@@ -68,11 +70,9 @@ class SellerShopRepository implements SellerShopRepositoryFacade {
     final String localId = SyncEngine.newTempId();
     await ManagerShopsLocalStore.putPending(localId, {'shop_data': shopData});
     try {
-      final client = dioHttp.client(requireAuth: true);
-      await client.post(
-        '$_shops.create_shop',
-        data: {'shop_data': shopData},
-      );
+      // Same cmd + payload shape the outbox handler replays
+      // (ShopCreateSyncHandler): shop.create_shop(shop_data).
+      await _gateway.tenant('api.shop.create_shop', {'shop_data': shopData});
       // Backend reachable and accepted: it is authoritative from here on
       // (getMyShop supplies the shop), so the write-through record goes.
       await ManagerShopsLocalStore.delete(localId);
@@ -122,15 +122,14 @@ class SellerShopRepository implements SellerShopRepositoryFacade {
   @override
   Future<ApiResult<MyShopResponse>> getMyShop() async {
     try {
-      final client = dioHttp.client(requireAuth: true);
-      final response = await client.get(
-        '$_shop.get_shop',
-        queryParameters: {
+      final response = await _gateway.tenant(
+        'api.seller_shop.get_shop',
+        {
           'lang': LocalStorage.getLanguage()?.locale,
           'currency_id': LocalStorage.getSelectedCurrency()?.id,
         },
       );
-      return ApiResult.success(data: MyShopResponse.fromJson(response.data));
+      return ApiResult.success(data: MyShopResponse.fromJson(response));
     } catch (e) {
       return _fail(e, 'get my shop');
     }
@@ -170,12 +169,11 @@ class SellerShopRepository implements SellerShopRepositoryFacade {
       if (orderPayment != null) 'order_payment': orderPayment,
     };
     try {
-      final client = dioHttp.client(requireAuth: true);
-      final response = await client.post(
-        '$_shop.update_shop',
-        data: {'shop_data': shopData},
+      final response = await _gateway.tenant(
+        'api.seller_shop.update_shop',
+        {'shop_data': shopData},
       );
-      return ApiResult.success(data: MyShopResponse.fromJson(response.data));
+      return ApiResult.success(data: MyShopResponse.fromJson(response));
     } catch (e) {
       return _fail(e, 'update shop');
     }
@@ -184,10 +182,11 @@ class SellerShopRepository implements SellerShopRepositoryFacade {
   @override
   Future<ApiResult<void>> setWorkingStatus({required bool open}) async {
     try {
-      final client = dioHttp.client(requireAuth: true);
-      await client.post(
-        '$_shop.set_shop_working_status',
-        data: {'status': open},
+      // seller_shop.set_working_status(status) — the whitelisted alias;
+      // `set_shop_working_status` is its un-aliased legacy twin.
+      await _gateway.tenant(
+        'api.seller_shop.set_working_status',
+        {'status': open},
       );
       return const ApiResult.success(data: null);
     } catch (e) {
@@ -198,11 +197,9 @@ class SellerShopRepository implements SellerShopRepositoryFacade {
   @override
   Future<ApiResult<List<ShopWorkingDay>>> getShopWorkingDays() async {
     try {
-      final client = dioHttp.client(requireAuth: true);
-      final response = await client.get(
-        '$_settings.get_seller_shop_working_days',
+      final dynamic body = await _gateway.tenant(
+        'api.seller_shop_settings.get_seller_shop_working_days',
       );
-      final dynamic body = response.data;
       final List<dynamic> list =
           body is List ? body : (body?['dates'] as List<dynamic>? ?? []);
       // Built by hand rather than ShopWorkingDay.fromJson: base's fromJson
@@ -244,10 +241,9 @@ class SellerShopRepository implements SellerShopRepositoryFacade {
         )
         .toList();
     try {
-      final client = dioHttp.client(requireAuth: true);
-      await client.post(
-        '$_settings.update_seller_shop_working_days',
-        data: {'working_days_data': days},
+      await _gateway.tenant(
+        'api.seller_shop_settings.update_seller_shop_working_days',
+        {'working_days_data': days},
       );
       return const ApiResult.success(data: null);
     } catch (e) {
