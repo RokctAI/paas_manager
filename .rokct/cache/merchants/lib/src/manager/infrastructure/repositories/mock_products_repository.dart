@@ -20,10 +20,10 @@ import 'package:merchants_sdk/src/manager/domain/interface/pos_catalog.dart';
 
 /// Demo-mode POS catalog (`--dart-define=IS_DEMO=true` routes the till's
 /// barcode lookup here, `ManagerMerchantsDependencies.register`): any
-/// barcode or search text resolves to one "Demo Product" at 150.00, the
-/// same demo identity products_sdk's mock serves — so headless tours and
-/// the standalone test harness scan, cart and check out with zero backend
-/// contact.
+/// barcode or search text resolves to one "Flame-grilled beef burger" at
+/// 150.00, the same demo identity products_sdk's mock serves — so headless
+/// tours and the standalone test harness scan, cart and check out with zero
+/// backend contact.
 class MockProductsRepository implements PosCatalogRepositoryFacade {
   static final ProductData demoProduct = ProductData(
     id: '1',
@@ -31,8 +31,8 @@ class MockProductsRepository implements PosCatalogRepositoryFacade {
     shopId: '1',
     active: true,
     translation: Translation(
-      title: 'Demo Product',
-      description: 'This is a demo product description',
+      title: 'Flame-grilled beef burger',
+      description: 'Flame-grilled beef patty, toasted bun, house sauce',
       locale: 'en',
     ),
     stocks: [Stocks(id: '1', price: 150, quantity: 100, totalPrice: 150)],

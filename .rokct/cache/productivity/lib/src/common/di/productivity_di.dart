@@ -16,8 +16,10 @@ import 'package:get_it/get_it.dart';
 import 'package:base_sdk/base_sdk.dart';
 import '../domain/interface/objectives_repository_facade.dart';
 import '../domain/interface/recovery_repository_facade.dart';
+import '../domain/interface/vision_repository_facade.dart';
 import '../infrastructure/repositories/objectives_repository_impl.dart';
 import '../infrastructure/repositories/recovery_repository_impl.dart';
+import '../infrastructure/repositories/vision_repository_impl.dart';
 import '../infrastructure/services/task_sync_handlers.dart';
 
 class ProductivitySdkDependencies {
@@ -36,6 +38,14 @@ class ProductivitySdkDependencies {
     if (!getIt.isRegistered<ObjectivesRepositoryFacade>()) {
       getIt.registerLazySingleton<ObjectivesRepositoryFacade>(
         () => const ObjectivesRepositoryImpl(),
+      );
+    }
+    // The plan and mastery reader behind the M2 vision cluster (section
+    // 41). Read-only, over the gateway, no database of its own; guarded
+    // like the two above.
+    if (!getIt.isRegistered<VisionRepositoryFacade>()) {
+      getIt.registerLazySingleton<VisionRepositoryFacade>(
+        () => const VisionRepositoryImpl(),
       );
     }
     // Attach the task push handlers so tasks written on the device drain to

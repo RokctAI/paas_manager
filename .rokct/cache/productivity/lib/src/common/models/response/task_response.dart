@@ -12,6 +12,8 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
+import 'package:productivity_sdk/src/common/application/run/task_run.dart';
+
 /// The response half of the personal-task sync contract.
 ///
 /// Shaped against `projects/frappe/src/task_sync.py`, which answers in three
@@ -177,11 +179,38 @@ class TaskResponse {
       'remoteId': name,
     };
     if (subtasks.isNotEmpty || existing?['subtasks'] == null) {
+      // Section 47's step keys (kind, optional, readings, value, note,
+      // skipped) are device bookkeeping the server does not carry — see
+      // `TaskSubtaskRequest`. They survive a pull the way `notifId`
+      // does: carried over from the device's own row at the same
+      // position, when it is the same step by title.
+      final List<Map<String, dynamic>> before = <Map<String, dynamic>>[
+        if (existing?['subtasks'] is List)
+          for (final Object? row in existing!['subtasks'] as List)
+            if (row is Map) row.cast<String, dynamic>(),
+      ];
       todo['subtasks'] = <Map<String, dynamic>>[
-        for (final TaskSubtaskResponse subtask in subtasks) subtask.toMap(),
+        for (int i = 0; i < subtasks.length; i++)
+          _keepDeviceStepKeys(
+            subtasks[i].toMap(),
+            i < before.length ? before[i] : null,
+          ),
       ];
     }
     return todo;
+  }
+
+  static Map<String, dynamic> _keepDeviceStepKeys(
+    Map<String, dynamic> pulled,
+    Map<String, dynamic>? device,
+  ) {
+    if (device == null || '${device['title'] ?? ''}' != '${pulled['title'] ?? ''}') {
+      return pulled;
+    }
+    for (final String key in TaskRunStep.deviceOnlyKeys) {
+      if (device.containsKey(key)) pulled[key] = device[key];
+    }
+    return pulled;
   }
 }
 

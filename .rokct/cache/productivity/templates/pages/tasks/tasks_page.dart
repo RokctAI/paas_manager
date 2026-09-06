@@ -70,6 +70,11 @@ class _TasksPageState extends State<TasksPage> {
   /// Section 47m: `isLongTerm` for the task being composed.
   bool _isLongTerm = false;
 
+  /// Section 47 (47a–47d): the maintenance template the task being
+  /// composed was filled from, if any. Written to the task map's
+  /// `template` key so the setup run can be told apart on the way back.
+  String? _templateKey;
+
   /// Frame 44c: the objective link on the task being composed — the
   /// `Strategic Objective` name (the typed column the server keeps) and
   /// the title / pillar pair chip 833 reads, kept beside it because a
@@ -243,6 +248,8 @@ class _TasksPageState extends State<TasksPage> {
             'recurrence': _recurrence,
             'stepsAreSequential': _stepsInOrder,
             'isLongTerm': _isLongTerm,
+            if (_templateKey != null)
+              MaintenanceTemplates.templateKey: _templateKey,
             ..._objectiveLinkFields(existing: _todos[index]),
             'createdAt':
                 _todos[index]['createdAt'] ?? DateTime.now().toIso8601String(),
@@ -277,6 +284,8 @@ class _TasksPageState extends State<TasksPage> {
           'recurrence': _recurrence,
           'stepsAreSequential': _stepsInOrder,
           'isLongTerm': _isLongTerm,
+          if (_templateKey != null)
+            MaintenanceTemplates.templateKey: _templateKey,
           ..._objectiveLinkFields(),
           'createdAt': DateTime.now().toIso8601String(),
           'subtasks': _currentSubtasks
@@ -306,6 +315,7 @@ class _TasksPageState extends State<TasksPage> {
       _recurrence = 'None';
       _stepsInOrder = false;
       _isLongTerm = false;
+      _templateKey = null;
       _strategicObjective = null;
       _strategicObjectiveTitle = null;
       _strategicObjectivePillar = null;
@@ -366,6 +376,7 @@ class _TasksPageState extends State<TasksPage> {
       _recurrence = task['recurrence'] ?? 'None';
       _stepsInOrder = task['stepsAreSequential'] == true;
       _isLongTerm = task['isLongTerm'] == true;
+      _templateKey = _linkText(task[MaintenanceTemplates.templateKey]);
       _strategicObjective = _linkText(task['strategicObjective']);
       _strategicObjectiveTitle = _linkText(task['strategicObjectiveTitle']);
       _strategicObjectivePillar = _linkText(task['strategicObjectivePillar']);
@@ -404,6 +415,7 @@ class _TasksPageState extends State<TasksPage> {
       _recurrence = 'None';
       _stepsInOrder = false;
       _isLongTerm = false;
+      _templateKey = null;
       _strategicObjective = null;
       _strategicObjectiveTitle = null;
       _strategicObjectivePillar = null;
@@ -463,8 +475,7 @@ class _TasksPageState extends State<TasksPage> {
       // The next instance starts with the PROCEDURE (title, instruction,
       // duration) and none of the run's progress: isDone cleared as
       // before, and the step timestamps with it.
-      'subtasks':
-          (task['subtasks'] as List?)
+      'subtasks': (task['subtasks'] as List?)
               ?.map((s) => TaskRunStep.freshCopy(Map<String, dynamic>.from(s)))
               .toList() ??
           [],
@@ -730,8 +741,8 @@ class _TasksPageState extends State<TasksPage> {
     final WidgetBuilder? detailBuilder = runningId != null
         ? (context) => _runPane(context, runningId)
         : _paneOpen
-        ? (context) => _composePane(context)
-        : null;
+            ? (context) => _composePane(context)
+            : null;
     // The section-38 list flow, spelled out as the PlaneHost stack
     // ListPlaneFlow builds — same page names, same corner Back (347) —
     // because FRAME 44c pushes a THIRD step: the objective picker (834)
@@ -739,21 +750,36 @@ class _TasksPageState extends State<TasksPage> {
     // slides list + detail left (the detail compresses into plane 2, the
     // list into plane 1). ListPlaneFlow carries exactly one detail and
     // cannot express that push; PlaneHost is what it wraps.
-    return PlaneHost(
-      back: FloatingNavBack(
-        icon: Icons.arrow_back,
-        label: AppHelpers.getTranslation(TrKeys.back),
-        // The pill pops the NEWEST step: the picker while it is open,
-        // else the detail / compose / run pane.
-        onTap: _popPlane,
+    //
+    // THE GROUND IS PAINTED HERE, ONCE, and again by each plane's
+    // Scaffold. Nothing beneath this page paints one: PlaneHost lays
+    // its planes side by side over a 14-logical seam and leaves any
+    // unclaimed plane an empty stage, AdaptiveShell adds nothing, and
+    // the app theme sets no scaffoldBackgroundColor — so a transparent
+    // page showed the platform's raw surface (opaque black on Android)
+    // in BOTH theme modes. [AppStyle.surfaceDark] resolves per mode
+    // (light #ECECEF, dark #101010), the same token task_run_page.dart
+    // and calc's CalculatorView paint.
+    return ColoredBox(
+      color: AppStyle.surfaceDark,
+      child: PlaneHost(
+        back: FloatingNavBack(
+          icon: Icons.arrow_back,
+          label: AppHelpers.getTranslation(TrKeys.back),
+          // The pill pops the NEWEST step: the picker while it is open,
+          // else the detail / compose / run pane.
+          onTap: _popPlane,
+        ),
+        stack: [
+          PlanePage(name: 'list', span: PlaneSpan.two, builder: _listPlane),
+          if (detailBuilder != null)
+            PlanePage(
+                name: 'list-detail-${detailName ?? ''}',
+                builder: detailBuilder),
+          if (detailBuilder != null && _pickingObjective && runningId == null)
+            PlanePage(name: 'objective-picker', builder: _objectivePickerPane),
+        ],
       ),
-      stack: [
-        PlanePage(name: 'list', span: PlaneSpan.two, builder: _listPlane),
-        if (detailBuilder != null)
-          PlanePage(name: 'list-detail-${detailName ?? ''}', builder: detailBuilder),
-        if (detailBuilder != null && _pickingObjective && runningId == null)
-          PlanePage(name: 'objective-picker', builder: _objectivePickerPane),
-      ],
     );
   }
 
@@ -889,7 +915,7 @@ class _TasksPageState extends State<TasksPage> {
   /// PLANE 3 (the LAST plane) — chip 834, the objective picker.
   Widget _objectivePickerPane(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppStyle.transparent,
+      backgroundColor: AppStyle.surfaceDark,
       body: SafeArea(
         child: ObjectivePickerPane(
           key: const ValueKey<String>('objective-picker'),
@@ -919,6 +945,12 @@ class _TasksPageState extends State<TasksPage> {
   // task map and hands the map back with progress written onto it; this
   // page puts it in the list and saves it the way it saves everything —
   // drift first, the outbox push unawaited behind it.
+  //
+  // DESIGN STRIP SECTION 47 (47a–47d, 47h, 47i) rides this same host
+  // unchanged: an RO plant's service run is a task made from a template
+  // (see `_templateChooser` in the compose lane), so it opens here, in
+  // the detail plane, with the same view, the same Leave and the same
+  // corner pill. Reading and photo steps are the view's business.
   // ===================================================================
 
   /// Chip 859 — open a task's run. The run pill on the card leads here.
@@ -949,11 +981,16 @@ class _TasksPageState extends State<TasksPage> {
   }
 
   /// The run wrote progress onto its task: put the map back and save.
+  /// Frame 47d: when that task is the plant-setup run and it has been
+  /// finished, its readings become the device's plant record — read by
+  /// the maintenance templates for their due dates. Any other task is
+  /// left alone by the capture.
   void _onRunChanged(Map<String, dynamic> task) {
     final int index = _todos.indexWhere((t) => t['id'] == task['id']);
     if (index == -1) return;
     setState(() => _todos[index] = task);
     _saveTodos();
+    unawaited(MaintenancePlantStore.local.captureFromRun(task));
   }
 
   /// PLANE 3 (the LAST plane) — the run, in place of the static detail.
@@ -964,7 +1001,7 @@ class _TasksPageState extends State<TasksPage> {
     }
     final Map<String, dynamic> task = _todos[index];
     return Scaffold(
-      backgroundColor: AppStyle.transparent,
+      backgroundColor: AppStyle.surfaceDark,
       body: SafeArea(
         child: TaskRunView(
           key: ValueKey<String>('run-$id'),
@@ -1036,9 +1073,10 @@ class _TasksPageState extends State<TasksPage> {
 
   /// CHIP 1064 — the day's list, split into the long-term band and the
   /// rest. Both halves keep the filter and sort the list already has.
-  ({List<MapEntry<int, Map<String, dynamic>>> longTerm,
-  List<MapEntry<int, Map<String, dynamic>>> rest})
-  _banded(List<MapEntry<int, Map<String, dynamic>>> displayed) {
+  ({
+    List<MapEntry<int, Map<String, dynamic>>> longTerm,
+    List<MapEntry<int, Map<String, dynamic>>> rest
+  }) _banded(List<MapEntry<int, Map<String, dynamic>>> displayed) {
     final longTerm = <MapEntry<int, Map<String, dynamic>>>[];
     final rest = <MapEntry<int, Map<String, dynamic>>>[];
     for (final entry in displayed) {
@@ -1055,8 +1093,9 @@ class _TasksPageState extends State<TasksPage> {
     final singlePlane = _isSinglePlane(context);
 
     return Scaffold(
-      backgroundColor: AppStyle.transparent,
+      backgroundColor: AppStyle.surfaceDark,
       floatingActionButton: FloatingActionButton(
+        key: const ValueKey<String>('tasks-compose'),
         onPressed: _openCompose,
         backgroundColor: AppStyle.primary,
         foregroundColor: AppStyle.blackColor,
@@ -1260,7 +1299,8 @@ class _TasksPageState extends State<TasksPage> {
         children: [
           Text(
             'Nothing here yet.',
-            style: AppStyle.interNormal(size: 13, color: AppStyle.textDarkFaint),
+            style:
+                AppStyle.interNormal(size: 13, color: AppStyle.textDarkFaint),
           ),
           // The one line about a failed pull. `_todos`, not the filtered
           // view: a filter that hides every row is not an empty list, and
@@ -1353,99 +1393,117 @@ class _TasksPageState extends State<TasksPage> {
   /// list keeps its planes and stays legible while you type.
   Widget _composePane(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppStyle.transparent,
+      backgroundColor: AppStyle.surfaceDark,
       body: SafeArea(
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16.w),
-          child: ListView(
-            padding: EdgeInsets.only(top: 12.h, bottom: 88.h),
-            children: [
-              Row(
-                children: [
-                  Expanded(
-                    child: Text(
-                      _editingId == null ? 'New task' : 'Task',
-                      style: AppStyle.interSemi(
-                        size: 18,
-                        color: AppStyle.textPrimary,
+        // BACK-PILL CLEARANCE (tour run 34040758271, still 10, phone and
+        // tablet): PlaneHost floats the corner pill (347) over THIS
+        // plane's foot, and the form scrolled under it — the Long term
+        // switch on the phone, Save task on the tablet, sat under the
+        // pill. The band is reserved OUTSIDE the list by the pill's own
+        // figures (planeBackClearance), so the viewport ends above the
+        // pill at every scroll offset; padding inside the list only ever
+        // cleared it at the end of the scroll. The pill itself is neither
+        // moved nor hidden.
+        child: PlaneBackClearance(
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16.w),
+            child: ListView(
+              padding: EdgeInsets.only(top: 12.h, bottom: 12.h),
+              children: [
+                Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        _editingId == null ? 'New task' : 'Task',
+                        style: AppStyle.interSemi(
+                          size: 18,
+                          color: AppStyle.textPrimary,
+                        ),
                       ),
                     ),
-                  ),
-                  // The only state the pane adds.
-                  Container(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 8.w, vertical: 2.h),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20.r),
-                      border: Border.all(color: AppStyle.strokeDark),
-                    ),
-                    child: Text(
-                      'unsaved',
-                      style: AppStyle.interNormal(
-                        size: 11,
-                        color: AppStyle.textDarkFaint,
+                    // The only state the pane adds.
+                    Container(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 8.w, vertical: 2.h),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20.r),
+                        border: Border.all(color: AppStyle.strokeDark),
+                      ),
+                      child: Text(
+                        'unsaved',
+                        style: AppStyle.interNormal(
+                          size: 11,
+                          color: AppStyle.textDarkFaint,
+                        ),
                       ),
                     ),
-                  ),
-                ],
-              ),
-              14.verticalSpace,
-              _fieldLabel('TITLE'),
-              _textField(_controller, 'What needs doing?'),
-              14.verticalSpace,
-              _fieldLabel('PRIORITY'),
-              _priorityTriple(),
-              14.verticalSpace,
-              _fieldLabel('DEADLINE'),
-              _deadlineRow(),
-              14.verticalSpace,
-              _fieldLabel('CATEGORY'),
-              _textField(_categoryController, 'Plant, admin, errand…'),
-              14.verticalSpace,
-              // FLAG (b) — drawn because the field is real; it is
-              // flagged because nothing ever acts on it.
-              _fieldLabel('REPEATS'),
-              _recurrenceQuad(),
-              14.verticalSpace,
-              // FLAG (c) — a local notification at the deadline, and
-              // nothing more. The sub-line says exactly that.
-              _reminderToggle(),
-              // CHIPS 1061 / 1060 — for a saved task with a reminder, the
-              // two clocks and the snooze control, right under the toggle
-              // that made the reminder.
-              if (_editingId != null) ..._editingReminderRow(),
-              14.verticalSpace,
-              // CHIP 1064 — the long-term band is a property of the task.
-              _longTermToggle(),
-              14.verticalSpace,
-              _fieldLabel('STEPS'),
-              // Section 46: the order rule. Off is today's any-order
-              // checklist; on, a run opens the steps one at a time.
-              _stepsInOrderToggle(),
-              8.verticalSpace,
-              for (var i = 0; i < _currentSubtasks.length; i++)
-                SubtaskCheckLine(
-                  subtask: SubtaskViewModel.fromMap(_currentSubtasks[i]),
-                  onToggle: () => _toggleFormSubtaskStatus(i),
-                  onRemove: () =>
-                      setState(() => _currentSubtasks.removeAt(i)),
+                  ],
                 ),
-              8.verticalSpace,
-              _subtaskComposer(),
-              14.verticalSpace,
-              // CHIP 833 — the M2 link row: what objective of the plan
-              // this task serves, and the door to the picker (834).
-              _fieldLabel('OBJECTIVE'),
-              ObjectiveLinkRow(
-                task: _composedTask,
-                onTap: _openObjectivePicker,
-                onClear: _strategicObjective == null
-                    ? null
-                    : () => _applyObjectiveLink(null),
-              ),
-              20.verticalSpace,
-              _paneActions(),
-            ],
+                14.verticalSpace,
+                // SECTION 47 — "From template": the RO plant's service
+                // runs, offered on a new task only. Picking one fills THIS
+                // form; nothing is saved until Save task, as ever.
+                if (_editingId == null) ...[
+                  _templateChooser(),
+                  14.verticalSpace,
+                ],
+                _fieldLabel('TITLE'),
+                _textField(_controller, 'What needs doing?'),
+                14.verticalSpace,
+                _fieldLabel('PRIORITY'),
+                _priorityTriple(),
+                14.verticalSpace,
+                _fieldLabel('DEADLINE'),
+                _deadlineRow(),
+                14.verticalSpace,
+                _fieldLabel('CATEGORY'),
+                _textField(_categoryController, 'Plant, admin, errand…'),
+                14.verticalSpace,
+                // FLAG (b) — drawn because the field is real; it is
+                // flagged because nothing ever acts on it.
+                _fieldLabel('REPEATS'),
+                _recurrenceQuad(),
+                14.verticalSpace,
+                // FLAG (c) — a local notification at the deadline, and
+                // nothing more. The sub-line says exactly that.
+                _reminderToggle(),
+                // CHIPS 1061 / 1060 — for a saved task with a reminder, the
+                // two clocks and the snooze control, right under the toggle
+                // that made the reminder.
+                if (_editingId != null) ..._editingReminderRow(),
+                14.verticalSpace,
+                // CHIP 1064 — the long-term band is a property of the task.
+                _longTermToggle(),
+                14.verticalSpace,
+                _fieldLabel('STEPS'),
+                // Section 46: the order rule. Off is today's any-order
+                // checklist; on, a run opens the steps one at a time.
+                _stepsInOrderToggle(),
+                8.verticalSpace,
+                for (var i = 0; i < _currentSubtasks.length; i++)
+                  SubtaskCheckLine(
+                    subtask: SubtaskViewModel.fromMap(_currentSubtasks[i]),
+                    onToggle: () => _toggleFormSubtaskStatus(i),
+                    onRemove: () =>
+                        setState(() => _currentSubtasks.removeAt(i)),
+                  ),
+                8.verticalSpace,
+                _subtaskComposer(),
+                14.verticalSpace,
+                // CHIP 833 — the M2 link row: what objective of the plan
+                // this task serves, and the door to the picker (834).
+                _fieldLabel('OBJECTIVE'),
+                ObjectiveLinkRow(
+                  task: _composedTask,
+                  onTap: _openObjectivePicker,
+                  onClear: _strategicObjective == null
+                      ? null
+                      : () => _applyObjectiveLink(null),
+                ),
+                20.verticalSpace,
+                _paneActions(),
+              ],
+            ),
           ),
         ),
       ),
@@ -1717,6 +1775,125 @@ class _TasksPageState extends State<TasksPage> {
     );
   }
 
+  // ===================================================================
+  // DESIGN STRIP SECTION 47 — the RO plant's service runs as ORDINARY
+  // TASKS (frames 47a–47d, 47h, 47i; Ray 2026-08-31: "maintenance is
+  // just a normal multi step task with reminder, no privilege"). The
+  // compose lane gains ONE row: "From template", which fills this same
+  // form with a template's title, steps, deadline, reminder and
+  // recurrence, so the task is saved, listed, run and reminded of
+  // exactly as any other. No hub row, no dashboard, no plane of its own.
+  //
+  // FRAME 47d's gate: the plant has to be described before it can be
+  // serviced. Until the setup run has been finished on this device the
+  // service templates are drawn but not live — present and dimmed, never
+  // hidden — and the one line under them says why.
+  // ===================================================================
+
+  /// Frame 47d's record, read on each build: null until the setup run has
+  /// been finished on this device.
+  PlantRecord? get _plant => MaintenancePlantStore.local.current();
+
+  /// The words on a template's chip. Keys, not English: the composed
+  /// app's TrKeys carries them from this SDK's manifest.
+  String _templateLabel(MaintenanceTemplate template) =>
+      AppHelpers.getTranslation(switch (template) {
+        MaintenanceTemplate.plantSetup => TrKeys.plantSetup,
+        MaintenanceTemplate.softenerMaintenance => TrKeys.softenerMaintenance,
+        MaintenanceTemplate.megaCharMaintenance => TrKeys.megacharMaintenance,
+        MaintenanceTemplate.preFilterReplacement => TrKeys.preFilterReplacement,
+        MaintenanceTemplate.roFilterReplacement => TrKeys.roFilterReplacement,
+        MaintenanceTemplate.membraneReplacement => TrKeys.roMembraneReplacement,
+      });
+
+  Widget _templateChooser() {
+    final PlantRecord? plant = _plant;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _fieldLabel(
+          AppHelpers.getTranslation(TrKeys.fromTemplate).toUpperCase(),
+        ),
+        Wrap(
+          spacing: 8.w,
+          runSpacing: 8.h,
+          children: [
+            for (final MaintenanceTemplate template in MaintenanceTemplates.all)
+              _templateChip(
+                template,
+                offered: MaintenanceTemplates.isOffered(template, plant),
+              ),
+          ],
+        ),
+        if (plant == null) ...[
+          6.verticalSpace,
+          Text(
+            AppHelpers.getTranslation(TrKeys.describeThePlantFirst),
+            style: AppStyle.interNormal(
+              size: 11,
+              color: AppStyle.textDarkFaint,
+            ),
+          ),
+        ],
+      ],
+    );
+  }
+
+  Widget _templateChip(MaintenanceTemplate template, {required bool offered}) {
+    final bool selected = _templateKey == template.key;
+    return InkWell(
+      key: ValueKey<String>('template-${template.key}'),
+      onTap: offered ? () => _applyTemplate(template) : null,
+      borderRadius: BorderRadius.circular(20.r),
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20.r),
+          color: selected ? AppStyle.primary : AppStyle.cardDarkAlt,
+          border: Border.all(
+            color: selected ? AppStyle.primary : AppStyle.strokeDark,
+          ),
+        ),
+        child: Text(
+          _templateLabel(template),
+          style: AppStyle.interNormal(
+            size: 12,
+            color: selected
+                ? AppStyle.blackColor
+                : offered
+                    ? AppStyle.textPrimary
+                    : AppStyle.textDarkFaint,
+          ),
+        ),
+      ),
+    );
+  }
+
+  /// Fill the form from [template]. Everything the template sets is a
+  /// field the form already has, so the operator can change any of it
+  /// before saving — a 20-minute rinse is a number on a step.
+  void _applyTemplate(MaintenanceTemplate template) {
+    final Map<String, dynamic> task = MaintenanceTemplates.build(
+      template,
+      now: DateTime.now(),
+      plant: _plant,
+    );
+    setState(() {
+      _templateKey = template.key;
+      _controller.text = '${task['title'] ?? ''}';
+      _stepsInOrder = task['stepsAreSequential'] == true;
+      _recurrence = '${task['recurrence'] ?? 'None'}';
+      _isReminderSet = task['reminder'] == true;
+      _selectedDeadline = task['deadline'] == null
+          ? null
+          : DateTime.tryParse('${task['deadline']}');
+      _currentSubtasks = List<Map<String, dynamic>>.from(
+        (task['subtasks'] as List? ?? const [])
+            .map((s) => Map<String, dynamic>.from(s as Map)),
+      );
+    });
+  }
+
   /// CHIP 831 — dashed means nothing committed yet. Section 46 gave the
   /// composer two more fields: what to do on the step, and how long it
   /// takes (minutes; blank or 0 is an untimed step with no clock).
@@ -1802,8 +1979,7 @@ class _TasksPageState extends State<TasksPage> {
             flex: 2,
             child: OutlinedButton(
               onPressed: () {
-                final index =
-                    _todos.indexWhere((t) => t['id'] == _editingId);
+                final index = _todos.indexWhere((t) => t['id'] == _editingId);
                 if (index != -1) _removeTodo(index);
                 _closePane();
               },
@@ -1839,8 +2015,7 @@ class _TasksPageState extends State<TasksPage> {
             ),
             child: Text(
               'Save task',
-              style:
-                  AppStyle.interSemi(size: 13, color: AppStyle.blackColor),
+              style: AppStyle.interSemi(size: 13, color: AppStyle.blackColor),
             ),
           ),
         ),

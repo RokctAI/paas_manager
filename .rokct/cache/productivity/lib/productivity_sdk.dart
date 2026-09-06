@@ -36,6 +36,17 @@ export 'src/common/models/data/objective_data.dart';
 export 'src/common/domain/interface/objectives_repository_facade.dart';
 export 'src/common/infrastructure/repositories/objectives_repository_impl.dart';
 export 'src/common/presentation/tasks/objective_picker_pane.dart';
+// Design strip section 41 — the M2 vision cluster: plan on a page (41a /
+// 41d), the objective drill (41b) and personal mastery (41c). Read-only
+// over the gateway (flag (a): view-first, the write endpoints do not exist
+// yet); the installed `templates/pages/vision` pages are host code and
+// reach the SDK through this barrel.
+export 'src/common/models/data/vision_data.dart';
+export 'src/common/domain/interface/vision_repository_facade.dart';
+export 'src/common/infrastructure/repositories/vision_repository_impl.dart';
+export 'src/common/presentation/vision/plan_board.dart';
+export 'src/common/presentation/vision/objective_detail_pane.dart';
+export 'src/common/presentation/vision/mastery_goal_card.dart';
 export 'src/common/models/request/task_request.dart';
 export 'src/common/models/response/task_response.dart';
 export 'src/common/application/recovery/recovery_state.dart';
@@ -54,7 +65,10 @@ export 'src/common/presentation/tasks/task_list_controls.dart';
 // no store) and the view the installed `tasks_page.dart` and
 // `task_run_page.dart` templates host.
 export 'src/common/application/run/task_run.dart';
+export 'src/common/application/run/maintenance_plant.dart';
+export 'src/common/application/run/maintenance_templates.dart';
 export 'src/common/presentation/run/task_run_view.dart';
+export 'src/common/presentation/plane_back_clearance.dart';
 // Design strip frame 46i — the paused run on the hub's Tasks row: the
 // derivation and its provider, and the line the host composes through the
 // manifest's `// @productivity-tasks-row` integration.

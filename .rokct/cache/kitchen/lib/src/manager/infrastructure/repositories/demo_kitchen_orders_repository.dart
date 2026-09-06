@@ -61,7 +61,7 @@ class DemoKitchenOrdersRepository implements KitchenOrdersRepositoryFacade {
   /// line both render something.
   static List<KitchenOrderData> _seed() => <KitchenOrderData>[
         KitchenOrderData(
-          id: 'DEMO-1041',
+          id: '1041',
           status: KitchenStatus.accepted,
           deliveryType: 'delivery',
           note: 'No chilli on the second wrap, please.',
@@ -73,7 +73,7 @@ class DemoKitchenOrdersRepository implements KitchenOrdersRepositoryFacade {
           ],
         ),
         KitchenOrderData(
-          id: 'DEMO-1040',
+          id: '1040',
           status: KitchenStatus.accepted,
           deliveryType: 'dine_in',
           createdAt: _now.subtract(const Duration(minutes: 8)),
@@ -83,7 +83,7 @@ class DemoKitchenOrdersRepository implements KitchenOrdersRepositoryFacade {
           ],
         ),
         KitchenOrderData(
-          id: 'DEMO-1039',
+          id: '1039',
           status: KitchenStatus.cooking,
           deliveryType: 'pickup',
           createdAt: _now.subtract(const Duration(minutes: 14)),
@@ -93,7 +93,7 @@ class DemoKitchenOrdersRepository implements KitchenOrdersRepositoryFacade {
           ],
         ),
         KitchenOrderData(
-          id: 'DEMO-1038',
+          id: '1038',
           status: KitchenStatus.cooking,
           deliveryType: 'delivery',
           note: 'Table by the window — running late.',
@@ -105,7 +105,7 @@ class DemoKitchenOrdersRepository implements KitchenOrdersRepositoryFacade {
           ],
         ),
         KitchenOrderData(
-          id: 'DEMO-1037',
+          id: '1037',
           status: KitchenStatus.ready,
           deliveryType: 'delivery',
           createdAt: _now.subtract(const Duration(minutes: 29)),

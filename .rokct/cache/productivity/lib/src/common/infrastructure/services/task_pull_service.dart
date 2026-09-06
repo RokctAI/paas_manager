@@ -43,6 +43,15 @@ import 'task_sync_store.dart';
 /// base_sdk's error lane ([TelemetryClient.logError]) carrying the gateway
 /// cmd and the error's CLASS — never its text, which can hold a URL, a
 /// token or server-authored copy.
+///
+/// A demo build is the one exception, and it is not a failure. With
+/// `--dart-define=IS_DEMO=true` ([AppConstants.isDemo]) there is no backend
+/// by design, so [pull] never issues the call: it resolves as a successful
+/// no-op — 0 rows, [lastFailure] clear, no telemetry. Letting it run would
+/// only ever fail, and that failure would put the "sync paused" line on
+/// every empty demo list, a connection-failure notice on a build that has
+/// no connection to fail. Same [AppConstants.isDemo] gate the other SDKs
+/// put in front of their network paths.
 class TaskPullService {
   TaskPullService._();
 
@@ -66,6 +75,13 @@ class TaskPullService {
   /// mirrors it rather than pretending otherwise.
   static const int pageLimit = 200;
 
+  /// Stands in for [AppConstants.isDemo], which is fixed at compile time
+  /// and so cannot be flipped by a test. Null means "ask the constant".
+  @visibleForTesting
+  static bool? isDemoOverride;
+
+  static bool get _isDemo => isDemoOverride ?? AppConstants.isDemo;
+
   /// Pull changed tasks and apply them locally. Returns how many rows were
   /// actually written, so a caller can decide whether a reload is worth it.
   ///
@@ -73,7 +89,15 @@ class TaskPullService {
   /// error the caller has to handle. It is still an error the caller can
   /// SEE: a failure lands on [lastFailure] as a typed [TaskPullFailure]
   /// and in telemetry before this returns 0.
+  ///
+  /// In a demo build ([AppConstants.isDemo]) nothing goes out at all: the
+  /// pull completes as a no-op that clears [lastFailure], exactly as a
+  /// successful empty page would.
   static Future<int> pull() async {
+    if (_isDemo) {
+      lastFailure.value = null;
+      return 0;
+    }
     try {
       final String? cursor = await TaskSyncStore.readCursor();
       final Object? response = await const PlatformGateway().call(

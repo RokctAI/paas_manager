@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.4.1
+
+* fix(demo): demo ticket numbers stop announcing themselves as demo (Ray
+  2026-09-03 21:45Z "demo in text or demo data is not needed").
+  `DemoKitchenOrdersRepository`'s five seeded tickets drop the `DEMO-`
+  prefix (`DEMO-1041` … `DEMO-1037` -> `1041` … `1037`), in lock-step
+  with orders_sdk 1.18.2's `DemoSellerOrdersRepository`, which seeds the
+  same numbers. Statuses, delivery types, notes, dish lines, prep states
+  and the minutes-old timings are unchanged.
+
 ## 1.4.0
 
 * `DemoKitchenOrdersRepository` — demo data behind the manager Kitchen tab.

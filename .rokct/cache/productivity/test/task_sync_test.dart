@@ -759,6 +759,33 @@ void main() {
       expect(fields['error_class'], TaskPullService.lastFailure.value!.errorClass);
       expect(fields.keys, unorderedEquals(<String>['cmd', 'error_class']));
     });
+
+    // A demo build (--dart-define=IS_DEMO=true) has no backend by design.
+    // Its pull must not be a failure that flags syncFailed - that is what
+    // drew "Sync paused. Your tasks will sync when the connection is back."
+    // on the guided tour's empty tasks list - and must not go out at all.
+    test('a demo build never pulls, never flags a failed sync and emits '
+        'no telemetry', () async {
+      // isDemo is a compile-time constant; the override is the only way a
+      // test can stand in a demo build.
+      TaskPullService.isDemoOverride = true;
+      addTearDown(() => TaskPullService.isDemoOverride = null);
+      final _StubBackend backend = useBackend();
+      backend.replies['api.projects.list_personal_tasks'] = 500;
+      // A failure left over from before the flag flipped is cleared, the
+      // same way a successful pull clears it.
+      TaskPullService.lastFailure.value = const TaskPullFailure(
+        cmd: 'api.projects.list_personal_tasks',
+        errorClass: 'DioException',
+      );
+
+      expect(await TaskPullService.pull(), 0);
+      await pumpEventQueue();
+
+      expect(TaskPullService.syncFailed, isFalse);
+      expect(backend.calls, isEmpty);
+      expect(telemetry, isEmpty);
+    });
   });
 
   // ────────────────────────────── the snooze ───────────────────────────────

@@ -12,9 +12,13 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
+import 'dart:async';
+
 import 'package:get_it/get_it.dart';
 import 'package:base_sdk/src/constants/app_constants.dart';
+import 'package:base_sdk/src/services/local_storage.dart';
 import 'package:base_sdk/src/sync/sync_engine.dart';
+import 'package:merchants_sdk/src/manager/infrastructure/demo_currency.dart';
 import 'package:merchants_sdk/src/manager/domain/interface/pos_catalog.dart';
 import 'package:merchants_sdk/src/manager/domain/interface/pos_orders.dart';
 import 'package:merchants_sdk/src/manager/domain/interface/quick_flow.dart';
@@ -68,9 +72,9 @@ class ManagerMerchantsDependencies {
     // The POS till's product-lookup seam (BillingPage barcode scans and
     // the Add Items lane). Demo-gated like MerchantsSdkDependencies'
     // ShopsRepositoryFacade: --dart-define=IS_DEMO=true routes lookups to
-    // this SDK's MockProductsRepository ("Demo Product", 150.00) so
-    // headless tours and the standalone POS test harness run with zero
-    // backend contact; otherwise the real repository delegates to the
+    // this SDK's MockProductsRepository ("Flame-grilled beef burger",
+    // 150.00) so headless tours and the standalone POS test harness run
+    // with zero backend contact; otherwise the real repository delegates to the
     // composed app's ProductsRepositoryFacade (products_sdk's, resolved
     // lazily per call).
     if (!getIt.isRegistered<PosCatalogRepositoryFacade>()) {
@@ -89,6 +93,23 @@ class ManagerMerchantsDependencies {
     // complete locally only.
     if (AppConstants.isDemo && !getIt.isRegistered<PosOrdersFacade>()) {
       getIt.registerSingleton<PosOrdersFacade>(MockPosOrdersRepository());
+    }
+    // The till's money strings (the "Cart is empty" summary's R0.00, the
+    // line cards, Continue) go through AppHelpers.numberFormat, which reads
+    // LocalStorage's selected currency. Nothing in a composed manager app
+    // seeds one in demo: comms_sdk registers the real CurrenciesRepository
+    // regardless of IS_DEMO and no manager shell calls
+    // CurrencyNotifier.fetchCurrency, so the till printed intl's locale
+    // fallback ("0.00USD" - the ISO code as a suffix) while every other
+    // seller fixture trades in rand (orders_sdk's DemoSellerOrdersRepository,
+    // this SDK's R150.00 catalog line). Seed that rand once, and only where
+    // nothing is selected, so a real currency - or a test harness's own seed
+    // - is never overwritten. The generated main.dart awaits
+    // LocalStorage.init() before any *Dependencies.register call, and
+    // SharedPreferences writes its in-memory cache synchronously, so the
+    // first numberFormat call already reads it; nothing here awaits.
+    if (AppConstants.isDemo && LocalStorage.getSelectedCurrency() == null) {
+      unawaited(LocalStorage.setSelectedCurrency(demoCurrency));
     }
     // Quick flow settings (design strip section 42): the shop's three
     // order-automation switches and the till keypad's digit->product map,

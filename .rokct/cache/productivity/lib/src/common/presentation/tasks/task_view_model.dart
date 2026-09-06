@@ -41,6 +41,12 @@ class SubtaskViewModel {
     this.durationSeconds = 0,
     this.startedAt,
     this.completedAt,
+    this.kind = StepKind.plain,
+    this.optional = false,
+    this.readings = const <ReadingSpec>[],
+    this.value,
+    this.note,
+    this.skipped = false,
   });
 
   final String title;
@@ -51,6 +57,17 @@ class SubtaskViewModel {
   final int durationSeconds;
   final DateTime? startedAt;
   final DateTime? completedAt;
+
+  /// Section 47 — the step's kind, whether it may be skipped, its
+  /// readings, its photo path, its note and whether Skip completed it.
+  /// Read off the map exactly as [TaskRunStep] reads them; nothing here
+  /// derives one.
+  final StepKind kind;
+  final bool optional;
+  final List<ReadingSpec> readings;
+  final String? value;
+  final String? note;
+  final bool skipped;
 
   bool get isTimed => durationSeconds > 0;
 
@@ -75,6 +92,12 @@ class SubtaskViewModel {
       durationSeconds: step.durationSeconds,
       startedAt: step.startedAt,
       completedAt: step.completedAt,
+      kind: step.kind,
+      optional: step.optional,
+      readings: step.readings,
+      value: step.value,
+      note: step.note,
+      skipped: step.skipped,
     );
   }
 }
@@ -188,6 +211,12 @@ class TaskViewModel {
           startedAt: s.startedAt,
           completedAt: s.completedAt,
           isDone: s.isDone,
+          kind: s.kind,
+          optional: s.optional,
+          readings: s.readings,
+          value: s.value,
+          note: s.note,
+          skipped: s.skipped,
         ),
     ],
     sequential: stepsAreSequential,

@@ -210,6 +210,17 @@ class TaskSubtaskRequest {
   final DateTime? startedAt;
   final DateTime? completedAt;
 
+  // NOT ON THE WIRE — section 47's step keys (`TaskRunStep.deviceOnlyKeys`:
+  // kind, optional, readings, value, note, skipped). They live in the
+  // device's `TasksTable.data` blob and nowhere else. The server home is
+  // the `Task Subtask` child doctype (tasks extend ERPNext's Task, Ray
+  // 2026-08-31), whose `task_sync.py` passthrough keeps only the keys in
+  // its SUBTASK_STEP_FIELDS whitelist and drops the rest silently — so
+  // sending them before that whitelist and the child columns exist would
+  // be a no-op dressed as a sync. When they land, the columns are named
+  // here and in `TaskSubtaskResponse`, and `needsPush` starts counting a
+  // typed reading as a change on its own.
+
   factory TaskSubtaskRequest.fromMap(Map<String, dynamic> row) {
     DateTime? parse(Object? value) {
       if (value == null) return null;
@@ -217,7 +228,8 @@ class TaskSubtaskRequest {
       return DateTime.tryParse(value.toString());
     }
 
-    final Object? rawDuration = row['durationSeconds'] ?? row['duration_seconds'];
+    final Object? rawDuration =
+        row['durationSeconds'] ?? row['duration_seconds'];
     final int duration = rawDuration is num
         ? rawDuration.toInt()
         : int.tryParse('${rawDuration ?? ''}') ?? 0;

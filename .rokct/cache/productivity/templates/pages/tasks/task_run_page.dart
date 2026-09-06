@@ -32,6 +32,8 @@
 // The page persists exactly as the workspace does: the local store first,
 // through the same repository, and the outbox push follows unawaited.
 
+import 'dart:async';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:base_sdk/base_sdk.dart';
 import 'package:base_sdk/src/presentation/theme/app_style.dart';
@@ -80,10 +82,12 @@ class _TaskRunPageState extends State<TaskRunPage> {
   }
 
   /// The run wrote progress onto the task: hold it, save it. Local first;
-  /// the push rides the outbox and nothing here waits for it.
+  /// the push rides the outbox and nothing here waits for it. Frame 47d:
+  /// a finished plant-setup run also becomes the device's plant record.
   void _onChanged(Map<String, dynamic> task) {
     setState(() => _task = task);
     _repository.saveTodos(<Map<String, dynamic>>[task]);
+    unawaited(MaintenancePlantStore.local.captureFromRun(task));
   }
 
   @override

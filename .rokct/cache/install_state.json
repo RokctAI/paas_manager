@@ -1,7 +1,7 @@
 {
   "packages": {
     "base_sdk": {
-      "version": "1.60.0",
+      "version": "1.60.4",
       "files": {
         "flutter_native_splash.yaml": "d469a133b5e1631d6ba811b048d290449224075edad2153189cfb2edc3f4d100",
         "android/app/src/main/res/font/montserrat_extrabolditalic.ttf": "d38bac61eda8d8c002b1a852f5368901a085fbe1d844b5e0a149b674e22e2cdd",
@@ -193,7 +193,7 @@
       ]
     },
     "users_sdk": {
-      "version": "1.3.3",
+      "version": "1.3.6",
       "files": {
         "lib/application/profile/profile_state.dart": "df2ec681941504e54fe30bcf3bece48c914a29b9410552e054cf47a018f7fb62",
         "lib/application/profile/profile_provider.dart": "ae79e4577eb7e7733148596b79c2b8f3145de74d1bdb36bfab55db1d9c3fc0c4",
@@ -208,14 +208,14 @@
       "boot_hooks": []
     },
     "merchants_sdk": {
-      "version": "1.28.0",
+      "version": "1.29.3",
       "files": {
         "assets/audio/notification.wav": "9d62af6f1c8df010941d1daa17162175d87293bd78371c787803b5a11f95cb9d",
         "assets/svgs/menu.svg": "9767d04ac4d157e423f972259a9c2c455a6a629c4098cc9c2fe8f9722451441b",
-        "lib/presentation/pages/main/main_page.dart": "9b938f2f69115a49591174deae79f9363b97a37e8f57041779f5d1a4743947a9",
+        "lib/presentation/pages/main/main_page.dart": "a1ac7c298329cd0b6b0e20d306864d1b1e7d379d1c34d711447bd12ff4cbe130",
         "lib/presentation/pages/main/widgets/bottom_navigator_item.dart": "9086f84d83295ec9eedec3eff18595ef23af14346c339fb1d46b6aa36da23387",
         "lib/presentation/pages/main/widgets/buttons_bouncing_effect.dart": "861cc919c2b45ddfe407ea86abbea7cc9cced4052f2bab06850770111c26fa94",
-        "lib/presentation/pages/restaurant/restaurant_page.dart": "31cd86a5861b0527d2aa8683e07a8441cfb0d32758e61b7d607f205bed23d95b",
+        "lib/presentation/pages/restaurant/restaurant_page.dart": "444ffbd4fe182fb60b93f499302f93fb5624f17c88ce55560a3318feb1d35119",
         "lib/presentation/pages/restaurant/widgets/edit_restaurant_modal.dart": "cf13f6efb610bf2e541d549d198060ed4082e1f3894ed1b8af9a4392c66c7e14",
         "lib/presentation/pages/restaurant/widgets/logout_button.dart": "0df8924813e55822c8dd914833c96a4e16e4a8bc7c6b673e3e1856442ed17d7d",
         "lib/presentation/pages/restaurant/widgets/working_time_modal.dart": "e027c9f314b5dd2414daeea290d499c6003971b1458d59524c1b6811eb83c137",
@@ -226,8 +226,8 @@
         "lib/presentation/routes/merchants_adapters.dart": "213d5b9b38f3fe77afed0a7b92f3e90e6fddc1cbd3adc8e529f190b2f9a5fc13",
         "lib/presentation/component/helper/horizontal_image_picker.dart": "3d3899881badec29e56a192b721aa6761568cf988cbefe42f4035d76175e9f21",
         "lib/presentation/pages/sync_issues/sync_issues_page.dart": "02bfe90c8487f738fe1b744443d3cdc5be21b4b574edc3e07ff7fdbe8feeee7a",
-        "lib/presentation/pages/billing/billing_page.dart": "af080822ed1b18b6c4fd3d8b3e554388a3e995f84e1b125b10ea9e6b4e1e0f01",
-        "lib/presentation/pages/billing/checkout_page.dart": "b874a52c47c04e92669ed611bbccf83a652e80ec6fc6414a2855829bfaf03457",
+        "lib/presentation/pages/billing/billing_page.dart": "adc8fceb1341880e2199508ffe9103d56688a934e6ce67c947c0182b981b6a38",
+        "lib/presentation/pages/billing/checkout_page.dart": "f97776dde3b5691cde2d8c3527fccfb847dc2ceb9cbb41742b47e07f7df6e85c",
         "lib/presentation/adapters/pos_orders_adapter.dart": "7eb832beff4a217f477fbe598c69c2277e8922181297ddc6944b82c032ed8e82",
         "lib/presentation/pages/quick_flow/quick_flow_page.dart": "6616f819341643a7952c63e53afc25abc58bd2281366710ee03e3325467438ff"
       },
@@ -294,6 +294,12 @@
         "iveScannedWaitForCode": "I've Scanned, Wait for Code",
         "printReceipt": "Print Receipt & Finish",
         "finish": "Finish without Receipt",
+        "receipt": "Receipt",
+        "saleReceipt": "SALE RECEIPT",
+        "receiptOrder": "Order",
+        "qty": "QTY",
+        "paid": "Paid",
+        "thankYou": "Thank you",
         "activeTransaction": "Active Transaction",
         "tillOfflineBanner": "Till offline \u2014 payment confirms by code. The customer pays the link on their phone and reads you the 6-digit code from their payment screen; the sale syncs when you are back online.",
         "confirmByCode": "Confirm by Code",
@@ -435,7 +441,7 @@
       ]
     },
     "products_sdk": {
-      "version": "1.10.0",
+      "version": "1.10.1",
       "files": {
         "lib/presentation/pages/foods/foods_page.dart": "b36c73ac7acb4e47e3bd3b4d84787810bf7bd87ade32c0b890e8eff7844bdcf9",
         "lib/presentation/pages/foods/foods/foods_body.dart": "ff4b16be770dc51ab54686f085030d8f2914b13d935c558829af1e70b976c92c",
@@ -548,7 +554,7 @@
       "boot_hooks": []
     },
     "orders_sdk": {
-      "version": "1.18.1",
+      "version": "1.20.0",
       "files": {
         "lib/presentation/pages/orders/orders_home_page.dart": "9586e95c9e3c6135434bf47eeae635b775057ae9e729f264e87c41350b22331a",
         "lib/presentation/pages/orders/details/order_details_modal.dart": "04220f29685b4f3f91e82b1b103d76ec0805c8d8316713917c59d3d8dfedc1ba",
@@ -559,18 +565,18 @@
         "lib/presentation/pages/orders/widgets/accepted_orders_body.dart": "04546f84ec06d2ad741797b0f8f19495c72bb5758029167bd84106a9ce0fb1b9",
         "lib/presentation/pages/orders/widgets/no_orders.dart": "96adbd622a9d195aec944390f71c8322b5e7aeffba1b483f16c948f7af5cd70f",
         "lib/presentation/pages/orders/widgets/on_a_way_orders_body.dart": "ca79de407fd36324a453d1850691d38f4c92a3daecbbc68b9082dcce4b7ffa3c",
-        "lib/presentation/pages/create_order/create_order_page.dart": "828967d2a4c099e0a81acb65c765e90bf0fb64a4ef2b922a77eaa63d5c4493c0",
+        "lib/presentation/pages/create_order/create_order_page.dart": "b8728978c52972bb894dcced1122d752ea9612a5a7768d31df00f32dc93873b8",
         "lib/presentation/pages/create_order/details/food_details_modal.dart": "5a908e20c75e439637c84717f70d5a5de6e6f8380f9f5be652db7f6a2afb9dd7",
         "lib/presentation/pages/create_order/details/widgets/food_price_widget.dart": "b7ef593dd08147b04ac10dae2adb7eaeef7fb5b921e82c5c7212b4084d65d6c5",
         "lib/presentation/pages/create_order/details/widgets/food_extras.dart": "8bc9b9a21f0faace4f3d61ef2bc9b793091aad94ef135555ae039a17d05480bd",
         "lib/presentation/pages/create_order/details/widgets/w_ingredient.dart": "9afa5920e99c5062c45d2b9cb03fdba1f980963c7c806ba988fb617755bf25fc",
         "lib/presentation/pages/create_order/details/widgets/ingredient_item.dart": "1a8b396d9ab226068e70a5e24d57c0ec3172bc68f9cae63e3cc165e498d82d83",
-        "lib/presentation/pages/create_order/shipping/shipping_address_page.dart": "3f1fb81282503819f22194c39b63ba99f51e1b1d596e120210be96c8bbe4619a",
+        "lib/presentation/pages/create_order/shipping/shipping_address_page.dart": "a734d90b206219f13459db0139ed99f82614853dfaa8f22a5e93291f118a8502",
         "lib/presentation/pages/create_order/shipping/select_section/select_section_page.dart": "045be947d413b62b1b91db9a5765097924362d7c8ab17e23279b57b738c3eadb",
         "lib/presentation/pages/create_order/shipping/select_section/widgets/section_item.dart": "4969b4f6ac35267c2dd20f84b69fbe4be5ff66aaba06759b9824e717b0b91496",
-        "lib/presentation/pages/create_order/shipping/details/delivery_time_page.dart": "e9bd0690a41092b3a0359d56345ea4c6f6d8a001a551fa5667f5fa5127034905",
+        "lib/presentation/pages/create_order/shipping/details/delivery_time_page.dart": "12920a5082b561b54544d1fc4541f91c4fed99e609d3f847f395d664324014bc",
         "lib/presentation/pages/create_order/shipping/details/widgets/payment_item.dart": "5c7760f1114fa411f2cc5fbe39b9dd66d3f77a441aa343170e6bd51350a7a072",
-        "lib/presentation/pages/create_order/shipping/address/select_address_page.dart": "41ba7ee51c8c07f0abe78874b9c3c3c7e81828a165134883d62a99867fb56e7e",
+        "lib/presentation/pages/create_order/shipping/address/select_address_page.dart": "45a54e4fd10d9c4fa1bad7cf967e1fd86d5b88d500f9b1b5130e832262471517",
         "lib/presentation/pages/create_order/shipping/address/searched_location_item.dart": "36571b7a10ef96898e59a5df7ae89cb02555c7b494708ca07b8a8b2252790441",
         "lib/presentation/pages/create_order/shipping/select_table/select_table_page.dart": "04270e30b1a6c634eb530e7d6a4473636eabd9ca609da283fad2a2063e7f9ec3",
         "lib/presentation/pages/create_order/shipping/select_table/widgets/table_item.dart": "1dcdcbb3695f6fc7b8329ac60da1a0f89c0a248430016c4ca9d368e79f562d91",
@@ -579,7 +585,7 @@
         "lib/presentation/pages/create_order/shipping/select_user/select_user_page.dart": "77c257713ece92e77d9c6ecd0a699d1be864952d6bd6bc2a3777bf2f8a0efede",
         "lib/presentation/pages/create_order/shipping/select_user/widgets/create_user_modal.dart": "9385355e9691469350ecb010ac2ef4314f9c4caac1f666be4508e9a99dd0ac65",
         "lib/presentation/pages/create_order/shipping/select_user/widgets/user_item.dart": "71289007495f34ae9a4441a826be4ce99b9d6f5347d96cb0f10a775df5174aa6",
-        "lib/presentation/pages/create_order/order/order_page.dart": "5eaa80d50c2ea760df7f4c5b186f617fa3d33c4d9955d47bc75eb32fcba4159e",
+        "lib/presentation/pages/create_order/order/order_page.dart": "4dc9cb286404d26708e5eb89116d8d04354f1315ac04327d930accb90e9a5e6d",
         "lib/presentation/pages/create_order/order/widgets/title_price.dart": "b9c4dc096f3f03e2e8470659669d4fad0edd024199adec81b5d4c1c02a315293",
         "lib/presentation/pages/order_history/order_history.dart": "44deaa58a541766b230bad9b466803bfe1f4ef5b8f0f286d32793984be04c9be",
         "lib/presentation/components/orders/orders_item.dart": "69781a9e66291af2380c42cf796137ce97c3daa6df18a33b728681d0c76cf18d",
@@ -597,7 +603,7 @@
         "lib/presentation/component/select_date_modal.dart": "f15a6c130767d8e2800fcc068af5dede9ee653331c752a704af38dd15b1b8b1b",
         "lib/presentation/pages/orders/widgets/board/orders_board_view.dart": "bd66684cd5691b896fbc8bfbc9c692775705b7f14206e3856b914826a26511ad",
         "lib/presentation/pages/orders/widgets/board/board_order_column.dart": "96a4362463465c34c8c05cba54d5204b0ce4d3a5d6680cd5033724a034d0516d",
-        "lib/presentation/pages/create_order/order/widgets/order_pane.dart": "ea6ad5d6e7a76ebde92e4504adc8be3bf4a8dd6580dfd8c7b141e94aaa5c41df"
+        "lib/presentation/pages/create_order/order/widgets/order_pane.dart": "a2d9eb6224f9483f629ec70a8a8b9982029aae447d6c3f2628127834ded1e462"
       },
       "routes": [
         {
@@ -661,6 +667,10 @@
       "registration_steps": [],
       "embedded_widgets": [],
       "tr_keys": {
+        "ordersToAccept": "orders_to_accept",
+        "waitingOnYou": "waiting_on_you",
+        "openOrders": "open_orders",
+        "manager": "manager",
         "aDriverWasAlreadyOnThisOneSoThe": "a_driver_was_already_on_this_one_so_the",
         "assignedToDriver": "assigned",
         "collectedInPerson": "collected_in_person",
@@ -711,6 +721,12 @@
         "receiptReprintFailed": "receipt_reprint_failed",
         "viewMore": "view_more",
         "clearAllOrders": "clear_all_orders",
+        "walkInOrder": "walk_in_order",
+        "searchWalkInProducts": "search_products",
+        "orderItems": "items",
+        "shipping": "shipping",
+        "placeOrder": "place_order",
+        "offlineOrderQueuesAndSyncs": "offline_the_order_queues_on_this_device_and_syncs",
         "delivered": "delivered",
         "customerInformation": "customer.information",
         "deliveryService": "delivery_service",
@@ -773,10 +789,22 @@
           ]
         }
       ],
-      "boot_hooks": []
+      "boot_hooks": [],
+      "integrations": [
+        {
+          "target": "lib/presentation/pages/launch/home.dart",
+          "placeholder": "// @launcher-windows-imports",
+          "replacement": "import 'package:orders_sdk/src/manager/presentation/launcher/manager_launch_window.dart';"
+        },
+        {
+          "target": "lib/presentation/pages/launch/home.dart",
+          "placeholder": "                // @launcher-windows",
+          "replacement": "                LaunchWindowSource.widget(\n                  mode: LaunchMode.manager,\n                  title: AppHelpers.getTranslation('manager'),\n                  icon: RemixIcons.store_2_line,\n                  builder: (context, openApp) =>\n                      ManagerLaunchWindow(onOpen: openApp),\n                ),"
+        }
+      ]
     },
     "kitchen_sdk": {
-      "version": "1.4.0",
+      "version": "1.4.1",
       "files": {
         "lib/presentation/pages/kitchen/kitchen_page.dart": "8a703b3db4386fbf24cef6d751b0f80820d2b9d06a13602fba02d9800ded53fa"
       },
@@ -881,7 +909,7 @@
       "boot_hooks": []
     },
     "comms_sdk": {
-      "version": "1.15.0",
+      "version": "1.15.1",
       "files": {
         "lib/presentation/pages/notification/notification_list_page.dart": "bbdc8b47532871a71548710cd6cb8804d51119ef5575a3bd8be18c70c331428b",
         "lib/application/notification/notification_state.dart": "055c8ab42969bad5e418061cbe38699458bfc8b74ea7d4def4a03a18e261b184",
@@ -957,10 +985,12 @@
       "boot_hooks": []
     },
     "productivity_sdk": {
-      "version": "1.3.0",
+      "version": "1.5.1",
       "files": {
-        "lib/presentation/pages/tasks/tasks_page.dart": "ead476551da1fec6afeb111a38946bc851b9b70ebb026c5f84f1213a878800bf",
-        "lib/presentation/pages/tasks/task_run_page.dart": "bbaade0735be015d501945371eaff1278d3774e3264c071bf1cfe52456beba3c"
+        "lib/presentation/pages/tasks/tasks_page.dart": "741807669474c7b3fd7d7f472158cb816c54f80ca83e22370b65c7877eecf598",
+        "lib/presentation/pages/tasks/task_run_page.dart": "f6712e043c2741afa91279b826838eb11aa185c984bdbc913ab7b8f5257d3100",
+        "lib/presentation/pages/vision/plan_on_a_page.dart": "7d6488c52d013dd40068da42a901711b9816229434751e6e1d2a39a9da63799b",
+        "lib/presentation/pages/vision/personal_mastery_page.dart": "b7aaccfe183ae0943ba67ca6c1573bc5c302dbeaa4500b5e274c6c529bb43aeb"
       },
       "routes": [
         {
@@ -974,6 +1004,18 @@
           "page": "TaskRunRoute.page",
           "type": "CupertinoRoute",
           "import": "package:${package}/presentation/pages/tasks/task_run_page.dart"
+        },
+        {
+          "path": "/vision",
+          "page": "PlanOnAPageRoute.page",
+          "type": "CupertinoRoute",
+          "import": "package:${package}/presentation/pages/vision/plan_on_a_page.dart"
+        },
+        {
+          "path": "/vision/mastery",
+          "page": "PersonalMasteryRoute.page",
+          "type": "CupertinoRoute",
+          "import": "package:${package}/presentation/pages/vision/personal_mastery_page.dart"
         }
       ],
       "app_routes": [],
@@ -1020,7 +1062,7 @@
         {
           "target": "lib/presentation/pages/launch/home.dart",
           "placeholder": "            // @launcher-glance",
-          "replacement": "            GlanceCard(\n              items: [\n                GlanceCardItem(\n                  icon: RemixIcons.task_line,\n                  text: 'Tasks - plan your day',\n                  onTap: () => context.router.pushNamed('/tasks'),\n                ),\n              ],\n            ),"
+          "replacement": "            GlanceCard(\n              items: [\n                GlanceCardItem(\n                  icon: RemixIcons.task_line,\n                  text: 'Tasks - plan your day',\n                  onTap: () => context.router.pushNamed('/tasks'),\n                ),\n                GlanceCardItem(\n                  icon: RemixIcons.flag_line,\n                  text: 'Plan on a page - the whole strategy',\n                  onTap: () => context.router.pushNamed('/vision'),\n                ),\n                GlanceCardItem(\n                  icon: RemixIcons.user_star_line,\n                  text: 'Personal mastery - your goals',\n                  onTap: () => context.router.pushNamed('/vision/mastery'),\n                ),\n              ],\n            ),"
         },
         {
           "target": "lib/presentation/pages/manager/restaurant/restaurant_page.dart",
@@ -1034,7 +1076,17 @@
         }
       ],
       "di_hooks": [],
-      "boot_hooks": []
+      "boot_hooks": [],
+      "tr_keys": {
+        "fromTemplate": "from_template",
+        "plantSetup": "plant_setup",
+        "softenerMaintenance": "softener_maintenance",
+        "megacharMaintenance": "megachar_maintenance",
+        "preFilterReplacement": "pre_filter_replacement",
+        "roFilterReplacement": "ro_filter_replacement",
+        "roMembraneReplacement": "ro_membrane_replacement",
+        "describeThePlantFirst": "describe_the_plant_before_it_can_be_serviced"
+      }
     },
     "calc_sdk": {
       "version": "1.1.1",
@@ -1132,7 +1184,7 @@
       "boot_hooks": []
     },
     "map_sdk": {
-      "version": "1.3.0",
+      "version": "1.3.1",
       "files": {},
       "routes": [],
       "app_routes": [],
@@ -1337,7 +1389,7 @@
       }
     },
     "auth_sdk": {
-      "version": "1.10.1",
+      "version": "1.10.4",
       "files": {
         "lib/presentation/routes/auth_route_pages.dart": "2ac2b6adab56b09a0eff1aa19478717f2c632e0415c46ac0c06f04549e77602c",
         "lib/presentation/routes/registration_step_pages.dart": "d18f7e35878721c688c4f0964db42c97148e1f2e9d225cd1a6bb7490e2628347",
@@ -1417,6 +1469,16 @@
           "id": "auth_restore_credential_gate",
           "order": 1,
           "body": "RestoreCredentialGate.install(); SessionEndHooks.register('restore_credentials', RestoreCredentialGate.clear);"
+        },
+        {
+          "id": "auth_en_bundled_translations",
+          "order": 2,
+          "body": "BundledTranslations.register('en', kAuthEnTranslations);",
+          "imports": [
+            "import 'package:base_sdk/src/services/bundled_translations.dart';",
+            "import 'package:auth_sdk/src/translations/auth_en_translations.dart';"
+          ],
+          "_comment": "Registers this SDK's bundled English map into base_sdk's BundledTranslations registry at boot (lms_sdk's 'af' hook is the precedent). base_sdk bundles no 'en' map because English normally survives through the humanized-key fallback, but that only holds for keys named after their copy: reset_password_text humanized to the literal \"Reset password text\" on every app shell's reset-password sheet, because demo builds take their served map from comms_sdk's MockSettingsRepository (a handful of rows that never carried this key). Backend-served translation rows still win; the map is only the offline/unseeded fallback consulted before the humanized-key fallback. Imports are declared explicitly (src paths, like lms_sdk) because neither symbol is exported by the auth_sdk barrel every composed main.dart already imports. Requires a base_sdk with bundled_translations.dart (the bundled-af wave)."
         }
       ]
     },
@@ -1595,36 +1657,36 @@
   },
   "sdk_cache": {
     "base": {
-      "version": "1.60.0",
-      "hash": "1e02ca98d22c0bf6"
+      "version": "1.60.4",
+      "hash": "46869b711a8ca451"
     },
     "comms": {
-      "version": "1.15.0",
-      "hash": "8dd0bf00a569a50a"
+      "version": "1.15.1",
+      "hash": "c3c7540e4e09b021"
     },
     "auth": {
-      "version": "1.10.1",
-      "hash": "efd373d74ae9f6b4"
+      "version": "1.10.4",
+      "hash": "5940157a40010df3"
     },
     "users": {
-      "version": "1.3.3",
-      "hash": "893b5ab83ae76de6"
+      "version": "1.3.6",
+      "hash": "a5a76f0b5fe55a0a"
     },
     "merchants": {
-      "version": "1.28.0",
-      "hash": "96765b1c298cc84c"
+      "version": "1.29.3",
+      "hash": "4b29a67cded207e0"
     },
     "products": {
-      "version": "1.10.0",
-      "hash": "0f3a4452babc677b"
+      "version": "1.10.1",
+      "hash": "054e6c067b1ca2c5"
     },
     "orders": {
-      "version": "1.18.1",
-      "hash": "d2d9dfc5d03af908"
+      "version": "1.20.0",
+      "hash": "5a44810b895a7520"
     },
     "kitchen": {
-      "version": "1.4.0",
-      "hash": "631d0f1775b0a1f0"
+      "version": "1.4.1",
+      "hash": "2a9f01e79ee07e3f"
     },
     "promotions": {
       "version": "1.2.2",
@@ -1647,8 +1709,8 @@
       "hash": "83864d75f80cd5e1"
     },
     "productivity": {
-      "version": "1.3.0",
-      "hash": "a0e52ce4fd78e412"
+      "version": "1.5.1",
+      "hash": "987f0bee2e71fdd1"
     },
     "calc": {
       "version": "1.1.1",
@@ -1663,8 +1725,8 @@
       "hash": "104aa35a28079adb"
     },
     "map": {
-      "version": "1.3.0",
-      "hash": "145c622b8f9a6b52"
+      "version": "1.3.1",
+      "hash": "59d2d79706c97184"
     },
     "weather": {
       "version": "1.6.1",
