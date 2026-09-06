@@ -198,6 +198,13 @@ flutter:
     - assets/svg/
     - assets/image/
     - assets/lottie/
+    # The real Inter/Montserrat faces AppStyle asks google_fonts for. The
+    # package checks the app's own assets before the network, so bundling
+    # them removes the runtime fetch (and the first-run fallback flash) and
+    # lets test/render/render_screen_test.dart render review frames with the
+    # app's real typography instead of the Ahem block font. Provenance and
+    # licence: assets/google_fonts/README.md.
+    - assets/google_fonts/
 
 flutter_icons:
   android: "launcher_icon"
