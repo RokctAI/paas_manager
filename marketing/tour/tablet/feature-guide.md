@@ -91,9 +91,8 @@ Name it, price it, stock it - a new product is ready to sell in minutes.
 
 ![Every order, one queue](screenshots/13-order_queue.png)
 
-New, accepted, ready, on the way - every order moves through one queue the
-moment it lands. On the launcher, the manager window counts what is waiting on
-you and keeps the takings inside the app.
+New, accepted, ready, on the way - every order in one queue. The launcher counts
+what is waiting on you, never the takings.
 
 ## 14. The paper trail, kept
 
