@@ -22,8 +22,12 @@
 // rect the review points a number at. `.github/workflows/render-strip.yml`
 // runs it on demand and composes the results into one review page.
 //
-// The screen: auth_sdk's sign-in sheet (LoginScreen) - the first screen a
-// Manager user sees. Chosen because it is the one manager-shell surface that
+// The screen: auth_sdk's sign-in route (LoginPage, with its LoginScreen sheet
+// opened on top) - the first screen a Manager user sees. The PAGE is rendered,
+// not the sheet alone: the page is what paints the full-bleed splash artwork,
+// the app-name logo and the Skip affordance, and the sheet is only ever
+// reached by tapping the page's own Login button. Chosen because it is the one
+// manager-shell surface that
 // renders FULLY POPULATED from the SDKs' own IS_DEMO fixtures with no live
 // backend: AuthSdkDependencies installs MockAuthRepository under
 // `--dart-define=IS_DEMO=true`, and every string on it resolves offline
@@ -33,6 +37,11 @@
 //
 // The harness renders demo/seed fixtures and is never wired to a live client
 // or backend.
+//
+// Fidelity rule this file exists to keep: render the screen the app renders,
+// wrapper included. A harness that supplies its own wrapper is drawing a
+// picture of the app, not photographing it - see buildScreen's doc comment for
+// the revision of this harness that got that wrong and what it cost.
 //
 // Run:  flutter test --dart-define=IS_DEMO=true test/render/render_screen_test.dart
 //       RENDER_SUFFIX=_draft flutter test --dart-define=IS_DEMO=true \
@@ -63,11 +72,15 @@ import 'package:base_sdk/src/presentation/components/buttons/custom_button.dart'
 import 'package:base_sdk/src/presentation/components/buttons/forgot_text_button.dart';
 import 'package:base_sdk/src/presentation/components/buttons/social_button.dart';
 import 'package:base_sdk/src/presentation/components/text_fields/outline_bordered_text_field.dart';
+import 'package:base_sdk/src/presentation/components/buttons/second_button.dart';
+import 'package:base_sdk/src/services/app_helpers.dart';
+import 'package:base_sdk/src/services/tr_keys.dart';
 import 'package:base_sdk/src/presentation/theme/app_style.dart';
 import 'package:base_sdk/src/services/local_storage.dart';
 
 import 'package:auth_sdk/src/common/di/auth_di.dart';
 import 'package:auth_sdk/src/common/presentation/pages/auth/login/login_screen.dart';
+import 'package:auth_sdk/src/common/presentation/pages/auth/login/login_page.dart';
 import 'package:comms_sdk/src/common/di/comms_di.dart';
 import 'package:users_sdk/src/common/di/users_di.dart';
 
@@ -152,11 +165,27 @@ void registerExceptionStubs() {}
 /// reads (language, theme) is set per variant in [renderVariant].
 void registerScreen() {}
 
-/// The widget under test: auth_sdk's real [LoginScreen], wrapped the way the
-/// app wraps it. In the app it is shown by
-/// `AppHelpers.showCustomModalBottomSheet`, so it is pumped here as the body
-/// of a sheet-shaped Scaffold rather than as a full page - substituting a
-/// plain page would review a layout the app never shows.
+/// The widget under test: auth_sdk's real [LoginPage] - the whole sign-in
+/// route, not just the sheet.
+///
+/// It is the PAGE because the sheet is not a screen. `LoginScreen` is reached
+/// exactly one way in the app: as the `modal:` argument of
+/// `AppHelpers.showCustomModalBottomSheet`, called from the Login button of
+/// `LoginPage` - the only reference to the class anywhere in auth_sdk. The
+/// page underneath is what paints the sign-in surface. On a compact window it
+/// draws the app's splash artwork FULL-BLEED behind everything
+/// (`AssetImage(splashImage)` over `assets/images/splash*.png`, picked by
+/// date in `_LoginPageState.initState`), and above that the app-name logo,
+/// the Skip affordance and the Login/Register buttons.
+///
+/// Why this is spelled out: an earlier revision of this harness pumped
+/// `LoginScreen` alone as the body of a bare `Scaffold`. Every widget in that
+/// frame was real, and the frame was still not the app - no splash image, no
+/// logo, no Skip, no scrim, the sheet floating on a flat surface no build of
+/// Manager has ever drawn. Rendering a real widget is not the same as
+/// rendering the real screen; the wrapper is part of the screen. [openSheet]
+/// opens the sheet the way the Login button does, so what the PNG shows is
+/// the app's own composition: real page, real barrier, real sheet.
 Widget buildScreen({required bool dark}) {
   return ProviderScope(
     child: ScreenUtilInit(
@@ -168,21 +197,65 @@ Widget buildScreen({required bool dark}) {
           brightness: dark ? Brightness.dark : Brightness.light,
           useMaterial3: false,
         ),
-        home: Scaffold(
-          backgroundColor: AppStyle.surfaceDark,
-          // Bottom-anchored, as `AppHelpers.showCustomModalBottomSheet`
-          // puts it: the frame is a phone screen with the sheet resting on
-          // its bottom edge, so the reviewer sees the sheet at the size and
-          // position a phone actually draws it.
-          body: Align(
-            alignment: Alignment.bottomCenter,
-            child: SingleChildScrollView(child: const LoginScreen()),
-          ),
-        ),
+        home: const LoginPage(),
       ),
     ),
   );
 }
+
+/// Opens the sign-in sheet the way the app opens it: by tapping [LoginPage]'s
+/// Login button, which calls `AppHelpers.showCustomModalBottomSheet` with
+/// `const LoginScreen()`.
+///
+/// Driving the real button rather than pushing a route by hand is the point -
+/// the sheet's constraints, its `maxHeight: screenHeight - 200`, its rounded
+/// shape and its scrim all come from the app's own call site, so none of them
+/// can drift away from what ships without this test noticing.
+Future<void> openSheet(WidgetTester tester) async {
+  final loginButton = find.widgetWithText(
+    CustomButton,
+    AppHelpers.getTranslation(TrKeys.login),
+  );
+  expect(
+    loginButton,
+    findsWidgets,
+    reason: 'no Login button on LoginPage - the sheet cannot be opened the '
+        'way the app opens it',
+  );
+  await tester.tap(loginButton.first, warnIfMissed: false);
+  await _drain(tester, rounds: 4);
+  expect(
+    find.byType(LoginScreen),
+    findsOneWidget,
+    reason: 'tapping Login did not put the sign-in sheet on screen',
+  );
+}
+
+/// Scopes a finder to the sheet's own subtree.
+///
+/// Required now that the real page is behind the sheet: `LoginPage` has
+/// `CustomButton`s of its own (Login, Register), and an unscoped
+/// `find.byType(CustomButton)` labels them all "Sign-in button - primary
+/// action" - three numbered points on one frame, two of them wrong.
+Finder _inSheet(Finder matching) =>
+    find.descendant(of: find.byType(LoginScreen), matching: matching);
+
+/// The full-bleed splash artwork [LoginPage] paints behind everything on a
+/// compact window: the `Container` whose `BoxDecoration.image` is the
+/// `AssetImage(splashImage)` resolved in `_LoginPageState.initState`.
+///
+/// Matched by the decoration rather than by a key so it keeps pointing at the
+/// real backdrop if the widget around it is refactored - and so the review
+/// FAILS LOUD (no rect, no numbered point) if the image ever stops being
+/// painted, which is the regression this whole spec exists to catch.
+Finder _splashBackdrop() => find.descendant(
+      of: find.byType(LoginPage),
+      matching: find.byWidgetPredicate((w) {
+        if (w is! Container) return false;
+        final decoration = w.decoration;
+        return decoration is BoxDecoration && decoration.image != null;
+      }),
+    );
 
 /// The elements the review points at.
 ///
@@ -190,42 +263,56 @@ Widget buildScreen({required bool dark}) {
 /// life of the page. Reword `label` freely; never reword `key`.
 List<ElementSpec> elementSpecs() {
   return <ElementSpec>[
+    // --- the page behind the sheet -----------------------------------------
+    ElementSpec(
+      key: 'auth.login.page_backdrop',
+      label: 'Splash artwork - full-bleed behind the sheet',
+      finder: _splashBackdrop(),
+    ),
+    ElementSpec(
+      key: 'auth.login.page_skip',
+      label: 'Skip - continue without an account',
+      finder: find.byType(SecondButton),
+    ),
+    // --- the sheet ----------------------------------------------------------
+    // Every finder below is scoped to the sheet subtree: the page behind it
+    // has widgets of the same types (CustomButton most of all).
     ElementSpec(
       key: 'auth.login.sheet_header',
       label: 'Sheet header - title and close affordance',
-      finder: find.byType(AppBarBottomSheet),
+      finder: _inSheet(find.byType(AppBarBottomSheet)),
     ),
     ElementSpec(
       key: 'auth.login.phone_field',
       label: 'Phone field - country picker, flag, dial code',
-      finder: find.byType(IntlPhoneField),
+      finder: _inSheet(find.byType(IntlPhoneField)),
     ),
     ElementSpec.each(
       keyOf: (i, w) =>
           'auth.login.text_field.${(w as OutlinedBorderTextField).label}',
       labelOf: (i, w) =>
           'Text field - ${(w as OutlinedBorderTextField).label ?? 'unlabelled'}',
-      finder: find.byType(OutlinedBorderTextField),
+      finder: _inSheet(find.byType(OutlinedBorderTextField)),
     ),
     ElementSpec(
       key: 'auth.login.keep_logged',
       label: 'Keep me logged in - checkbox',
-      finder: find.byType(Checkbox),
+      finder: _inSheet(find.byType(Checkbox)),
     ),
     ElementSpec(
       key: 'auth.login.forgot_password',
       label: 'Forgot password - opens the reset sheet',
-      finder: find.byType(ForgotTextButton),
+      finder: _inSheet(find.byType(ForgotTextButton)),
     ),
     ElementSpec(
       key: 'auth.login.submit',
       label: 'Sign-in button - primary action',
-      finder: find.byType(CustomButton),
+      finder: _inSheet(find.byType(CustomButton)),
     ),
     ElementSpec.each(
       keyOf: (i, w) => 'auth.login.social.${(w as SocialButton).title}',
       labelOf: (i, w) => 'Quick access - ${(w as SocialButton).title}',
-      finder: find.byType(SocialButton),
+      finder: _inSheet(find.byType(SocialButton)),
     ),
   ];
 }
@@ -360,6 +447,30 @@ void _mockPathProvider(String dir) {
       .setMockMethodCallHandler(channel, (call) async => dir);
 }
 
+/// Answers connectivity_plus the way a phone on Wi-Fi does.
+///
+/// `LoginPage` asks for the language list as it initialises
+/// (`LoginNotifier.checkLanguage` -> `AppConnectivity.connectivity()`), and
+/// with no plugin behind the channel that call raises a
+/// `MissingPluginException` after the test body has returned, which fails the
+/// run. `['wifi']` is the honest answer for the device this frame stands in
+/// for; the request that follows it is served by the SDKs' own demo
+/// repositories, never the network.
+void _mockConnectivity() {
+  final messenger =
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger;
+  messenger.setMockMethodCallHandler(
+    const MethodChannel('dev.fluttercommunity.plus/connectivity'),
+    (call) async => <String>['wifi'],
+  );
+  // The status stream is an EventChannel; its listen/cancel arrive as method
+  // calls on the channel's own name.
+  messenger.setMockMethodCallHandler(
+    const MethodChannel('dev.fluttercommunity.plus/connectivity_status'),
+    (call) async => null,
+  );
+}
+
 /// Lets REAL async work (drift isolate, futures, file IO) complete, then pumps
 /// frames so the resulting setStates land.
 ///
@@ -451,6 +562,7 @@ Future<void> renderVariant(
   debugDefaultTargetPlatformOverride = TargetPlatform.android;
 
   _mockPathProvider(dbDir);
+  _mockConnectivity();
 
   // App-wide state the screen reads before it builds. Mirrors the guided
   // tour's own setup block (tour/app.tour.yaml): the language must be seeded
@@ -499,6 +611,7 @@ Future<void> renderVariant(
     RepaintBoundary(key: boundaryKey, child: buildScreen(dark: dark)),
   );
   await _drain(tester);
+  await openSheet(tester);
 
   // Pass 1 measures the real content height in the tall probe viewport; pass 2
   // re-renders at exactly that height so the PNG is a full-length strip with
