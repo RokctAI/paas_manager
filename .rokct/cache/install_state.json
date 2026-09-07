@@ -1,7 +1,7 @@
 {
   "packages": {
     "base_sdk": {
-      "version": "1.60.9",
+      "version": "1.60.10",
       "files": {
         "flutter_native_splash.yaml": "d469a133b5e1631d6ba811b048d290449224075edad2153189cfb2edc3f4d100",
         "android/app/src/main/res/font/montserrat_extrabolditalic.ttf": "d38bac61eda8d8c002b1a852f5368901a085fbe1d844b5e0a149b674e22e2cdd",
@@ -985,7 +985,7 @@
       "boot_hooks": []
     },
     "productivity_sdk": {
-      "version": "1.5.3",
+      "version": "1.5.4",
       "files": {
         "lib/presentation/pages/tasks/tasks_page.dart": "057160dd03d0b05995aa6b94af321aacc8667142f4e700d35ca127ee29766268",
         "lib/presentation/pages/tasks/task_run_page.dart": "520d77877a155f9ad08f18f543f22768b690a4a25d1ffb8aaff5977fabe6737a",
@@ -1242,7 +1242,7 @@
       }
     },
     "revenue_sdk": {
-      "version": "1.12.1",
+      "version": "1.12.2",
       "files": {
         "lib/presentation/pages/income/income_page.dart": "8add9980d1fb052986e656ed17cadcf3db532f7842a4d7ca003fce774f8338f8",
         "lib/presentation/pages/income/app_bar_screen.dart": "da70222a0db114f137b0a48e9c8c5086cc369e151d48406913263e4f73c5628a",
@@ -1331,7 +1331,7 @@
       ]
     },
     "zones_sdk": {
-      "version": "1.5.0",
+      "version": "1.5.1",
       "files": {
         "lib/presentation/pages/merchant/delivery_zone/delivery_zone_page.dart": "765310edd51f3e359f2f4a7cceeaea0cb43b46bef312db2fdb108b71fb218d21",
         "lib/presentation/routes/zones_adapters.dart": "928782e42f6861eebb76272dec3d22144c95adb8357d0719c666469b3028d4c9"
@@ -1657,8 +1657,8 @@
   },
   "sdk_cache": {
     "base": {
-      "version": "1.60.9",
-      "hash": "423a3d0c54aed02c"
+      "version": "1.60.10",
+      "hash": "10c301ee55da8e2e"
     },
     "comms": {
       "version": "1.15.3",
@@ -1709,8 +1709,8 @@
       "hash": "83864d75f80cd5e1"
     },
     "productivity": {
-      "version": "1.5.3",
-      "hash": "4eab9978af60ef13"
+      "version": "1.5.4",
+      "hash": "701464d4507c0a0e"
     },
     "calc": {
       "version": "1.1.1",
@@ -1721,8 +1721,8 @@
       "hash": "ef378600c400e1cf"
     },
     "revenue": {
-      "version": "1.12.1",
-      "hash": "623a1d13564f0ca9"
+      "version": "1.12.2",
+      "hash": "86c67b50852074c4"
     },
     "map": {
       "version": "1.3.1",
@@ -1733,8 +1733,8 @@
       "hash": "cd9bbdcdba39427c"
     },
     "zones": {
-      "version": "1.5.0",
-      "hash": "408d14685a7d2721"
+      "version": "1.5.1",
+      "hash": "a6110b3278f9eb19"
     },
     "desktop": {
       "version": "1.2.2",

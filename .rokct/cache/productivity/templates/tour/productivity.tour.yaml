@@ -37,10 +37,22 @@
 # so the still is the one the pill would have opened, on both folds, and
 # it is reached from any screen the tour is on.
 #
+# A second rule, for the steps that type: `tester.enterText` opens the
+# device's real keyboard (the integration binding does not register
+# flutter_test's fake TestTextInput, so `tester.testTextInput.hide()`
+# would assert), and nothing closes it before the frame is held for the
+# capture — the tablet audit of 2026-09-07 found the system keyboard over
+# the lower fifth to quarter of the readings still on every shell. So a
+# step that has typed unfocuses the field and asks the platform to hide
+# the keyboard (`TextInput.hide`) before it returns, then gives the sheet
+# a moment to re-lay out. The value typed stays in the field: unfocus does
+# not clear a controller.
+#
 # Format: RokctAI/shared-workflows scripts/tour/README.md
 sdk: productivity
 imports:
   - "import 'package:base_sdk/src/database/app_database.dart';"
+  - "import 'package:flutter/services.dart';"
   - "import 'package:productivity_sdk/src/common/application/run/maintenance_plant.dart';"
   - "import 'package:productivity_sdk/src/common/application/run/maintenance_templates.dart';"
   - "import 'package:productivity_sdk/src/common/application/run/task_run.dart';"
@@ -244,6 +256,14 @@ steps:
           }
         }
       }
+      // The last enterText left the device keyboard up over the foot of
+      // the sheet (see the note at the top). Drop focus, tell the platform
+      // to hide it, and let the sheet re-lay out before the frame is held.
+      FocusManager.instance.primaryFocus?.unfocus();
+      await tester.pump();
+      await SystemChannels.textInput.invokeMethod<void>('TextInput.hide');
+      await tester.pump();
+      await Future<void>.delayed(const Duration(milliseconds: 750));
   - key: productivity_maintenance_photo
     title: "A photo and a note, if you want them"
     caption: "The last step is optional - *Skip is live* beside Finish, and nothing here can trap you mid-run."
@@ -277,3 +297,10 @@ steps:
       // 47i: the readings step finished, the photo step's own slot is on
       // screen — the still is this card, never the readings card again.
       await appears(find.byKey(TaskRunView.photoKey));
+      // This step typed too; make sure the keyboard is gone before the
+      // photo card is captured (note at the top).
+      FocusManager.instance.primaryFocus?.unfocus();
+      await tester.pump();
+      await SystemChannels.textInput.invokeMethod<void>('TextInput.hide');
+      await tester.pump();
+      await Future<void>.delayed(const Duration(milliseconds: 750));
