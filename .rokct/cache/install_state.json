@@ -1,7 +1,7 @@
 {
   "packages": {
     "base_sdk": {
-      "version": "1.60.4",
+      "version": "1.60.6",
       "files": {
         "flutter_native_splash.yaml": "d469a133b5e1631d6ba811b048d290449224075edad2153189cfb2edc3f4d100",
         "android/app/src/main/res/font/montserrat_extrabolditalic.ttf": "d38bac61eda8d8c002b1a852f5368901a085fbe1d844b5e0a149b674e22e2cdd",
@@ -69,7 +69,7 @@
         "lib/main.dart": "b70b3fbcdf15f87bdfe8e52543dd3f76866b531f3170296d8b917356a3d55cfe",
         "lib/presentation/app_widget.dart": "fbaf379174bb6d0bb53413ab6b35f833f9a4746d8e75b10910ce14b6ff9bd00e",
         "lib/presentation/routes/app_router.dart": "3b99e50c60dab1161ccf14aa381f7481ab1baad0223575df04e4bda89a20464b",
-        "lib/presentation/routes/route_pages.dart": "73c0b8cbf05823b865c35381355c9361c37135618d36e0ed3ea839f8d86af76d",
+        "lib/presentation/routes/route_pages.dart": "32ab7543d1b94e5b5aedd5a59604a390c373d6e881801c875e37f2ddd001d8c8",
         "android/app/src/main/kotlin/com/app/demo/JuvoApplication.kt": "18870e8ca0b87482d3ad45fecc6211762fde11d19fd46791aba40a49b4d31d07",
         "android/app/src/main/res/xml/backup_rules.xml": "a977a3552bb8c4facc634f4060ce11d623366bc310f5b119d390feb51b2f9409",
         "android/app/src/main/res/xml/data_extraction_rules.xml": "ea351530e8fc2c342abc9798bca781ab3cabb9245b328b32ea113ed6bf1531ac",
@@ -909,7 +909,7 @@
       "boot_hooks": []
     },
     "comms_sdk": {
-      "version": "1.15.1",
+      "version": "1.15.2",
       "files": {
         "lib/presentation/pages/notification/notification_list_page.dart": "bbdc8b47532871a71548710cd6cb8804d51119ef5575a3bd8be18c70c331428b",
         "lib/application/notification/notification_state.dart": "055c8ab42969bad5e418061cbe38699458bfc8b74ea7d4def4a03a18e261b184",
@@ -1657,12 +1657,12 @@
   },
   "sdk_cache": {
     "base": {
-      "version": "1.60.4",
-      "hash": "46869b711a8ca451"
+      "version": "1.60.6",
+      "hash": "729448f98c2d43ac"
     },
     "comms": {
-      "version": "1.15.1",
-      "hash": "c3c7540e4e09b021"
+      "version": "1.15.2",
+      "hash": "1f0ec975748c50d6"
     },
     "auth": {
       "version": "1.10.4",
