@@ -1,7 +1,7 @@
 {
   "title": "Manager sign-in sheet - real render",
   "kicker": "render-strip adoption - paas_manager",
-  "lede": "Not hand-drawn. Both frames below are auth_sdk's real LoginScreen widget tree as the Manager shell composes it, rendered headlessly to PNG at 390 logical px / dpr 3 on an iPhone-class viewport, with every numbered point placed automatically from the widget's own measured rect.",
+  "lede": "Not hand-drawn. Both frames below are auth_sdk's real LoginPage - the whole sign-in route as the Manager shell composes it, with its splash artwork behind the sheet and the sheet opened by tapping the page's own Login button - rendered headlessly to PNG at 390 logical px / dpr 3 on an iPhone-class viewport, with every numbered point placed automatically from the widget's own measured rect.",
   "fonts": "system",
   "chips_default": true,
   "frames": [
@@ -11,7 +11,7 @@
       "status": "SHIPPED",
       "png": "login_light.png",
       "rects": "login_light.json",
-      "note": "paas_manager main + composed SDK set from composer.json"
+      "note": "paas_manager main + composed SDK set from composer.json; LoginPage + sheet"
     },
     {
       "section": "Shipped - what main renders today",
@@ -19,7 +19,7 @@
       "status": "SHIPPED",
       "png": "login_dark.png",
       "rects": "login_dark.json",
-      "note": "paas_manager main + composed SDK set from composer.json"
+      "note": "paas_manager main + composed SDK set from composer.json; LoginPage + sheet"
     }
   ],
   "labels": {
@@ -31,7 +31,9 @@
     "auth.login.submit": "Sign-in button - primary action",
     "auth.login.social.Email": "Quick access - switch to email sign-in",
     "auth.login.social.Facebook": "Quick access - Facebook",
-    "auth.login.social.Google": "Quick access - Google"
+    "auth.login.social.Google": "Quick access - Google",
+    "auth.login.page_backdrop": "Splash artwork - full-bleed behind the sheet",
+    "auth.login.page_skip": "Skip - continue without an account"
   },
   "numbering": {
     "map": {
@@ -43,7 +45,9 @@
       "auth.login.submit": 6,
       "auth.login.social.Email": 7,
       "auth.login.social.Facebook": 8,
-      "auth.login.social.Google": 9
+      "auth.login.social.Google": 9,
+      "auth.login.page_backdrop": 10,
+      "auth.login.page_skip": 11
     },
     "retired": {}
   },
@@ -51,9 +55,9 @@
     {
       "kicker": "note - how these renders were produced",
       "body": [
-        "A widget-test harness (test/render/render_screen_test.dart); zero app code touched. It pumps auth_sdk's real LoginScreen inside the app's own ScreenUtilInit design size and AppStyle brightness seam, at 390 logical px / dpr 3 on an 844-tall phone frame with the sheet resting on the bottom edge the way AppHelpers.showCustomModalBottomSheet puts it, and captures the RepaintBoundary to PNG.",
+        "A widget-test harness (test/render/render_screen_test.dart); zero app code touched. It pumps auth_sdk's real LoginPage inside the app's own ScreenUtilInit design size and AppStyle brightness seam, at 390 logical px / dpr 3 on an 844-tall phone frame, then opens the sign-in sheet by TAPPING THE PAGE'S OWN LOGIN BUTTON - the same AppHelpers.showCustomModalBottomSheet call the app makes - and captures the RepaintBoundary to PNG. The sheet's geometry, its scrim and its maxHeight: screenHeight - 200 all come from the app's call site rather than from anything this harness chose.",
         "The data is the SDKs' own demo data, not fixtures written for this page. The test runs with --dart-define=IS_DEMO=true and calls the SDKs' DI registrations in composed-app order, so AuthSdkDependencies installs MockAuthRepository and CommsSdkDependencies installs MockSettingsRepository - the same demo fixtures a demo build of Manager serves. Every visible string resolves offline through base_sdk's BundledTranslations after the language is seeded exactly as tour/app.tour.yaml seeds it.",
-        "Real, not simulated: Inter loaded as the real font files google_fonts itself pins (assets/google_fonts/), the real MaterialIcons and Remix icon fonts, AppStyle light/dark tokens resolved by the real setBrightness seam, and auth_sdk's own platform guards resolved for Android so the quick-access row is the one a phone build draws."
+        "Real, not simulated: Inter and Montserrat loaded as the real font files google_fonts itself pins (assets/google_fonts/), the real MaterialIcons and Remix icon fonts, the real assets/images/splash.png artwork behind the sheet, AppStyle light/dark tokens resolved by the real setBrightness seam, and auth_sdk's own platform guards resolved for Android so the quick-access row is the one a phone build draws."
       ]
     },
     {
@@ -68,8 +72,15 @@
       "items": [
         "The phone field opens on +93 - Afghanistan. AppConstants.countryCodeISO is String.fromEnvironment('COUNTRY_ISO') and nothing in this repo or the shared workflows passes that define, so intl_phone_field falls back to the first entry in its own country list rather than to the seller's market.",
         "The primary action reads a hardcoded English 'Login', not a translation key: it is the one string on the sheet that will not localise.",
-        "Two RenderFlex overflows are raised while the sheet lays out - 95px on the keep-logged-in / forgot-password row and 50px on the quick-access row. The settled 390px frame draws neither, so they are transient layout passes rather than shipped clipping, but the sheet is that close to its width budget.",
-        "Nothing headless can reach connectivity_plus, so the render also proves the sheet draws its normal state rather than an error one when the connectivity stream never starts."
+        "Two RenderFlex overflows were raised while the sheet laid out under the old bare-Scaffold wrapper - 95px on the keep-logged-in / forgot-password row and 50px on the quick-access row. Under the real LoginPage wrapper they no longer appear, which is itself the point: the transient overflow was an artefact of the harness's own wrapper, not of the shipped screen.",
+        "connectivity_plus is answered with a phone-on-Wi-Fi stub, because LoginPage asks for the language list as it initialises. The render therefore shows the sheet's normal state, which is the state a phone with a network draws."
+      ]
+    },
+    {
+      "kicker": "what an earlier revision of this page got wrong",
+      "body": [
+        "The first version of this harness pumped LoginScreen ALONE as the body of a bare Scaffold, and the frame it produced was not the app. LoginScreen is not a screen: it is the modal: argument of AppHelpers.showCustomModalBottomSheet, and LoginPage - the only caller - is what paints the sign-in surface. Rendered without it the frame lost the full-bleed splash artwork, the app-name logo, the Skip affordance and the modal scrim, and showed the sheet floating on a flat grey ground no build of Manager has ever drawn.",
+        "Rendering a real widget is not the same as rendering the real screen. The wrapper is part of the screen, and a harness that supplies its own wrapper is drawing a picture of the app rather than photographing it. That is the failure mode this page has to be trusted not to have, so the backdrop is now a numbered element in its own right: if the splash ever stops being painted, the rect disappears and the frame loses a point instead of quietly looking fine."
       ]
     }
   ]
