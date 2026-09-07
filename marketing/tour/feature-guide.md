@@ -145,8 +145,8 @@ step and its timing.
 
 ![Readings before it goes back to service](screenshots/21-productivity_maintenance_readings.png)
 
-TDS and pressure, checked against the plant's limits - out of spec is named and
-holds the finish until it is re-tested or explained.
+TDS and pressure against the plant's limits - out of spec is named and holds the
+finish until re-tested or explained.
 
 ## 22. A photo and a note, if you want them
 
