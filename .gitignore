@@ -83,3 +83,8 @@ key.properties
 
 # Python bytecode from running the .rokct compose/install scripts.
 .rokct/__pycache__/
+
+# Render-strip harness outputs (test/render/render_screen_test.dart writes the
+# PNG + rect JSON here; CI uploads them from the runner, they are never
+# committed). See .github/workflows/render-strip.yml.
+/out/

@@ -1,0 +1,39 @@
+name: Render Strip
+
+# Renders REAL Manager screens headlessly and publishes a review strip.
+#
+# The pipeline lives in RokctAI/shared-workflows
+# (.github/workflows/universal-render-strip.yml plus scripts/render/); the
+# format, numbering conventions and status vocabulary are documented there in
+# scripts/render/README.md. This repo owns only the two inputs:
+#
+#   test/render/render_screen_test.dart   the widget test that renders a screen
+#   test/render/strip.json                the review page's config
+#
+# Manual only, deliberately. Rendering on every commit is not wanted: a shell
+# adopts this by CHOOSING to run it. Download the `render-strip` artifact and
+# open the HTML - it is self-contained, so it needs no network.
+
+# Must grant at least what the reusable workflow declares
+# (universal-render-strip.yml sets `permissions: write-all`). A narrower
+# block here makes GitHub refuse the run at startup with zero jobs.
+permissions: write-all
+
+on:
+  workflow_dispatch:
+    inputs:
+      render-suffix:
+        description: "Suffix for this run's outputs (e.g. _draft)"
+        required: false
+        default: ''
+
+jobs:
+  render:
+    uses: RokctAI/shared-workflows/.github/workflows/universal-render-strip.yml@main
+    secrets: inherit
+    with:
+      render-suffix: ${{ inputs.render-suffix }}
+      # Defaults: test/render/render_screen_test.dart + test/render/strip.json.
+      # run-compose stays on (the default): every manager-role screen this
+      # harness will grow into only exists in lib/ after the composer installs
+      # it, so the render must be of composed code.

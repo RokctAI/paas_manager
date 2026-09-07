@@ -1,0 +1,76 @@
+{
+  "title": "Manager sign-in sheet - real render",
+  "kicker": "render-strip adoption - paas_manager",
+  "lede": "Not hand-drawn. Both frames below are auth_sdk's real LoginScreen widget tree as the Manager shell composes it, rendered headlessly to PNG at 390 logical px / dpr 3 on an iPhone-class viewport, with every numbered point placed automatically from the widget's own measured rect.",
+  "fonts": "system",
+  "chips_default": true,
+  "frames": [
+    {
+      "section": "Shipped - what main renders today",
+      "caption": "Manager sign-in - light",
+      "status": "SHIPPED",
+      "png": "login_light.png",
+      "rects": "login_light.json",
+      "note": "paas_manager main + composed SDK set from composer.json"
+    },
+    {
+      "section": "Shipped - what main renders today",
+      "caption": "Manager sign-in - dark (app default)",
+      "status": "SHIPPED",
+      "png": "login_dark.png",
+      "rects": "login_dark.json",
+      "note": "paas_manager main + composed SDK set from composer.json"
+    }
+  ],
+  "labels": {
+    "auth.login.sheet_header": "Sheet header - back affordance and title",
+    "auth.login.phone_field": "Phone field - country dial code and number",
+    "auth.login.text_field.PASSWORD": "Password field - with show/hide eye",
+    "auth.login.keep_logged": "Keep me logged in - checkbox",
+    "auth.login.forgot_password": "Forgot password - opens the reset sheet",
+    "auth.login.submit": "Sign-in button - primary action",
+    "auth.login.social.Email": "Quick access - switch to email sign-in",
+    "auth.login.social.Facebook": "Quick access - Facebook",
+    "auth.login.social.Google": "Quick access - Google"
+  },
+  "numbering": {
+    "map": {
+      "auth.login.sheet_header": 1,
+      "auth.login.phone_field": 2,
+      "auth.login.text_field.PASSWORD": 3,
+      "auth.login.keep_logged": 4,
+      "auth.login.forgot_password": 5,
+      "auth.login.submit": 6,
+      "auth.login.social.Email": 7,
+      "auth.login.social.Facebook": 8,
+      "auth.login.social.Google": 9
+    },
+    "retired": {}
+  },
+  "notes": [
+    {
+      "kicker": "note - how these renders were produced",
+      "body": [
+        "A widget-test harness (test/render/render_screen_test.dart); zero app code touched. It pumps auth_sdk's real LoginScreen inside the app's own ScreenUtilInit design size and AppStyle brightness seam, at 390 logical px / dpr 3 on an 844-tall phone frame with the sheet resting on the bottom edge the way AppHelpers.showCustomModalBottomSheet puts it, and captures the RepaintBoundary to PNG.",
+        "The data is the SDKs' own demo data, not fixtures written for this page. The test runs with --dart-define=IS_DEMO=true and calls the SDKs' DI registrations in composed-app order, so AuthSdkDependencies installs MockAuthRepository and CommsSdkDependencies installs MockSettingsRepository - the same demo fixtures a demo build of Manager serves. Every visible string resolves offline through base_sdk's BundledTranslations after the language is seeded exactly as tour/app.tour.yaml seeds it.",
+        "Real, not simulated: Inter loaded as the real font files google_fonts itself pins (assets/google_fonts/), the real MaterialIcons and Remix icon fonts, AppStyle light/dark tokens resolved by the real setBrightness seam, and auth_sdk's own platform guards resolved for Android so the quick-access row is the one a phone build draws."
+      ]
+    },
+    {
+      "kicker": "why the sign-in sheet, and not the POS or the order queue",
+      "body": [
+        "Those were the first choices and they do not render from demo fixtures. Every manager-role screen in this shell (POS, order queue, order history, restaurant profile) lives in an SDK's templates/ tree and only exists as Dart after the composer installs it into lib/, and each one reads a manager-role facade - SellerOrdersRepository, PosProductsRepository, SellerShopRepository - that has NO isDemo branch: ManagerOrdersDependencies and ManagerMerchantsDependencies register the live HTTP repository unconditionally. Rendered headlessly they would show their empty/offline state, which is a frame about the network rather than about the design.",
+        "The sign-in sheet is the manager shell's genuine first screen, it is owned by an SDK that does have a demo path, and it renders fully populated with no backend. It is the proof that the pipeline runs end to end; widening coverage to the manager-role screens needs demo repositories in the commerce SDKs first."
+      ]
+    },
+    {
+      "kicker": "found by rendering (a drawing could not have caught these)",
+      "items": [
+        "The phone field opens on +93 - Afghanistan. AppConstants.countryCodeISO is String.fromEnvironment('COUNTRY_ISO') and nothing in this repo or the shared workflows passes that define, so intl_phone_field falls back to the first entry in its own country list rather than to the seller's market.",
+        "The primary action reads a hardcoded English 'Login', not a translation key: it is the one string on the sheet that will not localise.",
+        "Two RenderFlex overflows are raised while the sheet lays out - 95px on the keep-logged-in / forgot-password row and 50px on the quick-access row. The settled 390px frame draws neither, so they are transient layout passes rather than shipped clipping, but the sheet is that close to its width budget.",
+        "Nothing headless can reach connectivity_plus, so the render also proves the sheet draws its normal state rather than an error one when the connectivity stream never starts."
+      ]
+    }
+  ]
+}
