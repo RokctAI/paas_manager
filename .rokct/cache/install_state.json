@@ -1,7 +1,7 @@
 {
   "packages": {
     "base_sdk": {
-      "version": "1.60.6",
+      "version": "1.60.9",
       "files": {
         "flutter_native_splash.yaml": "d469a133b5e1631d6ba811b048d290449224075edad2153189cfb2edc3f4d100",
         "android/app/src/main/res/font/montserrat_extrabolditalic.ttf": "d38bac61eda8d8c002b1a852f5368901a085fbe1d844b5e0a149b674e22e2cdd",
@@ -208,7 +208,7 @@
       "boot_hooks": []
     },
     "merchants_sdk": {
-      "version": "1.29.3",
+      "version": "1.30.0",
       "files": {
         "assets/audio/notification.wav": "9d62af6f1c8df010941d1daa17162175d87293bd78371c787803b5a11f95cb9d",
         "assets/svgs/menu.svg": "9767d04ac4d157e423f972259a9c2c455a6a629c4098cc9c2fe8f9722451441b",
@@ -226,7 +226,7 @@
         "lib/presentation/routes/merchants_adapters.dart": "213d5b9b38f3fe77afed0a7b92f3e90e6fddc1cbd3adc8e529f190b2f9a5fc13",
         "lib/presentation/component/helper/horizontal_image_picker.dart": "3d3899881badec29e56a192b721aa6761568cf988cbefe42f4035d76175e9f21",
         "lib/presentation/pages/sync_issues/sync_issues_page.dart": "02bfe90c8487f738fe1b744443d3cdc5be21b4b574edc3e07ff7fdbe8feeee7a",
-        "lib/presentation/pages/billing/billing_page.dart": "adc8fceb1341880e2199508ffe9103d56688a934e6ce67c947c0182b981b6a38",
+        "lib/presentation/pages/billing/billing_page.dart": "f653f5ba388edc209fefaa43718c4d273b62f406e90e12aed100ae4192b7caf9",
         "lib/presentation/pages/billing/checkout_page.dart": "f97776dde3b5691cde2d8c3527fccfb847dc2ceb9cbb41742b47e07f7df6e85c",
         "lib/presentation/adapters/pos_orders_adapter.dart": "7eb832beff4a217f477fbe598c69c2277e8922181297ddc6944b82c032ed8e82",
         "lib/presentation/pages/quick_flow/quick_flow_page.dart": "6616f819341643a7952c63e53afc25abc58bd2281366710ee03e3325467438ff"
@@ -554,7 +554,7 @@
       "boot_hooks": []
     },
     "orders_sdk": {
-      "version": "1.20.1",
+      "version": "1.20.2",
       "files": {
         "lib/presentation/pages/orders/orders_home_page.dart": "9586e95c9e3c6135434bf47eeae635b775057ae9e729f264e87c41350b22331a",
         "lib/presentation/pages/orders/details/order_details_modal.dart": "04220f29685b4f3f91e82b1b103d76ec0805c8d8316713917c59d3d8dfedc1ba",
@@ -587,7 +587,7 @@
         "lib/presentation/pages/create_order/shipping/select_user/widgets/user_item.dart": "71289007495f34ae9a4441a826be4ce99b9d6f5347d96cb0f10a775df5174aa6",
         "lib/presentation/pages/create_order/order/order_page.dart": "4dc9cb286404d26708e5eb89116d8d04354f1315ac04327d930accb90e9a5e6d",
         "lib/presentation/pages/create_order/order/widgets/title_price.dart": "b9c4dc096f3f03e2e8470659669d4fad0edd024199adec81b5d4c1c02a315293",
-        "lib/presentation/pages/order_history/order_history.dart": "44deaa58a541766b230bad9b466803bfe1f4ef5b8f0f286d32793984be04c9be",
+        "lib/presentation/pages/order_history/order_history.dart": "fb4797e09d5319c808e75c1cd090cb79d63d4ad96ddef9e61686e850b6b81a2c",
         "lib/presentation/components/orders/orders_item.dart": "69781a9e66291af2380c42cf796137ce97c3daa6df18a33b728681d0c76cf18d",
         "lib/presentation/components/orders/order_item.dart": "3e057f705708acb5d3fa1769e92fca4f67c253b9680d670e9c48b42d95534247",
         "lib/presentation/components/orders/order_food_item.dart": "956a5372e9d58eab3ee86201a7c8b30d38fa630bce49cd13cf33670f366b86fa",
@@ -909,7 +909,7 @@
       "boot_hooks": []
     },
     "comms_sdk": {
-      "version": "1.15.2",
+      "version": "1.15.3",
       "files": {
         "lib/presentation/pages/notification/notification_list_page.dart": "bbdc8b47532871a71548710cd6cb8804d51119ef5575a3bd8be18c70c331428b",
         "lib/application/notification/notification_state.dart": "055c8ab42969bad5e418061cbe38699458bfc8b74ea7d4def4a03a18e261b184",
@@ -985,10 +985,10 @@
       "boot_hooks": []
     },
     "productivity_sdk": {
-      "version": "1.5.1",
+      "version": "1.5.2",
       "files": {
-        "lib/presentation/pages/tasks/tasks_page.dart": "741807669474c7b3fd7d7f472158cb816c54f80ca83e22370b65c7877eecf598",
-        "lib/presentation/pages/tasks/task_run_page.dart": "f6712e043c2741afa91279b826838eb11aa185c984bdbc913ab7b8f5257d3100",
+        "lib/presentation/pages/tasks/tasks_page.dart": "057160dd03d0b05995aa6b94af321aacc8667142f4e700d35ca127ee29766268",
+        "lib/presentation/pages/tasks/task_run_page.dart": "520d77877a155f9ad08f18f543f22768b690a4a25d1ffb8aaff5977fabe6737a",
         "lib/presentation/pages/vision/plan_on_a_page.dart": "7d6488c52d013dd40068da42a901711b9816229434751e6e1d2a39a9da63799b",
         "lib/presentation/pages/vision/personal_mastery_page.dart": "b7aaccfe183ae0943ba67ca6c1573bc5c302dbeaa4500b5e274c6c529bb43aeb"
       },
@@ -1242,7 +1242,7 @@
       }
     },
     "revenue_sdk": {
-      "version": "1.12.0",
+      "version": "1.12.1",
       "files": {
         "lib/presentation/pages/income/income_page.dart": "8add9980d1fb052986e656ed17cadcf3db532f7842a4d7ca003fce774f8338f8",
         "lib/presentation/pages/income/app_bar_screen.dart": "da70222a0db114f137b0a48e9c8c5086cc369e151d48406913263e4f73c5628a",
@@ -1657,12 +1657,12 @@
   },
   "sdk_cache": {
     "base": {
-      "version": "1.60.6",
-      "hash": "729448f98c2d43ac"
+      "version": "1.60.9",
+      "hash": "423a3d0c54aed02c"
     },
     "comms": {
-      "version": "1.15.2",
-      "hash": "1f0ec975748c50d6"
+      "version": "1.15.3",
+      "hash": "61981e502a0e3bb4"
     },
     "auth": {
       "version": "1.10.4",
@@ -1673,16 +1673,16 @@
       "hash": "9886a73d85f55738"
     },
     "merchants": {
-      "version": "1.29.3",
-      "hash": "4b29a67cded207e0"
+      "version": "1.30.0",
+      "hash": "fdc569ffdc0da7cb"
     },
     "products": {
       "version": "1.10.1",
       "hash": "054e6c067b1ca2c5"
     },
     "orders": {
-      "version": "1.20.1",
-      "hash": "4856705f920896f5"
+      "version": "1.20.2",
+      "hash": "ce8d2486f272b22c"
     },
     "kitchen": {
       "version": "1.4.1",
@@ -1709,8 +1709,8 @@
       "hash": "83864d75f80cd5e1"
     },
     "productivity": {
-      "version": "1.5.1",
-      "hash": "987f0bee2e71fdd1"
+      "version": "1.5.2",
+      "hash": "c62494e701e218d9"
     },
     "calc": {
       "version": "1.1.1",
@@ -1721,8 +1721,8 @@
       "hash": "ef378600c400e1cf"
     },
     "revenue": {
-      "version": "1.12.0",
-      "hash": "104aa35a28079adb"
+      "version": "1.12.1",
+      "hash": "623a1d13564f0ca9"
     },
     "map": {
       "version": "1.3.1",

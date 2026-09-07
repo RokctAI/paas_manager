@@ -83,15 +83,51 @@ class PosCartNotifier extends StateNotifier<PosCartState> {
     return added;
   }
 
-  /// Manual "Add Items" lane search (by name or barcode).
-  Future<void> search(String text) async {
-    if (text.trim().isEmpty) {
-      state = state.copyWith(searchResults: const [], isSearching: false);
+  /// Manual "Add Items" lane search (by name or barcode), under the
+  /// tapped category chip where the pane shows one.
+  Future<void> search(String text) => _search(text.trim(), state.categoryId);
+
+  /// The Add Items pane's chip bar (approved frame 11m, chip 349): a tapped
+  /// chip re-runs the current query under its category - with nothing
+  /// typed it lists the category outright; "All" (null) with nothing typed
+  /// clears the rows, exactly as an emptied field does.
+  Future<void> selectCategory(String? categoryId) =>
+      _search(state.query, categoryId);
+
+  /// The shop's categories for the chip bar - fetched once per till
+  /// session by the pane that draws them. An empty answer (or a failure)
+  /// keeps the bar absent rather than inventing one.
+  Future<void> loadCategories() async {
+    final result = await _catalog.categories();
+    if (!mounted) return;
+    result.when(
+      success: (data) =>
+          state = state.copyWith(categories: data.data ?? const []),
+      failure: (error, statusCode) {},
+    );
+  }
+
+  Future<void> _search(String text, String? categoryId) async {
+    if (text.isEmpty && categoryId == null) {
+      state = state.copyWith(
+        query: '',
+        clearCategory: true,
+        searchResults: const [],
+        isSearching: false,
+      );
       return;
     }
-    state = state.copyWith(isSearching: true);
-    final result = await _catalog.searchProducts(text: text.trim());
+    state = state.copyWith(
+      query: text,
+      categoryId: categoryId,
+      clearCategory: categoryId == null,
+      isSearching: true,
+    );
+    final result =
+        await _catalog.searchProducts(text: text, categoryId: categoryId);
     if (!mounted) return;
+    // A later query or chip has moved on: its own answer will land.
+    if (state.query != text || state.categoryId != categoryId) return;
     result.when(
       success: (data) => state = state.copyWith(
         searchResults: data.data ?? const [],
@@ -162,15 +198,14 @@ class PosCartNotifier extends StateNotifier<PosCartState> {
     final lines = [...state.lines]..removeAt(index);
     // Emptying the cart closes the order — the next first line mints a
     // fresh id (same rule as clearAll).
-    state = lines.isEmpty
-        ? const PosCartState()
-        : state.copyWith(lines: lines);
+    state = lines.isEmpty ? state.emptied() : state.copyWith(lines: lines);
   }
 
-  /// Clear All: back to the empty state. The total is a derived getter,
-  /// so it reads 0 the moment the lines go — the Spazafy stale-total bug
-  /// cannot reoccur.
-  void clearAll() => state = const PosCartState();
+  /// Clear All: back to the empty state (the catalog browsing state - the
+  /// chip bar's categories and tapped chip - stays, see
+  /// [PosCartState.emptied]). The total is a derived getter, so it reads 0
+  /// the moment the lines go — the Spazafy stale-total bug cannot reoccur.
+  void clearAll() => state = state.emptied();
 
   /// Completes the sale: returns the finished order's identity for the
   /// receipt, then resets the cart (a new order id is minted on the next
@@ -178,7 +213,7 @@ class PosCartNotifier extends StateNotifier<PosCartState> {
   /// the checkout's sync seam, deliberately outside this cart.
   ({String orderId, double total}) finishSale() {
     final receipt = (orderId: state.orderId, total: state.total);
-    state = const PosCartState();
+    state = state.emptied();
     return receipt;
   }
 

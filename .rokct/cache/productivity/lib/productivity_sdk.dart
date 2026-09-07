@@ -60,6 +60,7 @@ export 'src/common/di/productivity_di.dart';
 export 'src/common/presentation/tasks/task_view_model.dart';
 export 'src/common/presentation/tasks/task_card.dart';
 export 'src/common/presentation/tasks/task_list_controls.dart';
+export 'src/common/presentation/tasks/tasks_plane_claims.dart';
 
 // Design strip section 46 — the guided run: the derivation (pure Dart,
 // no store) and the view the installed `tasks_page.dart` and

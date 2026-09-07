@@ -27,15 +27,45 @@ import 'package:auto_route/auto_route.dart';
 import 'dart:async';
 import 'dart:math';
 
+/// The installed /tasks route page: frame 44a's workspace, hosted by
+/// [TasksWorkspace].
+///
+/// The route keeps its argument-free constructor ON PURPOSE. The manager
+/// hub pushes `const TasksRoute()` (merchants' restaurant_page.dart), and a
+/// page that grows a constructor parameter stops auto_route's generated
+/// route being const — which breaks the composed shell at kernel compile,
+/// not here (orders 1.19.1 learnt that the hard way). Anything that needs
+/// to open the workspace in a particular state builds [TasksWorkspace]
+/// directly, as the /tasks/run page does on a wide window.
 @RoutePage()
-class TasksPage extends StatefulWidget {
+class TasksPage extends StatelessWidget {
   const TasksPage({super.key});
 
   @override
-  State<TasksPage> createState() => _TasksPageState();
+  Widget build(BuildContext context) => const TasksWorkspace();
 }
 
-class _TasksPageState extends State<TasksPage> {
+/// The /tasks workspace — the list, its detail / compose / run pane and
+/// the objective picker on one PlaneHost (sections 44, 46 and 47).
+///
+/// Built by [TasksPage] as the route, and by the /tasks/run page on a
+/// wide window with [initialRunId] set: frame 47a rules that a run lives
+/// in 44a's DETAIL plane — "46's mechanism, unchanged — no new plane" —
+/// so the standalone run route hands a wide window to this workspace with
+/// the run already open rather than hosting the run on planes of its own.
+class TasksWorkspace extends StatefulWidget {
+  const TasksWorkspace({super.key, this.initialRunId});
+
+  /// The task whose run holds the detail plane from the first build, or
+  /// null for the workspace at rest. An id the store does not hold opens
+  /// nothing.
+  final String? initialRunId;
+
+  @override
+  State<TasksWorkspace> createState() => _TasksWorkspaceState();
+}
+
+class _TasksWorkspaceState extends State<TasksWorkspace> {
   late final TodoRepositoryFacade _repository;
 
   List<Map<String, dynamic>> _todos = [];
@@ -127,6 +157,10 @@ class _TasksPageState extends State<TasksPage> {
     _repository = TodoRepositoryImpl(AppDatabase());
     _objectives = const ObjectivesRepositoryImpl();
     _selectedDay = _focusedDay;
+    // Frame 47a's hand-off from /tasks/run on a wide window: the run pane
+    // is open from the first frame, and `_loadTodos` below drops the id
+    // again if the store turns out not to hold that task.
+    _runningId = widget.initialRunId;
     _initNotifications();
     _loadTodos();
     TaskPullService.lastFailure.addListener(_onPullStatusChanged);
@@ -182,6 +216,14 @@ class _TasksPageState extends State<TasksPage> {
     if (mounted) {
       setState(() {
         _todos = todos;
+        // A run pane for a task the store does not hold has nothing to
+        // show — the id came in by route (the 47a hand-off) or a pull took
+        // the row — so the pane closes and the list stands alone.
+        final String? running = _runningId;
+        if (running != null &&
+            !_todos.any((t) => '${t['id'] ?? ''}' == running)) {
+          _runningId = null;
+        }
       });
     }
     await _refreshSyncStates();
@@ -668,17 +710,34 @@ class _TasksPageState extends State<TasksPage> {
   // had drawn /tasks landing in the bare trailing plane (a claim of
   // one). The frame calls that "a choice, not a defect" and asks for it
   // to be made explicitly rather than inherited. THIS FILE PICKS TWO,
-  // on 44a's stamp: the list keeps its planes and the detail or compose
-  // pane pushes into the LAST one, which is the whole point of 44b —
-  // the shipped page wedged the compose form ABOVE the list, five
-  // Expanded rows of chips and dropdowns competing with the list for
-  // the same column.
+  // on 44a's stamp: the workspace is two planes side by side — the list
+  // in one, the detail / compose / run pane in the LAST — which is the
+  // whole point of 44b: the shipped page wedged the compose form ABOVE
+  // the list, five Expanded rows of chips and dropdowns competing with
+  // the list for the same column.
+  //
+  // HOW THE TWO ARE DECLARED (TasksPlaneClaims). 44a's list is ONE plane
+  // wide beside its pane — a single column of cards, not a column
+  // stretched over two planes — so the list claims one plane and grows
+  // into a second only while nothing else is on the stage
+  // (PlaneSpan.twoIfSpare); the pane makes the default one-plane claim.
+  // Three planes with a pane open are therefore list | pane | bare, two
+  // planes are list | pane, and a run (46a, 47a) or the picker (44c) is
+  // the same composition with a different pane. The plane 44a gives the
+  // HUB — the manager hub compressed to one plane, its PRODUCTIVITY row
+  // lit — is not this page's to draw: that hub is merchants_sdk's
+  // RestaurantHubPlaneFlow, a one-step host whose rows push REAL routes,
+  // and this SDK never imports it (ADR-005). Until the hub hosts /tasks
+  // inside its own flow (the commerce half of 44a, not built here), the
+  // plane it would keep trails BARE at the end, the ruled place for a
+  // leftover plane (Ray 2026-08-29 10:47Z).
   //
   // The mechanism is base_sdk's PlaneHost — the section 38 list flow
   // ListPlaneFlow wraps, spelled out here because frame 44c pushes a
   // THIRD step (the objective picker) that the wrapper cannot express.
-  // The list still declares two, and the corner back pill (canonical
-  // 347) is raised only while a pane is open.
+  // The corner back pill (canonical 347) pops the newest step while a
+  // pane is open; at the root of a wide window this page floats the same
+  // pill itself, popping the route to the hub — see build().
   //
   // TWO FLAGS RIDE THIS SCREEN AND ARE DRAWN, NOT HIDDEN. A THIRD IS
   // GONE:
@@ -704,8 +763,16 @@ class _TasksPageState extends State<TasksPage> {
   /// form of its own: the first card expands IN PLACE, which is the
   /// shipped ExpansionTile behaviour kept, so the subtask check lines
   /// still reach the phone rather than becoming a second push.
+  ///
+  /// Read from the plane COUNT, never from this page's span: beside an
+  /// open pane the list is granted ONE plane on a three-plane window too
+  /// (44a), and that is not the fold. Outside a plane — the page's own
+  /// context, above its host — the count comes from the window width by
+  /// the host's thresholds, as TaskRunView derives it.
   bool _isSinglePlane(BuildContext context) =>
-      ListPlaneColumns.columnsOf(context) < 2;
+      (Planes.maybeOf(context)?.count ??
+          PlaneHost.planeCountFor(MediaQuery.sizeOf(context).width)) <
+      2;
 
   /// The task whose card is expanded on the phone fold.
   String? _expandedId;
@@ -760,25 +827,69 @@ class _TasksPageState extends State<TasksPage> {
     // in BOTH theme modes. [AppStyle.surfaceDark] resolves per mode
     // (light #ECECEF, dark #101010), the same token task_run_page.dart
     // and calc's CalculatorView paint.
+    final Widget host = PlaneHost(
+      back: FloatingNavBack(
+        icon: Icons.arrow_back,
+        label: AppHelpers.getTranslation(TrKeys.back),
+        // The pill pops the NEWEST step: the picker while it is open,
+        // else the detail / compose / run pane.
+        onTap: _popPlane,
+      ),
+      stack: [
+        PlanePage(
+          name: 'list',
+          span: TasksPlaneClaims.list,
+          builder: _listPlane,
+        ),
+        if (detailBuilder != null)
+          PlanePage(
+            name: 'list-detail-${detailName ?? ''}',
+            span: TasksPlaneClaims.pane,
+            builder: detailBuilder,
+          ),
+        if (detailBuilder != null && _pickingObjective && runningId == null)
+          PlanePage(
+            name: 'objective-picker',
+            span: TasksPlaneClaims.pane,
+            builder: _objectivePickerPane,
+          ),
+      ],
+    );
     return ColoredBox(
       color: AppStyle.surfaceDark,
-      child: PlaneHost(
-        back: FloatingNavBack(
-          icon: Icons.arrow_back,
-          label: AppHelpers.getTranslation(TrKeys.back),
-          // The pill pops the NEWEST step: the picker while it is open,
-          // else the detail / compose / run pane.
-          onTap: _popPlane,
-        ),
-        stack: [
-          PlanePage(name: 'list', span: PlaneSpan.two, builder: _listPlane),
-          if (detailBuilder != null)
-            PlanePage(
-                name: 'list-detail-${detailName ?? ''}',
-                builder: detailBuilder),
-          if (detailBuilder != null && _pickingObjective && runningId == null)
-            PlanePage(name: 'objective-picker', builder: _objectivePickerPane),
-        ],
+      child: LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraints) {
+          // CANONICAL 347 AT THE ROOT OF A WIDE WINDOW. Frame 44a: "nav
+          // has folded to the corner back pill because a pushed page
+          // holds a plane", and 47a: "the corner Back still pops to the
+          // hub". PlaneHost floats its pill only while the flow is deeper
+          // than its root, so with nothing open this pushed page had no
+          // way back on a tablet at all. The same pill, in the same
+          // corner PlaneHost and calc's CalculatorView park it, pops the
+          // ROUTE; the moment a pane opens PlaneHost's own pill takes
+          // over (one back per screen, never two). One-plane windows are
+          // untouched: the fold keeps its shipped navigation.
+          final bool wide = PlaneHost.planeCountFor(constraints.maxWidth) >= 2;
+          if (!wide || detailBuilder != null) return host;
+          return Stack(
+            children: [
+              host,
+              PositionedDirectional(
+                end: 16,
+                bottom: 16,
+                child: SafeArea(
+                  child: FloatingBackPill(
+                    back: FloatingNavBack(
+                      icon: Icons.arrow_back,
+                      label: AppHelpers.getTranslation(TrKeys.back),
+                      onTap: () => Navigator.of(context).maybePop(),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          );
+        },
       ),
     );
   }
@@ -953,7 +1064,11 @@ class _TasksPageState extends State<TasksPage> {
   // corner pill. Reading and photo steps are the view's business.
   // ===================================================================
 
-  /// Chip 859 — open a task's run. The run pill on the card leads here.
+  /// Chip 859 — open a task's run. The run pill on the card leads here:
+  /// into the detail plane on a wide window (46a / 47a), onto the pushed
+  /// /tasks/run page at one plane (46f). The width is read from this
+  /// page's own context, above the host, so the fold test falls back to
+  /// the window width.
   Future<void> _openRun(int index) async {
     final Map<String, dynamic> task = _todos[index];
     final String id = '${task['id'] ?? ''}';
@@ -1217,6 +1332,9 @@ class _TasksPageState extends State<TasksPage> {
     final task = TaskViewModel.fromMap(todo);
     final String clientId = (todo['clientId'] ?? '').toString();
     return TaskCard(
+      // One key per task, so the guided tour (and any test) can reach a
+      // particular card and its run pill without depending on list order.
+      key: ValueKey<String>('task-card-${task.id}'),
       task: task,
       selected: _editingId == task.id || _runningId == task.id,
       // CHIP 859 — the run pill, for a task with steps that is not done.

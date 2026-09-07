@@ -1,3 +1,74 @@
+## 1.5.2
+
+* Tablet design audit 2026-09-07, defect 4: `/tasks` never showed frame
+  44a's composition on a wide window, and the standalone run page claimed
+  two planes where frame 47a rules "46's mechanism, unchanged — no new
+  plane". Fixed at the pages and in the tour fragment; the phone is
+  unchanged.
+  * **The list is one plane wide beside its pane.** 44a draws the
+    workspace as list | detail, each one plane; the list used to declare
+    `PlaneSpan.two` and stretched a single column of cards across two
+    planes whenever a detail, the compose lane or a run opened beside it
+    on a three-plane window. The claims now live in `TasksPlaneClaims`
+    (new, exported): the list is `twoIfSpare` — one plane beside a pane,
+    a second only while the stage would otherwise stand empty, so the
+    list at rest fills the window exactly as before — and every pane
+    makes the default one-plane claim. Three planes with a pane open are
+    list | pane | bare, two are list | pane, and the objective picker
+    (44c) slides list + detail towards the start as drawn. The plane 44a
+    gives the HUB is not this SDK's to draw: the manager hub is
+    merchants' `RestaurantHubPlaneFlow`, a one-step host whose rows push
+    real routes, so until it hosts `/tasks` inside its own flow (the
+    commerce half of 44a, not built here) the plane it would keep trails
+    bare at the end, the ruled place for a leftover.
+  * **The fold test reads the plane COUNT.** `_isSinglePlane` compared
+    the list's granted span, which is one beside a pane on a tablet too,
+    so the list would have fallen into the phone fold (cards expanding in
+    place, runs pushed as a route) the moment the claim changed; and from
+    the page's own context — above its host — it always read one, so the
+    run pill pushed the standalone route on every window. It now reads
+    `Planes.count`, falling back to the window width by PlaneHost's own
+    thresholds, exactly as `TaskRunView` derives it.
+  * **Canonical 347 at the root of a wide window.** PlaneHost floats its
+    pill only while the flow is deeper than its root, so `/tasks` with
+    nothing open had no way back to the hub on a tablet. The page floats
+    the same `FloatingBackPill` in the same bottom-END corner PlaneHost
+    and calc's `CalculatorView` use, popping the route; the moment a pane
+    opens PlaneHost's pill takes over, so there is one back per screen.
+    One-plane windows keep their shipped navigation.
+  * **`/tasks/run` yields a wide window to the workspace.** The route
+    used to host `TaskRunView` on a `PlaneSpan.two` PlaneHost of its own,
+    with no list beside it. On any window of two planes or more it now
+    builds `TasksWorkspace(initialRunId: …)` — the `/tasks` page's body,
+    split out of `TasksPage` so the route class keeps its argument-free
+    const constructor (`const TasksRoute()` is what the hub pushes) — and
+    the run opens in 44a's detail plane with the list beside it, the
+    corner pill popping the pane and then the route. At one plane the
+    page is what it was (46f), its claim now `PlaneSpan.one`, which is
+    what it always received there. The workspace drops a run id the
+    store does not hold. `TaskCard`s carry `ValueKey('task-card-<id>')`.
+  * **Tour: the stills open what they show from the list.** The
+    `productivity_tasks` step routed to `/tasks` with an empty store, so
+    every wide still was "Nothing here yet." over two planes and a bare
+    third. It now seeds four of a Limpopo water business's tasks through
+    the page's own repository — deliveries, brine salt, an invoice, a
+    long-term borehole (47m's band) — routes to `/tasks` and taps the
+    first card: 44a's list | detail on a wide window, 44d's expanded card
+    on the phone. The readings step now opens the softener run from its
+    card's run pill instead of routing to `/tasks/run`: 47a's list | run
+    on a wide window, the pushed page on the phone, then the same resume
+    and readings as before. Captions are unchanged; nothing rendered
+    names a demo.
+* Tests: `test/tasks_planes_test.dart` pumps the workspace's stack on a
+  real `PlaneHost` at 1066 and 800 logical and pins the allocation frame
+  by frame — list | detail | bare and list | detail | picker at three
+  planes, list | detail at two, the list grown to two planes at rest, the
+  full step rail (not the fold's segments) inside a one-plane detail at
+  three planes, and the standalone run's one-plane claim. The installed
+  pages themselves are templates (analysis excludes them, and they import
+  the composed app's comms_sdk), so the claims they declare are the
+  thing under test.
+
 ## 1.5.1
 
 * Two layout defects from the minilauncher Guided Tour (run 34040758271,

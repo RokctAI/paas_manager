@@ -13,6 +13,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 import 'package:base_sdk/src/models/data/product_data.dart';
+import 'package:base_sdk/src/models/response/categories_paginate_response.dart';
 
 /// Cents rounding for POS money math.
 ///
@@ -74,6 +75,9 @@ class PosCartState {
     this.isLoading = false,
     this.searchResults = const [],
     this.isSearching = false,
+    this.query = '',
+    this.categories = const [],
+    this.categoryId,
   });
 
   final List<PosCartLine> lines;
@@ -91,6 +95,17 @@ class PosCartState {
   /// Manual "Add Items" lane search results.
   final List<ProductData> searchResults;
   final bool isSearching;
+
+  /// The trimmed text the results answer, kept so a category chip can
+  /// re-run the same query under its filter.
+  final String query;
+
+  /// The shop's categories for the Add Items pane's chip bar (approved
+  /// frame 11m, chip 349) and the tapped chip - null is "All". Catalog
+  /// browsing state, not cart state: it survives Clear All and a finished
+  /// sale, so the bar never blinks out between customers.
+  final List<CategoryData> categories;
+  final String? categoryId;
 
   /// Sum of quantities (decimal — weighed lines count fractionally), for
   /// the cart chip ("2.75").
@@ -110,6 +125,10 @@ class PosCartState {
     bool? isLoading,
     List<ProductData>? searchResults,
     bool? isSearching,
+    String? query,
+    List<CategoryData>? categories,
+    String? categoryId,
+    bool clearCategory = false,
   }) =>
       PosCartState(
         lines: lines ?? this.lines,
@@ -117,5 +136,14 @@ class PosCartState {
         isLoading: isLoading ?? this.isLoading,
         searchResults: searchResults ?? this.searchResults,
         isSearching: isSearching ?? this.isSearching,
+        query: query ?? this.query,
+        categories: categories ?? this.categories,
+        categoryId: clearCategory ? null : (categoryId ?? this.categoryId),
       );
+
+  /// The empty cart that keeps the catalog browsing state (see
+  /// [categories]) - what Clear All, an emptied cart and a finished sale
+  /// reset to.
+  PosCartState emptied() =>
+      PosCartState(categories: categories, categoryId: categoryId);
 }
