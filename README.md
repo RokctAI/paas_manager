@@ -51,6 +51,19 @@ with walkthrough videos alongside it in [`marketing/tour/`](marketing/tour).
 [s23]: marketing/tour/store/23-calc_keypad.png
 <!-- @generated-tour-gallery-end -->
 
+<!-- @generated-render-strip-start -->
+## Design review strip
+
+[render-strip.html](marketing/tour/render-strip.html)
+is one self-contained page of this app's real screens - rendered
+headlessly from the code in this commit, before the tour's emulator
+legs ran, with every point numbered from the widget's own measured
+rectangle.
+
+GitHub serves a committed .html file as source, so open it from a
+local checkout (or download the raw file) to read the page.
+<!-- @generated-render-strip-end -->
+
 ## Building & Release (CI/CD)
 
 The project uses GitHub Actions for automated builds and releases. To enable signed builds, you must configure the following **Secrets** in your repository settings (`Settings > Secrets and variables > Actions`).
