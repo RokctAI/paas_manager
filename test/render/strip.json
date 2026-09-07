@@ -57,7 +57,7 @@
       "body": [
         "A widget-test harness (test/render/render_screen_test.dart); zero app code touched. It pumps auth_sdk's real LoginPage inside the app's own ScreenUtilInit design size and AppStyle brightness seam, at 390 logical px / dpr 3 on an 844-tall phone frame, then opens the sign-in sheet by TAPPING THE PAGE'S OWN LOGIN BUTTON - the same AppHelpers.showCustomModalBottomSheet call the app makes - and captures the RepaintBoundary to PNG. The sheet's geometry, its scrim and its maxHeight: screenHeight - 200 all come from the app's call site rather than from anything this harness chose.",
         "The data is the SDKs' own demo data, not fixtures written for this page. The test runs with --dart-define=IS_DEMO=true and calls the SDKs' DI registrations in composed-app order, so AuthSdkDependencies installs MockAuthRepository and CommsSdkDependencies installs MockSettingsRepository - the same demo fixtures a demo build of Manager serves. Every visible string resolves offline through base_sdk's BundledTranslations after the language is seeded exactly as tour/app.tour.yaml seeds it.",
-        "Real, not simulated: Inter and Montserrat loaded as the real font files google_fonts itself pins (assets/google_fonts/), the real MaterialIcons and Remix icon fonts, the real assets/images/splash.png artwork behind the sheet, AppStyle light/dark tokens resolved by the real setBrightness seam, and auth_sdk's own platform guards resolved for Android so the quick-access row is the one a phone build draws."
+        "Real, not simulated: Inter and Montserrat loaded as the real font files google_fonts itself pins (assets/google_fonts/), the real MaterialIcons and Remix icon fonts, the real assets/images/splash.png artwork behind the sheet, BOTH of the app's ThemeDatas (theme: and darkTheme:) copied from base_sdk's templates/app_widget.dart with the themeMode that chooses between them, AppStyle light/dark tokens resolved by the real setBrightness seam, and auth_sdk's own platform guards resolved for Android so the quick-access row is the one a phone build draws."
       ]
     },
     {
@@ -73,7 +73,9 @@
         "The phone field opens on +93 - Afghanistan. AppConstants.countryCodeISO is String.fromEnvironment('COUNTRY_ISO') and nothing in this repo or the shared workflows passes that define, so intl_phone_field falls back to the first entry in its own country list rather than to the seller's market.",
         "The primary action reads a hardcoded English 'Login', not a translation key: it is the one string on the sheet that will not localise.",
         "Two RenderFlex overflows were raised while the sheet laid out under the old bare-Scaffold wrapper - 95px on the keep-logged-in / forgot-password row and 50px on the quick-access row. Under the real LoginPage wrapper they no longer appear, which is itself the point: the transient overflow was an artefact of the harness's own wrapper, not of the shipped screen.",
-        "connectivity_plus is answered with a phone-on-Wi-Fi stub, because LoginPage asks for the language list as it initialises. The render therefore shows the sheet's normal state, which is the state a phone with a network draws."
+        "connectivity_plus is answered with a phone-on-Wi-Fi stub, because LoginPage asks for the language list as it initialises. The render therefore shows the sheet's normal state, which is the state a phone with a network draws.",
+        "Forgot password fails contrast in dark: 1.32:1 against the sheet, where WCAG AA wants 4.5:1. base_sdk's ForgotTextButton styles its label AppStyle.black, which is `static const Color black = Color(0xFF232B2F)` - a polarity-pinned constant that does not flip with the mode - so it renders near-black ink on the dark sheet's rgb(16,16,16). The same constant is correct in light (12.22:1), and the sheet's own title, which uses a mode-resolving token, is 19.03:1 in dark. So this is one widget reaching for the pinned constant where it should take the resolving ink token; it is not a palette-wide problem.",
+        "That contrast figure was RE-MEASURED after the theme wiring was corrected, against the same pixels the review shows. It is not an artefact of the old flag-flipped theme: the dark render is byte-identical either way, because nothing on this screen reads the ambient theme."
       ]
     },
     {
@@ -81,6 +83,13 @@
       "body": [
         "The first version of this harness pumped LoginScreen ALONE as the body of a bare Scaffold, and the frame it produced was not the app. LoginScreen is not a screen: it is the modal: argument of AppHelpers.showCustomModalBottomSheet, and LoginPage - the only caller - is what paints the sign-in surface. Rendered without it the frame lost the full-bleed splash artwork, the app-name logo, the Skip affordance and the modal scrim, and showed the sheet floating on a flat grey ground no build of Manager has ever drawn.",
         "Rendering a real widget is not the same as rendering the real screen. The wrapper is part of the screen, and a harness that supplies its own wrapper is drawing a picture of the app rather than photographing it. That is the failure mode this page has to be trusted not to have, so the backdrop is now a numbered element in its own right: if the splash ever stops being painted, the rect disappears and the frame loses a point instead of quietly looking fine."
+      ]
+    },
+    {
+      "kicker": "note - the dark frame is the app's dark theme, and what that did (and did not) change",
+      "body": [
+        "This harness previously built ONE ThemeData with brightness: dark ? Brightness.dark : Brightness.light. That is not the app's dark theme - it is the light theme with a flag flipped. The app pins two complete ThemeDatas and a themeMode; the dark one sets scaffoldBackgroundColor: AppStyle.surfaceDarkRaw and the shared systemOverlayStyle, neither of which a synthesised theme has. The harness now copies both, verbatim, from the template the shell's app_widget.dart is composed from.",
+        "Reported honestly: on THIS screen the correction changed nothing. The two PNGs are byte-identical before and after it. The reason is that the sign-in route takes none of its colour from the ambient Material theme - login_page.dart reads Theme.of(context) zero times, login_screen.dart reads it exactly once and only for .platform - and LoginPage overrides the scaffold background itself. Every colour on this frame comes from AppStyle, which the harness already drove through the real setBrightness seam. The fix is kept because it removes a live trap for the next screen and because a harness should not synthesise a theme the app does not use, not because it repainted this one."
       ]
     }
   ]
