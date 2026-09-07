@@ -193,10 +193,44 @@ Widget buildScreen({required bool dark}) {
       minTextAdapt: true,
       builder: (context, child) => MaterialApp(
         debugShowCheckedModeBanner: false,
+        // The app's OWN two ThemeDatas, copied from base_sdk's
+        // templates/app_widget.dart (the template this shell's
+        // lib/app_widget.dart is composed from) - both of them, plus the
+        // themeMode that chooses between them.
+        //
+        // This used to be one ThemeData with `brightness: dark ? dark :
+        // light`, which is NOT the app's dark theme: it is the LIGHT theme
+        // with a flag flipped. Material derives most of a ThemeData from
+        // `brightness`, but the app's dark theme is not derived - it pins
+        // `scaffoldBackgroundColor: AppStyle.surfaceDarkRaw` and the shared
+        // `systemOverlayStyle`, and a synthesised theme has neither. Anything
+        // that styles itself from the ambient theme rather than from an
+        // AppStyle token therefore rendered in colours the app never shows,
+        // and the dark frame reviewed a product that does not exist.
+        //
+        // paas_driver and minilauncher already wire both themes; this shell
+        // was the odd one out. Copy the app's arguments; do not synthesise
+        // them from a flag.
         theme: ThemeData(
-          brightness: dark ? Brightness.dark : Brightness.light,
           useMaterial3: false,
+          brightness: Brightness.light,
+          scaffoldBackgroundColor: AppStyle.surfaceLightRaw,
+          appBarTheme: const AppBarTheme(
+            systemOverlayStyle: AppStyle.systemUiOverlay,
+          ),
         ),
+        darkTheme: ThemeData(
+          useMaterial3: false,
+          brightness: Brightness.dark,
+          scaffoldBackgroundColor: AppStyle.surfaceDarkRaw,
+          appBarTheme: const AppBarTheme(
+            systemOverlayStyle: AppStyle.systemUiOverlay,
+          ),
+        ),
+        // The app reads this from AppNotifier's isDarkMode; the harness sets
+        // the same stored value in renderVariant before the first pump, so
+        // both sides of the frame agree on which theme is active.
+        themeMode: dark ? ThemeMode.dark : ThemeMode.light,
         home: const LoginPage(),
       ),
     ),
