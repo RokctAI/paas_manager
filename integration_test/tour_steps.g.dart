@@ -18,6 +18,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:auth_sdk/src/common/application/auth/auth.dart';
 import 'package:base_sdk/src/database/app_database.dart';
 import 'package:base_sdk/src/models/response/languages_response.dart';
+import 'package:base_sdk/src/presentation/adaptive/planes.dart';
 import 'package:base_sdk/src/services/app_helpers.dart';
 import 'package:base_sdk/src/services/local_storage.dart';
 import 'package:base_sdk/src/services/tr_keys.dart';
@@ -53,6 +54,10 @@ Future<void> tourSetup() async {
   // advertise several languages). LocalStorage.init() is idempotent -
   // app.main() calls it again.
   await LocalStorage.init();
+  // Capture in dark mode: persist the same flag the in-app theme toggle
+  // writes. AppNotifier reads it synchronously in its constructor (before
+  // the first frame), so every still and reel starts dark.
+  await LocalStorage.setAppThemeMode(true);
   if (LocalStorage.getLanguage() == null) {
     await LocalStorage.setLanguageData(LanguageData(
       id: '1',
@@ -205,12 +210,29 @@ final List<TourStep> tourSteps = <TourStep>[
     container.read(posCartProvider.notifier).increment(0);
   }),
   TourStep('pos_checkout', 8000, true, (WidgetTester tester, StackRouter router) async {
-    router.replaceNamed('/pos-checkout');
+    // Continue (287, Key posContinue) sits at the foot of the cart -
+    // the whole phone column, the cart plane at plane widths. Where the
+    // till's PlaneHost grants more than one plane, Continue is the ONLY
+    // way into the approved 11n checkout (it opens inside the planes;
+    // BillingPage._openCheckout never pushes the route there), so the
+    // branch reads the same plane count that method reads, from the
+    // button's own context. One plane is the phone: the /pos-checkout
+    // route, exactly the step this replaces.
+    final Finder continueButton = find.byKey(const Key('posContinue'));
+    final bool hostedInPlanes = continueButton.evaluate().isNotEmpty &&
+        (Planes.maybeOf(tester.element(continueButton))?.count ?? 1) > 1;
+    if (hostedInPlanes) {
+      await tester.tap(continueButton, warnIfMissed: false);
+    } else {
+      router.replaceNamed('/pos-checkout');
+    }
   }),
   TourStep('pos_receipt_preview', 6000, true, (WidgetTester tester, StackRouter router) async {
     // 293 on the checkout (merchants_sdk 1.29.0, frame 11k) opens the
     // receipt preview - the paper slip with the checkout's own dual
-    // finish beneath it - pushed above /pos-checkout as a plain route.
+    // finish beneath it - pushed above /pos-checkout as a plain route
+    // on the phone, handed to the till as the one-plane receipt (11r)
+    // where the checkout is plane-hosted (see the pos_checkout step).
     // The button sits at the foot of the checkout's vertical scroll
     // column (one on a phone, the tender column on the planes spread),
     // and the sliver only builds it once it is in view, so every
@@ -238,7 +260,8 @@ final List<TourStep> tourSteps = <TourStep>[
     // hardware printer would fail the print here and leave the preview
     // up with the sale open - "Finish without Receipt" (294) then
     // records it, so the tour continues either way. On success the
-    // preview pops and the checkout leaves with it, back to /main.
+    // preview pops and the checkout leaves with it, back to /main - on
+    // the planes the receipt plane closes and the till spreads again.
     await tester.tap(
       find.byKey(const Key('posReceiptPrintFinish')),
       warnIfMissed: false,
