@@ -985,7 +985,7 @@
       "boot_hooks": []
     },
     "productivity_sdk": {
-      "version": "1.5.2",
+      "version": "1.5.3",
       "files": {
         "lib/presentation/pages/tasks/tasks_page.dart": "057160dd03d0b05995aa6b94af321aacc8667142f4e700d35ca127ee29766268",
         "lib/presentation/pages/tasks/task_run_page.dart": "520d77877a155f9ad08f18f543f22768b690a4a25d1ffb8aaff5977fabe6737a",
@@ -1709,8 +1709,8 @@
       "hash": "83864d75f80cd5e1"
     },
     "productivity": {
-      "version": "1.5.2",
-      "hash": "c62494e701e218d9"
+      "version": "1.5.3",
+      "hash": "4eab9978af60ef13"
     },
     "calc": {
       "version": "1.1.1",
