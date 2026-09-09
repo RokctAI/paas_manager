@@ -1,3 +1,188 @@
+## 1.13.1
+
+* **Driver income: the landscape tablet still fits.** Ray's ruling is that
+  the guided tour captures the tablet in LANDSCAPE, and at 1280x800 dp
+  (the 2560x1600 panel at 320 dpi) the wide plane's left column measured a
+  474 dp viewport against 603 dp of content - a `maxScrollExtent` of 129
+  here, 136 as read off the tour's own capture - so the still showed the
+  Statistics tiles sliced in half by the Withdraw bar. The other three
+  tablet stills the tour takes (1706x1066 landscape at 240 dpi, 800x1280
+  and 1066x1706 portrait) all measured 0 and fit.
+  `templates/pages/driver/income/income_page.dart` now reflows that column
+  when it is LANDSCAPE - wider than it is tall, read straight off the
+  `LayoutBuilder` box the column is given, so there is no dp threshold to
+  drift from the cards' real heights. In landscape the order-price card
+  stands BESIDE the "Deliveryman transactions" header and the wallet and
+  bank-account rows instead of above them, and the statistics tiles keep
+  the full column width underneath; the gap between the row and the tiles
+  is the plane's own 16 rather than the stack's 24. Nothing is hidden,
+  dropped, shrunk or hung behind a scroll hint: the same four pieces in
+  the same reading order, left to right then down. The card was 120 dp of
+  content in a half-page-wide slot it never needed, and lifting the rows
+  up beside it is the height the tiles were missing. Portrait windows and
+  every compact (phone) window are untouched - the rule answers false at
+  376x615 and 509x603 dp, and the phone branch is not reached at all.
+  Measured under base's `templates/app_widget.dart` ScreenUtil recipe in a
+  Material 2 dark host with the SDK's Roboto standing in for Inter (the
+  test binding's own Ahem measures nothing like a real face), left column
+  `maxScrollExtent` before -> after:
+  1280x800 **129 -> 0** (content 603 -> 455 against a 474 dp viewport,
+  the tiles now ending 31 dp above the bar), 1706x1066 0 -> 0, 800x1280
+  0 -> 0, 1066x1706 0 -> 0; phone 432x768 unchanged to the pixel.
+* **The driver income template's sibling imports are relative.** The three
+  `package:${package}/presentation/pages/income/...` imports in
+  `income_page.dart` and the one in `statistics_screen.dart` are now
+  `'app_bar_screen.dart'`, `'statistics_screen.dart'`,
+  `'widgets/income_item.dart'` and `'widgets/statistics_item.dart'`. The
+  installer copies the whole `templates/pages/driver/income` tree into the
+  host's `lib/presentation/pages/income`, so they resolve in a composed
+  host exactly as the package form did (the composer substitutes
+  `${package}` by plain text replacement and never reads a page's own
+  imports; the route import comes from the manifest). What it buys:
+  the page now also resolves HERE, so revenue_sdk's own tests can BUILD
+  it. `test/driver_income_landscape_test.dart` pumps the real template
+  under the host recipe at all four tablet geometries and asserts both
+  columns' `maxScrollExtent` is 0, that the statistics tiles end above the
+  Withdraw button, and that the card sits beside the rows in landscape and
+  above them in portrait - plus that a phone window still gets the single
+  scrolling column. `test/driver_income_template_columns_test.dart` keeps
+  the textual guards and gains the landscape branch's shape. Manifest
+  1.13.0 -> 1.13.1.
+
+## 1.13.0
+
+* **Demo repositories follow the runtime demo session.** Phase 2 of demo
+  login in production (base_sdk 1.61.0, `DemoSession`). Until now each
+  role DI hook (`lib/src/driver/di/driver_revenue_di.dart`,
+  `lib/src/manager/di/manager_revenue_di.dart`) picked its statistics
+  facade with a compile-time ternary on `AppConstants.isDemo`, so a
+  server-marked demo account signing in on the production backend got the
+  real HTTP facade and an empty income page. Both hooks now register the
+  facade through a function that reads `DemoSession.demoActive` at
+  registration (the demo BUILD half still answers at boot exactly as
+  before) and subscribe ONCE to `DemoSession.instance`; on every flip -
+  the login flow's `activate()` after the backend accepts the marked
+  account, before routing, and `clear()` from `LocalStorage.logout` on
+  sign-out - the listener unregisters the statistics facade (guarded on
+  `isRegistered`, so it cannot throw) and registers the twin for the
+  switch's new position. The payout, wallet and deposit-approval seams are
+  the same class on both sides and are left untouched by a flip. The
+  duplicate-subscription guard keeps a host that also calls `register()`
+  by hand during its migration window on a single listener. The providers
+  that draw the income page (`statisticsProvider`, `walletProvider`,
+  `profitDashboardProvider`) resolve the facade from GetIt when first
+  built, which on both paths is after the flip. Nothing on screen changes
+  - no new strings, no widget reads the switch, and the tour fragment is
+  untouched because the demo BUILD path is byte-for-byte what it was. Zero
+  behavior change for a real account in a production build. Tests:
+  `test/demo_session_di_test.dart` drives both hooks on the shared GetIt
+  singleton with `DemoSession.isDemoOverride = false` (real facade when
+  the session is inactive, demo twin after `activate()`, real again after
+  `clear()`, demo twin when the session is already active at boot or in a
+  demo build, sibling facades identical across a flip, a second
+  `register()` does not subscribe twice, both roles composed in one host
+  swap on the same flip) and pins the source contract: no
+  `AppConstants.isDemo` read remains in `lib/` (comments excepted - the
+  demo twins' doc comments still name the constant when they explain the
+  split) and both hooks read `DemoSession.demoActive` and subscribe to
+  `DemoSession.instance`. Requires base_sdk >= 1.61.0; a composition on an
+  older base fails to compile at the `demo_session.dart` import rather
+  than silently keeping the compile-time split.
+
+## 1.12.5
+
+* **Driver income: two columns on tablets.** Approved layout for the fold
+  1.12.4 measured on paas_driver's 800x1280 dp still (the single column
+  renders 1:1 on non-compact windows and was 84 dp taller than the
+  reserved-slot viewport, so the 300.h chart card straddled the Withdraw
+  button's edge at scroll rest). On a medium+ window
+  `templates/pages/driver/income/income_page.dart` now renders the body as
+  a Row of two equal columns under the full-width Today / Weekly / Monthly
+  control: LEFT, the order-price card, the "Deliveryman transactions" /
+  "Your payouts" header, the wallet and bank-account rows and the
+  statistics tiles; RIGHT, the earnings chart at its full height, top-
+  aligned with the left column's first card. Each column scrolls on its
+  own. The switch is base's window-size class,
+  `windowSizeOf(context).isAtLeastMedium` (`AppBreakpoints.medium`,
+  600 dp) - the SAME width at which base's `templates/app_widget.dart`
+  stops scaling ScreenUtil from the 375x812 design and passes the logical
+  size (1:1), so the wide branch only ever renders with unscaled units.
+  Compact windows keep the single column: the transactions section moved
+  into a shared `_transactions` list the phone branch spreads in place, and
+  the phone widget tree and every rect measure identical to 1.12.4. With
+  it, the tile follow-up 1.12.4 noted: `statistics_screen.dart` sizes its
+  tiles from the row's own constraints in a `LayoutBuilder`
+  (`(row - 108.w) / 2`, the phone formula `(window - 140.w) / 2` under the
+  page's 16.w side padding, so the phone number is unchanged) and hands
+  them to `StatisticsItem`'s new optional `width`; the window-width formula
+  overflowed the half-width column by a full tile. Measured in a scratch
+  host of the templates under base's ScreenUtil recipe: at 800x1280 dp
+  (2.0) and 1067x1707 dp (1.5) no RenderFlex overflow, the chart card 300
+  dp high with its bottom 12 dp above its column's viewport bottom and
+  567 / 977.7 dp above the Withdraw button, both columns' maxScrollExtent 0.
+  `test/driver_income_template_columns_test.dart` pins the switch, the two
+  Expanded columns and their contents, the compact column's order and the
+  tile sizing. Manifest 1.12.4 -> 1.12.5.
+
+## 1.12.4
+
+* **Driver income: "Last incomeR45.00", and the tablet still re-read.**
+  paas_driver's landed stills of the page composed with revenue 1.12.3
+  (tablet 1600x2560 at 320 dpi = 800x1280 dp) showed two things. (1) The
+  order-price card's "Last income" line ran the label straight into the
+  value: the `RichText` in `templates/pages/driver/income/income_page.dart`
+  appended the `numberFormat` span with no separator and the translation
+  carries no trailing space. The value span now leads with a space, the
+  shape the "Today" row in `statistics_screen.dart` already uses. (2) The
+  chart's last bar rows and axis still sat "under" the Withdraw button at
+  scroll rest. That is the FOLD, not the bar: base's `ScreenUtilInit`
+  passes the logical size as the design size on non-compact windows, so
+  the column renders 1:1 on the tablet and is 116 dp taller than the
+  reserved-slot viewport; the scroller clips at its bottom edge, which is
+  the opaque button's top edge, and the chart card (fixed `300.h`, last in
+  the column) straddles it by 72 dp. Pumping the template in a scratch
+  host at 800x1280 with `extendBody: true` re-added measured the SAME
+  extent and the same 72 dp - the Scaffold hands an extended body a bottom
+  inset equal to the bar's height and the scroller padded by it - so the
+  1.12.3 slot change moved nothing and the 1.12.2/1.12.3 write-ups had
+  the cause wrong; the page's comment now says so. The one template-side
+  correction: `_chart` ended with a `32.verticalSpace` on top of the
+  scroller's `12.h`, so the card stopped 44 dp above the bar at scroll end
+  (the frames leave 12) and the page scrolled 32 dp further than its
+  content; the spacer is dropped (extent 116 -> 84 dp at 800x1280).
+  Fitting the tablet at rest (a shorter chart or a two-column plane on
+  medium+ windows) is a layout decision left open. Follow-up noted, not
+  fixed here: `statistics_screen.dart`'s tile row overflows by 72 px on
+  an 800 dp window (tile width `(width - 140.w) / 2`).
+  `test/driver_income_template_headers_test.dart` gains a group pinning
+  the leading space and the absence of the trailing spacer. Manifest
+  1.12.3 -> 1.12.4.
+
+## 1.12.3
+
+* **Driver income: unreadable section headers and a withdraw bar over the
+  last rows.** paas_driver's landed stills of the page (revenue 1.12.2,
+  corporate #90; tablet 800x1280 and the phone) showed two defects. (1)
+  "Deliveryman transactions", the "Your payouts" chip, "Statistics" and
+  "Earnings chart" rendered at 1.30:1: the three `TitleAndIcon` calls in
+  `templates/pages/driver/income/income_page.dart` and
+  `statistics_screen.dart` passed no colour, so they inherited base's
+  polarity-pinned const default `AppStyle.black` (0xFF232B2F) on the
+  page's `surfaceDark` ground. Each now passes
+  `titleColor: AppStyle.textPrimary` (and `rightTitleColor` where a right
+  title is set), the mode-resolving getter the rest of the page uses. (2)
+  The primary "Withdraw money" button covered the last ~100 dp of content
+  at scroll rest (the chart's last bar row and axis labels on the tablet,
+  the statistics tile titles on the phone): `income_page.dart` set
+  `extendBody: true`, so the body ran under the Scaffold's bottom slot,
+  whose first row is that OPAQUE button. `extendBody` is dropped; the
+  Scaffold reserves the slot, the body's viewport ends where the bar
+  begins and the bar keeps its own bottom safe area. The scroller's
+  `paddingOf(context).bottom + 12.h` stays (the inset term is now zero).
+  New `test/driver_income_template_headers_test.dart` pins both: every
+  `TitleAndIcon` the templates build passes `textPrimary`, and the page no
+  longer extends the body. Manifest 1.12.2 -> 1.12.3.
+
 ## 1.12.2
 
 * **Driver income: the page was still light on the tablet.** Tablet design

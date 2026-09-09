@@ -21,11 +21,13 @@ import 'package:revenue_sdk/src/common/infrastructure/models/response/statistics
 /// Demo-only [SellerStatisticsRepositoryFacade]
 /// (`--dart-define=IS_DEMO=true`): serves a small fictional week of store
 /// revenue offline so the manager /income screen is never a zeroed shell in
-/// demo builds — the same `AppConstants.isDemo` split delivery_sdk's
+/// demo builds — the same demo split delivery_sdk's
 /// `DriverDeliveryDependencies` applies to every courier facade
-/// (DemoLmsRepository precedent). Registered in place of
+/// (DemoLmsRepository precedent). Since 1.13.0 the split follows base's
+/// `DemoSession.demoActive`, so a server-marked demo account signed in on
+/// the production backend is served from here too. Registered in place of
 /// `SellerStatisticsRepository` by `ManagerRevenueDependencies`; zero
-/// behavior change when IS_DEMO is off. Never used in production; nothing
+/// behavior change for a real account in a production build. Nothing
 /// leaves the device.
 ///
 /// Covers the whole facade, the section-36 profit dashboard included: the

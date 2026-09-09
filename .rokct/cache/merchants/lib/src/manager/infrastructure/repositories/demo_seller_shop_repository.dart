@@ -19,13 +19,14 @@ import 'package:merchants_sdk/src/common/infrastructure/repositories/mock_shops_
 import 'package:merchants_sdk/src/manager/domain/interface/seller_shop.dart';
 import 'package:merchants_sdk/src/manager/infrastructure/models/response/my_shop_response.dart';
 
-/// Demo-only [SellerShopRepositoryFacade] (`--dart-define=IS_DEMO=true`):
-/// gives the demo manager a shop identity, so the restaurant hub's header,
-/// the shop-edit flow and the open/closed switch all render against a real
-/// shop instead of a blank header. Selected in place of
-/// [SellerShopRepository] by `ManagerMerchantsDependencies` — the same
-/// `AppConstants.isDemo` split this SDK already applies to the POS catalog,
-/// POS orders and quick-flow seams.
+/// Demo-only [SellerShopRepositoryFacade] (a demo build,
+/// `--dart-define=IS_DEMO=true`, or a demo session - base_sdk's
+/// `DemoSession.demoActive`): gives the demo manager a shop identity, so
+/// the restaurant hub's header, the shop-edit flow and the open/closed
+/// switch all render against a real shop instead of a blank header.
+/// Selected in place of [SellerShopRepository] by
+/// `ManagerMerchantsDependencies` — the same runtime-switch split this SDK
+/// applies to the POS catalog, POS orders and quick-flow seams.
 ///
 /// The shop served is [MockShopsRepository.demoShop] itself, NOT a second
 /// invention: `MerchantsSdkDependencies` already serves that identity to the

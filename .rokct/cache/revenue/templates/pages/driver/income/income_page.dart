@@ -23,6 +23,7 @@ import 'package:revenue_sdk/src/driver/infrastructure/models/chart.dart';
 import 'package:base_sdk/src/services/app_helpers.dart';
 import 'package:base_sdk/src/services/local_storage.dart';
 import 'package:base_sdk/src/services/tr_keys.dart';
+import 'package:base_sdk/src/presentation/adaptive/breakpoints.dart';
 import 'package:base_sdk/src/presentation/theme/app_style.dart';
 import 'package:base_sdk/src/presentation/components/custom_tab_bar.dart';
 import 'package:base_sdk/src/presentation/components/title_icon.dart';
@@ -40,9 +41,16 @@ import 'package:revenue_sdk/src/common/presentation/bank/payout_sent_sheet.dart'
 import 'package:revenue_sdk/src/common/presentation/payouts/driver_payouts_page.dart';
 import 'package:revenue_sdk/src/driver/presentation/wallet/driver_wallet_page.dart';
 import 'package:revenue_sdk/src/common/presentation/withdraw/withdraw_sheet.dart';
-import 'package:${package}/presentation/pages/income/app_bar_screen.dart';
-import 'package:${package}/presentation/pages/income/statistics_screen.dart';
-import 'package:${package}/presentation/pages/income/widgets/income_item.dart';
+// Siblings of this file: the installer copies the whole
+// templates/pages/driver/income tree into the host's
+// lib/presentation/pages/income, so a relative import resolves in the
+// composed host exactly as the old `package:${package}/...` form did -
+// and, unlike that form, it also resolves HERE, which is what lets
+// revenue_sdk's own widget tests build this page (see
+// test/driver_income_landscape_test.dart) instead of only grepping it.
+import 'app_bar_screen.dart';
+import 'statistics_screen.dart';
+import 'widgets/income_item.dart';
 
 @RoutePage(name: 'DriverIncomeRoute')
 class IncomePage extends ConsumerStatefulWidget {
@@ -262,19 +270,35 @@ class _IncomePageState extends ConsumerState<IncomePage>
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(statisticsProvider);
+    // The two-column plane. On a medium+ window (base's window-size class,
+    // AppBreakpoints.medium = 600 dp) the transactions section, the order
+    // prices and the statistics tiles stack in a LEFT column and the
+    // earnings chart stands in a RIGHT column, so the page fits at rest
+    // and the chart keeps its full 300.h. That is the SAME width at which
+    // base's templates/app_widget.dart stops scaling ScreenUtil from the
+    // 375x812 phone design and passes the logical size as the design size
+    // (.w/.h 1:1), so the wide branch only ever renders with unscaled
+    // units. Compact windows keep the single column exactly as before -
+    // this bool is the one switch.
+    final isWide = windowSizeOf(context).isAtLeastMedium;
     return Scaffold(
       backgroundColor: AppStyle.surfaceDark,
-      // The withdraw bar rides in the Scaffold's bottom slot and the body
-      // runs on UNDER it (extendBody), so the content still passes beneath
-      // the translucent stack on the way down exactly as before, while the
-      // Scaffold hands the body a bottom inset equal to the slot's REAL
-      // height. The scroller pads by that inset. It used to pad a fixed
-      // `bottom + 56.h` against a stack that is button + hint line + pill +
-      // safe area tall, so its last rows (the earnings chart) could never
-      // scroll out from under the bar on any window that had to scroll -
-      // the phone always, the tablet once the chart made the column taller
-      // than the viewport.
-      extendBody: true,
+      // The withdraw bar rides in the Scaffold's bottom slot and the
+      // Scaffold RESERVES that slot: no extendBody. The body's viewport
+      // ends where the bar begins and the bar keeps its own bottom safe
+      // area.
+      //
+      // What a still of the single column at scroll rest shows is the
+      // FOLD, not the bar covering content: the column is taller than the
+      // viewport on every phone, and the scroller clips at its bottom
+      // edge, which is exactly the opaque button's top edge. The last card
+      // (the chart) scrolls fully clear - a body run under the bar with
+      // extendBody: true measured the same extent and the same rows under
+      // the fold, because the Scaffold hands such a body a bottom inset
+      // equal to the bar's height and the scroller padded by it. The
+      // 800x1280 tablet, where the single column (1:1) was 84 dp taller
+      // than the viewport and the chart card straddled the fold, is what
+      // the two-column plane above exists for.
       body: Column(
         children: [
           AbbBarScreen(event: ref.read(statisticsProvider.notifier)),
@@ -283,110 +307,34 @@ class _IncomePageState extends ConsumerState<IncomePage>
             // Builder: the inset lives on the BODY's MediaQuery, which the
             // Scaffold provides below this widget's own context.
             child: Builder(
-              builder: (context) => SingleChildScrollView(
-                padding: EdgeInsets.only(
-                  right: 16.w,
-                  left: 16.w,
-                  // The slot's height plus the gap the frames leave between
-                  // the last card and the pill (the fleet's 12.h).
-                  bottom: MediaQuery.paddingOf(context).bottom + 12.h,
-                ),
-                child: Column(
-                  children: [
-                    CustomTabBar(
-                      tabController: _tabController,
-                      tabs: _tabs,
-                    ),
-                    24.verticalSpace,
-                    _orderPrices(context, state),
-                    // Thin wiring only (repo policy: substance lives in
-                    // analyzable lib/, templates/ is excluded from
-                    // `flutter analyze` fleet-wide). Both destinations
-                    // are real pages in revenue_sdk's lib/src/driver.
-                    TitleAndIcon(
-                      title: AppHelpers.getTranslation(
-                          TrKeys.deliverymanTransactions),
-                      rightTitle:
-                          AppHelpers.getTranslation('your_payouts'),
-                      // Design strip frame 49k, plane 2 of income: the
-                      // Requested -> Paid | Rejected trail. The balance
-                      // drops the moment he taps Withdraw, so this is
-                      // the screen that explains where the money is.
-                      onRightTap: () => DriverPayoutsPage.push(context),
-                    ),
-                    12.verticalSpace,
-                    // Design strip frame 49f, the wallet plane. The row
-                    // itself is unchanged - it is now a way IN to the
-                    // plane instead of a number with no explanation.
-                    GestureDetector(
-                      behavior: HitTestBehavior.opaque,
-                      onTap: () => DriverWalletPage.push(context),
-                      child: IncomeItem(
-                        title: AppHelpers.getTranslation(TrKeys.wallet),
-                        price: AppHelpers.numberFormat(
-                            number:
-                                LocalStorage.getUser()?.wallet?.price ?? 0),
+              builder: (context) => isWide
+                  ? _wideBody(context, state)
+                  : SingleChildScrollView(
+                      padding: EdgeInsets.only(
+                        right: 16.w,
+                        left: 16.w,
+                        // The gap the frames leave between the last card and the
+                        // bar (the fleet's 12.h). The inset term is zero while
+                        // the Scaffold reserves the bottom slot (it strips the
+                        // body's bottom padding when a bottomNavigationBar is
+                        // set) and only ever carries the slot's height if the
+                        // body is made to run under the bar again.
+                        bottom: MediaQuery.paddingOf(context).bottom + 12.h,
+                      ),
+                      child: Column(
+                        children: [
+                          CustomTabBar(
+                            tabController: _tabController,
+                            tabs: _tabs,
+                          ),
+                          24.verticalSpace,
+                          _orderPrices(context, state),
+                          ..._transactions(context, state),
+                          32.verticalSpace,
+                          _chart(state),
+                        ],
                       ),
                     ),
-                    12.verticalSpace,
-                    // Design strip frame 49q, plane 2 of income: the saved
-                    // bank accounts. Reachable on its own and not only
-                    // through a refused withdrawal, because a driver who
-                    // has closed an account needs to change it BEFORE the
-                    // next payout, not while one is being refused.
-                    GestureDetector(
-                      key: const Key('incomeBankAccountsRow'),
-                      behavior: HitTestBehavior.opaque,
-                      onTap: () => BankAccountsPage.push(context),
-                      child: IncomeItem(
-                        title: AppHelpers.getTranslation('bank_accounts'),
-                        price: '',
-                      ),
-                    ),
-                    // The legacy host row showed the courier's rating from
-                    // LocalStorage.getUser()?.rate (UserData parsed
-                    // assign_reviews_avg_rating). base_sdk's ProfileData carries
-                    // no rating field, so the row is parked until the courier
-                    // profile slice (delivery_sdk, S-D3) owns that surface.
-                    // IncomeItem(
-                    //   title: AppHelpers.getTranslation(TrKeys.rating),
-                    //   price: "-",
-                    // ),
-                    24.verticalSpace,
-                    StatisticsScreen(
-                        totalOrders: (state.countData?.data?.totalCount ?? 0)
-                            .toString(),
-                        todayOrders: (state.countData?.data?.totalTodayCount ?? 0)
-                            .toString(),
-                        acceptedOrders: (state
-                                    .countData?.data?.totalAcceptedCount ??
-                                0)
-                            .toString(),
-                        rejectedOrders: (state
-                                    .countData?.data?.totalCanceledCount ??
-                                0)
-                            .toString(),
-                        doneOrders: (state.countData?.data?.totalDeliveredCount ??
-                                0)
-                            .toString(),
-                        canceledOrders:
-                            (state
-                                        .countData?.data?.totalNewCount ??
-                                    0)
-                                .toString(),
-                        acceptedPer:
-                            "${((state.countData?.data?.totalAcceptedCount ?? 0) / (state.countData?.data?.totalCount ?? 1) * 100).toStringAsFixed(1)}%",
-                        rejectedPer:
-                            "${((state.countData?.data?.totalCanceledCount ?? 0) / (state.countData?.data?.totalCount ?? 1) * 100).toStringAsFixed(1)}%",
-                        donePer:
-                            "${((state.countData?.data?.totalDeliveredCount ?? 0) / (state.countData?.data?.totalCount ?? 1) * 100).toStringAsFixed(1)}%",
-                        canceledPer:
-                            "${((state.countData?.data?.totalNewCount ?? 0) / (state.countData?.data?.totalCount ?? 1) * 100).toStringAsFixed(1)}%"),
-                    32.verticalSpace,
-                    _chart(state),
-                  ],
-                ),
-              ),
             ),
           ),
         ],
@@ -454,6 +402,239 @@ class _IncomePageState extends ConsumerState<IncomePage>
     );
   }
 
+  /// The transactions section, shared by every branch: the
+  /// "Deliveryman transactions" / "Your payouts" header, the wallet and
+  /// bank-account rows and the statistics tiles, in the order the single
+  /// column has always stacked them. A list rather than a Column so the
+  /// compact branch keeps the same widget tree it had before the wide
+  /// branch existed.
+  ///
+  /// The two halves are also reachable on their own ([_transactionRows]
+  /// and [_statistics]) because the landscape plane stands the ROWS beside
+  /// the order-price card and keeps the tiles full width underneath; this
+  /// list is the portrait order and stays the one definition of it.
+  List<Widget> _transactions(BuildContext context, StatisticsState state) =>
+      [
+        ..._transactionRows(context),
+        24.verticalSpace,
+        _statistics(state),
+      ];
+
+  /// The header and the two tappable rows - everything in the section
+  /// above the statistics tiles.
+  List<Widget> _transactionRows(BuildContext context) {
+    return [
+      // Thin wiring only (repo policy: substance lives in
+      // analyzable lib/, templates/ is excluded from
+      // `flutter analyze` fleet-wide). Both destinations
+      // are real pages in revenue_sdk's lib/src/driver.
+      // Both inks passed explicitly: base's TitleAndIcon
+      // defaults them to the polarity-pinned const
+      // AppStyle.black, which is 1.30:1 on surfaceDark.
+      TitleAndIcon(
+        title: AppHelpers.getTranslation(
+            TrKeys.deliverymanTransactions),
+        titleColor: AppStyle.textPrimary,
+        rightTitle:
+            AppHelpers.getTranslation('your_payouts'),
+        rightTitleColor: AppStyle.textPrimary,
+        // Design strip frame 49k, plane 2 of income: the
+        // Requested -> Paid | Rejected trail. The balance
+        // drops the moment he taps Withdraw, so this is
+        // the screen that explains where the money is.
+        onRightTap: () => DriverPayoutsPage.push(context),
+      ),
+      12.verticalSpace,
+      // Design strip frame 49f, the wallet plane. The row
+      // itself is unchanged - it is now a way IN to the
+      // plane instead of a number with no explanation.
+      GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: () => DriverWalletPage.push(context),
+        child: IncomeItem(
+          title: AppHelpers.getTranslation(TrKeys.wallet),
+          price: AppHelpers.numberFormat(
+              number:
+                  LocalStorage.getUser()?.wallet?.price ?? 0),
+        ),
+      ),
+      12.verticalSpace,
+      // Design strip frame 49q, plane 2 of income: the saved
+      // bank accounts. Reachable on its own and not only
+      // through a refused withdrawal, because a driver who
+      // has closed an account needs to change it BEFORE the
+      // next payout, not while one is being refused.
+      GestureDetector(
+        key: const Key('incomeBankAccountsRow'),
+        behavior: HitTestBehavior.opaque,
+        onTap: () => BankAccountsPage.push(context),
+        child: IncomeItem(
+          title: AppHelpers.getTranslation('bank_accounts'),
+          price: '',
+        ),
+      ),
+      // The legacy host row showed the courier's rating from
+      // LocalStorage.getUser()?.rate (UserData parsed
+      // assign_reviews_avg_rating). base_sdk's ProfileData carries
+      // no rating field, so the row is parked until the courier
+      // profile slice (delivery_sdk, S-D3) owns that surface.
+      // IncomeItem(
+      //   title: AppHelpers.getTranslation(TrKeys.rating),
+      //   price: "-",
+      // ),
+    ];
+  }
+
+  /// The statistics tiles, full width of whatever column they land in
+  /// (statistics_screen.dart sizes them from their own row's constraints).
+  Widget _statistics(StatisticsState state) {
+    return StatisticsScreen(
+        totalOrders: (state.countData?.data?.totalCount ?? 0)
+            .toString(),
+        todayOrders: (state.countData?.data?.totalTodayCount ?? 0)
+            .toString(),
+        acceptedOrders: (state
+                    .countData?.data?.totalAcceptedCount ??
+                0)
+            .toString(),
+        rejectedOrders: (state
+                    .countData?.data?.totalCanceledCount ??
+                0)
+            .toString(),
+        doneOrders: (state.countData?.data?.totalDeliveredCount ??
+                0)
+            .toString(),
+        canceledOrders:
+            (state
+                        .countData?.data?.totalNewCount ??
+                    0)
+                .toString(),
+        acceptedPer:
+            "${((state.countData?.data?.totalAcceptedCount ?? 0) / (state.countData?.data?.totalCount ?? 1) * 100).toStringAsFixed(1)}%",
+        rejectedPer:
+            "${((state.countData?.data?.totalCanceledCount ?? 0) / (state.countData?.data?.totalCount ?? 1) * 100).toStringAsFixed(1)}%",
+        donePer:
+            "${((state.countData?.data?.totalDeliveredCount ?? 0) / (state.countData?.data?.totalCount ?? 1) * 100).toStringAsFixed(1)}%",
+        canceledPer:
+            "${((state.countData?.data?.totalNewCount ?? 0) / (state.countData?.data?.totalCount ?? 1) * 100).toStringAsFixed(1)}%");
+  }
+
+  /// Medium+ windows: the segmented control stays full width above two
+  /// equal columns. Left, the order prices and the transactions section,
+  /// scrolling on its own when it is taller than the viewport; right, the
+  /// earnings chart at its full height, top-aligned with the left column's
+  /// first card. The right column scrolls too, only so a window shorter
+  /// than the chart card (a landscape split) clips nothing.
+  Widget _wideBody(BuildContext context, StatisticsState state) {
+    // The gap the frames leave between the last card and the bar (the
+    // fleet's 12.h), plus the body's bottom inset - zero while the
+    // Scaffold reserves the bottom slot; see the compact branch.
+    final bottom = MediaQuery.paddingOf(context).bottom + 12.h;
+    return Padding(
+      padding: EdgeInsets.only(right: 16.w, left: 16.w),
+      child: Column(
+        children: [
+          CustomTabBar(
+            tabController: _tabController,
+            tabs: _tabs,
+          ),
+          24.verticalSpace,
+          Expanded(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  child: LayoutBuilder(
+                    builder: (context, box) {
+                      // The LANDSCAPE plane. This column is bounded here
+                      // (it is an Expanded inside the body's Row), so
+                      // box.maxHeight is the viewport the scroller below
+                      // will get and box.maxWidth is the half-page it has
+                      // to spend. Wider than it is tall means the page is
+                      // short of the one thing the stacked order-price
+                      // card + transaction rows need - height - and has a
+                      // surplus of the one thing standing them side by
+                      // side costs: width. That is the whole rule; no dp
+                      // threshold to drift from the cards' real heights.
+                      //
+                      // It answers true only on a landscape tablet
+                      // (1280x800 and 1706x1066 give this column 616x474
+                      // and 829x603) and false on both portrait ones
+                      // (800x1280 -> 376x615, 1066x1706 -> 509x603),
+                      // which keep the stack Ray approved, unchanged.
+                      final landscape = box.maxWidth > box.maxHeight;
+                      return SingleChildScrollView(
+                        key: const Key('incomeWideLeftColumn'),
+                        padding: EdgeInsets.only(bottom: bottom),
+                        child: landscape
+                            ? _landscapeColumn(context, state)
+                            : Column(
+                                children: [
+                                  _orderPrices(context, state),
+                                  ..._transactions(context, state),
+                                ],
+                              ),
+                      );
+                    },
+                  ),
+                ),
+                16.horizontalSpace,
+                Expanded(
+                  child: SingleChildScrollView(
+                    key: const Key('incomeWideRightColumn'),
+                    padding: EdgeInsets.only(bottom: bottom),
+                    child: _chart(state),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// The left column of the WIDE plane when that column is landscape
+  /// (see the rule in [_wideBody]): the order-price card stands BESIDE
+  /// the transaction rows instead of above them, and the statistics tiles
+  /// keep the full column width underneath.
+  ///
+  /// Nothing is hidden, dropped or shrunk - the same four pieces in the
+  /// same reading order, left to right then down. The card is 120 dp of
+  /// content in a half-page-wide slot it never needed, so lifting the
+  /// rows up beside it is the height the tiles were missing: at 1280x800
+  /// the stacked column measured 603 dp against a 474 dp viewport (the
+  /// Withdraw bar cut the tiles in half in the tour still); this
+  /// arrangement measures 451 and the tiles sit whole, above the bar,
+  /// with nothing to scroll.
+  Widget _landscapeColumn(BuildContext context, StatisticsState state) {
+    return Column(
+      children: [
+        Row(
+          // Both sub-columns keep their natural height and hang from the
+          // same top edge, so the card and the "Deliveryman transactions"
+          // header start on one line.
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(child: _orderPriceCard(context, state)),
+            // The seam between the two columns of the plane itself, so
+            // the sub-columns read as the same grid.
+            16.horizontalSpace,
+            Expanded(
+              child: Column(children: _transactionRows(context)),
+            ),
+          ],
+        ),
+        // The plane's own seam again (the portrait stack's 24 is the gap
+        // between two sections of ONE column; here the tiles follow a row
+        // that already reads as a band, and the 8 dp it gives back is
+        // headroom this short plane can spend on the tiles).
+        16.verticalSpace,
+        _statistics(state),
+      ],
+    );
+  }
+
   Column _chart(StatisticsState state) {
     // The SDK's StatisticsNotifier emits plain OrdinalSales rows so
     // revenue_sdk stays chart-library-agnostic; the charts_flutter Series
@@ -470,7 +651,12 @@ class _IncomePageState extends ConsumerState<IncomePage>
     ];
     return Column(
       children: [
-        TitleAndIcon(title: AppHelpers.getTranslation(TrKeys.earningsChart)),
+        // titleColor passed explicitly: base's default is the const
+        // AppStyle.black, unreadable on surfaceDark.
+        TitleAndIcon(
+          title: AppHelpers.getTranslation(TrKeys.earningsChart),
+          titleColor: AppStyle.textPrimary,
+        ),
         16.verticalSpace,
         Container(
             width: double.infinity,
@@ -488,63 +674,82 @@ class _IncomePageState extends ConsumerState<IncomePage>
               defaultRenderer: BarRendererConfig(
                   cornerStrategy: const ConstCornerStrategy(6)),
             )),
+        // No trailing spacer: the chart is the page's last card and the
+        // scroller's own bottom padding (the frames' 12.h) is the gap to
+        // the bar. The 32.h that sat here stacked on top of it, so the
+        // card stopped 44 dp above the bar at scroll end and the page
+        // scrolled 32 dp further than its content.
+      ],
+    );
+  }
+
+  /// The order-price card plus the gap that follows it in a stacked
+  /// column. The landscape plane stands the card beside the transaction
+  /// rows instead and supplies its own gap, so it calls
+  /// [_orderPriceCard] directly.
+  Column _orderPrices(BuildContext context, StatisticsState state) {
+    return Column(
+      children: [
+        _orderPriceCard(context, state),
         32.verticalSpace,
       ],
     );
   }
 
-  Column _orderPrices(BuildContext context, StatisticsState state) {
-    return Column(
-      children: [
-        Container(
-          width: double.infinity,
-          decoration: BoxDecoration(
-            color: AppStyle.cardDark,
-            borderRadius: BorderRadius.circular(10.r),
+  /// The card itself - "Order price", the last order's total and the
+  /// income line under it.
+  Widget _orderPriceCard(BuildContext context, StatisticsState state) {
+    return Container(
+      width: double.infinity,
+      decoration: BoxDecoration(
+        color: AppStyle.cardDark,
+        borderRadius: BorderRadius.circular(10.r),
+      ),
+      padding: EdgeInsets.all(16.r),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            AppHelpers.getTranslation(TrKeys.orderPrice),
+            style: AppStyle.interNormal(
+                size: 14,
+                color: AppStyle.textPrimary,
+                letterSpacing: -0.3),
           ),
-          padding: EdgeInsets.all(16.r),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                AppHelpers.getTranslation(TrKeys.orderPrice),
-                style: AppStyle.interNormal(
-                    size: 14,
-                    color: AppStyle.textPrimary,
-                    letterSpacing: -0.3),
-              ),
-              16.verticalSpace,
-              Text(
-                AppHelpers.numberFormat(
-                    number: state.countData?.data?.lastOrderTotalPrice ?? 0),
-                style: AppStyle.interSemi(
-                    size: 32,
-                    color: AppStyle.textPrimary,
-                    letterSpacing: -0.3),
-              ),
-              4.verticalSpace,
-              RichText(
-                  text: TextSpan(
-                      text: AppHelpers.getTranslation(TrKeys.lastIncome),
-                      style: AppStyle.interNormal(
-                          size: 12,
-                          color: AppStyle.textPrimary,
-                          letterSpacing: -0.3),
-                      children: [
-                    TextSpan(
-                      text: AppHelpers.numberFormat(
-                          number: state.countData?.data?.lastOrderIncome ?? 0),
-                      style: AppStyle.interSemi(
-                          size: 12,
-                          color: AppStyle.textPrimary,
-                          letterSpacing: -0.3),
-                    )
-                  ])),
-            ],
+          16.verticalSpace,
+          Text(
+            AppHelpers.numberFormat(
+                number: state.countData?.data?.lastOrderTotalPrice ?? 0),
+            style: AppStyle.interSemi(
+                size: 32,
+                color: AppStyle.textPrimary,
+                letterSpacing: -0.3),
           ),
-        ),
-        32.verticalSpace,
-      ],
+          4.verticalSpace,
+          RichText(
+              text: TextSpan(
+                  text: AppHelpers.getTranslation(TrKeys.lastIncome),
+                  style: AppStyle.interNormal(
+                      size: 12,
+                      color: AppStyle.textPrimary,
+                      letterSpacing: -0.3),
+                  children: [
+                TextSpan(
+                  // Leading space: the label span carries none
+                  // ("Last income" is the translation, not "Last
+                  // income "), so without it the row read
+                  // "Last incomeR45.00". Same shape as the "Today"
+                  // row in statistics_screen.dart (" $todayOrders").
+                  text:
+                      ' ${AppHelpers.numberFormat(number: state.countData?.data?.lastOrderIncome ?? 0)}',
+                  style: AppStyle.interSemi(
+                      size: 12,
+                      color: AppStyle.textPrimary,
+                      letterSpacing: -0.3),
+                )
+              ])),
+        ],
+      ),
     );
   }
 }
