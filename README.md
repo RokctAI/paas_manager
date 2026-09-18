@@ -20,12 +20,6 @@ tour run, so new screens appear here automatically.
 | ![Menu][s11] | ![Add Product][s12] | ![Order Queue][s13] |
 | **Order History** | **Kitchen Queue** | **Comms Language** |
 | ![Order History][s14] | ![Kitchen Queue][s15] | ![Comms Language][s16] |
-| **Revenue Income** | **Subscriptions Plans** | **Productivity Tasks** |
-| ![Revenue Income][s17] | ![Plans][s18] | ![Productivity Tasks][s19] |
-| **Task Compose** | **Maintenance Readings** | **Maintenance Photo** |
-| ![Task Compose][s20] | ![Readings][s21] | ![Maintenance Photo][s22] |
-| **Calc Keypad** | | |
-| ![Calc Keypad][s23] | | |
 
 The full tour lives in the [feature guide](marketing/tour/feature-guide.md),
 with walkthrough videos alongside it in [`marketing/tour/`](marketing/tour).
@@ -42,13 +36,6 @@ with walkthrough videos alongside it in [`marketing/tour/`](marketing/tour).
 [s14]: marketing/tour/store/14-order_history.png
 [s15]: marketing/tour/store/15-kitchen_queue.png
 [s16]: marketing/tour/store/16-comms_language.png
-[s17]: marketing/tour/store/17-revenue_income.png
-[s18]: marketing/tour/store/18-subscriptions_plans.png
-[s19]: marketing/tour/store/19-productivity_tasks.png
-[s20]: marketing/tour/store/20-productivity_task_compose.png
-[s21]: marketing/tour/store/21-productivity_maintenance_readings.png
-[s22]: marketing/tour/store/22-productivity_maintenance_photo.png
-[s23]: marketing/tour/store/23-calc_keypad.png
 <!-- @generated-tour-gallery-end -->
 
 <!-- @generated-render-strip-start -->
