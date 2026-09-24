@@ -81,7 +81,7 @@ android {
 
 
     defaultConfig {
-        applicationId dartDefines.MANAGER_ANDROID_PACKAGE_NAME
+        applicationId "com.app.demo"
         minSdkVersion flutter.minSdkVersion
         multiDexEnabled true
         targetSdkVersion 36
