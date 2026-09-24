@@ -90,7 +90,6 @@ android {
 
         // Synchronized configurations from dart-defines
         resValue "string", "google_maps_api_key", dartDefines.GOOGLE_MAPS_API_KEY ?: ""
-        resValue "string", "app_name", dartDefines.MANAGER_APP_NAME ?: ""
     }
 
     signingConfigs {
