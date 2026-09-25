@@ -9,7 +9,7 @@
 #
 # Demo account: setup.demo_email below is substituted into auth_sdk's
 # shared fragment, so its demo sign-in signs straight in as
-# manager@demo.rokct.ai - in demo builds MockAuthRepository maps that email
+# manager@demo.rokct.ai - in demo builds auth_sdk's api.user.login fixture maps that email
 # to the seller role, and Manager's session policy (merchants_sdk manifest,
 # app_type.manager) admits ONLY seller, landing it on /main exactly where
 # the merchants fragment starts. Left unset, the fragment falls back to
@@ -120,7 +120,7 @@ tour:
         LocalStorage.logout();
         router.replaceNamed('/login');
   # Sign in as the demo seller through the same login flow the auth
-  # fragment's demo_sign_in uses; MockAuthRepository maps this email to
+  # fragment's demo_sign_in uses; auth_sdk's api.user.login fixture maps this email to
   # the seller role, and the manager session policy lands it on /main -
   # the merchants fragment's first step routes there explicitly, so only
   # a modest settle is needed here.
@@ -142,7 +142,7 @@ tour:
           final login = container.read(loginProvider.notifier);
           login.setEmail('manager@demo.rokct.ai');
           login.setPassword('demo-managers-2026');
-          // MockAuthRepository accepts any credentials. The timeout guards the
+          // The api.user.login fixture accepts any credentials. The timeout guards the
           // post-session FCM sync, which can stall on an emulator - navigation
           // to the demo landing happens before it, so a timeout is harmless.
           await login
@@ -162,8 +162,8 @@ tour:
   # Chapter 4 - the kitchen queue: the home shell's tab 2 (kitchen_sdk).
   # Sits here because it is the same shell tab row the two chapters above
   # walk, and it reads as the next step of the same order's life. Chained
-  # since kitchen_sdk 1.4.0 demo-gated KitchenOrdersRepositoryFacade to its
-  # own DemoKitchenOrdersRepository - before that the step would have
+  # since kitchen_sdk's demo data answers KitchenOrdersRepositoryFacade in a
+  # demo session - before that the step would have
   # captured the screen's "no orders" empty state.
   - fragment: kitchen
   # promotions_sdk's fragment is registered empty on purpose (it owns no
@@ -171,20 +171,20 @@ tour:
   # so steps land here the moment the SDK routes one.
   - fragment: promotions
   # Chapter 5 - the language sheet (comms_sdk). Fully demo-grounded: its
-  # list comes from comms_sdk's own MockSettingsRepository under
-  # --dart-define=IS_DEMO=true. It is a modal over whatever screen the tour
+  # list comes from comms_sdk's own demo fixtures in the tour build
+  # (TOUR_MODE=true). It is a modal over whatever screen the tour
   # is on, and its own second step closes it again, so it sits between the
   # in-shop chapters and the money chapters where the sheet's "every screen
   # follows" promise reads naturally.
   - fragment: comms
   # Chapter 6 - the money: revenue_sdk's /income dashboard
-  # (app_type.manager ManagerIncomeRoute). In demo builds
-  # DemoSellerStatisticsRepository serves a fictional week of store revenue
+  # (app_type.manager ManagerIncomeRoute). In demo sessions revenue_sdk's
+  # fixtures serve a fictional week of store revenue
   # so the tiles, chart and order rows render stocked.
   - fragment: revenue
   # Chapter 7 - the plan: subscriptions_sdk's /subscriptions list
-  # (ManagerSubscriptionsRoute). In demo builds its riverpod providers fall
-  # back to DemoSubscriptionsRepository, so the grid shows two plans
+  # (ManagerSubscriptionsRoute). In demo sessions subscriptions_sdk's
+  # fixtures answer its repository, so the grid shows two plans
   # without the host payment adapters.
   - fragment: subscriptions
   # Chapter 8 - the day plan: productivity_sdk's /tasks (local drift

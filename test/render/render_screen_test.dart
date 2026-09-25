@@ -28,9 +28,11 @@
 // the app-name logo and the Skip affordance, and the sheet is only ever
 // reached by tapping the page's own Login button. Chosen because it is the one
 // manager-shell surface that
-// renders FULLY POPULATED from the SDKs' own IS_DEMO fixtures with no live
-// backend: AuthSdkDependencies installs MockAuthRepository under
-// `--dart-define=IS_DEMO=true`, and every string on it resolves offline
+// renders FULLY POPULATED from the SDKs' own demo fixtures with no live
+// backend: the harness activates a demo session, AuthSdkDependencies installs
+// the real auth repository (base_sdk's DemoGatewayInterceptor answers its
+// platform calls from auth_sdk's fixtures), and every string on it resolves
+// offline
 // through base_sdk's BundledTranslations. See test/render/strip.json's notes
 // for why the manager-role screens (POS, order queue, restaurant profile) are
 // not the proof frame.
@@ -43,9 +45,8 @@
 // picture of the app, not photographing it - see buildScreen's doc comment for
 // the revision of this harness that got that wrong and what it cost.
 //
-// Run:  flutter test --dart-define=IS_DEMO=true test/render/render_screen_test.dart
-//       RENDER_SUFFIX=_draft flutter test --dart-define=IS_DEMO=true \
-//           test/render/render_screen_test.dart
+// Run:  flutter test test/render/render_screen_test.dart
+//       RENDER_SUFFIX=_draft flutter test test/render/render_screen_test.dart
 
 import 'dart:convert';
 import 'dart:io';
@@ -64,7 +65,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:base_sdk/src/constants/app_constants.dart';
 import 'package:base_sdk/src/di/base_di.dart';
 import 'package:base_sdk/src/models/response/languages_response.dart';
 import 'package:base_sdk/src/presentation/components/app_bars/app_bar_bottom_sheet.dart';
@@ -76,6 +76,7 @@ import 'package:base_sdk/src/presentation/components/buttons/second_button.dart'
 import 'package:base_sdk/src/services/app_helpers.dart';
 import 'package:base_sdk/src/services/tr_keys.dart';
 import 'package:base_sdk/src/presentation/theme/app_style.dart';
+import 'package:base_sdk/src/services/demo_session.dart';
 import 'package:base_sdk/src/services/local_storage.dart';
 
 import 'package:auth_sdk/src/common/di/auth_di.dart';
@@ -125,12 +126,13 @@ const double kFrameHeight = 844;
 
 /// The SDKs' own demo data. THIS IS THE MAIN PATH.
 ///
-/// Every SDK ships its demo fixtures and swaps them in itself behind
-/// `AppConstants.isDemo` (`bool.fromEnvironment('IS_DEMO')`). The test runs
-/// with `--dart-define=IS_DEMO=true` and calls the DI registrations in the
-/// same order the composed `main.dart` does: base first, then each feature
-/// SDK. For this screen that means auth_sdk's `MockAuthRepository` backs
-/// `loginProvider`, exactly as it does in a demo build of Manager.
+/// Every SDK ships `<cmd>.json` fixtures and registers them from its own DI.
+/// The harness activates a demo session (in [renderVariant]) and calls the DI
+/// registrations in the same order the composed `main.dart` does: base first,
+/// then each feature SDK. They register their REAL repositories, and base_sdk's
+/// DemoGatewayInterceptor answers every platform cmd from the fixtures, so
+/// `loginProvider` is backed by the same auth repository a demo session of
+/// Manager uses.
 ///
 /// Only the SDKs this screen's widget tree actually resolves are registered;
 /// the manager-role hooks (`ManagerOrdersDependencies`,
@@ -138,14 +140,14 @@ const double kFrameHeight = 844;
 /// strip.json.
 Future<void> registerDemoDependencies() async {
   assert(
-    AppConstants.isDemo,
-    'run with --dart-define=IS_DEMO=true, or the SDKs register their real '
-    'HTTP repositories and the render is of a broken, empty screen',
+    DemoSession.demoActive,
+    'demo session not active: the real repositories would call a live '
+    'backend and the render is of a broken, empty screen',
   );
   BaseSdkDependencies.register(GetIt.I);
-  AuthSdkDependencies.register(GetIt.I); // MockAuthRepository
-  UsersSdkDependencies.register(GetIt.I); // MockAddressRepository
-  CommsSdkDependencies.register(GetIt.I); // MockSettingsRepository
+  AuthSdkDependencies.register(GetIt.I);
+  UsersSdkDependencies.register(GetIt.I);
+  CommsSdkDependencies.register(GetIt.I);
 }
 
 /// EXCEPTION: device history the demo mode cannot supply.
@@ -156,7 +158,8 @@ Future<void> seedDeviceHistory(WidgetTester tester) async {}
 
 /// EXCEPTION: stub a service with no demo implementation.
 ///
-/// Empty. Everything this screen resolves has an `isDemo` path in its own SDK.
+/// Empty. Everything this screen resolves goes through the platform gateway,
+/// so its SDK's fixtures answer it.
 void registerExceptionStubs() {}
 
 /// Register sections / routes / gates.
@@ -605,6 +608,9 @@ Future<void> renderVariant(
   SharedPreferences.setMockInitialValues(<String, Object>{});
   await tester.runAsync(() async {
     await LocalStorage.init();
+    // Demo on: the mock preferences above start empty, so the persisted flag
+    // is set again for each variant. DemoGatewayInterceptor reads it.
+    await DemoSession.instance.activate();
     if (LocalStorage.getLanguage() == null) {
       await LocalStorage.setLanguageData(
         LanguageData(
