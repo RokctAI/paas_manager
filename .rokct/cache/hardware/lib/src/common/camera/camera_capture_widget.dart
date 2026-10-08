@@ -16,8 +16,10 @@ import 'dart:typed_data';
 
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:remixicon/remixicon.dart';
 
 import 'camera_capture_service.dart';
+import 'camera_permission.dart';
 
 /// A live camera preview with a shutter button, mirroring the thin-wrapper
 /// style of `MobileScannerWidget`. Emits the raw captured bytes through
@@ -42,12 +44,24 @@ class CameraCaptureWidget extends StatefulWidget {
   final Widget Function(BuildContext context, VoidCallback onCapture)?
       shutterBuilder;
 
+  /// Optional replacement for the built-in "camera access is off" notice,
+  /// shown when the user refused the camera permission. Receives whether
+  /// the refusal is permanent, a callback that asks again, and one that
+  /// opens the app's OS settings page.
+  final Widget Function(
+    BuildContext context,
+    bool permanentlyDenied,
+    VoidCallback onRetry,
+    VoidCallback onOpenSettings,
+  )? permissionDeniedBuilder;
+
   const CameraCaptureWidget({
     super.key,
     required this.onCaptured,
     this.service,
     this.overlay,
     this.shutterBuilder,
+    this.permissionDeniedBuilder,
   });
 
   @override
@@ -66,6 +80,20 @@ class _CameraCaptureWidgetState extends State<CameraCaptureWidget> {
     _ownsService = widget.service == null;
     _service = widget.service ?? DeviceCameraCaptureService();
     _initFuture = _service.initialize();
+  }
+
+  /// Asks again (the permission prompt runs inside initialize()).
+  void _retry() {
+    // The FutureBuilder only subscribes on the next frame; mark the
+    // future handled now so a refusal is not reported as unhandled first.
+    final Future<void> retry = _service.initialize()..ignore();
+    setState(() {
+      _initFuture = retry;
+    });
+  }
+
+  void _openSettings() {
+    CameraPermission.openSettings();
   }
 
   @override
@@ -96,6 +124,20 @@ class _CameraCaptureWidgetState extends State<CameraCaptureWidget> {
       builder: (context, snapshot) {
         if (snapshot.connectionState != ConnectionState.done) {
           return const Center(child: CircularProgressIndicator());
+        }
+        final error = snapshot.error;
+        if (error is CameraPermissionDeniedException) {
+          return widget.permissionDeniedBuilder?.call(
+                context,
+                error.permanentlyDenied,
+                _retry,
+                _openSettings,
+              ) ??
+              _PermissionDeniedNotice(
+                permanentlyDenied: error.permanentlyDenied,
+                onRetry: _retry,
+                onOpenSettings: _openSettings,
+              );
         }
         if (snapshot.hasError || _service.controller == null) {
           return Center(
@@ -130,7 +172,63 @@ class _CameraCaptureWidgetState extends State<CameraCaptureWidget> {
               height: 20,
               child: CircularProgressIndicator(strokeWidth: 2),
             )
-          : const Icon(Icons.camera_alt),
+          : const Icon(Remix.camera_fill),
+    );
+  }
+}
+
+/// The built-in notice for a refused camera permission: what happened, a
+/// link to the app's settings page, and (while the OS will still show the
+/// prompt) a way to ask again.
+class _PermissionDeniedNotice extends StatelessWidget {
+  final bool permanentlyDenied;
+  final VoidCallback onRetry;
+  final VoidCallback onOpenSettings;
+
+  const _PermissionDeniedNotice({
+    required this.permanentlyDenied,
+    required this.onRetry,
+    required this.onOpenSettings,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Icon(Remix.camera_off_line, size: 40),
+            const SizedBox(height: 12),
+            Text(
+              permanentlyDenied
+                  ? 'Camera access is turned off. Allow it in Settings to '
+                      'take a photo.'
+                  : 'Camera access is needed to take a photo.',
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 16),
+            Wrap(
+              spacing: 8,
+              alignment: WrapAlignment.center,
+              children: [
+                if (!permanentlyDenied)
+                  OutlinedButton(
+                    key: const Key('camera-permission-retry'),
+                    onPressed: onRetry,
+                    child: const Text('Try again'),
+                  ),
+                FilledButton(
+                  key: const Key('camera-permission-open-settings'),
+                  onPressed: onOpenSettings,
+                  child: const Text('Open settings'),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

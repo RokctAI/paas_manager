@@ -45,10 +45,10 @@ packages:
     dependency: transitive
     description:
       name: archive
-      sha256: cb6a278ef2dbb298455e1a713bda08524a175630ec643a242c399c932a0a1f7d
+      sha256: "6c5bcd986e06b94e3c40244af471750840a3d2341d1f9763a1100a14add517b4"
       url: "https://pub.dev"
     source: hosted
-    version: "3.6.1"
+    version: "4.3.0"
   args:
     dependency: transitive
     description:
@@ -127,7 +127,7 @@ packages:
       path: ".rokct/cache/auth"
       relative: true
     source: path
-    version: "1.0.1"
+    version: "1.16.6"
   auto_route:
     dependency: "direct main"
     description:
@@ -158,7 +158,7 @@ packages:
       path: ".rokct/cache/base"
       relative: true
     source: path
-    version: "1.0.0"
+    version: "1.83.5"
   battery_plus:
     dependency: transitive
     description:
@@ -181,7 +181,7 @@ packages:
       path: ".rokct/cache/booking"
       relative: true
     source: path
-    version: "1.1.0"
+    version: "1.2.1"
   boolean_selector:
     dependency: transitive
     description:
@@ -268,7 +268,7 @@ packages:
       path: ".rokct/cache/calc"
       relative: true
     source: path
-    version: "1.1.0"
+    version: "1.1.3"
   calendar_date_picker2:
     dependency: "direct main"
     description:
@@ -321,10 +321,10 @@ packages:
     dependency: transitive
     description:
       name: characters
-      sha256: f71061c654a3380576a52b451dd5532377954cf9dbd272a78fc8479606670803
+      sha256: faf38497bda5ead2a8c7615f4f7939df04333478bf32e4173fcb06d428b5716b
       url: "https://pub.dev"
     source: hosted
-    version: "1.4.0"
+    version: "1.4.1"
   charts_common:
     dependency: transitive
     description:
@@ -413,7 +413,7 @@ packages:
       path: ".rokct/cache/comms"
       relative: true
     source: path
-    version: "1.0.0"
+    version: "1.22.2"
   confetti:
     dependency: transitive
     description:
@@ -785,6 +785,21 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.1.0"
+  flutter_app_group_directory:
+    dependency: transitive
+    description:
+      name: flutter_app_group_directory
+      sha256: "680ef9b2dee84c237cd7bb7fc78bc45867b32556a8a5f0de61278078b9fefd05"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.0"
+  flutter_braintree:
+    dependency: transitive
+    description:
+      path: ".rokct/cache/payments/third_party/flutter_braintree"
+      relative: true
+    source: path
+    version: "4.0.0"
   flutter_cache_manager:
     dependency: transitive
     description:
@@ -958,14 +973,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.23"
-  flutter_pos_printer_platform_image_3:
+  flutter_pos_printer_platform_image_3_sdt:
     dependency: transitive
     description:
-      name: flutter_pos_printer_platform_image_3
-      sha256: d640f9337bb929182784d99b938eb54799787e6093905dbbe40de34c20881694
+      name: flutter_pos_printer_platform_image_3_sdt
+      sha256: "57092b2cbaa888c970b42996b97e3ed335ee4517854ba50a21d0d6ed1159faa7"
       url: "https://pub.dev"
     source: hosted
-    version: "1.2.3"
+    version: "1.2.12"
   flutter_rating_bar:
     dependency: transitive
     description:
@@ -1109,6 +1124,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  gbk_codec:
+    dependency: transitive
+    description:
+      name: gbk_codec
+      sha256: "3af5311fc9393115e3650ae6023862adf998051a804a08fb804f042724999f61"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.4.0"
   geocoding:
     dependency: "direct main"
     description:
@@ -1356,7 +1379,15 @@ packages:
       path: ".rokct/cache/hardware"
       relative: true
     source: path
-    version: "1.0.0"
+    version: "1.1.2"
+  hex:
+    dependency: transitive
+    description:
+      name: hex
+      sha256: "4e7cd54e4b59ba026432a6be2dd9d96e4c5205725194997193bf871703b82c4a"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.2.0"
   hms_sdk:
     dependency: "direct main"
     description:
@@ -1424,10 +1455,10 @@ packages:
     dependency: "direct main"
     description:
       name: image
-      sha256: f31d52537dc417fdcde36088fdf11d191026fd5e4fae742491ebd40e5a8bea7d
+      sha256: a1e7f4951e538a568e14b856702afc9ae1d2f4b202daced8d22c1b9cd211ce89
       url: "https://pub.dev"
     source: hosted
-    version: "4.3.0"
+    version: "4.10.1"
   image_cropper:
     dependency: transitive
     description:
@@ -1516,14 +1547,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.2.1+1"
-  image_v3:
-    dependency: transitive
-    description:
-      name: image_v3
-      sha256: dd9f790f2397dd243a74e606a57780e03e2fb67f372baf587e7780c37bd0258d
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.3.0"
   integration_test:
     dependency: "direct dev"
     description: flutter
@@ -1583,7 +1606,7 @@ packages:
       path: ".rokct/cache/kitchen"
       relative: true
     source: path
-    version: "1.3.0"
+    version: "1.5.3"
   leak_tracker:
     dependency: transitive
     description:
@@ -1632,6 +1655,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.2"
+  live_activities:
+    dependency: transitive
+    description:
+      name: live_activities
+      sha256: "30a77e91918585d904c73ce9b96e6553e2d2d958b6059c23a0957277c95522bf"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.4.3"
   location:
     dependency: transitive
     description:
@@ -1668,48 +1699,48 @@ packages:
     dependency: "direct main"
     description:
       name: lottie
-      sha256: "6a24ade5d3d918c306bb1c21a6b9a04aab0489d51a2582522eea820b4093b62b"
+      sha256: "0bd56a8c5c2944386313588408bf93a379e6fca69f736d585c538e35e72ccd5c"
       url: "https://pub.dev"
     source: hosted
-    version: "3.1.2"
+    version: "3.6.1"
   map_sdk:
     dependency: "direct main"
     description:
       path: ".rokct/cache/map"
       relative: true
     source: path
-    version: "1.1.0"
+    version: "1.5.0"
   matcher:
     dependency: transitive
     description:
       name: matcher
-      sha256: dc58c723c3c24bf8d3e2d3ad3f2f9d7bd9cf43ec6feaa64181775e60190153f2
+      sha256: "31bd099b47c10cd1aeb55146a2d46ce0277630ecef3f7dae54ad7873f36696cd"
       url: "https://pub.dev"
     source: hosted
-    version: "0.12.17"
+    version: "0.12.20"
   material_color_utilities:
     dependency: transitive
     description:
       name: material_color_utilities
-      sha256: f7142bb1154231d7ea5f96bc7bde4bda2a0945d2806bb11670e30b850d56bdec
+      sha256: "9c337007e82b1889149c82ed242ed1cb24a66044e30979c44912381e9be4c48b"
       url: "https://pub.dev"
     source: hosted
-    version: "0.11.1"
+    version: "0.13.0"
   merchants_sdk:
     dependency: "direct main"
     description:
       path: ".rokct/cache/merchants"
       relative: true
     source: path
-    version: "1.5.0"
+    version: "1.33.3"
   meta:
     dependency: transitive
     description:
       name: meta
-      sha256: "23f08335362185a5ea2ad3a4e597f1375e78bce8a040df5c600c8d3552ef2394"
+      sha256: "307249ce4ff29d58a18e97f6345f539382eb9c9c29ecda628900f31de0443dd9"
       url: "https://pub.dev"
     source: hosted
-    version: "1.17.0"
+    version: "1.19.0"
   mime:
     dependency: transitive
     description:
@@ -1730,18 +1761,18 @@ packages:
     dependency: transitive
     description:
       name: network_info_plus
-      sha256: "4601b815b1c6a46d84839f65cd774a7d999738471d910fae00d813e9e98b04e1"
+      sha256: f926b2ba86aa0086a0dfbb9e5072089bc213d854135c1712f1d29fc89ba3c877
       url: "https://pub.dev"
     source: hosted
-    version: "4.1.0+1"
+    version: "6.1.4"
   network_info_plus_platform_interface:
     dependency: transitive
     description:
       name: network_info_plus_platform_interface
-      sha256: "881f5029c5edaf19c616c201d3d8b366c5b1384afd5c1da5a49e4345de82fb8b"
+      sha256: "7e7496a8a9d8136859b8881affc613c4a21304afeb6c324bcefc4bd0aff6b94b"
       url: "https://pub.dev"
     source: hosted
-    version: "1.1.3"
+    version: "2.0.2"
   nm:
     dependency: transitive
     description:
@@ -1764,7 +1795,7 @@ packages:
       path: ".rokct/cache/orders"
       relative: true
     source: path
-    version: "1.4.1"
+    version: "1.29.2"
   osm_nominatim:
     dependency: "direct main"
     description:
@@ -1875,7 +1906,7 @@ packages:
       path: ".rokct/cache/payments"
       relative: true
     source: path
-    version: "1.0.0"
+    version: "1.3.3"
   permission_handler:
     dependency: "direct main"
     description:
@@ -1972,6 +2003,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.5.1"
+  posix:
+    dependency: transitive
+    description:
+      name: posix
+      sha256: bc1bad54ad2b735816e31f8d4600cfde6c7839975085ddfbca48b6c9f7c4044e
+      url: "https://pub.dev"
+    source: hosted
+    version: "6.5.2"
   pretty_qr_code:
     dependency: transitive
     description:
@@ -2009,21 +2048,21 @@ packages:
       path: ".rokct/cache/productivity"
       relative: true
     source: path
-    version: "1.5.4"
+    version: "1.7.6"
   products_sdk:
     dependency: "direct main"
     description:
       path: ".rokct/cache/products"
       relative: true
     source: path
-    version: "1.5.0"
+    version: "1.12.5"
   promotions_sdk:
     dependency: "direct main"
     description:
       path: ".rokct/cache/promotions"
       relative: true
     source: path
-    version: "1.1.0"
+    version: "1.3.1"
   proste_indexed_stack:
     dependency: "direct main"
     description:
@@ -2078,7 +2117,7 @@ packages:
       path: ".rokct/cache/revenue"
       relative: true
     source: path
-    version: "1.0.0"
+    version: "1.14.1"
   riverpod:
     dependency: transitive
     description:
@@ -2091,10 +2130,10 @@ packages:
     dependency: transitive
     description:
       name: rxdart
-      sha256: "5c3004a4a8dbb94bd4bf5412a4def4acdaa12e12f269737a5751369e12d1a962"
+      sha256: "0c7c0cedd93788d996e33041ffecda924cc54389199cde4e6a34b440f50044cb"
       url: "https://pub.dev"
     source: hosted
-    version: "0.28.0"
+    version: "0.27.7"
   sanitize_html:
     dependency: transitive
     description:
@@ -2386,7 +2425,7 @@ packages:
       path: ".rokct/cache/subscriptions"
       relative: true
     source: path
-    version: "1.0.0"
+    version: "1.6.2"
   sync_http:
     dependency: transitive
     description:
@@ -2430,10 +2469,10 @@ packages:
     dependency: transitive
     description:
       name: test_api
-      sha256: ab2726c1a94d3176a45960b6234466ec367179b87dd74f1611adb1f3b5fb9d55
+      sha256: "2a122cbe059f8b610d3a5415f42e255b6c17b1f21eee1d960f31080237fb4f11"
       url: "https://pub.dev"
     source: hosted
-    version: "0.7.7"
+    version: "0.7.12"
   timezone:
     dependency: transitive
     description:
@@ -2544,7 +2583,7 @@ packages:
       path: ".rokct/cache/users"
       relative: true
     source: path
-    version: "1.0.1"
+    version: "1.5.1"
   uuid:
     dependency: transitive
     description:
@@ -2581,10 +2620,10 @@ packages:
     dependency: transitive
     description:
       name: vector_math
-      sha256: d530bd74fea330e6e364cda7a85019c434070188383e1cd8d9777ee586914c5b
+      sha256: "92b9910f66ed1057fd4da7b040ae7c74cafacf885bdc81be496928d5049b032d"
       url: "https://pub.dev"
     source: hosted
-    version: "2.2.0"
+    version: "2.4.3"
   visibility_detector:
     dependency: transitive
     description:
@@ -2742,7 +2781,7 @@ packages:
       path: ".rokct/cache/zones"
       relative: true
     source: path
-    version: "1.1.1"
+    version: "1.7.0"
 sdks:
-  dart: ">=3.10.0 <4.0.0"
-  flutter: ">=3.38.5"
+  dart: ">=3.11.0 <4.0.0"
+  flutter: ">=3.41.0"

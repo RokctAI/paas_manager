@@ -37,6 +37,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:productivity_sdk/src/common/models/data/vision_data.dart';
+import 'package:remixicon/remixicon.dart';
 
 /// `ToDo.date` as the check line prints it: "5 Sep".
 final DateFormat kTodoDateFormat = DateFormat('d MMM');
@@ -53,29 +54,49 @@ class WeeklyCheckInStrip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // A BuildContext lookup for the mode, not the app-wide AppStyle.isDark
+    // static (Ray, 2026-09-19: "glance doesnt change test immediately
+    // untill you come back if you switched theme mode" — the same defect,
+    // found here by the audit that followed).
+    //
+    // This strip resolved nothing from the context: every colour came from
+    // AppStyle's statics, which are not an inherited widget, so a
+    // theme-mode change scheduled no rebuild of it. And
+    // personal_mastery_page.dart mounts it `const`, so the flip provably
+    // cannot reach it through a parent rebuild either — the same
+    // const-child boundary the shared glance card sat behind. Reading the
+    // inherited theme here makes this element a dependent, so the mode
+    // change itself restyles the strip while the page is on screen; the
+    // card and stroke below ride the same rebuild and resolve afresh.
+    //
+    // The card fill and the hairline now name that mode too. They were
+    // left on AppStyle's app-wide statics when this strip was first
+    // fixed because no Brightness-taking seam existed for either role —
+    // the two reads that the rebuild happened to carry rather than the
+    // two the widget asked for. [AppStyle.cardAltFor] and
+    // [AppStyle.subtleStrokeFor] answer with the same two values each
+    // static resolves to, for the mode the theme reports.
+    final Brightness brightness = Theme.of(context).brightness;
+
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 10.h),
       decoration: BoxDecoration(
-        color: AppStyle.cardDarkAlt,
+        color: AppStyle.cardAltFor(brightness),
         borderRadius: BorderRadius.circular(12.r),
-        border: Border.all(color: AppStyle.strokeDarkSubtle),
+        border: Border.all(color: AppStyle.subtleStrokeFor(brightness)),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Icon(
-            Icons.notifications_none_outlined,
-            size: 16.r,
-            color: AppStyle.primary,
-          ),
+          Icon(Remix.notification_line, size: 16.r, color: AppStyle.primary),
           10.horizontalSpace,
           Expanded(
             child: Wrap(
               spacing: 16.w,
               runSpacing: 4.h,
               children: <Widget>[
-                _fact(mondayLabel, mondayFact),
-                _fact(fridayLabel, fridayFact),
+                _fact(mondayLabel, mondayFact, brightness),
+                _fact(fridayLabel, fridayFact, brightness),
               ],
             ),
           ),
@@ -84,19 +105,25 @@ class WeeklyCheckInStrip extends StatelessWidget {
     );
   }
 
-  Widget _fact(String label, String fact) {
+  /// The mode arrives as a [Brightness] read from the inherited theme in
+  /// [build], never from AppStyle's app-wide flag: the ink roles come from
+  /// AppStyle's mode seams for the mode the theme reports.
+  Widget _fact(String label, String fact, Brightness brightness) {
     return Text.rich(
       TextSpan(
         children: <InlineSpan>[
           TextSpan(
             text: label,
-            style: AppStyle.interSemi(size: 12, color: AppStyle.textPrimary),
+            style: AppStyle.interSemi(
+              size: 12,
+              color: AppStyle.inkFor(brightness),
+            ),
           ),
           TextSpan(
             text: ' · $fact',
             style: AppStyle.interNormal(
               size: 12,
-              color: AppStyle.textDarkSecondary,
+              color: AppStyle.secondaryInkFor(brightness),
             ),
           ),
         ],
@@ -128,12 +155,18 @@ class TodoCheckLine extends StatelessWidget {
               shape: BoxShape.circle,
               color: closed ? AppStyle.green : AppStyle.transparent,
               border: Border.all(
-                color: closed ? AppStyle.green : AppStyle.strokeDark,
+                color: closed
+                    ? AppStyle.green
+                    : AppStyle.strokeFor(Theme.of(context).brightness),
                 width: 1.4,
               ),
             ),
             child: closed
-                ? Icon(Icons.check, size: 11.r, color: AppStyle.blackColor)
+                ? Icon(
+                    Remix.check_line,
+                    size: 11.r,
+                    color: AppStyle.inkFor(Theme.of(context).brightness),
+                  )
                 : null,
           ),
           8.horizontalSpace,
@@ -145,8 +178,8 @@ class TodoCheckLine extends StatelessWidget {
               style: AppStyle.interNormal(
                 size: 12,
                 color: dim
-                    ? AppStyle.textDarkFaint
-                    : AppStyle.textDarkSecondary,
+                    ? AppStyle.faintFor(Theme.of(context).brightness)
+                    : AppStyle.secondaryInkFor(Theme.of(context).brightness),
               ),
             ),
           ),
@@ -156,7 +189,7 @@ class TodoCheckLine extends StatelessWidget {
               kTodoDateFormat.format(todo.date!),
               style: AppStyle.interNormal(
                 size: 11,
-                color: AppStyle.textDarkFaint,
+                color: AppStyle.faintFor(Theme.of(context).brightness),
               ),
             ),
           ],
@@ -191,7 +224,7 @@ class MasteryGoalCard extends StatelessWidget {
       key: cardKey(goal.name),
       padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.h),
       decoration: BoxDecoration(
-        color: AppStyle.cardDark,
+        color: AppStyle.cardFor(Theme.of(context).brightness),
         borderRadius: BorderRadius.circular(14.r),
       ),
       child: Column(
@@ -208,11 +241,7 @@ class MasteryGoalCard extends StatelessWidget {
                   shape: BoxShape.circle,
                   color: AppStyle.blue.withValues(alpha: 0.18),
                 ),
-                child: Icon(
-                  Icons.person_outline,
-                  size: 20.r,
-                  color: AppStyle.blue,
-                ),
+                child: Icon(Remix.user_line, size: 20.r, color: AppStyle.blue),
               ),
               10.horizontalSpace,
               Expanded(
@@ -226,7 +255,7 @@ class MasteryGoalCard extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                       style: AppStyle.interSemi(
                         size: 15,
-                        color: AppStyle.textPrimary,
+                        color: AppStyle.inkFor(Theme.of(context).brightness),
                       ),
                     ),
                     if (goal.description != null) ...<Widget>[
@@ -237,7 +266,9 @@ class MasteryGoalCard extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                         style: AppStyle.interNormal(
                           size: 12,
-                          color: AppStyle.textDarkSecondary,
+                          color: AppStyle.secondaryInkFor(
+                            Theme.of(context).brightness,
+                          ),
                         ),
                       ),
                     ],
@@ -254,7 +285,9 @@ class MasteryGoalCard extends StatelessWidget {
                         : AppStyle.transparent,
                     borderRadius: BorderRadius.circular(20.r),
                     border: Border.all(
-                      color: complete ? AppStyle.green : AppStyle.strokeDark,
+                      color: complete
+                          ? AppStyle.green
+                          : AppStyle.strokeFor(Theme.of(context).brightness),
                     ),
                   ),
                   child: Text(
@@ -263,7 +296,9 @@ class MasteryGoalCard extends StatelessWidget {
                       size: 11,
                       color: complete
                           ? AppStyle.green
-                          : AppStyle.textDarkSecondary,
+                          : AppStyle.secondaryInkFor(
+                              Theme.of(context).brightness,
+                            ),
                     ),
                   ),
                 ),
@@ -278,13 +313,18 @@ class MasteryGoalCard extends StatelessWidget {
                 height: 3.h,
                 child: LinearProgressIndicator(
                   value: goal.progress ?? 0,
-                  backgroundColor: AppStyle.strokeDarkSubtle,
+                  backgroundColor: AppStyle.subtleStrokeFor(
+                    Theme.of(context).brightness,
+                  ),
                   valueColor: AlwaysStoppedAnimation<Color>(bar),
                 ),
               ),
             ),
             8.verticalSpace,
-            Divider(height: 1, color: AppStyle.strokeDarkSubtle),
+            Divider(
+              height: 1,
+              color: AppStyle.subtleStrokeFor(Theme.of(context).brightness),
+            ),
             6.verticalSpace,
             for (final MasteryTodo todo in goal.todos!)
               TodoCheckLine(todo: todo),
@@ -315,7 +355,10 @@ class MasteryGoalList extends StatelessWidget {
       return Center(
         child: Text(
           emptyLabel,
-          style: AppStyle.interNormal(size: 13, color: AppStyle.textDarkFaint),
+          style: AppStyle.interNormal(
+            size: 13,
+            color: AppStyle.faintFor(Theme.of(context).brightness),
+          ),
         ),
       );
     }

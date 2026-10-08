@@ -1,6 +1,6 @@
 name: productivity_sdk
 description: "Team task tracking, checklists, workflow management, and operational action items."
-version: 1.5.4
+version: 1.7.6
 publish_to: 'none'
 environment:
   sdk: '>=3.10.0 <4.0.0'
@@ -22,6 +22,8 @@ dependencies:
   # it must be declared here or the composed app fails to build.
   table_calendar: ^3.1.0
   drift: ^2.19.0
+  # Icon set standard (Remixicon); lib/ and the installed templates use it.
+  remixicon: ^1.4.1
   base_sdk:
     path: ../base
 dev_dependencies:

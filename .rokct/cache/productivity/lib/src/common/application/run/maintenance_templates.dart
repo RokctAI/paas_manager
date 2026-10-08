@@ -132,6 +132,11 @@ enum MaintenanceTemplate {
   /// The seven-stage megaChar backwash plus readings and photo.
   megaCharMaintenance,
 
+  /// The pH fix vessel's manual service: the megaChar backwash's seven
+  /// stages, readings and photo, verbatim — the same manual vessel cap
+  /// (Ray, 2026-10-04: "a manual cap like the megachar vessel").
+  phFixMaintenance,
+
   /// The 47a list's replacement reminders: an ordinary task with a due
   /// date from the plant record and no step list, because no source
   /// gives one and none is invented here.
@@ -146,6 +151,7 @@ extension MaintenanceTemplateX on MaintenanceTemplate {
     MaintenanceTemplate.plantSetup => MaintenanceSetup.template,
     MaintenanceTemplate.softenerMaintenance => 'softener_maintenance',
     MaintenanceTemplate.megaCharMaintenance => 'megachar_maintenance',
+    MaintenanceTemplate.phFixMaintenance => 'phfix_maintenance',
     MaintenanceTemplate.preFilterReplacement => 'pre_filter_replacement',
     MaintenanceTemplate.roFilterReplacement => 'ro_filter_replacement',
     MaintenanceTemplate.membraneReplacement => 'membrane_replacement',
@@ -158,6 +164,7 @@ extension MaintenanceTemplateX on MaintenanceTemplate {
     MaintenanceTemplate.plantSetup => MaintenanceSetup.title,
     MaintenanceTemplate.softenerMaintenance => 'Softener Maintenance',
     MaintenanceTemplate.megaCharMaintenance => 'Megachar Maintenance',
+    MaintenanceTemplate.phFixMaintenance => 'Phfix vessel maintenance',
     MaintenanceTemplate.preFilterReplacement => 'Pre-filter replacement',
     MaintenanceTemplate.roFilterReplacement => 'RO filter replacement',
     MaintenanceTemplate.membraneReplacement => 'RO membrane replacement',
@@ -170,7 +177,8 @@ extension MaintenanceTemplateX on MaintenanceTemplate {
   bool get isGuided => switch (this) {
     MaintenanceTemplate.plantSetup ||
     MaintenanceTemplate.softenerMaintenance ||
-    MaintenanceTemplate.megaCharMaintenance => true,
+    MaintenanceTemplate.megaCharMaintenance ||
+    MaintenanceTemplate.phFixMaintenance => true,
     _ => false,
   };
 }
@@ -188,6 +196,20 @@ class MaintenanceTemplates {
 
   /// Whether [template] may be chosen with [plant] as the record: setup
   /// always, the rest only once the plant is described (47d).
+  /// The template keys the BACKEND offers to this account. Empty until a
+  /// server says otherwise, and while it is empty the compose lane draws
+  /// no "From template" row at all (Ray, 2026-10-04: templates "can only
+  /// be there if backend"). The templates themselves stay — the seed
+  /// builds its tasks from them — they are just not surfaced locally.
+  static Set<String> backendKeys = const <String>{};
+
+  /// The templates the chooser shows: those the backend offers, in
+  /// [all]'s order. Empty when the backend offers none.
+  static List<MaintenanceTemplate> get surfaced => <MaintenanceTemplate>[
+    for (final MaintenanceTemplate t in all)
+      if (backendKeys.contains(t.key)) t,
+  ];
+
   static bool isOffered(MaintenanceTemplate template, PlantRecord? plant) =>
       !template.needsPlant || plant != null;
 
@@ -212,6 +234,7 @@ class MaintenanceTemplates {
       case MaintenanceTemplate.softenerMaintenance:
         return _serviceRun(kSoftenerStages, spec);
       case MaintenanceTemplate.megaCharMaintenance:
+      case MaintenanceTemplate.phFixMaintenance:
         return _serviceRun(kMegaCharStages, spec);
       case MaintenanceTemplate.preFilterReplacement:
       case MaintenanceTemplate.roFilterReplacement:
@@ -237,6 +260,7 @@ class MaintenanceTemplates {
         return null;
       case MaintenanceTemplate.softenerMaintenance:
       case MaintenanceTemplate.megaCharMaintenance:
+      case MaintenanceTemplate.phFixMaintenance:
         return day(now);
       case MaintenanceTemplate.preFilterReplacement:
         return _after(plant?.preFilterInstalledOn, kPreFilterDays, day(now));
@@ -253,7 +277,8 @@ class MaintenanceTemplates {
   /// and repeat by the next template pick.
   static String recurrence(MaintenanceTemplate template) => switch (template) {
     MaintenanceTemplate.softenerMaintenance ||
-    MaintenanceTemplate.megaCharMaintenance => 'Weekly',
+    MaintenanceTemplate.megaCharMaintenance ||
+    MaintenanceTemplate.phFixMaintenance => 'Weekly',
     MaintenanceTemplate.preFilterReplacement => 'Monthly',
     _ => 'None',
   };

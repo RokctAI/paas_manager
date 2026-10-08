@@ -39,7 +39,7 @@ class BookingManagerHubSection extends StatelessWidget {
           title: AppHelpers.getTranslation(BookingTrKeys.reservations),
           // The shared default is pinned black for white-sheet hosts; the
           // manager profile host is dark-surfaced.
-          titleColor: AppStyle.textPrimary,
+          titleColor: AppStyle.inkFor(Theme.of(context).brightness),
         ),
         20.verticalSpace,
         _HubRow(
@@ -81,18 +81,18 @@ class _HubRow extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
         child: Row(
           children: [
-            Icon(icon, size: 22.r, color: AppStyle.textPrimary),
+            Icon(icon, size: 22.r, color: AppStyle.inkFor(Theme.of(context).brightness)),
             14.horizontalSpace,
             Expanded(
               child: Text(
                 title,
-                style: AppStyle.interNormal(size: 15, color: AppStyle.textPrimary),
+                style: AppStyle.interNormal(size: 15, color: AppStyle.inkFor(Theme.of(context).brightness)),
               ),
             ),
             Icon(
               Remix.arrow_right_s_line,
               size: 20.r,
-              color: AppStyle.textDarkSecondary,
+              color: AppStyle.secondaryInkFor(Theme.of(context).brightness),
             ),
           ],
         ),

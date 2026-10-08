@@ -1,0 +1,829 @@
+{
+  "$demo_select": {
+    "by": "payload.status",
+    "cases": {
+      "accepted": {
+        "$demo_select": {
+          "by": "payload.limit_start",
+          "cases": {
+            "20": {
+              "orders": [],
+              "counts": {
+                "all": 5,
+                "accepted": 2,
+                "cooking": 2,
+                "ready": 1,
+                "canceled": 0
+              },
+              "total": 2
+            },
+            "40": {
+              "orders": [],
+              "counts": {
+                "all": 5,
+                "accepted": 2,
+                "cooking": 2,
+                "ready": 1,
+                "canceled": 0
+              },
+              "total": 2
+            },
+            "60": {
+              "orders": [],
+              "counts": {
+                "all": 5,
+                "accepted": 2,
+                "cooking": 2,
+                "ready": 1,
+                "canceled": 0
+              },
+              "total": 2
+            },
+            "80": {
+              "orders": [],
+              "counts": {
+                "all": 5,
+                "accepted": 2,
+                "cooking": 2,
+                "ready": 1,
+                "canceled": 0
+              },
+              "total": 2
+            },
+            "100": {
+              "orders": [],
+              "counts": {
+                "all": 5,
+                "accepted": 2,
+                "cooking": 2,
+                "ready": 1,
+                "canceled": 0
+              },
+              "total": 2
+            },
+            "120": {
+              "orders": [],
+              "counts": {
+                "all": 5,
+                "accepted": 2,
+                "cooking": 2,
+                "ready": 1,
+                "canceled": 0
+              },
+              "total": 2
+            },
+            "140": {
+              "orders": [],
+              "counts": {
+                "all": 5,
+                "accepted": 2,
+                "cooking": 2,
+                "ready": 1,
+                "canceled": 0
+              },
+              "total": 2
+            },
+            "160": {
+              "orders": [],
+              "counts": {
+                "all": 5,
+                "accepted": 2,
+                "cooking": 2,
+                "ready": 1,
+                "canceled": 0
+              },
+              "total": 2
+            },
+            "180": {
+              "orders": [],
+              "counts": {
+                "all": 5,
+                "accepted": 2,
+                "cooking": 2,
+                "ready": 1,
+                "canceled": 0
+              },
+              "total": 2
+            },
+            "200": {
+              "orders": [],
+              "counts": {
+                "all": 5,
+                "accepted": 2,
+                "cooking": 2,
+                "ready": 1,
+                "canceled": 0
+              },
+              "total": 2
+            }
+          },
+          "default": {
+            "orders": [
+              {
+                "id": "1041",
+                "status": "accepted",
+                "delivery_type": "delivery",
+                "creation": "$now_iso",
+                "modified": "$now_iso",
+                "items": [
+                  {
+                    "id": "1",
+                    "title": "Peri-peri chicken wrap",
+                    "quantity": 2,
+                    "prep_status": "new"
+                  },
+                  {
+                    "id": "2",
+                    "title": "Chakalaka fries",
+                    "quantity": 1,
+                    "prep_status": "new"
+                  }
+                ],
+                "note": "No chilli on the second wrap, please."
+              },
+              {
+                "id": "1040",
+                "status": "accepted",
+                "delivery_type": "dine_in",
+                "creation": "$now_iso",
+                "modified": "$now_iso",
+                "items": [
+                  {
+                    "id": "3",
+                    "title": "Bunny chow (quarter)",
+                    "quantity": 2,
+                    "prep_status": "new"
+                  }
+                ]
+              }
+            ],
+            "counts": {
+              "all": 5,
+              "accepted": 2,
+              "cooking": 2,
+              "ready": 1,
+              "canceled": 0
+            },
+            "total": 2
+          }
+        }
+      },
+      "cooking": {
+        "$demo_select": {
+          "by": "payload.limit_start",
+          "cases": {
+            "20": {
+              "orders": [],
+              "counts": {
+                "all": 5,
+                "accepted": 2,
+                "cooking": 2,
+                "ready": 1,
+                "canceled": 0
+              },
+              "total": 2
+            },
+            "40": {
+              "orders": [],
+              "counts": {
+                "all": 5,
+                "accepted": 2,
+                "cooking": 2,
+                "ready": 1,
+                "canceled": 0
+              },
+              "total": 2
+            },
+            "60": {
+              "orders": [],
+              "counts": {
+                "all": 5,
+                "accepted": 2,
+                "cooking": 2,
+                "ready": 1,
+                "canceled": 0
+              },
+              "total": 2
+            },
+            "80": {
+              "orders": [],
+              "counts": {
+                "all": 5,
+                "accepted": 2,
+                "cooking": 2,
+                "ready": 1,
+                "canceled": 0
+              },
+              "total": 2
+            },
+            "100": {
+              "orders": [],
+              "counts": {
+                "all": 5,
+                "accepted": 2,
+                "cooking": 2,
+                "ready": 1,
+                "canceled": 0
+              },
+              "total": 2
+            },
+            "120": {
+              "orders": [],
+              "counts": {
+                "all": 5,
+                "accepted": 2,
+                "cooking": 2,
+                "ready": 1,
+                "canceled": 0
+              },
+              "total": 2
+            },
+            "140": {
+              "orders": [],
+              "counts": {
+                "all": 5,
+                "accepted": 2,
+                "cooking": 2,
+                "ready": 1,
+                "canceled": 0
+              },
+              "total": 2
+            },
+            "160": {
+              "orders": [],
+              "counts": {
+                "all": 5,
+                "accepted": 2,
+                "cooking": 2,
+                "ready": 1,
+                "canceled": 0
+              },
+              "total": 2
+            },
+            "180": {
+              "orders": [],
+              "counts": {
+                "all": 5,
+                "accepted": 2,
+                "cooking": 2,
+                "ready": 1,
+                "canceled": 0
+              },
+              "total": 2
+            },
+            "200": {
+              "orders": [],
+              "counts": {
+                "all": 5,
+                "accepted": 2,
+                "cooking": 2,
+                "ready": 1,
+                "canceled": 0
+              },
+              "total": 2
+            }
+          },
+          "default": {
+            "orders": [
+              {
+                "id": "1039",
+                "status": "cooking",
+                "delivery_type": "pickup",
+                "creation": "$now_iso",
+                "modified": "$now_iso",
+                "items": [
+                  {
+                    "id": "4",
+                    "title": "Boerewors roll",
+                    "quantity": 2,
+                    "prep_status": "cooking"
+                  }
+                ]
+              },
+              {
+                "id": "1038",
+                "status": "cooking",
+                "delivery_type": "delivery",
+                "creation": "$now_iso",
+                "modified": "$now_iso",
+                "items": [
+                  {
+                    "id": "5",
+                    "title": "Family braai platter",
+                    "quantity": 1,
+                    "prep_status": "cooking"
+                  },
+                  {
+                    "id": "6",
+                    "title": "Chakalaka fries",
+                    "quantity": 2,
+                    "prep_status": "ready"
+                  }
+                ],
+                "note": "Table by the window — running late."
+              }
+            ],
+            "counts": {
+              "all": 5,
+              "accepted": 2,
+              "cooking": 2,
+              "ready": 1,
+              "canceled": 0
+            },
+            "total": 2
+          }
+        }
+      },
+      "ready": {
+        "$demo_select": {
+          "by": "payload.limit_start",
+          "cases": {
+            "20": {
+              "orders": [],
+              "counts": {
+                "all": 5,
+                "accepted": 2,
+                "cooking": 2,
+                "ready": 1,
+                "canceled": 0
+              },
+              "total": 1
+            },
+            "40": {
+              "orders": [],
+              "counts": {
+                "all": 5,
+                "accepted": 2,
+                "cooking": 2,
+                "ready": 1,
+                "canceled": 0
+              },
+              "total": 1
+            },
+            "60": {
+              "orders": [],
+              "counts": {
+                "all": 5,
+                "accepted": 2,
+                "cooking": 2,
+                "ready": 1,
+                "canceled": 0
+              },
+              "total": 1
+            },
+            "80": {
+              "orders": [],
+              "counts": {
+                "all": 5,
+                "accepted": 2,
+                "cooking": 2,
+                "ready": 1,
+                "canceled": 0
+              },
+              "total": 1
+            },
+            "100": {
+              "orders": [],
+              "counts": {
+                "all": 5,
+                "accepted": 2,
+                "cooking": 2,
+                "ready": 1,
+                "canceled": 0
+              },
+              "total": 1
+            },
+            "120": {
+              "orders": [],
+              "counts": {
+                "all": 5,
+                "accepted": 2,
+                "cooking": 2,
+                "ready": 1,
+                "canceled": 0
+              },
+              "total": 1
+            },
+            "140": {
+              "orders": [],
+              "counts": {
+                "all": 5,
+                "accepted": 2,
+                "cooking": 2,
+                "ready": 1,
+                "canceled": 0
+              },
+              "total": 1
+            },
+            "160": {
+              "orders": [],
+              "counts": {
+                "all": 5,
+                "accepted": 2,
+                "cooking": 2,
+                "ready": 1,
+                "canceled": 0
+              },
+              "total": 1
+            },
+            "180": {
+              "orders": [],
+              "counts": {
+                "all": 5,
+                "accepted": 2,
+                "cooking": 2,
+                "ready": 1,
+                "canceled": 0
+              },
+              "total": 1
+            },
+            "200": {
+              "orders": [],
+              "counts": {
+                "all": 5,
+                "accepted": 2,
+                "cooking": 2,
+                "ready": 1,
+                "canceled": 0
+              },
+              "total": 1
+            }
+          },
+          "default": {
+            "orders": [
+              {
+                "id": "1037",
+                "status": "ready",
+                "delivery_type": "delivery",
+                "creation": "$now_iso",
+                "modified": "$now_iso",
+                "items": [
+                  {
+                    "id": "7",
+                    "title": "Gatsby (half)",
+                    "quantity": 2,
+                    "prep_status": "ready"
+                  }
+                ]
+              }
+            ],
+            "counts": {
+              "all": 5,
+              "accepted": 2,
+              "cooking": 2,
+              "ready": 1,
+              "canceled": 0
+            },
+            "total": 1
+          }
+        }
+      },
+      "canceled": {
+        "$demo_select": {
+          "by": "payload.limit_start",
+          "cases": {
+            "20": {
+              "orders": [],
+              "counts": {
+                "all": 5,
+                "accepted": 2,
+                "cooking": 2,
+                "ready": 1,
+                "canceled": 0
+              },
+              "total": 0
+            },
+            "40": {
+              "orders": [],
+              "counts": {
+                "all": 5,
+                "accepted": 2,
+                "cooking": 2,
+                "ready": 1,
+                "canceled": 0
+              },
+              "total": 0
+            },
+            "60": {
+              "orders": [],
+              "counts": {
+                "all": 5,
+                "accepted": 2,
+                "cooking": 2,
+                "ready": 1,
+                "canceled": 0
+              },
+              "total": 0
+            },
+            "80": {
+              "orders": [],
+              "counts": {
+                "all": 5,
+                "accepted": 2,
+                "cooking": 2,
+                "ready": 1,
+                "canceled": 0
+              },
+              "total": 0
+            },
+            "100": {
+              "orders": [],
+              "counts": {
+                "all": 5,
+                "accepted": 2,
+                "cooking": 2,
+                "ready": 1,
+                "canceled": 0
+              },
+              "total": 0
+            },
+            "120": {
+              "orders": [],
+              "counts": {
+                "all": 5,
+                "accepted": 2,
+                "cooking": 2,
+                "ready": 1,
+                "canceled": 0
+              },
+              "total": 0
+            },
+            "140": {
+              "orders": [],
+              "counts": {
+                "all": 5,
+                "accepted": 2,
+                "cooking": 2,
+                "ready": 1,
+                "canceled": 0
+              },
+              "total": 0
+            },
+            "160": {
+              "orders": [],
+              "counts": {
+                "all": 5,
+                "accepted": 2,
+                "cooking": 2,
+                "ready": 1,
+                "canceled": 0
+              },
+              "total": 0
+            },
+            "180": {
+              "orders": [],
+              "counts": {
+                "all": 5,
+                "accepted": 2,
+                "cooking": 2,
+                "ready": 1,
+                "canceled": 0
+              },
+              "total": 0
+            },
+            "200": {
+              "orders": [],
+              "counts": {
+                "all": 5,
+                "accepted": 2,
+                "cooking": 2,
+                "ready": 1,
+                "canceled": 0
+              },
+              "total": 0
+            }
+          },
+          "default": {
+            "orders": [],
+            "counts": {
+              "all": 5,
+              "accepted": 2,
+              "cooking": 2,
+              "ready": 1,
+              "canceled": 0
+            },
+            "total": 0
+          }
+        }
+      }
+    },
+    "default": {
+      "$demo_select": {
+        "by": "payload.limit_start",
+        "cases": {
+          "20": {
+            "orders": [],
+            "counts": {
+              "all": 5,
+              "accepted": 2,
+              "cooking": 2,
+              "ready": 1,
+              "canceled": 0
+            },
+            "total": 5
+          },
+          "40": {
+            "orders": [],
+            "counts": {
+              "all": 5,
+              "accepted": 2,
+              "cooking": 2,
+              "ready": 1,
+              "canceled": 0
+            },
+            "total": 5
+          },
+          "60": {
+            "orders": [],
+            "counts": {
+              "all": 5,
+              "accepted": 2,
+              "cooking": 2,
+              "ready": 1,
+              "canceled": 0
+            },
+            "total": 5
+          },
+          "80": {
+            "orders": [],
+            "counts": {
+              "all": 5,
+              "accepted": 2,
+              "cooking": 2,
+              "ready": 1,
+              "canceled": 0
+            },
+            "total": 5
+          },
+          "100": {
+            "orders": [],
+            "counts": {
+              "all": 5,
+              "accepted": 2,
+              "cooking": 2,
+              "ready": 1,
+              "canceled": 0
+            },
+            "total": 5
+          },
+          "120": {
+            "orders": [],
+            "counts": {
+              "all": 5,
+              "accepted": 2,
+              "cooking": 2,
+              "ready": 1,
+              "canceled": 0
+            },
+            "total": 5
+          },
+          "140": {
+            "orders": [],
+            "counts": {
+              "all": 5,
+              "accepted": 2,
+              "cooking": 2,
+              "ready": 1,
+              "canceled": 0
+            },
+            "total": 5
+          },
+          "160": {
+            "orders": [],
+            "counts": {
+              "all": 5,
+              "accepted": 2,
+              "cooking": 2,
+              "ready": 1,
+              "canceled": 0
+            },
+            "total": 5
+          },
+          "180": {
+            "orders": [],
+            "counts": {
+              "all": 5,
+              "accepted": 2,
+              "cooking": 2,
+              "ready": 1,
+              "canceled": 0
+            },
+            "total": 5
+          },
+          "200": {
+            "orders": [],
+            "counts": {
+              "all": 5,
+              "accepted": 2,
+              "cooking": 2,
+              "ready": 1,
+              "canceled": 0
+            },
+            "total": 5
+          }
+        },
+        "default": {
+          "orders": [
+            {
+              "id": "1041",
+              "status": "accepted",
+              "delivery_type": "delivery",
+              "creation": "$now_iso",
+              "modified": "$now_iso",
+              "items": [
+                {
+                  "id": "1",
+                  "title": "Peri-peri chicken wrap",
+                  "quantity": 2,
+                  "prep_status": "new"
+                },
+                {
+                  "id": "2",
+                  "title": "Chakalaka fries",
+                  "quantity": 1,
+                  "prep_status": "new"
+                }
+              ],
+              "note": "No chilli on the second wrap, please."
+            },
+            {
+              "id": "1040",
+              "status": "accepted",
+              "delivery_type": "dine_in",
+              "creation": "$now_iso",
+              "modified": "$now_iso",
+              "items": [
+                {
+                  "id": "3",
+                  "title": "Bunny chow (quarter)",
+                  "quantity": 2,
+                  "prep_status": "new"
+                }
+              ]
+            },
+            {
+              "id": "1039",
+              "status": "cooking",
+              "delivery_type": "pickup",
+              "creation": "$now_iso",
+              "modified": "$now_iso",
+              "items": [
+                {
+                  "id": "4",
+                  "title": "Boerewors roll",
+                  "quantity": 2,
+                  "prep_status": "cooking"
+                }
+              ]
+            },
+            {
+              "id": "1038",
+              "status": "cooking",
+              "delivery_type": "delivery",
+              "creation": "$now_iso",
+              "modified": "$now_iso",
+              "items": [
+                {
+                  "id": "5",
+                  "title": "Family braai platter",
+                  "quantity": 1,
+                  "prep_status": "cooking"
+                },
+                {
+                  "id": "6",
+                  "title": "Chakalaka fries",
+                  "quantity": 2,
+                  "prep_status": "ready"
+                }
+              ],
+              "note": "Table by the window — running late."
+            },
+            {
+              "id": "1037",
+              "status": "ready",
+              "delivery_type": "delivery",
+              "creation": "$now_iso",
+              "modified": "$now_iso",
+              "items": [
+                {
+                  "id": "7",
+                  "title": "Gatsby (half)",
+                  "quantity": 2,
+                  "prep_status": "ready"
+                }
+              ]
+            }
+          ],
+          "counts": {
+            "all": 5,
+            "accepted": 2,
+            "cooking": 2,
+            "ready": 1,
+            "canceled": 0
+          },
+          "total": 5
+        }
+      }
+    }
+  }
+}

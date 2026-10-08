@@ -20,7 +20,6 @@ import 'package:remixicon/remixicon.dart';
 import 'package:base_sdk/src/presentation/components/loading.dart';
 import 'package:base_sdk/src/presentation/theme/app_style.dart';
 import 'package:base_sdk/src/services/app_helpers.dart';
-import 'package:base_sdk/src/services/local_storage.dart';
 import 'package:base_sdk/src/services/tr_keys.dart';
 import 'package:booking_sdk/src/common/booking_tr_keys.dart';
 import 'package:booking_sdk/src/common/presentation/reservation_widgets.dart';
@@ -116,7 +115,7 @@ class _ReservationTablesViewState extends ConsumerState<ReservationTablesView> {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = LocalStorage.getAppThemeMode();
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     final state = ref.watch(reservationTablesProvider);
     final notifier = ref.read(reservationTablesProvider.notifier);
     final textColor = isDark ? AppStyle.white : AppStyle.black;

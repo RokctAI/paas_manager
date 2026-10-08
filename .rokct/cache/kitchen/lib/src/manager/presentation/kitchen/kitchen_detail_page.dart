@@ -13,7 +13,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 import 'package:flutter/material.dart';
-import 'package:flutter_remix/flutter_remix.dart';
+import 'package:remixicon/remixicon.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:base_sdk/src/presentation/components/floating_nav/floating_bottom_nav.dart';
@@ -53,7 +53,7 @@ class KitchenDetailPage extends ConsumerWidget {
       }
     });
     return Scaffold(
-      backgroundColor: AppStyle.surfaceDark,
+      backgroundColor: AppStyle.surfaceFor(Theme.of(context).brightness),
       body: SafeArea(
         child: order == null
             ? const SizedBox.shrink()
@@ -72,7 +72,7 @@ class KitchenDetailPage extends ConsumerWidget {
                     bottom: 16,
                     child: FloatingBackPill(
                       back: FloatingNavBack(
-                        icon: FlutterRemix.arrow_left_s_line,
+                        icon: Remix.arrow_left_s_line,
                         label: AppHelpers.getTranslation(TrKeys.back),
                         onTap: () => Navigator.of(context).maybePop(),
                       ),

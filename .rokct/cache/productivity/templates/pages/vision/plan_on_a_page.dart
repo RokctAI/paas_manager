@@ -50,6 +50,7 @@ import 'package:base_sdk/src/presentation/theme/app_style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:productivity_sdk/productivity_sdk.dart';
+import 'package:remixicon/remixicon.dart';
 
 @RoutePage(name: 'PlanOnAPageRoute')
 class PlanOnAPagePage extends StatefulWidget {
@@ -112,8 +113,23 @@ class _PlanOnAPagePageState extends State<PlanOnAPagePage> {
   Widget build(BuildContext context) {
     final PlanBoard? board = _board;
     final StrategicObjective? selected = board?.objectiveNamed(_selected);
+    // A BuildContext lookup for the mode, not the app-wide AppStyle.isDark
+    // static (Ray, 2026-09-19: "glance doesnt change test immediately
+    // untill you come back if you switched theme mode" — the same defect,
+    // found in this page by the audit that followed).
+    //
+    // THE GROUND IS RESOLVED AGAINST THE INHERITED THEME. AppStyle's
+    // mode-resolving statics carry the right value but are not an
+    // inherited widget, so reading one registers no dependency — and this
+    // page is a pushed ModalRoute, which caches the widget it built, so an
+    // ancestor rebuild provably never reaches it either. The ground kept
+    // the previous mode's colour until the reader left the page and came
+    // back. Reading the theme here makes this element a dependent, so the
+    // mode change itself repaints the page while it is on screen.
+    final Brightness brightness = Theme.of(context).brightness;
+
     return Scaffold(
-      backgroundColor: AppStyle.surfaceDark,
+      backgroundColor: AppStyle.surfaceFor(brightness),
       body: Stack(
         children: <Widget>[
           PlaneHost(
@@ -145,7 +161,7 @@ class _PlanOnAPagePageState extends State<PlanOnAPagePage> {
             child: SafeArea(
               child: FloatingBackPill(
                 back: FloatingNavBack(
-                  icon: Icons.arrow_back,
+                  icon: Remix.arrow_left_line,
                   label: AppHelpers.getTranslation(TrKeys.back),
                   onTap: _popPlane,
                 ),

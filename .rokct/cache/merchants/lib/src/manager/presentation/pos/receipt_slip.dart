@@ -17,7 +17,6 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import 'package:base_sdk/src/presentation/theme/app_style.dart';
 import 'package:base_sdk/src/services/app_helpers.dart';
 import 'package:base_sdk/src/services/tr_keys.dart';
 import 'package:merchants_sdk/src/manager/utils/pos_receipt_printer.dart';
@@ -120,7 +119,7 @@ class ReceiptSlip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final double pad = (compact ? 14 : 18).r;
-    final bool dark = AppStyle.isDark;
+    final bool dark = Theme.of(context).brightness == Brightness.dark;
     return Center(
       child: ConstrainedBox(
         constraints: BoxConstraints(maxWidth: paperWidth.r),

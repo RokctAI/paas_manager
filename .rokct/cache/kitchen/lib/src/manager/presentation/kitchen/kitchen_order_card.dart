@@ -20,6 +20,7 @@ import 'package:base_sdk/src/services/app_helpers.dart';
 import 'package:kitchen_sdk/src/manager/infrastructure/models/data/kitchen_order_data.dart';
 import 'package:kitchen_sdk/src/manager/presentation/kitchen/kitchen_clock.dart';
 import 'package:kitchen_sdk/src/manager/presentation/kitchen/kitchen_status.dart';
+import 'package:remixicon/remixicon.dart';
 
 /// Shared card atoms of the approved kitchen frames (34a/34b).
 abstract final class KitchenCardBits {
@@ -28,11 +29,11 @@ abstract final class KitchenCardBits {
   static IconData glyphIcon(String? deliveryType) {
     switch ((deliveryType ?? '').toLowerCase()) {
       case KitchenRules.deliveryType:
-        return Icons.pedal_bike;
+        return Remix.riding_line;
       case KitchenRules.dineType:
-        return Icons.restaurant;
+        return Remix.restaurant_line;
       default:
-        return Icons.directions_walk;
+        return Remix.walk_line;
     }
   }
 

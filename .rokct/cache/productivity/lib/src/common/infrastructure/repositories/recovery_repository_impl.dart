@@ -16,6 +16,7 @@ import 'package:base_sdk/base_sdk.dart';
 import 'package:drift/drift.dart';
 import 'package:uuid/uuid.dart';
 import '../../domain/interface/recovery_repository_facade.dart';
+import '../database/productivity_owner_scope.dart';
 
 class RecoveryRepositoryImpl implements RecoveryRepositoryFacade {
   final AppDatabase _database;
@@ -25,7 +26,7 @@ class RecoveryRepositoryImpl implements RecoveryRepositoryFacade {
   @override
   Future<Map<String, int>> getStreakStats() async {
     try {
-      final profiles = await _database.select(_database.recoveryProfilesTable).get();
+      final profiles = await _visibleProfiles();
       if (profiles.isNotEmpty) {
         final profile = profiles.first;
         return {
@@ -51,19 +52,26 @@ class RecoveryRepositoryImpl implements RecoveryRepositoryFacade {
     var ritualsCompleted = 0;
     var currentStreak = 0;
     try {
-      final urges = await _database.select(_database.urgeLogsTable).get();
+      await ProductivityOwnerScope.ready(_database);
+      final String owner = ProductivityOwnerScope.currentOwner;
+      final urges = await (_database.select(_database.urgeLogsTable)
+            ..where((t) => ownerVisible(t.owner, owner)))
+          .get();
       urgeEvents = urges.where((u) => inWindow(u.timestamp)).length;
 
       final procs =
-          await _database.select(_database.procrastinationLogsTable).get();
+          await (_database.select(_database.procrastinationLogsTable)
+                ..where((t) => ownerVisible(t.owner, owner)))
+              .get();
       procrastinations = procs.where((p) => inWindow(p.logTime)).length;
 
-      final rituals = await _database.select(_database.ritualLogsTable).get();
+      final rituals = await (_database.select(_database.ritualLogsTable)
+            ..where((t) => ownerVisible(t.owner, owner)))
+          .get();
       ritualsCompleted =
           rituals.where((r) => inWindow(r.completedAt)).length;
 
-      final profiles =
-          await _database.select(_database.recoveryProfilesTable).get();
+      final profiles = await _visibleProfiles();
       if (profiles.isNotEmpty) currentStreak = profiles.first.currentStreak;
     } catch (e) {
       // Fail soft: a partial/empty summary beats crashing the report.
@@ -85,10 +93,12 @@ class RecoveryRepositoryImpl implements RecoveryRepositoryFacade {
     String? habitId,
   }) async {
     try {
+      await ProductivityOwnerScope.ready(_database);
       final uuid = const Uuid().v4();
       await _database.into(_database.urgeLogsTable).insert(
         UrgeLogsTableCompanion.insert(
           id: Value(uuid),
+          owner: Value(ProductivityOwnerScope.currentOwner),
           habitId: Value(habitId),
           timestamp: DateTime.now(),
           intensity: intensity,
@@ -112,10 +122,12 @@ class RecoveryRepositoryImpl implements RecoveryRepositoryFacade {
   @override
   Future<void> completeRitual(String ritualId) async {
     try {
+      await ProductivityOwnerScope.ready(_database);
       final uuid = const Uuid().v4();
       await _database.into(_database.ritualLogsTable).insert(
         RitualLogsTableCompanion.insert(
           id: Value(uuid),
+          owner: Value(ProductivityOwnerScope.currentOwner),
           ritualId: ritualId,
           completedAt: DateTime.now(),
         ),
@@ -133,10 +145,12 @@ class RecoveryRepositoryImpl implements RecoveryRepositoryFacade {
     String? reason,
   }) async {
     try {
+      await ProductivityOwnerScope.ready(_database);
       final uuid = const Uuid().v4();
       await _database.into(_database.procrastinationLogsTable).insert(
         ProcrastinationLogsTableCompanion.insert(
           id: Value(uuid),
+          owner: Value(ProductivityOwnerScope.currentOwner),
           ritualId: Value(ritualId),
           scheduledTime: scheduledTime,
           logTime: DateTime.now(),
@@ -152,12 +166,26 @@ class RecoveryRepositoryImpl implements RecoveryRepositoryFacade {
 
   // --- Helper Methods ---
 
+  /// The recovery profiles this account may see: its own, plus every
+  /// profile that belongs to nobody in particular. A second account on the
+  /// device gets its own profile rather than inheriting the first
+  /// account's streak - and the first account's profile stays on disk.
+  Future<List<RecoveryProfileEntity>> _visibleProfiles() async {
+    await ProductivityOwnerScope.ready(_database);
+    final String owner = ProductivityOwnerScope.currentOwner;
+    return (_database.select(_database.recoveryProfilesTable)
+          ..where((t) => ownerVisible(t.owner, owner))
+          ..orderBy([(t) => OrderingTerm.desc(t.owner)]))
+        .get();
+  }
+
   Future<void> _updateStreak(int newStreak) async {
-    final profiles = await _database.select(_database.recoveryProfilesTable).get();
+    final profiles = await _visibleProfiles();
     if (profiles.isEmpty) {
       await _database.into(_database.recoveryProfilesTable).insert(
         RecoveryProfilesTableCompanion.insert(
           id: Value(const Uuid().v4()),
+          owner: Value(ProductivityOwnerScope.currentOwner),
           startDate: DateTime.now(),
           currentStreak: Value(newStreak),
           longestStreak: Value(newStreak),
@@ -170,7 +198,8 @@ class RecoveryRepositoryImpl implements RecoveryRepositoryFacade {
         longest = newStreak;
       }
       await (_database.update(_database.recoveryProfilesTable)
-            ..where((t) => t.id.equals(profile.id)))
+            ..where((t) =>
+                t.id.equals(profile.id) & t.owner.equals(profile.owner)))
           .write(
         RecoveryProfilesTableCompanion(
           currentStreak: Value(newStreak),
@@ -181,7 +210,7 @@ class RecoveryRepositoryImpl implements RecoveryRepositoryFacade {
   }
 
   Future<void> _incrementStreak() async {
-    final profiles = await _database.select(_database.recoveryProfilesTable).get();
+    final profiles = await _visibleProfiles();
     if (profiles.isEmpty) {
       await _updateStreak(1);
     } else {

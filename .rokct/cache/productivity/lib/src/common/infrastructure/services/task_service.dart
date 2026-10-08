@@ -16,6 +16,7 @@ import 'package:base_sdk/base_sdk.dart';
 import 'package:drift/drift.dart';
 
 import '../../models/data/task_data.dart';
+import '../database/productivity_owner_scope.dart';
 
 class TaskService {
   final AppDatabase _database;
@@ -23,7 +24,11 @@ class TaskService {
   TaskService(this._database);
 
   Future<List<TaskModel>> getTasks() async {
-    final tasks = await _database.select(_database.tasksTable).get();
+    await ProductivityOwnerScope.ready(_database);
+    final String owner = ProductivityOwnerScope.currentOwner;
+    final tasks = await (_database.select(_database.tasksTable)
+          ..where((t) => ownerVisible(t.owner, owner)))
+        .get();
     return tasks.map((task) {
       if (task.data == null) return TaskModel.fromMap({});
       return TaskModel.fromJson(task.data!);
@@ -31,9 +36,11 @@ class TaskService {
   }
 
   Future<void> addTask(TaskModel task) async {
+    await ProductivityOwnerScope.ready(_database);
     await _database.into(_database.tasksTable).insert(
       TasksTableCompanion.insert(
         id: Value(task.id),
+        owner: Value(ProductivityOwnerScope.currentOwner),
         title: task.title,
         description: Value(task.description),
         isCompleted: Value(task.isCompleted),
@@ -46,9 +53,22 @@ class TaskService {
   }
 
   Future<void> updateTask(TaskModel updatedTask) async {
+    await ProductivityOwnerScope.ready(_database);
+    final String owner = ProductivityOwnerScope.currentOwner;
+    // Same claim as the tasks store's: the upsert below conflicts on the
+    // full {id, owner}, so a pre-scoping row for this id is taken over
+    // rather than left beside the row being written.
+    if (owner != kUnownedOwner) {
+      await (_database.update(_database.tasksTable)
+            ..where((t) =>
+                t.id.equals(updatedTask.id) &
+                t.owner.equals(kUnownedOwner)))
+          .write(TasksTableCompanion(owner: Value(owner)));
+    }
     await _database.into(_database.tasksTable).insertOnConflictUpdate(
       TasksTableCompanion.insert(
         id: Value(updatedTask.id),
+        owner: Value(owner),
         title: updatedTask.title,
         description: Value(updatedTask.description),
         isCompleted: Value(updatedTask.isCompleted),
@@ -84,6 +104,10 @@ class TaskService {
   }
 
   Future<void> deleteTask(String id) async {
-    await (_database.delete(_database.tasksTable)..where((t) => t.id.equals(id))).go();
+    await ProductivityOwnerScope.ready(_database);
+    final String owner = ProductivityOwnerScope.currentOwner;
+    await (_database.delete(_database.tasksTable)
+          ..where((t) => t.id.equals(id) & ownerVisible(t.owner, owner)))
+        .go();
   }
 }

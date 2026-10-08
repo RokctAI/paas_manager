@@ -88,9 +88,9 @@ class RevenueKpiTile extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: AppStyle.cardDark,
+        color: AppStyle.cardFor(Theme.of(context).brightness),
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: AppStyle.strokeDarkSubtle),
+        border: Border.all(color: AppStyle.subtleStrokeFor(Theme.of(context).brightness)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -104,7 +104,7 @@ class RevenueKpiTile extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                   style: AppStyle.interNormal(
                     size: 13,
-                    color: AppStyle.textDarkSecondary,
+                    color: AppStyle.secondaryInkFor(Theme.of(context).brightness),
                   ),
                 ),
               ),
@@ -118,7 +118,7 @@ class RevenueKpiTile extends StatelessWidget {
             overflow: TextOverflow.ellipsis,
             style: AppStyle.interBold(
               size: 22,
-              color: valueColor ?? AppStyle.textPrimary,
+              color: valueColor ?? AppStyle.inkFor(Theme.of(context).brightness),
             ),
           ),
           if (sub != null) ...[
@@ -129,7 +129,7 @@ class RevenueKpiTile extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
               style: AppStyle.interNormal(
                 size: 11,
-                color: AppStyle.textDarkFaint,
+                color: AppStyle.faintFor(Theme.of(context).brightness),
               ),
             ),
           ],
@@ -152,9 +152,9 @@ class KpiMiniList extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
       decoration: BoxDecoration(
-        color: AppStyle.cardDark,
+        color: AppStyle.cardFor(Theme.of(context).brightness),
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: AppStyle.strokeDarkSubtle),
+        border: Border.all(color: AppStyle.subtleStrokeFor(Theme.of(context).brightness)),
       ),
       child: Column(
         children: [
@@ -170,7 +170,7 @@ class KpiMiniList extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                       style: AppStyle.interNormal(
                         size: 13,
-                        color: AppStyle.textDarkSecondary,
+                        color: AppStyle.secondaryInkFor(Theme.of(context).brightness),
                       ),
                     ),
                   ),
@@ -178,7 +178,7 @@ class KpiMiniList extends StatelessWidget {
                     value,
                     style: AppStyle.interSemi(
                       size: 14,
-                      color: color ?? AppStyle.textPrimary,
+                      color: color ?? AppStyle.inkFor(Theme.of(context).brightness),
                     ),
                   ),
                 ],

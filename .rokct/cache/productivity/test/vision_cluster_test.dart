@@ -42,6 +42,7 @@ import 'package:productivity_sdk/src/common/models/data/vision_data.dart';
 import 'package:productivity_sdk/src/common/presentation/vision/mastery_goal_card.dart';
 import 'package:productivity_sdk/src/common/presentation/vision/objective_detail_pane.dart';
 import 'package:productivity_sdk/src/common/presentation/vision/plan_board.dart';
+import 'package:remixicon/remixicon.dart';
 
 /// The design size matches the window so ScreenUtil scales by one.
 Future<void> _pump(
@@ -368,7 +369,7 @@ void main() {
       await _pump(tester, _hosted(const PlanBoardView(board: _board)));
       expect(find.byType(FloatingActionButton), findsNothing);
       expect(find.byType(TextField), findsNothing);
-      expect(find.byIcon(Icons.add), findsNothing);
+      expect(find.byIcon(Remix.add_line), findsNothing);
       expect(find.byIcon(Icons.edit), findsNothing);
     });
 
@@ -621,11 +622,15 @@ void main() {
           ],
         ),
       );
-      expect(find.byIcon(Icons.check), findsOneWidget);
+      expect(find.byIcon(Remix.check_line), findsOneWidget);
       final Text closed = tester.widget<Text>(find.text('Closed one'));
       final Text open = tester.widget<Text>(find.text('Open one'));
-      expect(closed.style?.color, AppStyle.textDarkFaint);
-      expect(open.style?.color, AppStyle.textDarkSecondary);
+      // The ink follows the INHERITED theme, not the app-wide static.
+      final Brightness b = Theme.of(
+        tester.element(find.text('Closed one')),
+      ).brightness;
+      expect(closed.style?.color, AppStyle.faintFor(b));
+      expect(open.style?.color, AppStyle.secondaryInkFor(b));
     });
 
     testWidgets('the due date sits faint at the end', (tester) async {

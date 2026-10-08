@@ -1,5 +1,41 @@
 # Changelog
 
+## 1.6.2
+
+* fix(theme): widgets read their surface, card, stroke and ink colours from Theme.of(context) at build time (AppStyle.surfaceFor/cardFor/cardAltFor/strokeFor/subtleStrokeFor/inkFor/secondaryInkFor/faintFor) instead of the AppStyle.isDark-resolved statics, so a live dark/light switch restyles open pages instead of leaving the old mode's colours (Ray, 2026-10-04).
+
+## 1.6.1
+
+- Icons move to Remixicon (`.rokct/decision_log.md`, "Icon package
+  standard"): every Material `Icons.*` is now the matching `Remix.*`
+  glyph, and the pubspec pins `remixicon: ^1.4.1`. Icons only.
+
+## 1.6.0
+
+- The purchase dialog's payment-method row is now the public
+  `SubscriptionPaymentMethodRow`, coloured through the theme seams so it
+  reads in light mode too. The installed dialog template uses it unchanged in
+  behaviour; loyalty_sdk's customer plans reuse it for the wallet / saved card
+  choice.
+- Backend (subscriptions/frappe): new shared recurring-billing engine,
+  `src/tenant/recurring/rules.py` (due, retry window, late start, resume,
+  card top-up amount; moved from lms `rlms.renewal_rules`) and
+  `recurring/billing.py` (saved-card top-up for the shortfall, then wallet
+  debit through pay's `debit_wallet_for_payment`; moved from lms
+  `rlms.renewal_card`). LMS learner renewals and commerce customer
+  subscriptions both use it.
+
+## 1.5.0
+
+- Demo runs the real `SubscriptionsRepository`: `subscriptionRepositoryProvider`
+  answers it over base_sdk's `HttpService` Dio unless the host overrides it,
+  and base_sdk 1.73.0's `DemoGatewayInterceptor` answers its
+  `api.subscription.*` cmds from `templates/assets/demo/subscriptions/<cmd>.json`
+  (installed to `assets/demo/subscriptions`) during a demo session.
+- Deleted `DemoSubscriptionsRepository`. `DemoSubscriptionPaymentsProvider`
+  (no platform cmd here) moved to `demo_subscription_payments_provider.dart`.
+  Needs base_sdk 1.73.0.
+
 ## 1.3.0
 
 Approved section-40 redesign of the manager /subscriptions screens

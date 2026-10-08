@@ -22,6 +22,8 @@ import 'dart:typed_data';
 
 import 'package:camera/camera.dart';
 
+import 'camera_permission.dart';
+
 /// Thrown when the camera cannot be initialized or a capture fails.
 class CameraCaptureException implements Exception {
   final String message;
@@ -38,6 +40,9 @@ class CameraCaptureException implements Exception {
 /// without a physical camera.
 abstract class CameraCaptureService {
   /// Prepares the underlying camera for capture. Safe to call more than once.
+  ///
+  /// The device implementation asks for the camera permission here, on
+  /// first use, and throws [CameraPermissionDeniedException] if refused.
   Future<void> initialize();
 
   /// Whether the service is ready to [capture].
@@ -78,6 +83,17 @@ class DeviceCameraCaptureService implements CameraCaptureService {
   @override
   Future<void> initialize() async {
     if (isInitialized) return;
+
+    // Ask for the camera the first time it is actually used, never up
+    // front. A refusal surfaces as CameraPermissionDeniedException so the
+    // UI can explain it and link to the settings page.
+    final permission = await CameraPermission.request();
+    if (permission != CameraPermissionResult.granted) {
+      throw CameraPermissionDeniedException(
+        permanentlyDenied:
+            permission == CameraPermissionResult.permanentlyDenied,
+      );
+    }
 
     final cameras = await availableCameras();
     if (cameras.isEmpty) {

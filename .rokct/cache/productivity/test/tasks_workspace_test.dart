@@ -45,6 +45,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:productivity_sdk/src/common/presentation/tasks/task_card.dart';
 import 'package:productivity_sdk/src/common/presentation/tasks/task_list_controls.dart';
 import 'package:productivity_sdk/src/common/presentation/tasks/task_view_model.dart';
+import 'package:remixicon/remixicon.dart';
 
 Future<void> _pump(
   WidgetTester tester,
@@ -283,7 +284,7 @@ void main() {
         tester,
         const SubtaskCheckLine(subtask: SubtaskViewModel(title: 'Backwash')),
       );
-      expect(find.byIcon(Icons.close), findsNothing);
+      expect(find.byIcon(Remix.close_line), findsNothing);
       await _pump(
         tester,
         SubtaskCheckLine(
@@ -291,7 +292,7 @@ void main() {
           onRemove: () {},
         ),
       );
-      expect(find.byIcon(Icons.close), findsOneWidget);
+      expect(find.byIcon(Remix.close_line), findsOneWidget);
     });
   });
 
@@ -409,6 +410,86 @@ void main() {
       await tester.tap(find.byType(SubtaskComposerRow));
       await tester.pump();
       expect(tapped, isTrue);
+    });
+  });
+
+  // THE PHONE FOLD'S ONLY WAY INTO THE TASK FORM — Ray, on the launcher's
+  // Tasks page: "tasks saved cant be edited".
+  //
+  // What a later edit could quietly undo: on a wide window the card's own
+  // onTap opens the form in the detail plane, but on one plane that tap is
+  // spoken for — it expands the card in place, which IS frame 44d's fold —
+  // so the form had no gesture left and a saved task could not be changed on
+  // a phone at all. The pill below is that gesture. Dropping it, or drawing
+  // it only on a collapsed card, puts the bug straight back.
+  group('the edit pill - the way into the task form on the phone fold', () {
+    testWidgets('the expanded card offers it and reports the tap', (
+      tester,
+    ) async {
+      var edited = false;
+      await _pump(
+        tester,
+        TaskCard(
+          task: TaskViewModel.fromMap(_seed),
+          onToggleDone: () {},
+          expanded: true,
+          onEdit: () => edited = true,
+        ),
+        width: 390,
+      );
+
+      expect(find.byKey(TaskCard.editKey), findsOneWidget);
+      await tester.tap(find.byKey(TaskCard.editKey));
+      await tester.pump();
+      expect(edited, isTrue);
+    });
+
+    testWidgets('a collapsed card keeps it out of the list', (tester) async {
+      await _pump(
+        tester,
+        TaskCard(
+          task: TaskViewModel.fromMap(_seed),
+          onToggleDone: () {},
+          onEdit: () {},
+        ),
+        width: 390,
+      );
+
+      expect(find.byKey(TaskCard.editKey), findsNothing);
+    });
+
+    testWidgets('no callback draws no pill - what a wide window passes', (
+      tester,
+    ) async {
+      await _pump(
+        tester,
+        TaskCard(
+          task: TaskViewModel.fromMap(_seed),
+          onToggleDone: () {},
+          expanded: true,
+        ),
+      );
+
+      expect(find.byKey(TaskCard.editKey), findsNothing);
+    });
+
+    testWidgets('a DONE task can still be opened - being finished is a field '
+        'like any other, and a wrong one has to be fixable', (tester) async {
+      await _pump(
+        tester,
+        TaskCard(
+          task: TaskViewModel.fromMap(<String, dynamic>{
+            ..._seed,
+            'isDone': true,
+          }),
+          onToggleDone: () {},
+          expanded: true,
+          onEdit: () {},
+        ),
+        width: 390,
+      );
+
+      expect(find.byKey(TaskCard.editKey), findsOneWidget);
     });
   });
 }

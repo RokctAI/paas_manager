@@ -21,8 +21,7 @@ import 'package:merchants_sdk/src/manager/domain/interface/pos_catalog.dart';
 
 /// One cart per till session — the BillingPage tab and the pushed
 /// CheckoutPage watch the same instance. The catalog facade comes from
-/// get_it (`ManagerMerchantsDependencies.register`: demo-gated to
-/// `MockProductsRepository` under `--dart-define=IS_DEMO=true`).
+/// get_it (`ManagerMerchantsDependencies.register`).
 final posCartProvider = StateNotifierProvider<PosCartNotifier, PosCartState>(
   (ref) => PosCartNotifier(GetIt.instance<PosCatalogRepositoryFacade>()),
 );

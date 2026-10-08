@@ -18,13 +18,16 @@ import 'package:flutter/foundation.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:base_sdk/base_sdk.dart';
-import 'package:drift/drift.dart' show Value;
+import 'package:drift/drift.dart'
+    show BooleanExpressionOperators, OrderingTerm, Value;
 import 'package:uuid/uuid.dart';
+import '../../application/tasks/long_term_rule.dart';
 import '../../domain/interface/todo_repository_facade.dart';
 import '../../models/request/task_request.dart';
 import '../services/task_pull_service.dart';
 import '../services/task_sync_queue.dart';
 import '../services/task_sync_store.dart';
+import '../database/productivity_owner_scope.dart';
 
 /// The tasks surface's store.
 ///
@@ -48,7 +51,15 @@ class TodoRepositoryImpl implements TodoRepositoryFacade {
   Future<List<Map<String, dynamic>>> loadTodos() async {
     final List<Map<String, dynamic>> todos = <Map<String, dynamic>>[];
     try {
-      final tasks = await _database.select(_database.tasksTable).get();
+      await ProductivityOwnerScope.ready(_database);
+      final String owner = ProductivityOwnerScope.currentOwner;
+      // The account's own rows plus every row that belongs to nobody in
+      // particular. A second account on this device sees neither the
+      // first account's tasks nor, once the first account claims them,
+      // the rows it wrote before scoping existed.
+      final tasks = await (_database.select(_database.tasksTable)
+            ..where((t) => ownerVisible(t.owner, owner)))
+          .get();
       for (final task in tasks) {
         todos.add(rowToTodo(task));
       }
@@ -125,14 +136,24 @@ class TodoRepositoryImpl implements TodoRepositoryFacade {
     final List<MapEntry<String, Map<String, dynamic>>> pendingPush =
         <MapEntry<String, Map<String, dynamic>>>[];
     try {
+      await ProductivityOwnerScope.ready(_database);
+      final String owner = ProductivityOwnerScope.currentOwner;
       await _database.transaction(() async {
         for (final todo in todos) {
           // Resolve the id once so the row key and the blob agree; the blob
           // is what carries it back when the caller supplied no id.
           final String id = (todo['id'] ?? const Uuid().v4()).toString();
+          // Ordered owner-descending with an explicit limit: `id` alone
+          // is no longer unique, so an unclaimed pre-scoping row and this
+          // account's own row for the same id can both be visible, and
+          // the owned one is the one being edited. kUnownedOwner is the
+          // empty string, so it sorts below every real owner.
           final TaskEntity? existing = await (_database
                     .select(_database.tasksTable)
-                  ..where((t) => t.id.equals(id)))
+                  ..where((t) =>
+                      t.id.equals(id) & ownerVisible(t.owner, owner))
+                  ..orderBy([(t) => OrderingTerm.desc(t.owner)])
+                  ..limit(1))
               .getSingleOrNull();
           // The client_id is minted ONCE and then never changes: it is the
           // key the server upserts on, so a task that gained a new one on
@@ -140,19 +161,48 @@ class TodoRepositoryImpl implements TodoRepositoryFacade {
           final String clientId = _resolveClientId(existing, todo);
           todo['clientId'] = clientId;
           if (existing?.remoteId != null) todo['remoteId'] = existing!.remoteId;
+          final DateTime? dueDate = todo['deadline'] != null
+              ? DateTime.tryParse(todo['deadline'].toString())
+              : null;
+          final DateTime createdAt = (todo['createdAt'] != null
+                  ? DateTime.tryParse(todo['createdAt'].toString())
+                  : null) ??
+              DateTime.now();
+          // SECTION 47m, SECOND PASS — the long-term band is DERIVED from
+          // the end date, and this is the choke point every local write
+          // passes through. Deriving it HERE as well as on the form is
+          // what makes the rule hold for writers that never saw the form:
+          // the recurrence roll-over, a restored backup, a pulled task
+          // whose deadline the server moved. The field is still stored and
+          // still what the card, the band split and the synced
+          // `is_long_term` column read - only nothing chooses it by hand
+          // any more.
+          todo['isLongTerm'] = LongTermRule.isLongTerm(
+            endDate: dueDate,
+            startDate: LongTermRule.startDateOf(todo),
+            createdAt: createdAt,
+          );
+          // CLAIMS the pre-scoping row for this id when there is one.
+          // `owner` is in the primary key, so the upsert below conflicts
+          // on {id, owner} and would otherwise leave the unowned twin
+          // sitting beside the row just written, visible twice. Only the
+          // id actually being written is touched, by the account actually
+          // writing it - this is not a backfill.
+          if (owner != kUnownedOwner) {
+            await (_database.update(_database.tasksTable)
+                  ..where((t) =>
+                      t.id.equals(id) & t.owner.equals(kUnownedOwner)))
+                .write(TasksTableCompanion(owner: Value(owner)));
+          }
           await _database.into(_database.tasksTable).insertOnConflictUpdate(
             TasksTableCompanion.insert(
               id: Value(id),
+              owner: Value(owner),
               title: (todo['title'] ?? '').toString(),
               description: Value(todo['description']?.toString()),
               isCompleted: Value(todo['isDone'] == true),
-              dueDate: Value(todo['deadline'] != null
-                  ? DateTime.tryParse(todo['deadline'].toString())
-                  : null),
-              createdAt: Value((todo['createdAt'] != null
-                      ? DateTime.tryParse(todo['createdAt'].toString())
-                      : null) ??
-                  DateTime.now()),
+              dueDate: Value(dueDate),
+              createdAt: Value(createdAt),
               updatedAt: Value(DateTime.now()),
               createdBy: Value(todo['createdBy']?.toString()),
               clientId: Value(clientId),
@@ -226,14 +276,22 @@ class TodoRepositoryImpl implements TodoRepositoryFacade {
     if (id.isEmpty) return;
     String clientId = '';
     try {
+      await ProductivityOwnerScope.ready(_database);
+      final String owner = ProductivityOwnerScope.currentOwner;
       // Read the client_id before the row goes: it is the only handle the
       // server has on this task.
       final TaskEntity? row = await (_database.select(_database.tasksTable)
-            ..where((t) => t.id.equals(id)))
+            ..where((t) =>
+                t.id.equals(id) & ownerVisible(t.owner, owner))
+            ..orderBy([(t) => OrderingTerm.desc(t.owner)])
+            ..limit(1))
           .getSingleOrNull();
       clientId = (row?.clientId ?? '').toString();
+      // Deletes only what this account can see. Another account's task
+      // with the same id is left exactly where it is.
       await (_database.delete(_database.tasksTable)
-            ..where((t) => t.id.equals(id)))
+            ..where((t) =>
+                t.id.equals(id) & ownerVisible(t.owner, owner)))
           .go();
     } catch (e) {
       debugPrint('Error deleting todo $id: $e');
@@ -266,8 +324,13 @@ class TodoRepositoryImpl implements TodoRepositoryFacade {
     // no way to tell a user their snooze did not take.
     if (!remindAt.isAfter(DateTime.now())) return false;
     try {
+      await ProductivityOwnerScope.ready(_database);
+      final String owner = ProductivityOwnerScope.currentOwner;
       final TaskEntity? row = await (_database.select(_database.tasksTable)
-            ..where((t) => t.id.equals(id)))
+            ..where((t) =>
+                t.id.equals(id) & ownerVisible(t.owner, owner))
+            ..orderBy([(t) => OrderingTerm.desc(t.owner)])
+            ..limit(1))
           .getSingleOrNull();
       if (row == null) return false;
       final Object? counted = rowToTodo(row)['snoozeCount'];
@@ -283,7 +346,8 @@ class TodoRepositoryImpl implements TodoRepositoryFacade {
       // the deadline, and the surest way to keep that true is for the column
       // to be untouchable from this path.
       await (_database.update(_database.tasksTable)
-            ..where((t) => t.id.equals(id)))
+            ..where((t) =>
+                t.id.equals(id) & t.owner.equals(row.owner)))
           .write(
         TasksTableCompanion(
           clientId: Value(clientId),
@@ -325,14 +389,20 @@ class TodoRepositoryImpl implements TodoRepositoryFacade {
 
   /// Mints client ids for rows that have none and queues their first push.
   Future<void> _queueUnsynced() async {
+    await ProductivityOwnerScope.ready(_database);
+    final String owner = ProductivityOwnerScope.currentOwner;
+    // Only this account's own (and unowned) tasks are uploaded. Another
+    // account's rows are not this session's to push.
     final List<TaskEntity> rows = await (_database.select(_database.tasksTable)
-          ..where((t) => t.clientId.isNull()))
+          ..where((t) =>
+              t.clientId.isNull() & ownerVisible(t.owner, owner)))
         .get();
     for (final TaskEntity row in rows) {
       final String clientId = TaskSyncStore.newClientId();
       final Map<String, dynamic> todo = rowToTodo(row)..['clientId'] = clientId;
       await (_database.update(_database.tasksTable)
-            ..where((t) => t.id.equals(row.id)))
+            ..where((t) =>
+                t.id.equals(row.id) & t.owner.equals(row.owner)))
           .write(
         TasksTableCompanion(
           clientId: Value(clientId),

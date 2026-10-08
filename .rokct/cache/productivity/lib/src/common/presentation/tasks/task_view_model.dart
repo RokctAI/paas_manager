@@ -157,8 +157,14 @@ class TaskViewModel {
   /// because the field does nothing.
   final String recurrence;
 
-  /// Section 47m: kept in the long-term band above the day's work. A
-  /// property of the task, set by hand — nothing derives it.
+  /// Section 47m: kept in the long-term band above the day's work.
+  ///
+  /// DERIVED FROM THE END DATE, NOT PICKED. `LongTermRule` writes this on
+  /// every save — a deadline more than `LongTermRule.horizonDays` days
+  /// past the task's start (its creation, on a surface with no start-date
+  /// field) is a long-term commitment. The field itself is unchanged and
+  /// still the one thing the card badge, the band split and the synced
+  /// `is_long_term` column read; what changed is who sets it.
   final bool isLongTerm;
 
   /// Section 46: the subtasks are steps in order.

@@ -50,10 +50,10 @@ class ProductProfitRow extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: AppStyle.cardDark,
+          color: AppStyle.cardFor(Theme.of(context).brightness),
           borderRadius: BorderRadius.circular(14),
           border: Border.all(
-            color: selected ? AppStyle.primary : AppStyle.strokeDarkSubtle,
+            color: selected ? AppStyle.primary : AppStyle.subtleStrokeFor(Theme.of(context).brightness),
             width: selected ? 1.6 : 1,
           ),
         ),
@@ -75,7 +75,7 @@ class ProductProfitRow extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                         style: AppStyle.interSemi(
                           size: 14,
-                          color: AppStyle.textPrimary,
+                          color: AppStyle.inkFor(Theme.of(context).brightness),
                         ),
                       ),
                       const SizedBox(height: 2),
@@ -86,7 +86,7 @@ class ProductProfitRow extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                         style: AppStyle.interNormal(
                           size: 11,
-                          color: AppStyle.textDarkSecondary,
+                          color: AppStyle.secondaryInkFor(Theme.of(context).brightness),
                         ),
                       ),
                     ],
@@ -103,7 +103,7 @@ class ProductProfitRow extends StatelessWidget {
                       style: AppStyle.interSemi(
                         size: 14,
                         color: _noProfit
-                            ? AppStyle.textDarkFaint
+                            ? AppStyle.faintFor(Theme.of(context).brightness)
                             : (product.profit < 0
                                 ? AppStyle.red
                                 : AppStyle.green),
@@ -113,7 +113,7 @@ class ProductProfitRow extends StatelessWidget {
                       AppHelpers.getTranslation('profit'),
                       style: AppStyle.interNormal(
                         size: 10,
-                        color: AppStyle.textDarkFaint,
+                        color: AppStyle.faintFor(Theme.of(context).brightness),
                       ),
                     ),
                   ],
@@ -176,7 +176,7 @@ class ProfitMarginStrip extends StatelessWidget {
           product.price > 0
               ? AppHelpers.numberFormat(number: product.price)
               : '—',
-          AppStyle.textPrimary,
+          AppStyle.inkFor(Theme.of(context).brightness),
         ),
         _divider(),
         _cell(
@@ -184,7 +184,7 @@ class ProfitMarginStrip extends StatelessWidget {
           costMissing
               ? AppHelpers.getTranslation('cost_not_set')
               : AppHelpers.numberFormat(number: product.cost),
-          costMissing ? AppStyle.textDarkFaint : AppStyle.textPrimary,
+          costMissing ? AppStyle.faintFor(Theme.of(context).brightness) : AppStyle.inkFor(Theme.of(context).brightness),
         ),
         _divider(),
         _cell(
@@ -196,7 +196,7 @@ class ProfitMarginStrip extends StatelessWidget {
                       '${marginPct.round()}%'
                   : '${marginPct.round()}%'),
           costMissing
-              ? AppStyle.textDarkFaint
+              ? AppStyle.faintFor(Theme.of(context).brightness)
               : (margin < 0 ? AppStyle.red : AppStyle.green),
         ),
       ],
@@ -299,7 +299,7 @@ class UnknownBucketBanner extends StatelessWidget {
               '${AppHelpers.getTranslation('of_revenue_sold_without_a_cost_price_it_is_left_out_of_profit_and_margin_never_counted_as_pure_profit')}',
               style: AppStyle.interNormal(
                 size: 11,
-                color: AppStyle.textDarkSecondary,
+                color: AppStyle.secondaryInkFor(Theme.of(context).brightness),
               ),
             ),
           ),

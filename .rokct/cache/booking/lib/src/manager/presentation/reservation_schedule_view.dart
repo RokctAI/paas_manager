@@ -21,7 +21,6 @@ import 'package:base_sdk/src/presentation/components/buttons/custom_button.dart'
 import 'package:base_sdk/src/presentation/components/loading.dart';
 import 'package:base_sdk/src/presentation/theme/app_style.dart';
 import 'package:base_sdk/src/services/app_helpers.dart';
-import 'package:base_sdk/src/services/local_storage.dart';
 import 'package:booking_sdk/src/common/booking_tr_keys.dart';
 import 'package:booking_sdk/src/common/presentation/reservation_widgets.dart';
 import 'package:booking_sdk/src/common/utils/booking_schedule_rules.dart';
@@ -111,7 +110,7 @@ class _ReservationScheduleViewState
 
   @override
   Widget build(BuildContext context) {
-    final isDark = LocalStorage.getAppThemeMode();
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     final state = ref.watch(reservationScheduleProvider);
     final notifier = ref.read(reservationScheduleProvider.notifier);
     final textColor = isDark ? AppStyle.white : AppStyle.black;

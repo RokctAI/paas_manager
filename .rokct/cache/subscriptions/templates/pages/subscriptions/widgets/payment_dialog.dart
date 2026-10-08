@@ -72,6 +72,7 @@ class SubscriptionPaymentBody extends ConsumerWidget {
             ? state.list[state.selectSubscribe]
             : null;
     final payments = state.payments ?? [];
+    final brightness = Theme.of(context).brightness;
 
     final title = plan?.title ??
         plan?.content ??
@@ -97,14 +98,17 @@ class SubscriptionPaymentBody extends ConsumerWidget {
       children: [
         Text(
           AppHelpers.getTranslation(TrKeys.selectPayment),
-          style: AppStyle.interSemi(size: 22),
+          style: AppStyle.interSemi(
+            size: 22,
+            color: AppStyle.inkFor(brightness),
+          ),
         ),
         6.verticalSpace,
         Text(
           summary,
           style: AppStyle.interRegular(
             size: 14,
-            color: AppStyle.textDarkSecondary,
+            color: AppStyle.secondaryInkFor(brightness),
           ),
         ),
         18.verticalSpace,
@@ -113,17 +117,26 @@ class SubscriptionPaymentBody extends ConsumerWidget {
             padding: EdgeInsets.zero,
             children: [
               for (int i = 0; i < payments.length; i++)
-                _PaymentMethodRow(
+                // subscriptions_sdk's shared row (also used by loyalty_sdk's
+                // customer plans): wallet balance as the wallet's hint,
+                // "opens secure checkout" for the web-view gateways.
+                SubscriptionPaymentMethodRow(
                   method: payments[i],
                   selected: state.selectPayment == i,
-                  walletBalance: walletPrice(),
+                  icon: payments[i].tag == 'wallet'
+                      ? Remix.wallet_3_line
+                      : Remix.bank_card_line,
+                  hint: payments[i].tag == 'wallet'
+                      ? '${AppHelpers.getTranslation(TrKeys.balance)} '
+                          '${AppHelpers.numberFormat(number: walletPrice())}'
+                      : AppHelpers.getTranslation('opens.secure.checkout'),
                   onTap: () => notifier.selectPayment(index: i),
                 ),
               // @subscription-payments-list
             ],
           ),
         ),
-        Container(height: 1, color: AppStyle.strokeDarkSubtle),
+        Container(height: 1, color: AppStyle.subtleStrokeFor(brightness)),
         14.verticalSpace,
         Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -133,9 +146,18 @@ class SubscriptionPaymentBody extends ConsumerWidget {
               children: [
                 Text(
                   AppHelpers.getTranslation(TrKeys.total),
-                  style: AppStyle.interNoSemi(size: 16),
+                  style: AppStyle.interNoSemi(
+                    size: 16,
+                    color: AppStyle.inkFor(brightness),
+                  ),
                 ),
-                Text(priceText, style: AppStyle.interBold(size: 20)),
+                Text(
+                  priceText,
+                  style: AppStyle.interBold(
+                    size: 20,
+                    color: AppStyle.inkFor(brightness),
+                  ),
+                ),
               ],
             ),
             16.verticalSpace,
@@ -182,7 +204,7 @@ class SubscriptionPaymentBody extends ConsumerWidget {
                 AppHelpers.getTranslation(TrKeys.cancel),
                 style: AppStyle.interNoSemi(
                   size: 15,
-                  color: AppStyle.textDarkSecondary,
+                  color: AppStyle.secondaryInkFor(brightness),
                 ),
               ),
             ),
@@ -190,107 +212,6 @@ class SubscriptionPaymentBody extends ConsumerWidget {
           ],
         ),
       ],
-    );
-  }
-}
-
-/// One PAYMENT-METHOD radio row (chip 766): icon, gateway name, hint line
-/// (wallet balance for the wallet; "opens secure checkout" for the webview
-/// gateways — the shipped purchase path for card gateways is
-/// `paymentSubscriptionWebView`), and the radio mark.
-class _PaymentMethodRow extends StatelessWidget {
-  final SubscriptionPaymentMethod method;
-  final bool selected;
-  final num walletBalance;
-  final VoidCallback onTap;
-
-  const _PaymentMethodRow({
-    required this.method,
-    required this.selected,
-    required this.walletBalance,
-    required this.onTap,
-  });
-
-  bool get _isWallet => method.tag == 'wallet';
-
-  @override
-  Widget build(BuildContext context) {
-    final hint = _isWallet
-        ? '${AppHelpers.getTranslation(TrKeys.balance)} '
-            '${AppHelpers.numberFormat(number: walletBalance)}'
-        : AppHelpers.getTranslation('opens.secure.checkout');
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        margin: REdgeInsets.only(bottom: 10),
-        padding: REdgeInsets.all(14),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(14.r),
-          color: selected
-              ? AppStyle.primary.withOpacity(0.08)
-              : AppStyle.transparent,
-          border: Border.all(
-            color: selected ? AppStyle.primary : AppStyle.strokeDarkSubtle,
-            width: selected ? 1.5 : 1,
-          ),
-        ),
-        child: Row(
-          children: [
-            Icon(
-              _isWallet ? Remix.wallet_3_line : Remix.bank_card_line,
-              size: 22.r,
-              color:
-                  selected ? AppStyle.primary : AppStyle.textDarkSecondary,
-            ),
-            12.horizontalSpace,
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    AppHelpers.getTranslation(method.tag ?? ''),
-                    style: AppStyle.interNoSemi(size: 15),
-                  ),
-                  2.verticalSpace,
-                  Text(
-                    hint,
-                    style: AppStyle.interRegular(
-                      size: 12.5,
-                      color: AppStyle.textDarkSecondary,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            10.horizontalSpace,
-            Container(
-              width: 20.r,
-              height: 20.r,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                border: Border.all(
-                  color: selected
-                      ? AppStyle.primary
-                      : AppStyle.textDarkSecondary,
-                  width: 2,
-                ),
-              ),
-              child: selected
-                  ? Center(
-                      child: Container(
-                        width: 10.r,
-                        height: 10.r,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: AppStyle.primary,
-                        ),
-                      ),
-                    )
-                  : null,
-            ),
-          ],
-        ),
-      ),
     );
   }
 }

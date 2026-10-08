@@ -13,13 +13,19 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 
+import 'package:base_sdk/base_sdk.dart' show DemoFixtures;
 import 'package:get_it/get_it.dart';
+
+/// Host asset directory holding subscriptions_sdk's demo platform fixtures
+/// (`<cmd>.json`), installed from `templates/assets/demo/subscriptions`.
+const String subscriptionsDemoFixtureDirectory = 'assets/demo/subscriptions';
 
 class SubscriptionsSdkDependencies {
   static void register(GetIt getIt) {
-    // SubscriptionsRepository needs the host app's Dio client and AppDatabase,
-    // which the host wires in its own composition code (see the dependency
-    // manager template in core_sdk). Nothing to register SDK-side.
+    // Demo runs the REAL SubscriptionsRepository (subscriptionRepositoryProvider):
+    // base_sdk's DemoGatewayInterceptor answers its api.subscription.* cmds
+    // from these fixtures while DemoSession.demoActive.
+    DemoFixtures.registerAssetDirectory(subscriptionsDemoFixtureDirectory);
   }
 }
 

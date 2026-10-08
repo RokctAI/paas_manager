@@ -62,9 +62,16 @@ class NavRailLayout extends StatelessWidget {
     // Which physical side the rail column occupies.
     final bool railOnLeft = atStart == ltr;
 
+    // The float margin goes on the screen-edge side only. The page side
+    // gets none: every tab page already carries its own 16 px gutter, the
+    // same gutter that is the gap to the screen edge when the nav is the
+    // bottom pill. A margin here as well doubled the gap beside the rail.
     final railColumn = SafeArea(
       child: Padding(
-        padding: EdgeInsetsDirectional.only(start: 16.w, end: 16.w),
+        padding: EdgeInsetsDirectional.only(
+          start: atStart ? 16.w : 0,
+          end: atStart ? 0 : 16.w,
+        ),
         // Same guard as the bottom pill's items: on a window that is
         // tablet-mode wide but short (landscape phone) the rail scales
         // down instead of overflowing.

@@ -14,6 +14,7 @@
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:remixicon/remixicon.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -135,7 +136,7 @@ class _PayFastWebViewState extends State<PayFastWebView> {
     controller.setNavigationDelegate(
       NavigationDelegate(
         onPageStarted: (String url) {
-          debugPrint('PayFast WebView started loading: $url');
+          debugPrint('PayFast WebView started loading: ${payFastLogUrl(url)}');
         },
         onPageFinished: (String url) {
           if (mounted) {
@@ -143,7 +144,7 @@ class _PayFastWebViewState extends State<PayFastWebView> {
               isLoading = false;
             });
           }
-          debugPrint('PayFast WebView finished loading: $url');
+          debugPrint('PayFast WebView finished loading: ${payFastLogUrl(url)}');
 
           // Check for success or return URLs
           _checkForPaymentCompletion(url);
@@ -161,7 +162,7 @@ class _PayFastWebViewState extends State<PayFastWebView> {
           }
         },
         onNavigationRequest: (NavigationRequest request) {
-          debugPrint('PayFast WebView navigation: ${request.url}');
+          debugPrint('PayFast WebView navigation: ${payFastLogUrl(request.url)}');
 
           // Check for success or cancel URLs
           if (_checkForPaymentCompletion(request.url)) {
@@ -207,7 +208,7 @@ class _PayFastWebViewState extends State<PayFastWebView> {
           style: AppStyle.interNormal(),
         ),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: AppStyle.black),
+          icon: const Icon(Remix.arrow_left_line, color: AppStyle.black),
           onPressed: () {
             // Confirm before closing the payment
             AppHelpers.showAlertDialog(
@@ -321,7 +322,7 @@ class PayFastWebViewPreloader {
               url: url,
               isReady: true,
             );
-            debugPrint('PayFast WebView preloaded: $url');
+            debugPrint('PayFast WebView preloaded: ${payFastLogUrl(url)}');
           },
           onNavigationRequest: (NavigationRequest request) {
             // Allow all navigation during preloading
@@ -332,7 +333,7 @@ class PayFastWebViewPreloader {
 
       // Load the URL
       controller.loadRequest(Uri.parse(url));
-      debugPrint('Started preloading PayFast WebView: $url');
+      debugPrint('Started preloading PayFast WebView: ${payFastLogUrl(url)}');
     } catch (e) {
       debugPrint('PayFast WebView preload error: $e');
     }

@@ -13,6 +13,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 import 'package:flutter/material.dart';
+import 'package:remixicon/remixicon.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:base_sdk/src/handlers/api_result.dart';
@@ -219,7 +220,7 @@ class _SavedCardsWidgetState extends ConsumerState<SavedCardsWidget> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.credit_card_off, size: 48.r, color: AppStyle.textGrey),
+            Icon(Remix.bank_card_line, size: 48.r, color: AppStyle.textGrey),
             16.verticalSpace,
             Text(
               AppHelpers.getTranslation(TrKeys.noSavedCard),
@@ -273,7 +274,7 @@ class _SavedCardsWidgetState extends ConsumerState<SavedCardsWidget> {
                 decoration: BoxDecoration(
                   color: isSelected
                       ? AppStyle.primary.withOpacity(0.05)
-                      : AppStyle.cardDark,
+                      : AppStyle.cardFor(Theme.of(context).brightness),
                   borderRadius: BorderRadius.circular(12.r),
                   border: Border.all(
                     color: isSelected ? AppStyle.primary : AppStyle.borderColor,
@@ -347,7 +348,7 @@ class _SavedCardsWidgetState extends ConsumerState<SavedCardsWidget> {
                       IconButton(
                         onPressed: () => _confirmDeleteCard(card),
                         icon: Icon(
-                          Icons.close,
+                          Remix.close_line,
                           color: Colors.red.shade400,
                           size: 20.r,
                         ),
@@ -376,13 +377,13 @@ class _SavedCardsWidgetState extends ConsumerState<SavedCardsWidget> {
   IconData _getCardIcon(String cardType) {
     final type = cardType.toLowerCase();
     if (type.contains('visa')) {
-      return Icons.credit_card;
+      return Remix.bank_card_line;
     } else if (type.contains('master')) {
-      return Icons.credit_card;
+      return Remix.bank_card_line;
     } else if (type.contains('amex')) {
-      return Icons.credit_card;
+      return Remix.bank_card_line;
     } else {
-      return Icons.credit_card;
+      return Remix.bank_card_line;
     }
   }
 }

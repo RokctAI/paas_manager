@@ -54,6 +54,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:productivity_sdk/src/common/application/run/task_run.dart';
 import 'package:productivity_sdk/src/common/presentation/plane_back_clearance.dart';
+import 'package:remixicon/remixicon.dart';
 
 /// The moment format on the resume card and the rail's outcomes.
 final DateFormat _kMomentFormat = DateFormat('MMM dd, hh:mm a');
@@ -289,8 +290,9 @@ class _TaskRunViewState extends State<TaskRunView> with WidgetsBindingObserver {
       _emit(run.recordNote(index, note));
 
   Future<void> _pickPhoto(TaskRun run, int index) async {
-    final String? path =
-        await (widget.pickPhoto ?? _pickWithImgService)(context);
+    final String? path = await (widget.pickPhoto ?? _pickWithImgService)(
+      context,
+    );
     if (!mounted || path == null || path.trim().isEmpty) return;
     _emit(run.recordValue(index, path));
   }
@@ -303,28 +305,36 @@ class _TaskRunViewState extends State<TaskRunView> with WidgetsBindingObserver {
   Future<String?> _pickWithImgService(BuildContext context) async {
     final bool? camera = await showModalBottomSheet<bool>(
       context: context,
-      backgroundColor: AppStyle.cardDark,
+      backgroundColor: AppStyle.cardFor(Theme.of(context).brightness),
       builder: (BuildContext context) => SafeArea(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             ListTile(
-              leading: Icon(Icons.photo_camera_outlined,
-                  color: AppStyle.textPrimary),
+              leading: Icon(
+                Remix.camera_line,
+                color: AppStyle.inkFor(Theme.of(context).brightness),
+              ),
               title: Text(
                 'Take a photo',
-                style:
-                    AppStyle.interNormal(size: 14, color: AppStyle.textPrimary),
+                style: AppStyle.interNormal(
+                  size: 14,
+                  color: AppStyle.inkFor(Theme.of(context).brightness),
+                ),
               ),
               onTap: () => Navigator.of(context).pop(true),
             ),
             ListTile(
-              leading: Icon(Icons.photo_library_outlined,
-                  color: AppStyle.textPrimary),
+              leading: Icon(
+                Remix.gallery_line,
+                color: AppStyle.inkFor(Theme.of(context).brightness),
+              ),
               title: Text(
                 'Choose from the gallery',
-                style:
-                    AppStyle.interNormal(size: 14, color: AppStyle.textPrimary),
+                style: AppStyle.interNormal(
+                  size: 14,
+                  color: AppStyle.inkFor(Theme.of(context).brightness),
+                ),
               ),
               onTap: () => Navigator.of(context).pop(false),
             ),
@@ -333,8 +343,9 @@ class _TaskRunViewState extends State<TaskRunView> with WidgetsBindingObserver {
       ),
     );
     if (camera == null) return null;
-    final Object? picked =
-        camera ? await ImgService.getCamera() : await ImgService.getGallery();
+    final Object? picked = camera
+        ? await ImgService.getCamera()
+        : await ImgService.getGallery();
     return picked is String ? picked : null;
   }
 
@@ -406,8 +417,9 @@ class _TaskRunViewState extends State<TaskRunView> with WidgetsBindingObserver {
         onBack: run.previousDoneBefore(focus) == null
             ? null
             : () => _back(run, focus),
-        onSkip:
-            run.skipTargetFrom(focus) == null ? null : () => _skip(run, focus),
+        onSkip: run.skipTargetFrom(focus) == null
+            ? null
+            : () => _skip(run, focus),
         onSkipStep: run.canSkipAt(focus) ? () => _skipStep(run, focus) : null,
         onReading: (int reading, String raw) =>
             _recordReading(run, focus, reading, raw),
@@ -423,8 +435,9 @@ class _TaskRunViewState extends State<TaskRunView> with WidgetsBindingObserver {
             run: run,
             focus: focus,
             now: now,
-            onPick:
-                run.sequential ? null : (int i) => setState(() => _focus = i),
+            onPick: run.sequential
+                ? null
+                : (int i) => setState(() => _focus = i),
           ),
         12.verticalSpace,
         card,
@@ -433,11 +446,7 @@ class _TaskRunViewState extends State<TaskRunView> with WidgetsBindingObserver {
 
     final Widget list = ListView(
       padding: EdgeInsets.fromLTRB(16.w, 12.h, 16.w, 88.h),
-      children: <Widget>[
-        _header(run),
-        12.verticalSpace,
-        ...body,
-      ],
+      children: <Widget>[_header(run), 12.verticalSpace, ...body],
     );
     // The list is ALWAYS the first child of this column, pinned or not,
     // so the re-flow never re-parents it: the field being typed in keeps
@@ -469,7 +478,7 @@ class _TaskRunViewState extends State<TaskRunView> with WidgetsBindingObserver {
                 'RUN',
                 style: AppStyle.interNormal(
                   size: 11,
-                  color: AppStyle.textDarkFaint,
+                  color: AppStyle.faintFor(Theme.of(context).brightness),
                   letterSpacing: 0.8,
                 ),
               ),
@@ -478,8 +487,10 @@ class _TaskRunViewState extends State<TaskRunView> with WidgetsBindingObserver {
                 '${widget.task['title'] ?? ''}',
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
-                style:
-                    AppStyle.interSemi(size: 18, color: AppStyle.textPrimary),
+                style: AppStyle.interSemi(
+                  size: 18,
+                  color: AppStyle.inkFor(Theme.of(context).brightness),
+                ),
               ),
             ],
           ),
@@ -492,7 +503,7 @@ class _TaskRunViewState extends State<TaskRunView> with WidgetsBindingObserver {
               run.isInProgress ? 'Leave · progress kept' : 'Leave',
               style: AppStyle.interNormal(
                 size: 12,
-                color: AppStyle.textDarkSecondary,
+                color: AppStyle.secondaryInkFor(Theme.of(context).brightness),
               ),
             ),
           ),
@@ -501,9 +512,12 @@ class _TaskRunViewState extends State<TaskRunView> with WidgetsBindingObserver {
   }
 
   Widget _notice(String text) => Text(
-        text,
-        style: AppStyle.interNormal(size: 13, color: AppStyle.textDarkFaint),
-      );
+    text,
+    style: AppStyle.interNormal(
+      size: 13,
+      color: AppStyle.faintFor(Theme.of(context).brightness),
+    ),
+  );
 }
 
 // ------------------------------------------------------------- the rail
@@ -532,15 +546,17 @@ class _RailHead extends StatelessWidget {
               'STEP ${focus + 1} OF ${run.total}',
               style: AppStyle.interSemi(
                 size: 11,
-                color: AppStyle.textPrimary,
+                color: AppStyle.inkFor(Theme.of(context).brightness),
                 letterSpacing: 0.8,
               ),
             ),
             const Spacer(),
             Text(
               '${run.leftCount} left',
-              style:
-                  AppStyle.interNormal(size: 11, color: AppStyle.textDarkFaint),
+              style: AppStyle.interNormal(
+                size: 11,
+                color: AppStyle.faintFor(Theme.of(context).brightness),
+              ),
             ),
           ],
         ),
@@ -559,8 +575,10 @@ class _RailHead extends StatelessWidget {
                     color: run.steps[i].isDone
                         ? AppStyle.green
                         : i == focus
-                            ? (blocked ? AppStyle.starColor : AppStyle.primary)
-                            : AppStyle.strokeDarkSubtle,
+                        ? (blocked ? AppStyle.starColor : AppStyle.primary)
+                        : AppStyle.subtleStrokeFor(
+                            Theme.of(context).brightness,
+                          ),
                   ),
                 ),
               ),
@@ -595,9 +613,11 @@ class _StepRail extends StatelessWidget {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 10.h),
       decoration: BoxDecoration(
-        color: AppStyle.cardDark,
+        color: AppStyle.cardFor(Theme.of(context).brightness),
         borderRadius: BorderRadius.circular(12.r),
-        border: Border.all(color: AppStyle.strokeDarkSubtle),
+        border: Border.all(
+          color: AppStyle.subtleStrokeFor(Theme.of(context).brightness),
+        ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -605,13 +625,13 @@ class _StepRail extends StatelessWidget {
         children: <Widget>[
           _RailHead(run: run, focus: focus, now: now),
           8.verticalSpace,
-          for (int i = 0; i < run.total; i++) _row(i),
+          for (int i = 0; i < run.total; i++) _row(context, i),
         ],
       ),
     );
   }
 
-  Widget _row(int i) {
+  Widget _row(BuildContext context, int i) {
     final TaskRunStep step = run.steps[i];
     final bool current = i == focus;
     final StepGate gate = run.gateAt(i, now);
@@ -623,9 +643,11 @@ class _StepRail extends StatelessWidget {
       lead = Container(
         width: 18.r,
         height: 18.r,
-        decoration:
-            BoxDecoration(shape: BoxShape.circle, color: AppStyle.green),
-        child: Icon(Icons.check, size: 12.r, color: AppStyle.blackColor),
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: AppStyle.green,
+        ),
+        child: Icon(Remix.check_line, size: 12.r, color: AppStyle.blackColor),
       );
     } else {
       lead = Container(
@@ -635,7 +657,9 @@ class _StepRail extends StatelessWidget {
         decoration: BoxDecoration(
           shape: BoxShape.circle,
           border: Border.all(
-            color: current ? ring : AppStyle.strokeDark,
+            color: current
+                ? ring
+                : AppStyle.strokeFor(Theme.of(context).brightness),
             width: current ? 1.6 : 1,
           ),
         ),
@@ -643,18 +667,21 @@ class _StepRail extends StatelessWidget {
           '${i + 1}',
           style: AppStyle.interSemi(
             size: 9,
-            color: current ? ring : AppStyle.textDarkFaint,
+            color: current
+                ? ring
+                : AppStyle.faintFor(Theme.of(context).brightness),
           ),
         ),
       );
     }
     final Color titleColor = step.isDone
-        ? AppStyle.textDarkSecondary
+        ? AppStyle.secondaryInkFor(Theme.of(context).brightness)
         : current
-            ? AppStyle.textPrimary
-            : AppStyle.textDarkFaint;
-    final VoidCallback? pick =
-        onPick == null || step.isDone || current ? null : () => onPick!(i);
+        ? AppStyle.inkFor(Theme.of(context).brightness)
+        : AppStyle.faintFor(Theme.of(context).brightness);
+    final VoidCallback? pick = onPick == null || step.isDone || current
+        ? null
+        : () => onPick!(i);
     return InkWell(
       onTap: pick,
       borderRadius: BorderRadius.circular(6.r),
@@ -681,7 +708,7 @@ class _StepRail extends StatelessWidget {
                 size: 11,
                 color: gate == StepGate.running
                     ? AppStyle.starColor
-                    : AppStyle.textDarkFaint,
+                    : AppStyle.faintFor(Theme.of(context).brightness),
               ),
             ),
           ],
@@ -712,8 +739,11 @@ class _StepRail extends StatelessWidget {
 /// CHIP 865 — the compact rail for one plane: the same count, the same
 /// hairline as segments, and the current/next pair by name.
 class _CompactRail extends StatelessWidget {
-  const _CompactRail(
-      {required this.run, required this.focus, required this.now});
+  const _CompactRail({
+    required this.run,
+    required this.focus,
+    required this.now,
+  });
 
   final TaskRun run;
   final int focus;
@@ -725,9 +755,11 @@ class _CompactRail extends StatelessWidget {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 10.h),
       decoration: BoxDecoration(
-        color: AppStyle.cardDark,
+        color: AppStyle.cardFor(Theme.of(context).brightness),
         borderRadius: BorderRadius.circular(12.r),
-        border: Border.all(color: AppStyle.strokeDarkSubtle),
+        border: Border.all(
+          color: AppStyle.subtleStrokeFor(Theme.of(context).brightness),
+        ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -739,7 +771,10 @@ class _CompactRail extends StatelessWidget {
             run.steps[focus].title,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
-            style: AppStyle.interSemi(size: 12, color: AppStyle.textPrimary),
+            style: AppStyle.interSemi(
+              size: 12,
+              color: AppStyle.inkFor(Theme.of(context).brightness),
+            ),
           ),
           if (next != null && next != focus) ...[
             2.verticalSpace,
@@ -747,8 +782,10 @@ class _CompactRail extends StatelessWidget {
               'Next: ${run.steps[next].title}',
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style:
-                  AppStyle.interNormal(size: 11, color: AppStyle.textDarkFaint),
+              style: AppStyle.interNormal(
+                size: 11,
+                color: AppStyle.faintFor(Theme.of(context).brightness),
+              ),
             ),
           ],
         ],
@@ -819,7 +856,8 @@ class _StepCard extends StatelessWidget {
     // 47h's route out: an out-of-spec reading may be explained. The note
     // is drawn as soon as one reading is out of spec, and stays once
     // written.
-    final bool explainable = step.isReading &&
+    final bool explainable =
+        step.isReading &&
         (step.hasNote ||
             step.readings.any(
               (ReadingSpec r) => r.status == ReadingStatus.outOfSpec,
@@ -827,7 +865,7 @@ class _StepCard extends StatelessWidget {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 14.h),
       decoration: BoxDecoration(
-        color: AppStyle.cardDark,
+        color: AppStyle.cardFor(Theme.of(context).brightness),
         borderRadius: BorderRadius.circular(12.r),
         border: Border.all(
           color: blocked ? AppStyle.starColor : AppStyle.primary,
@@ -843,7 +881,7 @@ class _StepCard extends StatelessWidget {
                 'STEP ${index + 1} OF ${run.total}',
                 style: AppStyle.interNormal(
                   size: 11,
-                  color: AppStyle.textDarkFaint,
+                  color: AppStyle.faintFor(Theme.of(context).brightness),
                   letterSpacing: 0.8,
                 ),
               ),
@@ -855,7 +893,7 @@ class _StepCard extends StatelessWidget {
                   style: AppStyle.interSemi(
                     size: 10,
                     color: step.optional
-                        ? AppStyle.textDarkFaint
+                        ? AppStyle.faintFor(Theme.of(context).brightness)
                         : AppStyle.starColor,
                     letterSpacing: 0.8,
                   ),
@@ -866,7 +904,10 @@ class _StepCard extends StatelessWidget {
           4.verticalSpace,
           Text(
             step.title,
-            style: AppStyle.interSemi(size: 16, color: AppStyle.textPrimary),
+            style: AppStyle.interSemi(
+              size: 16,
+              color: AppStyle.inkFor(Theme.of(context).brightness),
+            ),
           ),
           if (step.hasInstruction) ...[
             6.verticalSpace,
@@ -874,11 +915,11 @@ class _StepCard extends StatelessWidget {
               step.instruction!.trim(),
               style: AppStyle.interNormal(
                 size: 13,
-                color: AppStyle.textDarkSecondary,
+                color: AppStyle.secondaryInkFor(Theme.of(context).brightness),
               ),
             ),
           ],
-          if (step.isTimed) ...[12.verticalSpace, _clock(step, gate)],
+          if (step.isTimed) ...[12.verticalSpace, _clock(context, step, gate)],
           if (step.isReading) ...[
             12.verticalSpace,
             for (int i = 0; i < step.readings.length; i++) ...[
@@ -892,7 +933,7 @@ class _StepCard extends StatelessWidget {
               ),
             ],
           ],
-          if (step.isPhoto) ...[12.verticalSpace, _photo(step)],
+          if (step.isPhoto) ...[12.verticalSpace, _photo(context, step)],
           if (step.isPhoto || explainable) ...[
             10.verticalSpace,
             _NoteField(
@@ -904,7 +945,7 @@ class _StepCard extends StatelessWidget {
               onChanged: onNote,
             ),
           ],
-          if (!footerPinned) ..._foot(step, gate, last, pinned: false),
+          if (!footerPinned) ..._foot(context, step, gate, last, pinned: false),
         ],
       ),
     );
@@ -914,14 +955,15 @@ class _StepCard extends StatelessWidget {
   /// 856's amber block), the actions row, and Skip for now. Inside the
   /// card it follows the fields; pinned, it is drawn by [pinnedFooter].
   List<Widget> _foot(
+    BuildContext context,
     TaskRunStep step,
     StepGate gate,
     bool last, {
     required bool pinned,
   }) {
     final Widget? notice = switch (gate) {
-      StepGate.running => _blocked(step),
-      StepGate.incomplete => _incomplete(step),
+      StepGate.running => _blocked(context, step),
+      StepGate.incomplete => _incomplete(context, step),
       _ => null,
     };
     return <Widget>[
@@ -931,7 +973,7 @@ class _StepCard extends StatelessWidget {
         (pinned ? 10 : 16).verticalSpace,
       ] else if (!pinned)
         16.verticalSpace,
-      _actions(gate, last),
+      _actions(context, gate, last),
       if (onSkip != null) ...<Widget>[
         8.verticalSpace,
         Align(
@@ -943,7 +985,7 @@ class _StepCard extends StatelessWidget {
               'Skip for now',
               style: AppStyle.interNormal(
                 size: 12,
-                color: AppStyle.textDarkSecondary,
+                color: AppStyle.secondaryInkFor(Theme.of(context).brightness),
               ),
             ),
           ),
@@ -980,7 +1022,7 @@ class _StepCard extends StatelessWidget {
             (compact ? 0 : planeBackClearance()),
       ),
       decoration: BoxDecoration(
-        color: AppStyle.cardDark,
+        color: AppStyle.cardFor(Theme.of(context).brightness),
         border: Border(
           top: BorderSide(
             color: blocked ? AppStyle.starColor : AppStyle.primary,
@@ -990,14 +1032,14 @@ class _StepCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         mainAxisSize: MainAxisSize.min,
-        children: _foot(step, gate, last, pinned: true),
+        children: _foot(context, step, gate, last, pinned: true),
       ),
     );
   }
 
   /// CHIP 872 — the step clock: the full duration before Start, the live
   /// countdown while it runs, "time's up" once it has run out.
-  Widget _clock(TaskRunStep step, StepGate gate) {
+  Widget _clock(BuildContext context, TaskRunStep step, StepGate gate) {
     final String reading;
     final String caption;
     final Color tint;
@@ -1006,7 +1048,7 @@ class _StepCard extends StatelessWidget {
       case StepGate.locked:
         reading = formatRunClock(step.duration);
         caption = 'Start the clock when you begin';
-        tint = AppStyle.textDarkSecondary;
+        tint = AppStyle.secondaryInkFor(Theme.of(context).brightness);
       case StepGate.running:
         reading = formatRunClock(step.remainingAt(now));
         caption = 'left on this step';
@@ -1024,18 +1066,17 @@ class _StepCard extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: <Widget>[
-        Text(
-          reading,
-          style: AppStyle.interSemi(size: 32, color: tint),
-        ),
+        Text(reading, style: AppStyle.interSemi(size: 32, color: tint)),
         10.horizontalSpace,
         Expanded(
           child: Padding(
             padding: EdgeInsets.only(bottom: 6.h),
             child: Text(
               caption,
-              style:
-                  AppStyle.interNormal(size: 12, color: AppStyle.textDarkFaint),
+              style: AppStyle.interNormal(
+                size: 12,
+                color: AppStyle.faintFor(Theme.of(context).brightness),
+              ),
             ),
           ),
         ),
@@ -1047,7 +1088,7 @@ class _StepCard extends StatelessWidget {
   /// route out, which honestly says there is none but time. Amber, never
   /// red: nothing has gone wrong. At one plane (46g) it also lists what is
   /// NOT blocked, because a blocked phone screen can read as a dead end.
-  Widget _blocked(TaskRunStep step) {
+  Widget _blocked(BuildContext context, TaskRunStep step) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 10.h),
       decoration: BoxDecoration(
@@ -1061,7 +1102,7 @@ class _StepCard extends StatelessWidget {
         children: <Widget>[
           Row(
             children: <Widget>[
-              Icon(Icons.hourglass_top, size: 14.r, color: AppStyle.starColor),
+              Icon(Remix.hourglass_line, size: 14.r, color: AppStyle.starColor),
               6.horizontalSpace,
               Text(
                 'Not finished yet',
@@ -1074,15 +1115,19 @@ class _StepCard extends StatelessWidget {
             '${formatRunClock(step.remainingAt(now))} left on this step\'s clock. '
             'Continue unlocks when it runs out — there is no way past this but time.',
             style: AppStyle.interNormal(
-                size: 12, color: AppStyle.textDarkSecondary),
+              size: 12,
+              color: AppStyle.secondaryInkFor(Theme.of(context).brightness),
+            ),
           ),
           if (compact) ...[
             8.verticalSpace,
             Text(
               'Only forward is blocked. Back still moves a step, Leave still '
               'keeps your progress, and what you have done is already saved.',
-              style:
-                  AppStyle.interNormal(size: 11, color: AppStyle.textDarkFaint),
+              style: AppStyle.interNormal(
+                size: 11,
+                color: AppStyle.faintFor(Theme.of(context).brightness),
+              ),
             ),
           ],
         ],
@@ -1095,7 +1140,7 @@ class _StepCard extends StatelessWidget {
   /// ppm"), and the route out is to re-test or record why. Amber, never
   /// red: a reading out of spec is a fact about the plant, not an error
   /// in the app.
-  Widget _incomplete(TaskRunStep step) {
+  Widget _incomplete(BuildContext context, TaskRunStep step) {
     final ReadingSpec? unmet = step.firstUnmetReading;
     final bool outOfSpec = unmet?.status == ReadingStatus.outOfSpec;
     return Container(
@@ -1111,7 +1156,7 @@ class _StepCard extends StatelessWidget {
         children: <Widget>[
           Row(
             children: <Widget>[
-              Icon(Icons.rule, size: 14.r, color: AppStyle.starColor),
+              Icon(Remix.list_check, size: 14.r, color: AppStyle.starColor),
               6.horizontalSpace,
               Text(
                 outOfSpec ? 'Out of spec' : 'Reading missing',
@@ -1122,7 +1167,10 @@ class _StepCard extends StatelessWidget {
           4.verticalSpace,
           Text(
             step.refusal ?? '',
-            style: AppStyle.interSemi(size: 12, color: AppStyle.textPrimary),
+            style: AppStyle.interSemi(
+              size: 12,
+              color: AppStyle.inkFor(Theme.of(context).brightness),
+            ),
           ),
           2.verticalSpace,
           Text(
@@ -1130,15 +1178,19 @@ class _StepCard extends StatelessWidget {
                 ? 'Re-test, or record why it is out of spec, to continue.'
                 : 'Every reading needs a value before this step can continue.',
             style: AppStyle.interNormal(
-                size: 12, color: AppStyle.textDarkSecondary),
+              size: 12,
+              color: AppStyle.secondaryInkFor(Theme.of(context).brightness),
+            ),
           ),
           if (compact) ...[
             8.verticalSpace,
             Text(
               'Only forward is blocked. Back still moves a step, Leave still '
               'keeps your progress, and what you have recorded is already saved.',
-              style:
-                  AppStyle.interNormal(size: 11, color: AppStyle.textDarkFaint),
+              style: AppStyle.interNormal(
+                size: 11,
+                color: AppStyle.faintFor(Theme.of(context).brightness),
+              ),
             ),
           ],
         ],
@@ -1149,27 +1201,31 @@ class _StepCard extends StatelessWidget {
   /// 47i — the photo slot: a tile to add one, or the picked file's name
   /// with a way to drop it. A path, never a preview: the run keeps the
   /// path and nothing here reads the file.
-  Widget _photo(TaskRunStep step) {
+  Widget _photo(BuildContext context, TaskRunStep step) {
     if (step.hasValue) {
       final String name = step.value!.split(RegExp(r'[\\/]')).last;
       return Container(
         padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 10.h),
         decoration: BoxDecoration(
-          color: AppStyle.cardDarkAlt,
+          color: AppStyle.cardAltFor(Theme.of(context).brightness),
           borderRadius: BorderRadius.circular(10.r),
-          border: Border.all(color: AppStyle.strokeDarkSubtle),
+          border: Border.all(
+            color: AppStyle.subtleStrokeFor(Theme.of(context).brightness),
+          ),
         ),
         child: Row(
           children: <Widget>[
-            Icon(Icons.photo_outlined, size: 18.r, color: AppStyle.green),
+            Icon(Remix.image_line, size: 18.r, color: AppStyle.green),
             8.horizontalSpace,
             Expanded(
               child: Text(
                 name,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style:
-                    AppStyle.interNormal(size: 12, color: AppStyle.textPrimary),
+                style: AppStyle.interNormal(
+                  size: 12,
+                  color: AppStyle.inkFor(Theme.of(context).brightness),
+                ),
               ),
             ),
             if (!step.isDone)
@@ -1180,7 +1236,9 @@ class _StepCard extends StatelessWidget {
                   'Remove',
                   style: AppStyle.interNormal(
                     size: 12,
-                    color: AppStyle.textDarkSecondary,
+                    color: AppStyle.secondaryInkFor(
+                      Theme.of(context).brightness,
+                    ),
                   ),
                 ),
               ),
@@ -1196,12 +1254,17 @@ class _StepCard extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 14.h),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10.r),
-          border: Border.all(color: AppStyle.strokeDark),
+          border: Border.all(
+            color: AppStyle.strokeFor(Theme.of(context).brightness),
+          ),
         ),
         child: Row(
           children: <Widget>[
-            Icon(Icons.add_a_photo_outlined,
-                size: 18.r, color: AppStyle.textDarkSecondary),
+            Icon(
+              Remix.image_add_line,
+              size: 18.r,
+              color: AppStyle.secondaryInkFor(Theme.of(context).brightness),
+            ),
             10.horizontalSpace,
             Expanded(
               child: Column(
@@ -1211,12 +1274,16 @@ class _StepCard extends StatelessWidget {
                   Text(
                     'Add a photo',
                     style: AppStyle.interSemi(
-                        size: 13, color: AppStyle.textPrimary),
+                      size: 13,
+                      color: AppStyle.inkFor(Theme.of(context).brightness),
+                    ),
                   ),
                   Text(
                     'of the vessel head or the meter',
                     style: AppStyle.interNormal(
-                        size: 11, color: AppStyle.textDarkFaint),
+                      size: 11,
+                      color: AppStyle.faintFor(Theme.of(context).brightness),
+                    ),
                   ),
                 ],
               ),
@@ -1230,15 +1297,15 @@ class _StepCard extends StatelessWidget {
   /// CHIPS 855 / 854 / 857 — the run's Back and the forward control.
   /// Continue is present and disabled with a lock while a clock blocks it,
   /// never hidden. 47i adds Skip between them on an optional step.
-  Widget _actions(StepGate gate, bool last) {
+  Widget _actions(BuildContext context, StepGate gate, bool last) {
     final bool blocked =
         gate == StepGate.running || gate == StepGate.incomplete;
     final bool starting = gate == StepGate.notStarted;
     final String forward = starting
         ? 'Start'
         : last
-            ? 'Finish run'
-            : 'Continue';
+        ? 'Finish run'
+        : 'Continue';
     return Row(
       children: <Widget>[
         Expanded(
@@ -1248,7 +1315,9 @@ class _StepCard extends StatelessWidget {
             onPressed: onBack,
             style: OutlinedButton.styleFrom(
               minimumSize: Size(0, 44.h),
-              side: BorderSide(color: AppStyle.strokeDark),
+              side: BorderSide(
+                color: AppStyle.strokeFor(Theme.of(context).brightness),
+              ),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10.r),
               ),
@@ -1258,8 +1327,8 @@ class _StepCard extends StatelessWidget {
               style: AppStyle.interSemi(
                 size: 13,
                 color: onBack == null
-                    ? AppStyle.textDarkFaint
-                    : AppStyle.textPrimary,
+                    ? AppStyle.faintFor(Theme.of(context).brightness)
+                    : AppStyle.inkFor(Theme.of(context).brightness),
               ),
             ),
           ),
@@ -1273,15 +1342,19 @@ class _StepCard extends StatelessWidget {
               onPressed: onSkipStep,
               style: OutlinedButton.styleFrom(
                 minimumSize: Size(0, 44.h),
-                side: BorderSide(color: AppStyle.strokeDark),
+                side: BorderSide(
+                  color: AppStyle.strokeFor(Theme.of(context).brightness),
+                ),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10.r),
                 ),
               ),
               child: Text(
                 'Skip',
-                style:
-                    AppStyle.interSemi(size: 13, color: AppStyle.textPrimary),
+                style: AppStyle.interSemi(
+                  size: 13,
+                  color: AppStyle.inkFor(Theme.of(context).brightness),
+                ),
               ),
             ),
           ),
@@ -1294,13 +1367,17 @@ class _StepCard extends StatelessWidget {
             onPressed: blocked
                 ? null
                 : starting
-                    ? onStart
-                    : onContinue,
+                ? onStart
+                : onContinue,
             style: ElevatedButton.styleFrom(
               backgroundColor: AppStyle.primary,
               foregroundColor: AppStyle.blackColor,
-              disabledBackgroundColor: AppStyle.cardDarkAlt,
-              disabledForegroundColor: AppStyle.textDarkFaint,
+              disabledBackgroundColor: AppStyle.cardAltFor(
+                Theme.of(context).brightness,
+              ),
+              disabledForegroundColor: AppStyle.faintFor(
+                Theme.of(context).brightness,
+              ),
               minimumSize: Size(0, 44.h),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10.r),
@@ -1308,17 +1385,19 @@ class _StepCard extends StatelessWidget {
             ),
             icon: Icon(
               blocked
-                  ? Icons.lock_outline
+                  ? Remix.lock_line
                   : starting
-                      ? Icons.play_arrow
-                      : Icons.check,
+                  ? Remix.play_fill
+                  : Remix.check_line,
               size: 16.r,
             ),
             label: Text(
               forward,
               style: AppStyle.interSemi(
                 size: 13,
-                color: blocked ? AppStyle.textDarkFaint : AppStyle.blackColor,
+                color: blocked
+                    ? AppStyle.faintFor(Theme.of(context).brightness)
+                    : AppStyle.blackColor,
               ),
             ),
           ),
@@ -1369,8 +1448,9 @@ class _ReadingRow extends StatefulWidget {
 }
 
 class _ReadingRowState extends State<_ReadingRow> {
-  late final TextEditingController _controller =
-      TextEditingController(text: widget.reading.value ?? '');
+  late final TextEditingController _controller = TextEditingController(
+    text: widget.reading.value ?? '',
+  );
   late final FocusNode _focus = FocusNode()..addListener(_onFocus);
 
   /// Focus arrived: bring the whole row — label, spec and field — into
@@ -1420,7 +1500,7 @@ class _ReadingRowState extends State<_ReadingRow> {
     final ReadingSpec reading = widget.reading;
     final ReadingStatus status = reading.status;
     final Color tint = switch (status) {
-      ReadingStatus.empty => AppStyle.strokeDark,
+      ReadingStatus.empty => AppStyle.strokeFor(Theme.of(context).brightness),
       ReadingStatus.inSpec => AppStyle.green,
       ReadingStatus.outOfSpec => AppStyle.starColor,
     };
@@ -1435,7 +1515,7 @@ class _ReadingRowState extends State<_ReadingRow> {
           padding: EdgeInsets.symmetric(horizontal: 10.w),
           alignment: AlignmentDirectional.centerStart,
           decoration: BoxDecoration(
-            color: AppStyle.cardDarkAlt,
+            color: AppStyle.cardAltFor(Theme.of(context).brightness),
             borderRadius: BorderRadius.circular(8.r),
             border: Border.all(color: tint),
           ),
@@ -1444,8 +1524,8 @@ class _ReadingRowState extends State<_ReadingRow> {
             style: AppStyle.interNormal(
               size: 13,
               color: reading.hasValue
-                  ? AppStyle.textPrimary
-                  : AppStyle.textDarkFaint,
+                  ? AppStyle.inkFor(Theme.of(context).brightness)
+                  : AppStyle.faintFor(Theme.of(context).brightness),
             ),
           ),
         ),
@@ -1458,13 +1538,18 @@ class _ReadingRowState extends State<_ReadingRow> {
         enabled: widget.enabled,
         onChanged: widget.onChanged,
         keyboardType: const TextInputType.numberWithOptions(decimal: true),
-        style: AppStyle.interSemi(size: 15, color: AppStyle.textPrimary),
+        style: AppStyle.interSemi(
+          size: 15,
+          color: AppStyle.inkFor(Theme.of(context).brightness),
+        ),
         decoration: InputDecoration(
           filled: true,
-          fillColor: AppStyle.cardDarkAlt,
+          fillColor: AppStyle.cardAltFor(Theme.of(context).brightness),
           isDense: true,
-          contentPadding:
-              EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
+          contentPadding: EdgeInsets.symmetric(
+            horizontal: 10.w,
+            vertical: 10.h,
+          ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8.r),
             borderSide: BorderSide(color: tint),
@@ -1489,8 +1574,10 @@ class _ReadingRowState extends State<_ReadingRow> {
             children: <Widget>[
               Text(
                 reading.label,
-                style:
-                    AppStyle.interNormal(size: 12, color: AppStyle.textPrimary),
+                style: AppStyle.interNormal(
+                  size: 12,
+                  color: AppStyle.inkFor(Theme.of(context).brightness),
+                ),
               ),
               if (reading.specLabel.isNotEmpty)
                 Text(
@@ -1499,7 +1586,7 @@ class _ReadingRowState extends State<_ReadingRow> {
                     size: 11,
                     color: status == ReadingStatus.outOfSpec
                         ? AppStyle.starColor
-                        : AppStyle.textDarkFaint,
+                        : AppStyle.faintFor(Theme.of(context).brightness),
                   ),
                 ),
             ],
@@ -1513,8 +1600,10 @@ class _ReadingRowState extends State<_ReadingRow> {
             width: 34.w,
             child: Text(
               reading.unit,
-              style:
-                  AppStyle.interNormal(size: 12, color: AppStyle.textDarkFaint),
+              style: AppStyle.interNormal(
+                size: 12,
+                color: AppStyle.faintFor(Theme.of(context).brightness),
+              ),
             ),
           ),
         ],
@@ -1542,8 +1631,9 @@ class _NoteField extends StatefulWidget {
 }
 
 class _NoteFieldState extends State<_NoteField> {
-  late final TextEditingController _controller =
-      TextEditingController(text: widget.note ?? '');
+  late final TextEditingController _controller = TextEditingController(
+    text: widget.note ?? '',
+  );
   late final FocusNode _focus = FocusNode()..addListener(_onFocus);
 
   void _onFocus() {
@@ -1578,13 +1668,18 @@ class _NoteFieldState extends State<_NoteField> {
       onChanged: widget.onChanged,
       minLines: 2,
       maxLines: 4,
-      style: AppStyle.interNormal(size: 13, color: AppStyle.textPrimary),
+      style: AppStyle.interNormal(
+        size: 13,
+        color: AppStyle.inkFor(Theme.of(context).brightness),
+      ),
       decoration: InputDecoration(
         hintText: widget.hint,
-        hintStyle:
-            AppStyle.interNormal(size: 13, color: AppStyle.textDarkFaint),
+        hintStyle: AppStyle.interNormal(
+          size: 13,
+          color: AppStyle.faintFor(Theme.of(context).brightness),
+        ),
         filled: true,
-        fillColor: AppStyle.cardDarkAlt,
+        fillColor: AppStyle.cardAltFor(Theme.of(context).brightness),
         isDense: true,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8.r),
@@ -1617,7 +1712,7 @@ class _ResumeCard extends StatelessWidget {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 14.h),
       decoration: BoxDecoration(
-        color: AppStyle.cardDark,
+        color: AppStyle.cardFor(Theme.of(context).brightness),
         borderRadius: BorderRadius.circular(12.r),
         border: Border.all(color: AppStyle.primary),
       ),
@@ -1627,7 +1722,10 @@ class _ResumeCard extends StatelessWidget {
         children: <Widget>[
           Text(
             'Pick up where you left off',
-            style: AppStyle.interSemi(size: 16, color: AppStyle.textPrimary),
+            style: AppStyle.interSemi(
+              size: 16,
+              color: AppStyle.inkFor(Theme.of(context).brightness),
+            ),
           ),
           4.verticalSpace,
           Text(
@@ -1636,8 +1734,10 @@ class _ResumeCard extends StatelessWidget {
               if (touched != null)
                 'last touched ${_kMomentFormat.format(touched)}',
             ].where((String s) => s.isNotEmpty).join(' · '),
-            style:
-                AppStyle.interNormal(size: 12, color: AppStyle.textDarkFaint),
+            style: AppStyle.interNormal(
+              size: 12,
+              color: AppStyle.faintFor(Theme.of(context).brightness),
+            ),
           ),
           10.verticalSpace,
           for (int i = 0; i < run.total; i++)
@@ -1648,8 +1748,8 @@ class _ResumeCard extends StatelessWidget {
                   children: <Widget>[
                     Icon(
                       run.steps[i].isDone
-                          ? Icons.check_circle
-                          : Icons.timelapse,
+                          ? Remix.checkbox_circle_fill
+                          : Remix.timer_line,
                       size: 14.r,
                       color: run.steps[i].isDone
                           ? AppStyle.green
@@ -1663,7 +1763,9 @@ class _ResumeCard extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                         style: AppStyle.interNormal(
                           size: 12,
-                          color: AppStyle.textDarkSecondary,
+                          color: AppStyle.secondaryInkFor(
+                            Theme.of(context).brightness,
+                          ),
                         ),
                       ),
                     ),
@@ -1671,11 +1773,11 @@ class _ResumeCard extends StatelessWidget {
                       run.steps[i].isDone
                           ? (run.steps[i].skipped ? 'skipped' : 'kept')
                           : run.steps[i].isTimed
-                              ? 'clock kept running'
-                              : 'kept',
+                          ? 'clock kept running'
+                          : 'kept',
                       style: AppStyle.interNormal(
                         size: 11,
-                        color: AppStyle.textDarkFaint,
+                        color: AppStyle.faintFor(Theme.of(context).brightness),
                       ),
                     ),
                   ],
@@ -1719,7 +1821,9 @@ class _ResumeCard extends StatelessWidget {
                   child: Text(
                     'Resume',
                     style: AppStyle.interSemi(
-                        size: 13, color: AppStyle.blackColor),
+                      size: 13,
+                      color: AppStyle.blackColor,
+                    ),
                   ),
                 ),
               ),
@@ -1750,7 +1854,7 @@ class _FinishedCard extends StatelessWidget {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 14.h),
       decoration: BoxDecoration(
-        color: AppStyle.cardDark,
+        color: AppStyle.cardFor(Theme.of(context).brightness),
         borderRadius: BorderRadius.circular(12.r),
         border: Border.all(color: AppStyle.green),
       ),
@@ -1760,12 +1864,18 @@ class _FinishedCard extends StatelessWidget {
         children: <Widget>[
           Row(
             children: <Widget>[
-              Icon(Icons.check_circle, size: 18.r, color: AppStyle.green),
+              Icon(
+                Remix.checkbox_circle_fill,
+                size: 18.r,
+                color: AppStyle.green,
+              ),
               8.horizontalSpace,
               Text(
                 'All ${run.total} steps done',
-                style:
-                    AppStyle.interSemi(size: 16, color: AppStyle.textPrimary),
+                style: AppStyle.interSemi(
+                  size: 16,
+                  color: AppStyle.inkFor(Theme.of(context).brightness),
+                ),
               ),
             ],
           ),
@@ -1773,8 +1883,10 @@ class _FinishedCard extends StatelessWidget {
             4.verticalSpace,
             Text(
               'finished ${_kMomentFormat.format(finished)}',
-              style:
-                  AppStyle.interNormal(size: 12, color: AppStyle.textDarkFaint),
+              style: AppStyle.interNormal(
+                size: 12,
+                color: AppStyle.faintFor(Theme.of(context).brightness),
+              ),
             ),
           ],
           if (onMarkDone != null && !taskDone) ...[

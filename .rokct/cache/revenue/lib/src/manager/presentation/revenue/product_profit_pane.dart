@@ -59,9 +59,9 @@ class ProductProfitPane extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: AppStyle.cardDarkAlt,
+        color: AppStyle.cardAltFor(Theme.of(context).brightness),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppStyle.strokeDarkSubtle),
+        border: Border.all(color: AppStyle.subtleStrokeFor(Theme.of(context).brightness)),
       ),
       padding: const EdgeInsets.all(16),
       child: Column(
@@ -77,9 +77,9 @@ class ProductProfitPane extends StatelessWidget {
                   Container(
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
-                      color: AppStyle.cardDark,
+                      color: AppStyle.cardFor(Theme.of(context).brightness),
                       borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: AppStyle.strokeDark),
+                      border: Border.all(color: AppStyle.strokeFor(Theme.of(context).brightness)),
                     ),
                     child: ProfitMarginStrip(product: product, large: true),
                   ),
@@ -88,7 +88,7 @@ class ProductProfitPane extends StatelessWidget {
                     AppHelpers.getTranslation('this_period').toUpperCase(),
                     style: AppStyle.interSemi(
                       size: 11,
-                      color: AppStyle.textDarkSecondary,
+                      color: AppStyle.secondaryInkFor(Theme.of(context).brightness),
                       letterSpacing: 0.6,
                     ),
                   ),
@@ -100,7 +100,7 @@ class ProductProfitPane extends StatelessWidget {
                       AppHelpers.getTranslation('by_variant').toUpperCase(),
                       style: AppStyle.interSemi(
                         size: 11,
-                        color: AppStyle.textDarkSecondary,
+                        color: AppStyle.secondaryInkFor(Theme.of(context).brightness),
                         letterSpacing: 0.6,
                       ),
                     ),

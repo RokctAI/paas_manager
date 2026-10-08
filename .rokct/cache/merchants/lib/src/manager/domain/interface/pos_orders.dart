@@ -25,8 +25,8 @@ import 'package:base_sdk/src/handlers/api_result.dart';
 /// `SellerSectionsTablesRepositoryFacade` precedent). The manager host
 /// registers the installed `ManagerPosOrdersAdapter`
 /// (templates/adapters/manager/pos_orders_adapter.dart) — host-composition
-/// code that may reference any composed SDK. Demo builds register this
-/// SDK's `MockPosOrdersRepository` instead (zero backend contact). When
+/// code that may reference any composed SDK; a demo session runs that same
+/// adapter against the fixtures (base_sdk's DemoGatewayInterceptor). When
 /// NOTHING is registered the checkout degrades honestly: no customer /
 /// credit surface, and a finished sale completes locally only.
 abstract class PosOrdersFacade {
@@ -130,10 +130,10 @@ class PosCustomer {
 
   /// "TM" for Thabo Mokoena — the attach card's avatar initials.
   String get initials {
-    final parts = [firstname, lastname]
-        .whereType<String>()
-        .where((p) => p.isNotEmpty)
-        .toList();
+    final parts = [
+      firstname,
+      lastname,
+    ].whereType<String>().where((p) => p.isNotEmpty).toList();
     if (parts.isEmpty) return '?';
     return parts.take(2).map((p) => p[0].toUpperCase()).join();
   }

@@ -12,17 +12,18 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-import 'package:base_sdk/src/constants/app_constants.dart';
+import 'package:base_sdk/src/services/demo_session.dart';
 import 'package:base_sdk/src/services/local_storage.dart';
 
 /// The signed-in seller's shop docname: the cached shop JSON first
 /// (orders_sdk's `LocalStorage.getShopJson()?['id']` precedent), then the
-/// profile's shop. Demo composes answer with the demo shop so the screens
-/// render without a session.
+/// profile's shop. A demo session answers with the demo shop (the one the
+/// assets/demo/booking fixtures describe) so the screens render without a
+/// real shop.
 String? sellerShopId() {
   final cached = LocalStorage.getShopJson()?['id']?.toString();
   if (cached != null && cached.isNotEmpty) return cached;
   final profile = LocalStorage.getUser()?.shop?.id;
   if (profile != null && profile.isNotEmpty) return profile;
-  return AppConstants.isDemo ? 'demo-shop' : null;
+  return DemoSession.demoActive ? 'demo-shop' : null;
 }

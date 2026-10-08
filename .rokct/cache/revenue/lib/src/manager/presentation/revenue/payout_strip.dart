@@ -34,9 +34,9 @@ class PayoutStrip extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: AppStyle.cardDarkAlt,
+        color: AppStyle.cardAltFor(Theme.of(context).brightness),
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: AppStyle.strokeDarkSubtle),
+        border: Border.all(color: AppStyle.subtleStrokeFor(Theme.of(context).brightness)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -45,7 +45,7 @@ class PayoutStrip extends StatelessWidget {
             AppHelpers.getTranslation('payout').toUpperCase(),
             style: AppStyle.interSemi(
               size: 11,
-              color: AppStyle.textDarkSecondary,
+              color: AppStyle.secondaryInkFor(Theme.of(context).brightness),
               letterSpacing: 0.6,
             ),
           ),
@@ -53,22 +53,22 @@ class PayoutStrip extends StatelessWidget {
           _row(
             AppHelpers.getTranslation('gross_revenue'),
             AppHelpers.numberFormat(number: gross),
-            AppStyle.textPrimary,
+            AppStyle.inkFor(Theme.of(context).brightness),
           ),
           const SizedBox(height: 8),
           _row(
             AppHelpers.getTranslation('platform_fee'),
             '− ${AppHelpers.numberFormat(number: fee)}',
-            AppStyle.textDarkSecondary,
+            AppStyle.secondaryInkFor(Theme.of(context).brightness),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 10),
-            child: Divider(height: 1, color: AppStyle.strokeDarkSubtle),
+            child: Divider(height: 1, color: AppStyle.subtleStrokeFor(Theme.of(context).brightness)),
           ),
           _row(
             AppHelpers.getTranslation('your_payout'),
             AppHelpers.numberFormat(number: payout),
-            AppStyle.textPrimary,
+            AppStyle.inkFor(Theme.of(context).brightness),
             bold: true,
           ),
         ],

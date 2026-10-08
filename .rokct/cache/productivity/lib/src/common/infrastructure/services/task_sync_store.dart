@@ -13,11 +13,13 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 import 'package:base_sdk/base_sdk.dart';
-import 'package:drift/drift.dart' show Value;
+import 'package:drift/drift.dart'
+    show BooleanExpressionOperators, OrderingTerm, Value;
 import 'package:uuid/uuid.dart';
 
 import '../repositories/todo_repository_impl.dart';
 import '../../models/response/task_response.dart';
+import '../database/productivity_owner_scope.dart';
 
 /// The local half of task sync: everything the push and pull paths need to
 /// read from and write back to [TasksTable].
@@ -55,10 +57,24 @@ class TaskSyncStore {
   /// on purpose.
   static String newClientId() => _uuid.v4();
 
-  /// The row with this local [id], or null.
-  static Future<TaskEntity?> rowById(String id) => (_db.select(
-    _db.tasksTable,
-  )..where((t) => t.id.equals(id))).getSingleOrNull();
+  /// The row with this local [id] that the current account can see, or
+  /// null.
+  ///
+  /// Ordered owner-descending with an explicit limit, like every other
+  /// single-row read in this SDK: `id` alone is no longer unique, so an
+  /// unclaimed pre-scoping row and this account's own row for the same id
+  /// can both be visible and the owned one wins.
+  static Future<TaskEntity?> rowById(String id) async {
+    await ProductivityOwnerScope.ready(_db);
+    final String owner = ProductivityOwnerScope.currentOwner;
+    final List<TaskEntity> rows =
+        await (_db.select(_db.tasksTable)
+              ..where((t) => t.id.equals(id) & ownerVisible(t.owner, owner))
+              ..orderBy([(t) => OrderingTerm.desc(t.owner)])
+              ..limit(1))
+            .get();
+    return rows.isEmpty ? null : rows.first;
+  }
 
   /// The row carrying this [clientId], or null.
   ///
@@ -67,9 +83,13 @@ class TaskSyncStore {
   /// same client id is doing something wrong, but it must not turn a
   /// reconciliation into a thrown error on a path nobody is waiting on.
   static Future<TaskEntity?> rowByClientId(String clientId) async {
+    await ProductivityOwnerScope.ready(_db);
+    final String owner = ProductivityOwnerScope.currentOwner;
     final List<TaskEntity> rows =
         await (_db.select(_db.tasksTable)
-              ..where((t) => t.clientId.equals(clientId))
+              ..where((t) =>
+                  t.clientId.equals(clientId) & ownerVisible(t.owner, owner))
+              ..orderBy([(t) => OrderingTerm.desc(t.owner)])
               ..limit(1))
             .get();
     return rows.isEmpty ? null : rows.first;
@@ -89,7 +109,12 @@ class TaskSyncStore {
     if (row == null) return false;
     final Map<String, dynamic> todo = TodoRepositoryImpl.rowToTodo(row)
       ..addAll(todoPatch);
-    await (_db.update(_db.tasksTable)..where((t) => t.id.equals(row.id))).write(
+    // Keyed on the row's OWN owner, read off the row that was found:
+    // this must write the row the read returned and never reach across
+    // to another account's row with the same id.
+    await (_db.update(_db.tasksTable)
+          ..where((t) => t.id.equals(row.id) & t.owner.equals(row.owner)))
+        .write(
       TasksTableCompanion(
         // Absent, not null: an ack that carried no name must leave whatever
         // id the row already holds alone rather than clearing it.
@@ -150,11 +175,21 @@ class TaskSyncStore {
           ? null
           : TodoRepositoryImpl.rowToTodo(existing),
     );
+    final String owner = ProductivityOwnerScope.currentOwner;
+    // A pulled task lands as this account's, and claims the pre-scoping
+    // row for that id if there is one, for the same reason the local save
+    // path does: the upsert conflicts on the full {id, owner}.
+    if (owner != kUnownedOwner) {
+      await (_db.update(_db.tasksTable)
+            ..where((t) => t.id.equals(id) & t.owner.equals(kUnownedOwner)))
+          .write(TasksTableCompanion(owner: Value(owner)));
+    }
     await _db
         .into(_db.tasksTable)
         .insertOnConflictUpdate(
           TasksTableCompanion.insert(
             id: Value(id),
+            owner: Value(owner),
             title: (todo['title'] ?? '').toString(),
             description: Value(todo['description']?.toString()),
             isCompleted: Value(task.isDone),

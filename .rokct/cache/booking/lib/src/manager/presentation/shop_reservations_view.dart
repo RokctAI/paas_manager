@@ -20,7 +20,6 @@ import 'package:base_sdk/src/presentation/components/lists/list_language.dart';
 import 'package:base_sdk/src/presentation/components/loading.dart';
 import 'package:base_sdk/src/presentation/theme/app_style.dart';
 import 'package:base_sdk/src/services/app_helpers.dart';
-import 'package:base_sdk/src/services/local_storage.dart';
 import 'package:base_sdk/src/services/tr_keys.dart';
 import 'package:booking_sdk/src/common/booking_tr_keys.dart';
 import 'package:booking_sdk/src/common/infrastructure/models/booking_models.dart';
@@ -63,7 +62,7 @@ class _ShopReservationsViewState extends ConsumerState<ShopReservationsView> {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = LocalStorage.getAppThemeMode();
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     final state = ref.watch(shopReservationsProvider);
     final notifier = ref.read(shopReservationsProvider.notifier);
 

@@ -24,6 +24,7 @@ import 'package:kitchen_sdk/src/manager/infrastructure/models/data/kitchen_order
 import 'package:kitchen_sdk/src/manager/presentation/kitchen/kitchen_clock.dart';
 import 'package:kitchen_sdk/src/manager/presentation/kitchen/kitchen_order_card.dart';
 import 'package:kitchen_sdk/src/manager/presentation/kitchen/kitchen_status.dart';
+import 'package:remixicon/remixicon.dart';
 
 /// The selected order's detail (approved 34a plane 3 / 34c phone push):
 /// order header with status pill and the small clock; the dish-by-dish
@@ -42,7 +43,7 @@ class KitchenDetailPane extends ConsumerWidget {
         ? ''
         : DateFormat('d MMM').format(order.createdAt!.toLocal());
     return ColoredBox(
-      color: AppStyle.surfaceDark,
+      color: AppStyle.surfaceFor(Theme.of(context).brightness),
       child: Padding(
         padding: const EdgeInsetsDirectional.fromSTEB(16, 16, 16, 16),
         child: Column(
@@ -58,7 +59,7 @@ class KitchenDetailPane extends ConsumerWidget {
                     overflow: TextOverflow.ellipsis,
                     style: AppStyle.interBold(
                       size: 17,
-                      color: AppStyle.textPrimary,
+                      color: AppStyle.inkFor(Theme.of(context).brightness),
                     ),
                   ),
                 ),
@@ -76,7 +77,7 @@ class KitchenDetailPane extends ConsumerWidget {
                     overflow: TextOverflow.ellipsis,
                     style: AppStyle.interNormal(
                       size: 11.5,
-                      color: AppStyle.textDarkSecondary,
+                      color: AppStyle.secondaryInkFor(Theme.of(context).brightness),
                     ),
                   ),
                 ),
@@ -89,7 +90,7 @@ class KitchenDetailPane extends ConsumerWidget {
               ],
             ),
             const SizedBox(height: 14),
-            Container(height: 1, color: AppStyle.strokeDarkSubtle),
+            Container(height: 1, color: AppStyle.subtleStrokeFor(Theme.of(context).brightness)),
             const SizedBox(height: 14),
             Expanded(
               child: ListView(
@@ -99,7 +100,7 @@ class KitchenDetailPane extends ConsumerWidget {
                     ' · ${order.dishes.length}',
                     style: AppStyle.interBold(
                       size: 10.5,
-                      color: AppStyle.textDarkFaint,
+                      color: AppStyle.faintFor(Theme.of(context).brightness),
                     ),
                   ),
                   const SizedBox(height: 11),
@@ -108,9 +109,9 @@ class KitchenDetailPane extends ConsumerWidget {
                   Row(
                     children: [
                       Icon(
-                        Icons.touch_app_outlined,
+                        Remix.cursor_line,
                         size: 12,
-                        color: AppStyle.textDarkFaint,
+                        color: AppStyle.faintFor(Theme.of(context).brightness),
                       ),
                       const SizedBox(width: 5),
                       Expanded(
@@ -120,7 +121,7 @@ class KitchenDetailPane extends ConsumerWidget {
                           ),
                           style: AppStyle.interNormal(
                             size: 10.5,
-                            color: AppStyle.textDarkFaint,
+                            color: AppStyle.faintFor(Theme.of(context).brightness),
                           ),
                         ),
                       ),
@@ -156,7 +157,7 @@ class KitchenDetailPane extends ConsumerWidget {
     child: Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Icon(Icons.sticky_note_2_outlined, size: 16, color: AppStyle.rate),
+        Icon(Remix.sticky_note_2_line, size: 16, color: AppStyle.rate),
         const SizedBox(width: 9),
         Expanded(
           child: Column(
@@ -281,14 +282,14 @@ class KitchenDetailPane extends ConsumerWidget {
     final bool? confirmed = await showDialog<bool>(
       context: context,
       builder: (dialogContext) => AlertDialog(
-        backgroundColor: AppStyle.cardDark,
+        backgroundColor: AppStyle.cardFor(Theme.of(context).brightness),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
-          side: BorderSide(color: AppStyle.strokeDark),
+          side: BorderSide(color: AppStyle.strokeFor(Theme.of(context).brightness)),
         ),
         content: Text(
           AppHelpers.getTranslation(TrKeys.areYouSure),
-          style: AppStyle.interNormal(size: 14, color: AppStyle.textPrimary),
+          style: AppStyle.interNormal(size: 14, color: AppStyle.inkFor(Theme.of(context).brightness)),
         ),
         actions: [
           TextButton(
@@ -297,7 +298,7 @@ class KitchenDetailPane extends ConsumerWidget {
               AppHelpers.getTranslation(TrKeys.cancel),
               style: AppStyle.interSemi(
                 size: 13,
-                color: AppStyle.textDarkSecondary,
+                color: AppStyle.secondaryInkFor(Theme.of(context).brightness),
               ),
             ),
           ),
@@ -347,12 +348,12 @@ class _DishLine extends ConsumerWidget {
                   : (dish.title ?? ''),
               style: AppStyle.interSemi(
                 size: 13.5,
-                color: struck ? AppStyle.textDarkFaint : AppStyle.textPrimary,
+                color: struck ? AppStyle.faintFor(Theme.of(context).brightness) : AppStyle.inkFor(Theme.of(context).brightness),
               ).copyWith(
                 decoration: struck
                     ? TextDecoration.lineThrough
                     : TextDecoration.none,
-                decorationColor: AppStyle.textDarkFaint,
+                decorationColor: AppStyle.faintFor(Theme.of(context).brightness),
               ),
             ),
           ),
@@ -379,7 +380,7 @@ class _DishLine extends ConsumerWidget {
                   if (editable) ...[
                     const SizedBox(width: 5),
                     Icon(
-                      Icons.touch_app_outlined,
+                      Remix.cursor_line,
                       size: 13,
                       color: status.color,
                     ),

@@ -194,8 +194,8 @@ class _KitchenFlipClockState extends State<KitchenFlipClock> {
         digit = AppStyle.red;
         border = AppStyle.red.withValues(alpha: 0.6);
       default:
-        digit = AppStyle.textPrimary;
-        border = AppStyle.strokeDark;
+        digit = AppStyle.inkFor(Theme.of(context).brightness);
+        border = AppStyle.strokeFor(Theme.of(context).brightness);
     }
 
     final w = widget.tileWidth;
@@ -203,7 +203,7 @@ class _KitchenFlipClockState extends State<KitchenFlipClock> {
       padding: const EdgeInsets.symmetric(horizontal: 3),
       child: Text(
         ':',
-        style: _mono(w * 0.5, AppStyle.textDarkSecondary),
+        style: _mono(w * 0.5, AppStyle.secondaryInkFor(Theme.of(context).brightness)),
       ),
     );
 
@@ -252,7 +252,7 @@ class _KitchenFlipClockState extends State<KitchenFlipClock> {
       width: w,
       height: w * 1.18,
       decoration: BoxDecoration(
-        color: AppStyle.cardDarkAlt,
+        color: AppStyle.cardAltFor(Theme.of(context).brightness),
         borderRadius: BorderRadius.circular(6),
         border: Border.all(color: border),
       ),

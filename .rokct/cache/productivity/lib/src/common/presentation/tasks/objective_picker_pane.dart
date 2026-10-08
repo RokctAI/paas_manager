@@ -39,6 +39,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:productivity_sdk/src/common/models/data/objective_data.dart';
 import 'package:productivity_sdk/src/common/presentation/tasks/task_view_model.dart';
+import 'package:remixicon/remixicon.dart';
 
 /// A pillar's accent, by its position in the pillar list.
 ///
@@ -167,7 +168,10 @@ class _ObjectivePickerPaneState extends State<ObjectivePickerPane> {
             'Link an objective',
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
-            style: AppStyle.interSemi(size: 18, color: AppStyle.textPrimary),
+            style: AppStyle.interSemi(
+              size: 18,
+              color: AppStyle.inkFor(Theme.of(context).brightness),
+            ),
           ),
         ),
         8.horizontalSpace,
@@ -201,14 +205,14 @@ class _ObjectivePickerPaneState extends State<ObjectivePickerPane> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Icon(Icons.outlined_flag, size: 14.r, color: objectiveTint),
+          Icon(Remix.flag_line, size: 14.r, color: objectiveTint),
           8.horizontalSpace,
           Expanded(
             child: Text(
               ObjectivePickerPane.provenance,
               style: AppStyle.interNormal(
                 size: 11,
-                color: AppStyle.textDarkSecondary,
+                color: AppStyle.secondaryInkFor(Theme.of(context).brightness),
               ),
             ),
           ),
@@ -262,7 +266,9 @@ class _ObjectivePickerPaneState extends State<ObjectivePickerPane> {
           color: active ? tint.withValues(alpha: 0.16) : AppStyle.transparent,
           borderRadius: BorderRadius.circular(20.r),
           border: Border.all(
-            color: active ? tint : AppStyle.strokeDarkSubtle,
+            color: active
+                ? tint
+                : AppStyle.subtleStrokeFor(Theme.of(context).brightness),
           ),
         ),
         child: Row(
@@ -272,7 +278,9 @@ class _ObjectivePickerPaneState extends State<ObjectivePickerPane> {
               label,
               style: AppStyle.interSemi(
                 size: 12,
-                color: active ? tint : AppStyle.textDarkSecondary,
+                color: active
+                    ? tint
+                    : AppStyle.secondaryInkFor(Theme.of(context).brightness),
               ),
             ),
             6.horizontalSpace,
@@ -280,7 +288,9 @@ class _ObjectivePickerPaneState extends State<ObjectivePickerPane> {
               '$count',
               style: AppStyle.interNormal(
                 size: 11,
-                color: active ? tint : AppStyle.textDarkFaint,
+                color: active
+                    ? tint
+                    : AppStyle.faintFor(Theme.of(context).brightness),
               ),
             ),
           ],
@@ -334,7 +344,10 @@ class _ObjectivePickerPaneState extends State<ObjectivePickerPane> {
           catalog!.objectives.isEmpty
               ? 'No objectives in the plan yet.'
               : 'No objectives under this pillar.',
-          style: AppStyle.interNormal(size: 13, color: AppStyle.textDarkFaint),
+          style: AppStyle.interNormal(
+            size: 13,
+            color: AppStyle.faintFor(Theme.of(context).brightness),
+          ),
         ),
       );
     }
@@ -349,7 +362,7 @@ class _ObjectivePickerPaneState extends State<ObjectivePickerPane> {
           objective: objective,
           pillarTitle: pillar?.title,
           accent: pillar == null
-              ? AppStyle.textDarkSecondary
+              ? AppStyle.secondaryInkFor(Theme.of(context).brightness)
               : pillarAccent(catalog.accentIndexOf(pillar.name)),
           kpiCount: catalog.kpiCountByObjective.containsKey(objective.name)
               ? catalog.kpiCountFor(objective)
@@ -373,14 +386,19 @@ class _ObjectivePickerPaneState extends State<ObjectivePickerPane> {
             onPressed: widget.onCancel,
             style: OutlinedButton.styleFrom(
               minimumSize: Size(0, 44.h),
-              side: BorderSide(color: AppStyle.strokeDark),
+              side: BorderSide(
+                color: AppStyle.strokeFor(Theme.of(context).brightness),
+              ),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10.r),
               ),
             ),
             child: Text(
               'Cancel',
-              style: AppStyle.interSemi(size: 13, color: AppStyle.textPrimary),
+              style: AppStyle.interSemi(
+                size: 13,
+                color: AppStyle.inkFor(Theme.of(context).brightness),
+              ),
             ),
           ),
         ),
@@ -401,7 +419,10 @@ class _ObjectivePickerPaneState extends State<ObjectivePickerPane> {
             ),
             child: Text(
               'Link objective',
-              style: AppStyle.interSemi(size: 13, color: AppStyle.blackColor),
+              style: AppStyle.interSemi(
+                size: 13,
+                color: AppStyle.inkFor(Theme.of(context).brightness),
+              ),
             ),
           ),
         ),
@@ -453,10 +474,12 @@ class ObjectiveCard extends StatelessWidget {
         child: Container(
           padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 10.h),
           decoration: BoxDecoration(
-            color: AppStyle.cardDark,
+            color: AppStyle.cardFor(Theme.of(context).brightness),
             borderRadius: BorderRadius.circular(12.r),
             border: Border.all(
-              color: selected ? AppStyle.primary : AppStyle.strokeDarkSubtle,
+              color: selected
+                  ? AppStyle.primary
+                  : AppStyle.subtleStrokeFor(Theme.of(context).brightness),
             ),
           ),
           child: Row(
@@ -472,9 +495,17 @@ class ObjectiveCard extends StatelessWidget {
                       runSpacing: 4.h,
                       children: <Widget>[
                         if (pillarTitle != null)
-                          _tag(pillarTitle!, tint: accent, outlined: true),
+                          _tag(
+                            context,
+                            pillarTitle!,
+                            tint: accent,
+                            outlined: true,
+                          ),
                         if (kpiCount != null)
-                          _tag(kpiCount == 1 ? '1 KPI' : '$kpiCount KPIs'),
+                          _tag(
+                            context,
+                            kpiCount == 1 ? '1 KPI' : '$kpiCount KPIs',
+                          ),
                       ],
                     ),
                     6.verticalSpace,
@@ -484,14 +515,14 @@ class ObjectiveCard extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                       style: AppStyle.interSemi(
                         size: 14,
-                        color: AppStyle.textPrimary,
+                        color: AppStyle.inkFor(Theme.of(context).brightness),
                       ),
                     ),
                   ],
                 ),
               ),
               10.horizontalSpace,
-              _radio(),
+              _radio(context),
             ],
           ),
         ),
@@ -499,14 +530,24 @@ class ObjectiveCard extends StatelessWidget {
     );
   }
 
-  Widget _tag(String label, {Color? tint, bool outlined = false}) {
-    final Color color = tint ?? AppStyle.textDarkSecondary;
+  Widget _tag(
+    BuildContext context,
+    String label, {
+    Color? tint,
+    bool outlined = false,
+  }) {
+    final Color color =
+        tint ?? AppStyle.secondaryInkFor(Theme.of(context).brightness);
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 2.h),
       decoration: BoxDecoration(
-        color: outlined ? color.withValues(alpha: 0.12) : AppStyle.cardDarkAlt,
+        color: outlined
+            ? color.withValues(alpha: 0.12)
+            : AppStyle.cardAltFor(Theme.of(context).brightness),
         borderRadius: BorderRadius.circular(6.r),
-        border: outlined ? Border.all(color: color.withValues(alpha: 0.6)) : null,
+        border: outlined
+            ? Border.all(color: color.withValues(alpha: 0.6))
+            : null,
       ),
       child: Text(label, style: AppStyle.interNormal(size: 11, color: color)),
     );
@@ -514,7 +555,7 @@ class ObjectiveCard extends StatelessWidget {
 
   /// The round radio: the task card's 19px checkbox shape, so a picked
   /// objective and a done task read alike.
-  Widget _radio() {
+  Widget _radio(BuildContext context) {
     return Container(
       key: radioKey(objective.name),
       width: 19.r,
@@ -524,12 +565,14 @@ class ObjectiveCard extends StatelessWidget {
         shape: BoxShape.circle,
         color: selected ? AppStyle.primary : AppStyle.transparent,
         border: Border.all(
-          color: selected ? AppStyle.primary : AppStyle.strokeDark,
+          color: selected
+              ? AppStyle.primary
+              : AppStyle.strokeFor(Theme.of(context).brightness),
           width: 1.5,
         ),
       ),
       child: selected
-          ? Icon(Icons.check, size: 13.r, color: AppStyle.blackColor)
+          ? Icon(Remix.check_line, size: 13.r, color: AppStyle.blackColor)
           : null,
     );
   }
@@ -567,7 +610,8 @@ class ObjectiveLinkRow extends StatelessWidget {
   /// The sub-line for a linked task: `Pillar › “Title”`, or the name when
   /// that is all the device holds.
   static String linkedLine(TaskViewModel task) {
-    final String title = task.strategicObjectiveTitle ?? task.strategicObjective ?? '';
+    final String title =
+        task.strategicObjectiveTitle ?? task.strategicObjective ?? '';
     final String? pillar = task.strategicObjectivePillar;
     return pillar == null ? '“$title”' : '$pillar › “$title”';
   }
@@ -575,7 +619,9 @@ class ObjectiveLinkRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bool linked = task.hasStrategicObjective;
-    final Color tint = linked ? objectiveTint : AppStyle.textDarkFaint;
+    final Color tint = linked
+        ? objectiveTint
+        : AppStyle.faintFor(Theme.of(context).brightness);
     return Material(
       color: AppStyle.transparent,
       child: InkWell(
@@ -585,17 +631,17 @@ class ObjectiveLinkRow extends StatelessWidget {
         child: Container(
           padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 10.h),
           decoration: BoxDecoration(
-            color: AppStyle.cardDarkAlt,
+            color: AppStyle.cardAltFor(Theme.of(context).brightness),
             borderRadius: BorderRadius.circular(10.r),
             border: Border.all(
               color: linked
                   ? objectiveTint.withValues(alpha: 0.45)
-                  : AppStyle.strokeDarkSubtle,
+                  : AppStyle.subtleStrokeFor(Theme.of(context).brightness),
             ),
           ),
           child: Row(
             children: <Widget>[
-              Icon(Icons.outlined_flag, size: 16.r, color: tint),
+              Icon(Remix.flag_line, size: 16.r, color: tint),
               10.horizontalSpace,
               Expanded(
                 child: Column(
@@ -606,7 +652,7 @@ class ObjectiveLinkRow extends StatelessWidget {
                       label,
                       style: AppStyle.interSemi(
                         size: 13,
-                        color: AppStyle.textPrimary,
+                        color: AppStyle.inkFor(Theme.of(context).brightness),
                       ),
                     ),
                     2.verticalSpace,
@@ -616,7 +662,9 @@ class ObjectiveLinkRow extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                       style: AppStyle.interNormal(
                         size: 11,
-                        color: linked ? objectiveTint : AppStyle.textDarkFaint,
+                        color: linked
+                            ? objectiveTint
+                            : AppStyle.faintFor(Theme.of(context).brightness),
                       ),
                     ),
                   ],
@@ -628,19 +676,22 @@ class ObjectiveLinkRow extends StatelessWidget {
                   onTap: onClear,
                   behavior: HitTestBehavior.opaque,
                   child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 2.h),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 6.w,
+                      vertical: 2.h,
+                    ),
                     child: Icon(
-                      Icons.close,
+                      Remix.close_line,
                       size: 15.r,
-                      color: AppStyle.textDarkFaint,
+                      color: AppStyle.faintFor(Theme.of(context).brightness),
                     ),
                   ),
                 )
               else
                 Icon(
-                  Icons.chevron_right,
+                  Remix.arrow_right_s_line,
                   size: 18.r,
-                  color: AppStyle.textDarkFaint,
+                  color: AppStyle.faintFor(Theme.of(context).brightness),
                 ),
             ],
           ),

@@ -63,7 +63,7 @@ class RevenueDetailPage extends ConsumerWidget {
       }
     });
     return Scaffold(
-      backgroundColor: AppStyle.surfaceDark,
+      backgroundColor: AppStyle.surfaceFor(Theme.of(context).brightness),
       body: SafeArea(
         child: product == null
             ? const SizedBox.shrink()

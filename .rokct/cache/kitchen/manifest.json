@@ -1,7 +1,9 @@
 {
   "name": "kitchen_sdk",
-  "version": "1.4.1",
-  "_comment_requires": "kitchen_sdk >= 1.3.0 requires base_sdk >= 1.43.0 (PlaneHost/Planes/PlaneSpan and FloatingBackPill from the approved plane model — the manager Kitchen screen declares ALL planes per approved frame 34a and folds to the corner back pill on phones per 34c). The composer manifest schema has no machine-readable minimum-version field, so this is the declaration (orders_sdk's convention).",
+  "version": "1.5.3",
+  "_comment_version_1_5_1": "1.5.0 -> 1.5.1: the demo fixture install moves from the app_type.manager block to the top-level installs, next to the top-level app_assets entry that registers it. The common DI registers assets/demo/kitchen in every role, but only manager composes copied the fixtures, so any other compose (supacharge's Windows build) got an assets/demo/kitchen/ pubspec entry with nothing behind it and flutter failed with 'unable to find directory entry in pubspec.yaml'. Manifest-only change; no code changes.",
+  "_comment_version_1_5_0": "1.4.1 -> 1.5.0: demo runs the REAL repositories (Ray, 2026-09-25: \"touch all sdk demos ... remove unused files\"). The DI hooks register the real repositories only and call DemoFixtures.registerAssetDirectory('assets/demo/kitchen'); base_sdk 1.73.0's DemoGatewayInterceptor answers each platform cmd from templates/assets/demo/kitchen/<cmd>.json (installed to assets/demo/kitchen) while DemoSession.demoActive, and an unknown cmd fails with DemoFixtureMissing. The kitchen fixtures carry (the five-ticket service across accepted/cooking/ready, filterable by status, plus two kitchen stations for KitchensRepository). Deleted: DemoKitchenOrdersRepository and the demo-session swap code that chose them. Needs base_sdk >= 1.73.0 (DemoFixtures / DemoGatewayInterceptor).",
+  "_comment_requires": "kitchen_sdk >= 1.5.0 requires base_sdk >= 1.73.0 (DemoFixtures.registerAssetDirectory and the DemoGatewayInterceptor that answers the demo fixtures). kitchen_sdk >= 1.3.0 requires base_sdk >= 1.43.0 (PlaneHost/Planes/PlaneSpan and FloatingBackPill from the approved plane model — the manager Kitchen screen declares ALL planes per approved frame 34a and folds to the corner back pill on phones per 34c). The composer manifest schema has no machine-readable minimum-version field, so this is the declaration (orders_sdk's convention).",
   "boot_hooks": [
     {
       "id": "kitchen-af-bundled-translations",
@@ -12,6 +14,15 @@
         "import 'package:kitchen_sdk/src/translations/kitchen_af_translations.dart';"
       ],
       "_comment": "Registers this SDK's bundled Afrikaans map for its manifest tr_keys into base_sdk's BundledTranslations registry at boot. Backend-served translation rows still win; the map is only the offline/unseeded fallback consulted before the humanized-key fallback. Requires a base_sdk with bundled_translations.dart."
+    }
+  ],
+  "app_assets": [
+    "assets/demo/kitchen/"
+  ],
+  "installs": [
+    {
+      "from": "templates/assets/demo/kitchen",
+      "to": "assets/demo/kitchen"
     }
   ],
   "installs": [],

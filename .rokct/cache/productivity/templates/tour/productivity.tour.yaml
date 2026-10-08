@@ -59,6 +59,7 @@ imports:
   - "import 'package:productivity_sdk/src/common/infrastructure/repositories/todo_repository_impl.dart';"
   - "import 'package:productivity_sdk/src/common/presentation/run/task_run_view.dart';"
   - "import 'package:productivity_sdk/src/common/presentation/tasks/task_card.dart';"
+  - "import 'package:productivity_sdk/src/common/presentation/tasks/productivity_plus_nav.dart';"
 steps:
   # 44a on a wide window: the list in one plane, the tapped task's detail
   # beside it; 44d on the phone: the same card expanded in place. The day's
@@ -179,7 +180,14 @@ steps:
       );
       router.replaceNamed('/tasks');
       await Future<void>.delayed(const Duration(seconds: 3));
-      final Finder compose = find.byKey(const ValueKey<String>('tasks-compose'));
+      // The plus moved onto the floating nav (Ray, 2026-09-20: "i think
+      // productivity plus should be in the floating nav when you in its
+      // page"), so the tap that opens the compose lane is the bar's own
+      // control rather than a FloatingActionButton keyed by list.
+      final Finder compose = find.descendant(
+        of: find.byKey(ProductivityPlusNav.navKey),
+        matching: find.byIcon(ProductivityPlusNav.plusIcon),
+      );
       if (compose.evaluate().isNotEmpty) {
         await tester.tap(compose.first, warnIfMissed: false);
         await Future<void>.delayed(const Duration(seconds: 2));

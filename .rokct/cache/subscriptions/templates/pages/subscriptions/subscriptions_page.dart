@@ -139,7 +139,7 @@ class _SubscriptionsPageState extends ConsumerState<ManagerSubscriptionsPage> {
           if (!didPop) _closePayment();
         },
         child: Scaffold(
-          backgroundColor: AppStyle.surfaceDark,
+          backgroundColor: AppStyle.surfaceFor(Theme.of(context).brightness),
           body: SafeArea(
             child: LayoutBuilder(
               builder: (context, constraints) {
@@ -169,7 +169,7 @@ class _SubscriptionsPageState extends ConsumerState<ManagerSubscriptionsPage> {
                               ),
                               padding: REdgeInsets.all(20),
                               decoration: BoxDecoration(
-                                color: AppStyle.cardDark,
+                                color: AppStyle.cardFor(Theme.of(context).brightness),
                                 borderRadius: BorderRadius.circular(16.r),
                               ),
                               child: SubscriptionPaymentBody(
@@ -265,14 +265,14 @@ class _Overview extends ConsumerWidget {
                 padding: REdgeInsets.symmetric(horizontal: 12, vertical: 6),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(100.r),
-                  border: Border.all(color: AppStyle.strokeDark),
+                  border: Border.all(color: AppStyle.strokeFor(Theme.of(context).brightness)),
                 ),
                 child: Text(
                   '${plans.length} '
                   '${AppHelpers.getTranslation('plans').toLowerCase()}',
                   style: AppStyle.interRegular(
                     size: 13,
-                    color: AppStyle.textDarkSecondary,
+                    color: AppStyle.secondaryInkFor(Theme.of(context).brightness),
                   ),
                 ),
               ),
@@ -351,7 +351,7 @@ class _EmptyCatalog extends StatelessWidget {
       width: double.infinity,
       padding: REdgeInsets.symmetric(horizontal: 24, vertical: 36),
       decoration: BoxDecoration(
-        color: AppStyle.cardDark,
+        color: AppStyle.cardFor(Theme.of(context).brightness),
         borderRadius: BorderRadius.circular(16.r),
       ),
       child: Column(
@@ -359,7 +359,7 @@ class _EmptyCatalog extends StatelessWidget {
           Icon(
             Remix.price_tag_3_line,
             size: 36.r,
-            color: AppStyle.textDarkSecondary,
+            color: AppStyle.secondaryInkFor(Theme.of(context).brightness),
           ),
           12.verticalSpace,
           Text(
@@ -373,7 +373,7 @@ class _EmptyCatalog extends StatelessWidget {
             textAlign: TextAlign.center,
             style: AppStyle.interRegular(
               size: 13.5,
-              color: AppStyle.textDarkSecondary,
+              color: AppStyle.secondaryInkFor(Theme.of(context).brightness),
             ),
           ),
         ],
