@@ -2,4 +2,3 @@ analyzer:
   exclude:
     - "templates/**"
     - "third_party/**"
-    - build/**

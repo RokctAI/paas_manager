@@ -13,10 +13,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 import 'dart:convert';
-import 'dart:io';
 import 'package:flutter/foundation.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:share_plus/share_plus.dart';
 import 'package:base_sdk/base_sdk.dart';
 import 'package:drift/drift.dart'
     show BooleanExpressionOperators, OrderingTerm, Value;
@@ -24,6 +21,7 @@ import 'package:uuid/uuid.dart';
 import '../../application/tasks/long_term_rule.dart';
 import '../../domain/interface/todo_repository_facade.dart';
 import '../../models/request/task_request.dart';
+import '../services/productivity_backup.dart';
 import '../services/task_pull_service.dart';
 import '../services/task_sync_queue.dart';
 import '../services/task_sync_store.dart';
@@ -434,15 +432,34 @@ class TodoRepositoryImpl implements TodoRepositoryFacade {
   }
 
   @override
-  Future<void> exportTodos(List<Map<String, dynamic>> todos) async {
+  Future<void> exportTodos(List<Map<String, dynamic>> todos) =>
+      // Same file, same text, same bytes as ever; the body now lives where
+      // the notes backup can take the same road.
+      ProductivityBackup.share(
+        todos,
+        fileName: ProductivityBackup.tasksFileName,
+        text: ProductivityBackup.tasksShareText,
+      );
 
-    try {
-      final directory = await getApplicationDocumentsDirectory();
-      final file = File('${directory.path}/todos_backup.json');
-      await file.writeAsString(json.encode(todos));
-      await Share.shareXFiles([XFile(file.path)], text: 'My Todo Backup');
-    } catch (e) {
-      debugPrint('Error exporting data: $e');
+  @override
+  Future<int> importTodos(List<Map<String, dynamic>> todos) async {
+    final List<Map<String, dynamic>> fresh =
+        ProductivityBackup.newOnly(await loadTodos(), todos);
+    if (fresh.isEmpty) return 0;
+    // A task with no id is new by definition; it is given one here so the
+    // count below can find it again.
+    for (final Map<String, dynamic> t in fresh) {
+      if ('${t['id'] ?? ''}'.trim().isEmpty) t['id'] = const Uuid().v4();
     }
+    // Through saveTodos and nothing else: the long-term rule, the owner
+    // claim and the sync push all apply to a restored task exactly as they
+    // do to a typed one.
+    await saveTodos(fresh);
+    // saveTodos reports a refused write by logging it, not by throwing, so
+    // the count is read back from the store rather than assumed.
+    final Set<String> held = <String>{
+      for (final Map<String, dynamic> t in await loadTodos()) '${t['id']}',
+    };
+    return fresh.where((t) => held.contains('${t['id']}')).length;
   }
 }

@@ -38,4 +38,16 @@ abstract class NoteRepositoryFacade {
 
   /// Removes one note by id. A missing id is a no-op, never an error.
   Future<void> deleteNote(String id);
+
+  /// Writes [notes] to a backup file and opens the share sheet on it - the
+  /// tasks Backup's format and road, under the notes file name.
+  Future<void> exportNotes(List<Map<String, dynamic>> notes);
+
+  /// Restores notes read from a backup [exportNotes] wrote, and returns how
+  /// many were added.
+  ///
+  /// A note whose id is already held is SKIPPED, never overwritten. A
+  /// restored note keeps the `createdAt` and `updatedAt` it was backed up
+  /// with, so it sorts where it sorted before rather than to the top.
+  Future<int> importNotes(List<Map<String, dynamic>> notes);
 }

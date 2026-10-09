@@ -588,8 +588,61 @@ class _TasksWorkspaceState extends State<TasksWorkspace> {
     );
   }
 
+  /// Chip 835 — backs up the lit list: tasks as they always were, notes
+  /// the same way under their own file name (ProductivityBackup).
   Future<void> _exportData() async {
-    await _repository.exportTodos(_todos);
+    if (_list == WorkspaceList.notes) {
+      await _noteRepository.exportNotes(_notes);
+    } else {
+      await _repository.exportTodos(_todos);
+    }
+  }
+
+  /// Restores the lit list from a backup the export above wrote — Ray: "i
+  /// think they also need imprt". Items already held (same id) are
+  /// skipped, never overwritten; the rest go through the repository's own
+  /// save path, so an imported task syncs like a typed one.
+  Future<void> _importData() async {
+    final bool notes = _list == WorkspaceList.notes;
+    final String? text = await ProductivityBackup.pickText();
+    if (text == null || !mounted) return;
+    final List<Map<String, dynamic>> items;
+    try {
+      items = ProductivityBackup.decode(text);
+    } on NotABackupException {
+      if (mounted) {
+        AppHelpers.showCheckTopSnackBar(
+          context,
+          'That file is not a ${notes ? 'notes' : 'tasks'} backup.',
+        );
+      }
+      return;
+    }
+    final int added;
+    try {
+      added = notes
+          ? await _noteRepository.importNotes(items)
+          : await _repository.importTodos(items);
+    } catch (_) {
+      if (mounted) {
+        AppHelpers.showCheckTopSnackBar(context, 'Import failed.');
+      }
+      return;
+    }
+    if (notes) {
+      await _loadNotes();
+    } else {
+      await _loadTodos();
+    }
+    if (!mounted) return;
+    AppHelpers.showCheckTopSnackBarDone(
+      context,
+      ProductivityBackup.importSummary(
+        added: added,
+        read: items.length,
+        noun: notes ? 'note' : 'task',
+      ),
+    );
   }
 
   void _saveTask() {
@@ -1636,9 +1689,18 @@ class _TasksWorkspaceState extends State<TasksWorkspace> {
                   // the workspace changes. Same control chip 827 uses for the
                   // sort, for the same reason: two values, both visible, the
                   // active one lit.
-                  Align(
-                    alignment: AlignmentDirectional.centerStart,
-                    child: WorkspaceListSegment(
+                  //
+                  // THE HEADER UTILITIES SHARE THIS LINE — Ray: "only tasks
+                  // seem to be able to export and notes doesnt ... calendar
+                  // and export should be n the top line where task and notes
+                  // rectangle". Chip 832 (calendar mode) and chip 835
+                  // (Backup) moved up from the tasks header's second line;
+                  // export and import act on the lit list. Calendar mode
+                  // stays tasks-only, as it always was: a note has no date
+                  // to fall on.
+                  WorkspaceListBar(
+                    key: const ValueKey<String>('workspace-list-bar'),
+                    segment: WorkspaceListSegment(
                       active: _list,
                       counts: <WorkspaceList, int>{
                         WorkspaceList.tasks: _todos.length,
@@ -1646,6 +1708,29 @@ class _TasksWorkspaceState extends State<TasksWorkspace> {
                       },
                       onChanged: _showList,
                     ),
+                    actions: <Widget>[
+                      if (!notes)
+                        _headerAction(
+                          icon: _showCalendar
+                              ? Remix.list_unordered
+                              : Remix.calendar_line,
+                          tooltip: 'Calendar mode',
+                          onTap: () =>
+                              setState(() => _showCalendar = !_showCalendar),
+                        ),
+                      // CHIP 835 — the only way an item leaves the device
+                      // (flag a), now for notes as well as tasks.
+                      _headerAction(
+                        icon: Remix.download_line,
+                        tooltip: notes ? 'Export notes' : 'Export tasks',
+                        onTap: _exportData,
+                      ),
+                      _headerAction(
+                        icon: Remix.folder_open_line,
+                        tooltip: notes ? 'Import notes' : 'Import tasks',
+                        onTap: _importData,
+                      ),
+                    ],
                   ),
                   10.verticalSpace,
                   ...notes ? _noteListRows() : _taskListRows(context),
@@ -1717,26 +1802,10 @@ class _TasksWorkspaceState extends State<TasksWorkspace> {
     final displayedTodos = _getFilteredAndSortedTodos();
     final singlePlane = _isSinglePlane(context);
     return <Widget>[
-      // CANONICAL 700 — header and count pill, carrying the two
-      // header utilities: 832 calendar mode and 835 Backup.
-      TaskListHeader(
-        title: 'Tasks',
-        count: displayedTodos.length,
-        actions: [
-          _headerAction(
-            icon: _showCalendar ? Remix.list_unordered : Remix.calendar_line,
-            tooltip: 'Calendar mode',
-            onTap: () => setState(() => _showCalendar = !_showCalendar),
-          ),
-          // CHIP 835 — the only way a task leaves the device
-          // (flag a). Kept in the header on every frame.
-          _headerAction(
-            icon: Remix.download_line,
-            tooltip: 'Backup',
-            onTap: _exportData,
-          ),
-        ],
-      ),
+      // CANONICAL 700 — header and count pill. Its two utilities, 832
+      // calendar mode and 835 Backup, moved up to the segment's line
+      // (WorkspaceListBar in _listPlane), where notes reach them too.
+      TaskListHeader(title: 'Tasks', count: displayedTodos.length),
       10.verticalSpace,
       _searchField(),
       10.verticalSpace,

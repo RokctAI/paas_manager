@@ -19,6 +19,7 @@ import 'package:uuid/uuid.dart';
 
 import '../../domain/interface/note_repository_facade.dart';
 import '../database/productivity_owner_scope.dart';
+import '../services/productivity_backup.dart';
 
 /// The notes surface's store — the tasks store's pattern, minus the half
 /// that exists only for the server.
@@ -132,6 +133,55 @@ class NoteRepositoryImpl implements NoteRepositoryFacade {
     } catch (e) {
       debugPrint('Error deleting note $id: $e');
     }
+  }
+
+  @override
+  Future<void> exportNotes(List<Map<String, dynamic>> notes) =>
+      ProductivityBackup.share(
+        notes,
+        fileName: ProductivityBackup.notesFileName,
+        text: ProductivityBackup.notesShareText,
+      );
+
+  @override
+  Future<int> importNotes(List<Map<String, dynamic>> notes) async {
+    final List<Map<String, dynamic>> fresh =
+        ProductivityBackup.newOnly(await loadNotes(), notes);
+    if (fresh.isEmpty) return 0;
+    int added = 0;
+    try {
+      await ProductivityOwnerScope.ready(_database);
+      final String owner = ProductivityOwnerScope.currentOwner;
+      final DateTime now = DateTime.now();
+      // One transaction: a backup is restored whole or not at all, never
+      // left half-written by a refused row.
+      await _database.transaction(() async {
+        for (final Map<String, dynamic> note in fresh) {
+          final String id = (note['id'] ?? '').toString().trim().isNotEmpty
+              ? note['id'].toString().trim()
+              : _uuid.v4();
+          final DateTime createdAt = _parse(note['createdAt']) ?? now;
+          // saveNote stamps "now" because a save IS a change; a restore
+          // is not, so the note keeps the moment it last changed.
+          final DateTime updatedAt = _parse(note['updatedAt']) ?? createdAt;
+          await _database.into(_database.notesTable).insertOnConflictUpdate(
+                NotesTableCompanion.insert(
+                  id: Value(id),
+                  owner: Value(owner),
+                  title: Value((note['title'] ?? '').toString().trim()),
+                  body: Value((note['body'] ?? '').toString()),
+                  createdAt: Value(createdAt),
+                  updatedAt: Value(updatedAt),
+                ),
+              );
+        }
+      });
+      added = fresh.length;
+    } catch (e) {
+      debugPrint('Error importing notes: $e');
+      rethrow;
+    }
+    return added;
   }
 
   /// One stored row as the surface's map.

@@ -30,6 +30,7 @@ export 'src/common/infrastructure/services/task_sync_handlers.dart';
 export 'src/common/infrastructure/services/task_sync_queue.dart';
 export 'src/common/infrastructure/services/task_sync_store.dart';
 export 'src/common/infrastructure/services/task_pull_service.dart';
+export 'src/common/infrastructure/services/productivity_backup.dart';
 export 'src/common/models/data/task_data.dart';
 // Design strip frame 44c — the M2 bridge: the plan read for the objective
 // picker, and the picker itself. Read-only over the gateway.

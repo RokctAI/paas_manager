@@ -1,3 +1,14 @@
+## 1.16.7
+
+* fix(auth): the restore-credential boot hook waits for the first frame
+  before deciding whether anyone is signed in. It runs in main() before
+  `LocalStorage.init()`, where the token always reads empty, so every launch
+  was treated as signed out: a signed-in user never got the restore-key
+  check, and every cold start (on the launcher, every return after the
+  system reclaimed it) asked the backend for restore options and Credential
+  Manager for a key before anyone touched the screen. Nothing is shown
+  either way; failures stay debug-only.
+
 ## 1.16.6
 
 * fix(theme): widgets read their surface, card, stroke and ink colours from Theme.of(context) at build time (AppStyle.surfaceFor/cardFor/cardAltFor/strokeFor/subtleStrokeFor/inkFor/secondaryInkFor/faintFor) instead of the AppStyle.isDark-resolved statics, so a live dark/light switch restyles open pages instead of leaving the old mode's colours (Ray, 2026-10-04).

@@ -33,6 +33,14 @@ abstract class TodoRepositoryFacade {
   /// Exports the tasks to a file and triggers a share dialog
   Future<void> exportTodos(List<Map<String, dynamic>> todos);
 
+  /// Restores tasks read from a backup [exportTodos] wrote, and returns how
+  /// many were added.
+  ///
+  /// A task whose id is already held is SKIPPED, never overwritten, so an
+  /// old backup cannot roll a task back; the rest are written through
+  /// [saveTodos], exactly as a typed task is.
+  Future<int> importTodos(List<Map<String, dynamic>> todos);
+
   /// Moves one task's reminder to [remindAt] and NEVER its deadline.
   ///
   /// That separation is the whole reason the server keeps `remind_at` in its

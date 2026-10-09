@@ -76,6 +76,8 @@ class TrKeys {
   static const String tapeKeepsLast10 = 'the_tape_keeps_the_last_10_calculations';
   static const String useAsTheAmount = 'use_{amount}_as_the_amount';
   static const String fillsTheAmountNeverTheCart = 'fills_the_amount_display_it_never_touches_the_cart';
+  static const String muteKeySounds = 'mute_key_sounds';
+  static const String unmuteKeySounds = 'unmute_key_sounds';
   static const String unread = 'unread';
   static const String kitchen = 'kitchen';
   static const String kitchens = 'kitchens';

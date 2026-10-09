@@ -121,3 +121,48 @@ class WorkspaceListSegment extends StatelessWidget {
     );
   }
 }
+
+/// The list plane's top line: the Tasks / Notes segment, and the header
+/// utilities beside it.
+///
+/// Ray: "calendar and export should be n the top line where task and
+/// notes rectangle". The utilities used to sit on the list header's second
+/// line, and only on the tasks half, which left the notes half with no
+/// way to back up at all. They now share the segment's line on BOTH lists
+/// and act on whichever list is lit.
+///
+/// FITS A 360dp PHONE. The segment keeps its natural width and only
+/// scales down - never overflows - when the line is narrower than the
+/// segment plus the actions it carries; the actions are never dropped.
+class WorkspaceListBar extends StatelessWidget {
+  const WorkspaceListBar({
+    super.key,
+    required this.segment,
+    this.actions = const <Widget>[],
+  });
+
+  /// The [WorkspaceListSegment].
+  final Widget segment;
+
+  /// The header utilities, in reading order, at the line's end.
+  final List<Widget> actions;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: <Widget>[
+        Expanded(
+          child: Align(
+            alignment: AlignmentDirectional.centerStart,
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              alignment: AlignmentDirectional.centerStart,
+              child: segment,
+            ),
+          ),
+        ),
+        ...actions,
+      ],
+    );
+  }
+}
