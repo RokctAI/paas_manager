@@ -103,6 +103,21 @@ class _TaskRunPageState extends State<TaskRunPage> {
 
   @override
   Widget build(BuildContext context) {
+    // A BuildContext lookup for the mode, not the app-wide AppStyle.isDark
+    // static (Ray, 2026-09-19: "glance doesnt change test immediately
+    // untill you come back if you switched theme mode" — the same defect,
+    // found in this page by the audit that followed).
+    //
+    // Read HERE, in the State's own build and outside the LayoutBuilder
+    // below, so the dependency lands on this element: AppStyle's
+    // mode-resolving statics carry the right value but are not an
+    // inherited widget, so reading one registers nothing — and this page
+    // is a pushed ModalRoute, which caches the widget it built, so an
+    // ancestor rebuild provably never reaches it either. The run's ground
+    // and its one absent-task line kept the previous mode's colours until
+    // the reader popped the page and pushed it again.
+    final Brightness brightness = Theme.of(context).brightness;
+
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
         // FRAME 47a — the run is 44a's DETAIL plane, list beside it, and
@@ -115,16 +130,20 @@ class _TaskRunPageState extends State<TaskRunPage> {
             initialRunId: widget.taskId,
           );
         }
-        return _onePlane(context);
+        return _onePlane(context, brightness);
       },
     );
   }
 
   /// FRAME 46f — the one-plane push: the run fills the screen.
-  Widget _onePlane(BuildContext context) {
+  ///
+  /// [brightness] is the mode the inherited theme reports, read in [build];
+  /// every colour role here resolves against it rather than against the
+  /// app-wide flag.
+  Widget _onePlane(BuildContext context, Brightness brightness) {
     final Map<String, dynamic>? task = _task;
     return Scaffold(
-      backgroundColor: AppStyle.surfaceDark,
+      backgroundColor: AppStyle.surfaceFor(brightness),
       body: SafeArea(
         child: !_loaded
             ? const SizedBox.shrink()
@@ -134,7 +153,7 @@ class _TaskRunPageState extends State<TaskRunPage> {
                   'That task is not on this device.',
                   style: AppStyle.interNormal(
                     size: 13,
-                    color: AppStyle.textDarkFaint,
+                    color: AppStyle.faintFor(brightness),
                   ),
                 ),
               )

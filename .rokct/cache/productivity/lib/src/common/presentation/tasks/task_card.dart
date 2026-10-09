@@ -41,6 +41,7 @@ import 'package:productivity_sdk/src/common/application/run/task_run.dart';
 import 'package:productivity_sdk/src/common/application/sync/task_sync_state.dart';
 import 'package:productivity_sdk/src/common/presentation/tasks/task_reminder_controls.dart';
 import 'package:productivity_sdk/src/common/presentation/tasks/task_view_model.dart';
+import 'package:remixicon/remixicon.dart';
 
 /// The shipped deadline format, kept verbatim.
 final DateFormat kTaskDeadlineFormat = DateFormat('MMM dd, hh:mm a');
@@ -72,6 +73,7 @@ class TaskCard extends StatelessWidget {
     this.runLabel,
     this.syncState,
     this.onSnooze,
+    this.onEdit,
   });
 
   final TaskViewModel task;
@@ -95,6 +97,17 @@ class TaskCard extends StatelessWidget {
   /// control; the two clocks are still drawn for a task with a reminder.
   final VoidCallback? onSnooze;
 
+  /// FRAME 44d, THE MISSING DOOR — opens this task in the task form.
+  ///
+  /// Ray, on the launcher's Tasks page: "tasks saved cant be edited". On a
+  /// wide window the card's own [onTap] opens the form in the detail plane;
+  /// on the phone fold [onTap] is spoken for — it expands the card in place,
+  /// which IS the fold — so there was no gesture left that reached the form
+  /// and a saved task could not be changed at all. This is that gesture,
+  /// drawn on the expanded card beside the rest of what the fold reveals.
+  /// Null hides it, which is what a wide window passes.
+  final VoidCallback? onEdit;
+
   /// Lit while this card's task holds the detail or compose plane.
   final bool selected;
 
@@ -117,10 +130,12 @@ class TaskCard extends StatelessWidget {
         child: Container(
           padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 10.h),
           decoration: BoxDecoration(
-            color: AppStyle.cardDark,
+            color: AppStyle.cardFor(Theme.of(context).brightness),
             borderRadius: BorderRadius.circular(12.r),
             border: Border.all(
-              color: selected ? AppStyle.primary : AppStyle.strokeDarkSubtle,
+              color: selected
+                  ? AppStyle.primary
+                  : AppStyle.subtleStrokeFor(Theme.of(context).brightness),
             ),
           ),
           child: Column(
@@ -130,7 +145,7 @@ class TaskCard extends StatelessWidget {
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _checkbox(),
+                  _checkbox(context),
                   10.horizontalSpace,
                   Expanded(
                     child: Column(
@@ -145,20 +160,24 @@ class TaskCard extends StatelessWidget {
                               AppStyle.interSemi(
                                 size: 14,
                                 color: task.isDone
-                                    ? AppStyle.textDarkFaint
-                                    : AppStyle.textPrimary,
+                                    ? AppStyle.faintFor(
+                                        Theme.of(context).brightness,
+                                      )
+                                    : AppStyle.inkFor(
+                                        Theme.of(context).brightness,
+                                      ),
                               ).copyWith(
                                 decoration: task.isDone
                                     ? TextDecoration.lineThrough
                                     : TextDecoration.none,
                               ),
                         ),
-                        if (_metaChips.isNotEmpty) ...[
+                        if (_metaChips(context).isNotEmpty) ...[
                           6.verticalSpace,
                           Wrap(
                             spacing: 6.w,
                             runSpacing: 4.h,
-                            children: _metaChips,
+                            children: _metaChips(context),
                           ),
                         ],
                       ],
@@ -166,12 +185,22 @@ class TaskCard extends StatelessWidget {
                   ),
                 ],
               ),
-              if (task.hasSubtasks) ...[8.verticalSpace, _subtaskProgress()],
+              if (task.hasSubtasks) ...[
+                8.verticalSpace,
+                _subtaskProgress(context),
+              ],
               if (expanded && task.hasReminder) ...[
                 8.verticalSpace,
                 TaskReminderRow(
                   task: task,
                   onSnooze: task.isDone ? null : onSnooze,
+                ),
+              ],
+              if (expanded && onEdit != null) ...[
+                8.verticalSpace,
+                Align(
+                  alignment: AlignmentDirectional.centerStart,
+                  child: _editPill(context),
                 ),
               ],
               if (expanded && task.hasSubtasks) ...[
@@ -201,8 +230,51 @@ class TaskCard extends StatelessWidget {
   /// The key on the run pill (859).
   static const Key runKey = Key('task-card-run');
 
+  /// The key on the edit pill, so the host and this SDK's tests can reach
+  /// the one gesture on the phone fold that opens the task form.
+  static const Key editKey = Key('task-card-edit');
+
+  /// The edit pill — the run pill's shape (chip 859) in the card's quiet
+  /// stroke rather than the accent, because opening a task to change it is
+  /// not the call to action a run is.
+  Widget _editPill(BuildContext context) {
+    return GestureDetector(
+      key: editKey,
+      onTap: onEdit,
+      behavior: HitTestBehavior.opaque,
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
+        decoration: BoxDecoration(
+          color: AppStyle.cardAltFor(Theme.of(context).brightness),
+          borderRadius: BorderRadius.circular(20.r),
+          border: Border.all(
+            color: AppStyle.strokeFor(Theme.of(context).brightness),
+          ),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              Remix.edit_line,
+              size: 13.r,
+              color: AppStyle.secondaryInkFor(Theme.of(context).brightness),
+            ),
+            4.horizontalSpace,
+            Text(
+              'Edit',
+              style: AppStyle.interSemi(
+                size: 11,
+                color: AppStyle.secondaryInkFor(Theme.of(context).brightness),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   /// The 19px round checkbox on `isDone`.
-  Widget _checkbox() {
+  Widget _checkbox(BuildContext context) {
     return GestureDetector(
       key: doneCheckboxKey,
       onTap: onToggleDone,
@@ -215,12 +287,14 @@ class TaskCard extends StatelessWidget {
           shape: BoxShape.circle,
           color: task.isDone ? AppStyle.primary : AppStyle.transparent,
           border: Border.all(
-            color: task.isDone ? AppStyle.primary : AppStyle.strokeDark,
+            color: task.isDone
+                ? AppStyle.primary
+                : AppStyle.strokeFor(Theme.of(context).brightness),
             width: 1.5,
           ),
         ),
         child: task.isDone
-            ? Icon(Icons.check, size: 13.r, color: AppStyle.blackColor)
+            ? Icon(Remix.check_line, size: 13.r, color: AppStyle.blackColor)
             : null,
       ),
     );
@@ -228,10 +302,11 @@ class TaskCard extends StatelessWidget {
 
   /// The meta chip run: priority flag, deadline, category, recurrence,
   /// reminder bell — each drawn only when the field carries something.
-  List<Widget> get _metaChips {
+  List<Widget> _metaChips(BuildContext context) {
     final chips = <Widget>[
       _chip(
-        icon: Icons.flag,
+        context,
+        icon: Remix.flag_fill,
         label: task.priority,
         tint: taskPriorityColor(task.priority),
       ),
@@ -240,26 +315,30 @@ class TaskCard extends StatelessWidget {
     if (deadline != null) {
       chips.add(
         _chip(
-          icon: Icons.schedule,
+          context,
+          icon: Remix.time_line,
           label: kTaskDeadlineFormat.format(deadline),
         ),
       );
     }
     final category = task.category;
     if (category != null && category.isNotEmpty) {
-      chips.add(_chip(icon: Icons.label_outline, label: category));
+      chips.add(_chip(context, icon: Remix.price_tag_3_line, label: category));
     }
     // FLAG (b): drawn because the field is real, flagged because nothing
     // acts on it. None is not drawn — an absent repeat is not a label.
     if (task.recurrence.isNotEmpty && task.recurrence != 'None') {
-      chips.add(_chip(icon: Icons.repeat, label: task.recurrence));
+      chips.add(
+        _chip(context, icon: Remix.repeat_line, label: task.recurrence),
+      );
     }
     // FLAG (c): a reminder is a LOCAL notification at the deadline and
     // nothing more — until it syncs (47n), and the badge below says which.
     if (task.hasReminder) {
       chips.add(
         _chip(
-          icon: Icons.notifications_none,
+          context,
+          icon: Remix.notification_line,
           label: task.snoozeCount > 0 ? '×${task.snoozeCount}' : null,
         ),
       );
@@ -268,7 +347,8 @@ class TaskCard extends StatelessWidget {
     if (task.isLongTerm) {
       chips.add(
         _chip(
-          icon: Icons.horizontal_rule,
+          context,
+          icon: Remix.subtract_line,
           label: 'Long term',
           tint: LongTermBandHeader.tint,
         ),
@@ -279,12 +359,18 @@ class TaskCard extends StatelessWidget {
     return chips;
   }
 
-  Widget _chip({required IconData icon, String? label, Color? tint}) {
-    final color = tint ?? AppStyle.textDarkSecondary;
+  Widget _chip(
+    BuildContext context, {
+    required IconData icon,
+    String? label,
+    Color? tint,
+  }) {
+    final color =
+        tint ?? AppStyle.secondaryInkFor(Theme.of(context).brightness);
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 2.h),
       decoration: BoxDecoration(
-        color: AppStyle.cardDarkAlt,
+        color: AppStyle.cardAltFor(Theme.of(context).brightness),
         borderRadius: BorderRadius.circular(6.r),
       ),
       child: Row(
@@ -303,7 +389,7 @@ class TaskCard extends StatelessWidget {
   /// "N of M" over a 3px bar. Both numbers are counted from the list.
   /// Beside it, chip 859: the run pill, which says where a run stopped
   /// without the task being opened.
-  Widget _subtaskProgress() {
+  Widget _subtaskProgress(BuildContext context) {
     final progress = task.subtaskProgress ?? 0;
     final TaskRun run = task.run;
     final String position = run.positionLabel ?? '';
@@ -321,7 +407,7 @@ class TaskCard extends StatelessWidget {
                     : '${task.subtasksDone} of ${task.subtasks.length} · $position',
                 style: AppStyle.interNormal(
                   size: 11,
-                  color: AppStyle.textDarkFaint,
+                  color: AppStyle.faintFor(Theme.of(context).brightness),
                 ),
               ),
               4.verticalSpace,
@@ -331,7 +417,9 @@ class TaskCard extends StatelessWidget {
                   height: 3.h,
                   child: LinearProgressIndicator(
                     value: progress,
-                    backgroundColor: AppStyle.strokeDarkSubtle,
+                    backgroundColor: AppStyle.subtleStrokeFor(
+                      Theme.of(context).brightness,
+                    ),
                     valueColor: AlwaysStoppedAnimation<Color>(AppStyle.primary),
                   ),
                 ),
@@ -356,14 +444,17 @@ class TaskCard extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Icon(
-                    run.isInProgress ? Icons.play_circle_outline : Icons.play_arrow,
+                    run.isInProgress ? Remix.play_circle_line : Remix.play_fill,
                     size: 13.r,
                     color: AppStyle.primary,
                   ),
                   4.horizontalSpace,
                   Text(
                     runLabel ?? (run.isInProgress ? 'Resume' : 'Run'),
-                    style: AppStyle.interSemi(size: 11, color: AppStyle.primary),
+                    style: AppStyle.interSemi(
+                      size: 11,
+                      color: AppStyle.primary,
+                    ),
                   ),
                 ],
               ),
@@ -406,12 +497,16 @@ class SubtaskCheckLine extends StatelessWidget {
                 border: Border.all(
                   color: subtask.isDone
                       ? AppStyle.primary
-                      : AppStyle.strokeDark,
+                      : AppStyle.strokeFor(Theme.of(context).brightness),
                   width: 1.4,
                 ),
               ),
               child: subtask.isDone
-                  ? Icon(Icons.check, size: 11.r, color: AppStyle.blackColor)
+                  ? Icon(
+                      Remix.check_line,
+                      size: 11.r,
+                      color: AppStyle.inkFor(Theme.of(context).brightness),
+                    )
                   : null,
             ),
           ),
@@ -429,8 +524,10 @@ class SubtaskCheckLine extends StatelessWidget {
                       AppStyle.interNormal(
                         size: 12,
                         color: subtask.isDone
-                            ? AppStyle.textDarkFaint
-                            : AppStyle.textDarkSecondary,
+                            ? AppStyle.faintFor(Theme.of(context).brightness)
+                            : AppStyle.secondaryInkFor(
+                                Theme.of(context).brightness,
+                              ),
                       ).copyWith(
                         decoration: subtask.isDone
                             ? TextDecoration.lineThrough
@@ -445,7 +542,7 @@ class SubtaskCheckLine extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                     style: AppStyle.interNormal(
                       size: 10,
-                      color: AppStyle.textDarkFaint,
+                      color: AppStyle.faintFor(Theme.of(context).brightness),
                     ),
                   ),
               ],
@@ -458,9 +555,9 @@ class SubtaskCheckLine extends StatelessWidget {
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 2.h),
                 child: Icon(
-                  Icons.close,
+                  Remix.close_line,
                   size: 14.r,
-                  color: AppStyle.textDarkFaint,
+                  color: AppStyle.faintFor(Theme.of(context).brightness),
                 ),
               ),
             ),

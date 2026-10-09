@@ -17,3 +17,7 @@ __pycache__/
 node_modules/
 *.pyc
 .flutter-plugins-dependencies
+
+# Vendored upstream Braintree plugin ships a vendor-published Maven credential
+# that trips GitHub push protection; compose regenerates it on every run.
+payments/third_party/flutter_braintree/

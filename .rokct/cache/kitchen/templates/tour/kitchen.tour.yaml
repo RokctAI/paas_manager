@@ -9,10 +9,10 @@
 # — per its install contract, so it declares no route). Include it only in
 # manager-family app manifests.
 #
-# Demo grounding (--dart-define=IS_DEMO=true): since 1.4.0
-# ManagerKitchenDependencies demo-gates KitchenOrdersRepositoryFacade to
-# this SDK's own DemoKitchenOrdersRepository, which serves a seeded service
-# of five tickets across accepted/cooking/ready from memory. So the step
+# Demo grounding (a demo session): the REAL KitchenOrdersRepository runs
+# and base_sdk's DemoGatewayInterceptor answers its cmds from the fixtures
+# in assets/demo/kitchen, a seeded service of five tickets across
+# accepted/cooking/ready. So the step
 # below captures a live queue with ticking flip clocks, dish pills and
 # populated filter counts, with zero backend contact.
 #

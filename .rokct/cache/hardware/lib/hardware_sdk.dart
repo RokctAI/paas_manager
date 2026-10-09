@@ -25,6 +25,7 @@ export 'src/common/scanner/mobile/mobile_scanner_widget.dart';
 // Camera capture + stamp capability (photo capture, timestamp/location burn-in)
 export 'src/common/camera/camera_capture_service.dart';
 export 'src/common/camera/camera_capture_widget.dart';
+export 'src/common/camera/camera_permission.dart';
 export 'src/common/camera/camera_stamp_service.dart';
 export 'src/common/camera/image_stamper.dart';
 export 'src/common/camera/models/stamp_options.dart';

@@ -104,9 +104,6 @@ class PayFastService {
     final signature = _createSignaturePerDocumentation(params, passphrase);
     params['signature'] = signature;
 
-    // Debug
-    debugPrint('PayFast params: ${jsonEncode(params)}');
-
     // Build the URL
     final host = production ? 'www.payfast.co.za' : 'sandbox.payfast.co.za';
     final queryString = _buildQueryString(params);
@@ -289,12 +286,8 @@ class PayFastService {
       getString += '&passphrase=${_customUrlEncode(passphrase)}';
     }
 
-    // Debug
-    debugPrint('PayFast signature string: $getString');
-
     // Calculate MD5 hash
     final signature = crypto.md5.convert(utf8.encode(getString)).toString();
-    debugPrint('PayFast generated signature: $signature');
 
     return signature;
   }

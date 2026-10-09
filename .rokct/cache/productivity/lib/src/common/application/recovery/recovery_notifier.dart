@@ -33,7 +33,10 @@ class RecoveryNotifier extends StateNotifier<RecoveryState> {
       final stats = await _repository.getStreakStats();
       
       // Check if there is an active urge logged within the last 2 hours
+      await ProductivityOwnerScope.ready(_database);
+      final String owner = ProductivityOwnerScope.currentOwner;
       final recentUrges = await (_database.select(_database.urgeLogsTable)
+            ..where((t) => ownerVisible(t.owner, owner))
             ..orderBy([(t) => OrderingTerm(expression: t.timestamp, mode: OrderingMode.desc)])
             ..limit(1))
           .get();
@@ -48,7 +51,9 @@ class RecoveryNotifier extends StateNotifier<RecoveryState> {
       }
 
       // Query the next uncompleted ritual for the current time of day
-      final rituals = await _database.select(_database.dailyRitualsTable).get();
+      final rituals = await (_database.select(_database.dailyRitualsTable)
+            ..where((t) => ownerVisible(t.owner, owner)))
+          .get();
       DailyRitualEntity? nextRitual;
       if (rituals.isNotEmpty) {
         nextRitual = rituals.first; // Simply display the first available ritual for preview
@@ -56,7 +61,9 @@ class RecoveryNotifier extends StateNotifier<RecoveryState> {
 
       // Check if any task has been delayed >= 2 times
       final delayedLogs = await (_database.select(_database.procrastinationLogsTable)
-            ..where((t) => t.delayCount.isBiggerOrEqualValue(2))
+            ..where((t) =>
+                t.delayCount.isBiggerOrEqualValue(2) &
+                ownerVisible(t.owner, owner))
             ..limit(1))
           .get();
 

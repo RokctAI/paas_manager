@@ -67,7 +67,7 @@ class ShopTitleRow extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                   style: AppStyle.interSemi(
                     size: 22.sp,
-                    color: AppStyle.textPrimary,
+                    color: AppStyle.inkFor(Theme.of(context).brightness),
                   ),
                 ),
               ),
@@ -91,7 +91,7 @@ class ShopTitleRow extends StatelessWidget {
                 key: const Key('shopTitleRowRating'),
                 style: AppStyle.interNormal(
                   size: 12.sp,
-                  color: AppStyle.textPrimary,
+                  color: AppStyle.inkFor(Theme.of(context).brightness),
                 ),
               ),
             ],
@@ -131,7 +131,7 @@ class ShopTitleRow extends StatelessWidget {
           icon: Icon(
             Remix.pencil_line,
             size: 20.r,
-            color: AppStyle.textPrimary,
+            color: AppStyle.inkFor(Theme.of(context).brightness),
           ),
           onPressed: onEdit,
         ),

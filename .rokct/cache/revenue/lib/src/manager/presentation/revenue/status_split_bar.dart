@@ -49,9 +49,9 @@ class StatusSplitBar extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: AppStyle.cardDark,
+        color: AppStyle.cardFor(Theme.of(context).brightness),
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: AppStyle.strokeDarkSubtle),
+        border: Border.all(color: AppStyle.subtleStrokeFor(Theme.of(context).brightness)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -65,7 +65,7 @@ class StatusSplitBar extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                   style: AppStyle.interSemi(
                     size: 11,
-                    color: AppStyle.textDarkSecondary,
+                    color: AppStyle.secondaryInkFor(Theme.of(context).brightness),
                     letterSpacing: 0.6,
                   ),
                 ),
@@ -74,7 +74,7 @@ class StatusSplitBar extends StatelessWidget {
                 '$total ${AppHelpers.getTranslation('total')}',
                 style: AppStyle.interNormal(
                   size: 12,
-                  color: AppStyle.textDarkSecondary,
+                  color: AppStyle.secondaryInkFor(Theme.of(context).brightness),
                 ),
               ),
             ],
@@ -85,7 +85,7 @@ class StatusSplitBar extends StatelessWidget {
             child: SizedBox(
               height: 8,
               child: barTotal == 0
-                  ? ColoredBox(color: AppStyle.strokeDarkSubtle)
+                  ? ColoredBox(color: AppStyle.subtleStrokeFor(Theme.of(context).brightness))
                   : Row(
                       children: [
                         for (final (segment, count) in segments)
@@ -119,7 +119,7 @@ class StatusSplitBar extends StatelessWidget {
                       '${AppHelpers.getTranslation(segment.trKey)} $count',
                       style: AppStyle.interNormal(
                         size: 12,
-                        color: AppStyle.textDarkSecondary,
+                        color: AppStyle.secondaryInkFor(Theme.of(context).brightness),
                       ),
                     ),
                   ],
@@ -129,7 +129,7 @@ class StatusSplitBar extends StatelessWidget {
                   '+$hidden ${AppHelpers.getTranslation('more')}',
                   style: AppStyle.interNormal(
                     size: 12,
-                    color: AppStyle.textDarkFaint,
+                    color: AppStyle.faintFor(Theme.of(context).brightness),
                   ),
                 ),
             ],

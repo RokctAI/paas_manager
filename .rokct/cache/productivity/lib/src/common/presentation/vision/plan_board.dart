@@ -43,17 +43,18 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:productivity_sdk/src/common/models/data/objective_data.dart';
 import 'package:productivity_sdk/src/common/models/data/vision_data.dart';
 import 'package:productivity_sdk/src/common/presentation/tasks/objective_picker_pane.dart';
+import 'package:remixicon/remixicon.dart';
 
 /// A pillar's glyph, by its position in the pillar list — the same
 /// derivation as [pillarAccent], and for the same reason: the Pillar
 /// doctype has no icon column, so the glyph is positional dress.
 IconData pillarGlyph(int index) {
   const List<IconData> glyphs = <IconData>[
-    Icons.groups_outlined,
-    Icons.water_drop_outlined,
-    Icons.eco_outlined,
-    Icons.flag_outlined,
-    Icons.star_outline,
+    Remix.group_line,
+    Remix.drop_line,
+    Remix.leaf_line,
+    Remix.flag_line,
+    Remix.star_line,
   ];
   return glyphs[index % glyphs.length];
 }
@@ -77,7 +78,10 @@ class PlanHeader extends StatelessWidget {
             title,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
-            style: AppStyle.interSemi(size: 18, color: AppStyle.textPrimary),
+            style: AppStyle.interSemi(
+              size: 18,
+              color: AppStyle.inkFor(Theme.of(context).brightness),
+            ),
           ),
         ),
         if (count != null) ...<Widget>[
@@ -86,13 +90,15 @@ class PlanHeader extends StatelessWidget {
             padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 3.h),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20.r),
-              border: Border.all(color: AppStyle.strokeDark),
+              border: Border.all(
+                color: AppStyle.strokeFor(Theme.of(context).brightness),
+              ),
             ),
             child: Text(
               count!,
               style: AppStyle.interNormal(
                 size: 12,
-                color: AppStyle.textDarkSecondary,
+                color: AppStyle.secondaryInkFor(Theme.of(context).brightness),
               ),
             ),
           ),
@@ -120,7 +126,7 @@ class VisionMasthead extends StatelessWidget {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 12.h),
       decoration: BoxDecoration(
-        color: AppStyle.cardDark,
+        color: AppStyle.cardFor(Theme.of(context).brightness),
         borderRadius: BorderRadius.circular(14.r),
       ),
       child: Row(
@@ -134,7 +140,7 @@ class VisionMasthead extends StatelessWidget {
               color: AppStyle.primary.withValues(alpha: 0.16),
             ),
             child: Icon(
-              Icons.visibility_outlined,
+              Remix.eye_line,
               size: compact ? 18.r : 22.r,
               color: AppStyle.primary,
             ),
@@ -154,7 +160,7 @@ class VisionMasthead extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                         style: AppStyle.interSemi(
                           size: compact ? 15 : 17,
-                          color: AppStyle.textPrimary,
+                          color: AppStyle.inkFor(Theme.of(context).brightness),
                         ),
                       ),
                     ),
@@ -189,7 +195,9 @@ class VisionMasthead extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                     style: AppStyle.interNormal(
                       size: compact ? 12 : 13,
-                      color: AppStyle.textDarkSecondary,
+                      color: AppStyle.secondaryInkFor(
+                        Theme.of(context).brightness,
+                      ),
                     ),
                   ),
                 ],
@@ -249,7 +257,7 @@ class PillarHeader extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                   style: AppStyle.interSemi(
                     size: compact ? 14 : 15,
-                    color: AppStyle.textPrimary,
+                    color: AppStyle.inkFor(Theme.of(context).brightness),
                   ),
                 ),
               ),
@@ -280,7 +288,7 @@ class PillarHeader extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
               style: AppStyle.interNormal(
                 size: 12,
-                color: AppStyle.textDarkSecondary,
+                color: AppStyle.secondaryInkFor(Theme.of(context).brightness),
               ),
             ),
           ],
@@ -340,10 +348,12 @@ class PlanObjectiveCard extends StatelessWidget {
         child: Container(
           padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 10.h),
           decoration: BoxDecoration(
-            color: AppStyle.cardDark,
+            color: AppStyle.cardFor(Theme.of(context).brightness),
             borderRadius: BorderRadius.circular(12.r),
             border: Border.all(
-              color: selected ? AppStyle.primary : AppStyle.strokeDarkSubtle,
+              color: selected
+                  ? AppStyle.primary
+                  : AppStyle.subtleStrokeFor(Theme.of(context).brightness),
               width: selected ? 1.5 : 1,
             ),
           ),
@@ -360,7 +370,7 @@ class PlanObjectiveCard extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                       style: AppStyle.interSemi(
                         size: compact ? 14 : 15,
-                        color: AppStyle.textPrimary,
+                        color: AppStyle.inkFor(Theme.of(context).brightness),
                       ),
                     ),
                   ),
@@ -395,7 +405,9 @@ class PlanObjectiveCard extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                   style: AppStyle.interNormal(
                     size: 12,
-                    color: AppStyle.textDarkSecondary,
+                    color: AppStyle.secondaryInkFor(
+                      Theme.of(context).brightness,
+                    ),
                   ),
                 ),
               ],
@@ -422,9 +434,9 @@ class PlanObjectiveCard extends StatelessWidget {
                     ),
                   const Spacer(),
                   Icon(
-                    Icons.chevron_right,
+                    Remix.arrow_right_s_line,
                     size: 18.r,
-                    color: AppStyle.textDarkFaint,
+                    color: AppStyle.faintFor(Theme.of(context).brightness),
                   ),
                 ],
               ),
@@ -489,7 +501,7 @@ class PillarColumn extends StatelessWidget {
               'No objectives under this pillar yet.',
               style: AppStyle.interNormal(
                 size: 12,
-                color: AppStyle.textDarkFaint,
+                color: AppStyle.faintFor(Theme.of(context).brightness),
               ),
             ),
           ),
@@ -555,7 +567,10 @@ class PlanBoardView extends StatelessWidget {
       return Center(
         child: Text(
           emptyLabel,
-          style: AppStyle.interNormal(size: 13, color: AppStyle.textDarkFaint),
+          style: AppStyle.interNormal(
+            size: 13,
+            color: AppStyle.faintFor(Theme.of(context).brightness),
+          ),
         ),
       );
     }
@@ -626,7 +641,7 @@ class PlanBoardView extends StatelessWidget {
                 noPillarsLabel,
                 style: AppStyle.interNormal(
                   size: 13,
-                  color: AppStyle.textDarkFaint,
+                  color: AppStyle.faintFor(Theme.of(context).brightness),
                 ),
               ),
             ),

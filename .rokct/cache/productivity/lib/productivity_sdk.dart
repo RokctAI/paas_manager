@@ -17,6 +17,7 @@ library productivity_sdk;
 export 'src/common/domain/interface/todo_repository_facade.dart';
 export 'src/common/domain/interface/recovery_repository_facade.dart';
 export 'src/common/infrastructure/database/tasks_table.dart';
+export 'src/common/infrastructure/database/productivity_owner_scope.dart';
 export 'src/common/infrastructure/database/recovery_tables.dart';
 export 'src/common/infrastructure/repositories/todo_repository_impl.dart';
 export 'src/common/infrastructure/repositories/recovery_repository_impl.dart';
@@ -67,6 +68,8 @@ export 'src/common/presentation/tasks/tasks_plane_claims.dart';
 // `task_run_page.dart` templates host.
 export 'src/common/application/run/task_run.dart';
 export 'src/common/application/run/maintenance_plant.dart';
+export 'src/common/application/run/maintenance_seed.dart';
+export 'src/common/application/run/recipe_seed.dart';
 export 'src/common/application/run/maintenance_templates.dart';
 export 'src/common/presentation/run/task_run_view.dart';
 export 'src/common/presentation/plane_back_clearance.dart';
@@ -75,9 +78,43 @@ export 'src/common/presentation/plane_back_clearance.dart';
 // manifest's `// @productivity-tasks-row` integration.
 export 'src/common/application/run/paused_run.dart';
 export 'src/common/presentation/hub/paused_run_line.dart';
+export 'src/common/application/glance/productivity_attention.dart';
+export 'src/common/presentation/glance/needs_attention_glance.dart';
 
 // Design strip section 47 — snooze, the long-term band and the sync-state
 // badge, generic to every task.
 export 'src/common/application/sync/task_sync_state.dart';
 export 'src/common/presentation/tasks/task_reminder_controls.dart';
 export 'src/common/presentation/tasks/task_sync_notice.dart';
+
+// Section 47m, second pass — the long-term band is DERIVED from the task's
+// end date (Ray: "long term task is selected not automatically detected
+// from end date"). Exported because the installed tasks page applies the
+// rule when it builds a task map, and the store applies it again on save.
+export 'src/common/application/tasks/long_term_rule.dart';
+
+// Notes — a second list on the /tasks workspace (Ray: "i cant do notes its
+// only tasks and no seperate notes if need to be"). LOCAL ONLY: no backend
+// this app composes has a note doctype, so there is no sync half to this
+// feature and no note ever leaves the device.
+export 'src/common/domain/interface/note_repository_facade.dart';
+export 'src/common/infrastructure/database/notes_table.dart';
+export 'src/common/infrastructure/repositories/note_repository_impl.dart';
+export 'src/common/presentation/notes/note_view_model.dart';
+export 'src/common/presentation/notes/note_card.dart';
+export 'src/common/presentation/notes/notes_list_controls.dart';
+
+// Ray, on the launcher's Tasks page: "plus opens new but i think hlding it
+// should give me option like tasks notes" — the add button's long press, and
+// the rule that picks the status filter the tasks list opens on ("when there
+// is completed task switch from all to pending").
+export 'src/common/presentation/tasks/new_item_sheet.dart';
+export 'src/common/presentation/tasks/productivity_plus_nav.dart';
+export 'src/common/application/tasks/initial_status_filter.dart';
+
+// Sign-out — Ray, 2026-09-19: "if on temp local user you logout all your
+// tasks still show". This SDK's own session-end tidy-up, registered against
+// users_sdk's SessionEndHooks from this manifest's boot hook. Exported
+// because that hook body is composed into the HOST's main.dart, which reaches
+// this package only through this barrel.
+export 'src/common/application/session/productivity_session_end.dart';

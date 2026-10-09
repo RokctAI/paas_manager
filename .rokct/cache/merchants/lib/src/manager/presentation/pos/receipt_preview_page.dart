@@ -123,7 +123,7 @@ class _ReceiptPreviewPageState extends ConsumerState<ReceiptPreviewPage> {
     final Planes? planes = Planes.maybeOf(context);
     final bool inPlanes = planes != null && planes.count > 1;
     return Scaffold(
-      backgroundColor: AppStyle.surfaceDark,
+      backgroundColor: AppStyle.surfaceFor(Theme.of(context).brightness),
       body: Stack(
         children: [
           CustomScrollView(
@@ -173,7 +173,7 @@ class _ReceiptPreviewPageState extends ConsumerState<ReceiptPreviewPage> {
         Expanded(
           child: Text(
             AppHelpers.getTranslation(TrKeys.receipt),
-            style: AppStyle.interSemi(size: 18.sp, color: AppStyle.textPrimary),
+            style: AppStyle.interSemi(size: 18.sp, color: AppStyle.inkFor(Theme.of(context).brightness)),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),

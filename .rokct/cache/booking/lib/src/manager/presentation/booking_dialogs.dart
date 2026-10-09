@@ -17,7 +17,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:base_sdk/src/presentation/theme/app_style.dart';
 import 'package:base_sdk/src/services/app_helpers.dart';
-import 'package:base_sdk/src/services/local_storage.dart';
 import 'package:base_sdk/src/services/tr_keys.dart';
 
 /// Small dialogs the manager booking screens share.
@@ -43,7 +42,7 @@ Future<Map<String, String>?> promptBookingFields(
   required String title,
   required List<BookingPromptField> fields,
 }) async {
-  final isDark = LocalStorage.getAppThemeMode();
+  final isDark = Theme.of(context).brightness == Brightness.dark;
   final controllers = {
     for (final f in fields) f.key: TextEditingController(text: f.initial),
   };
@@ -103,7 +102,7 @@ Future<bool> confirmBooking(
   required String title,
   String? body,
 }) async {
-  final isDark = LocalStorage.getAppThemeMode();
+  final isDark = Theme.of(context).brightness == Brightness.dark;
   final ok = await showDialog<bool>(
     context: context,
     builder: (ctx) => AlertDialog(

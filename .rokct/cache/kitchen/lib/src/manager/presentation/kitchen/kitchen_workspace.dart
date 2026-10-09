@@ -54,7 +54,7 @@ class _KitchenWorkspaceState extends ConsumerState<KitchenWorkspace> {
   Widget build(BuildContext context) {
     final selected = ref.watch(kitchenProvider.select((s) => s.selectedOrder));
     return ColoredBox(
-      color: AppStyle.surfaceDark,
+      color: AppStyle.surfaceFor(Theme.of(context).brightness),
       child: LayoutBuilder(
         builder: (context, constraints) {
           // On a ONE-plane (phone) width the detail is a real pushed

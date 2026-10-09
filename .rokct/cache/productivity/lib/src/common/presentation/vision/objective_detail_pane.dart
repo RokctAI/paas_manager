@@ -32,6 +32,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:productivity_sdk/src/common/models/data/objective_data.dart';
 import 'package:productivity_sdk/src/common/models/data/vision_data.dart';
 import 'package:productivity_sdk/src/common/presentation/tasks/objective_picker_pane.dart';
+import 'package:remixicon/remixicon.dart';
 
 /// CHIP 790 — the plan breadcrumb: the doctype link chain Vision ‹ Pillar
 /// ‹ Objective rendered as a path, "Vision 2028 › Operations", the pillar
@@ -60,7 +61,7 @@ class PlanBreadcrumb extends StatelessWidget {
             overflow: TextOverflow.ellipsis,
             style: AppStyle.interNormal(
               size: 12,
-              color: AppStyle.textDarkFaint,
+              color: AppStyle.faintFor(Theme.of(context).brightness),
             ),
           ),
         ),
@@ -72,9 +73,9 @@ class PlanBreadcrumb extends StatelessWidget {
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 4.w),
             child: Icon(
-              Icons.chevron_right,
+              Remix.arrow_right_s_line,
               size: 14.r,
-              color: AppStyle.textDarkFaint,
+              color: AppStyle.faintFor(Theme.of(context).brightness),
             ),
           ),
         );
@@ -108,9 +109,11 @@ class KpiCard extends StatelessWidget {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 10.h),
       decoration: BoxDecoration(
-        color: AppStyle.cardDark,
+        color: AppStyle.cardFor(Theme.of(context).brightness),
         borderRadius: BorderRadius.circular(12.r),
-        border: Border.all(color: AppStyle.strokeDarkSubtle),
+        border: Border.all(
+          color: AppStyle.subtleStrokeFor(Theme.of(context).brightness),
+        ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -118,7 +121,7 @@ class KpiCard extends StatelessWidget {
         children: <Widget>[
           Row(
             children: <Widget>[
-              Icon(Icons.show_chart, size: 16.r, color: accent),
+              Icon(Remix.line_chart_line, size: 16.r, color: accent),
               8.horizontalSpace,
               Expanded(
                 child: Text(
@@ -127,7 +130,7 @@ class KpiCard extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                   style: AppStyle.interSemi(
                     size: 14,
-                    color: AppStyle.textPrimary,
+                    color: AppStyle.inkFor(Theme.of(context).brightness),
                   ),
                 ),
               ),
@@ -139,7 +142,7 @@ class KpiCard extends StatelessWidget {
               kpi.description!,
               style: AppStyle.interNormal(
                 size: 12,
-                color: AppStyle.textDarkSecondary,
+                color: AppStyle.secondaryInkFor(Theme.of(context).brightness),
               ),
             ),
           ],
@@ -172,7 +175,7 @@ class ObjectiveDetailPane extends StatelessWidget {
   Widget build(BuildContext context) {
     final Pillar? pillar = board.pillarNamed(objective.pillar);
     final Color accent = pillar == null
-        ? AppStyle.textDarkSecondary
+        ? AppStyle.secondaryInkFor(Theme.of(context).brightness)
         : pillarAccent(board.accentIndexOf(pillar.name));
     final List<Kpi> kpis = board.kpisOf(objective.name);
     return ListView(
@@ -186,7 +189,10 @@ class ObjectiveDetailPane extends StatelessWidget {
         8.verticalSpace,
         Text(
           objective.title,
-          style: AppStyle.interSemi(size: 18, color: AppStyle.textPrimary),
+          style: AppStyle.interSemi(
+            size: 18,
+            color: AppStyle.inkFor(Theme.of(context).brightness),
+          ),
         ),
         if (objective.description != null) ...<Widget>[
           6.verticalSpace,
@@ -194,18 +200,24 @@ class ObjectiveDetailPane extends StatelessWidget {
             objective.description!,
             style: AppStyle.interNormal(
               size: 13,
-              color: AppStyle.textDarkSecondary,
+              color: AppStyle.secondaryInkFor(Theme.of(context).brightness),
             ),
           ),
         ],
         14.verticalSpace,
-        Divider(height: 1, color: AppStyle.strokeDarkSubtle),
+        Divider(
+          height: 1,
+          color: AppStyle.subtleStrokeFor(Theme.of(context).brightness),
+        ),
         14.verticalSpace,
         Row(
           children: <Widget>[
             Text(
               kpisLabel,
-              style: AppStyle.interSemi(size: 15, color: AppStyle.textPrimary),
+              style: AppStyle.interSemi(
+                size: 15,
+                color: AppStyle.inkFor(Theme.of(context).brightness),
+              ),
             ),
             if (board.kpisRead) ...<Widget>[
               8.horizontalSpace,
@@ -230,7 +242,7 @@ class ObjectiveDetailPane extends StatelessWidget {
             kpisUnreadLabel,
             style: AppStyle.interNormal(
               size: 12,
-              color: AppStyle.textDarkFaint,
+              color: AppStyle.faintFor(Theme.of(context).brightness),
             ),
           )
         else if (kpis.isEmpty)
@@ -238,7 +250,7 @@ class ObjectiveDetailPane extends StatelessWidget {
             noKpisLabel,
             style: AppStyle.interNormal(
               size: 12,
-              color: AppStyle.textDarkFaint,
+              color: AppStyle.faintFor(Theme.of(context).brightness),
             ),
           )
         else

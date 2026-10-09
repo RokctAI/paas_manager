@@ -1,3 +1,609 @@
+## 1.7.6
+
+* feat(seed): R&D recipe test batches for sinyage@gmail.com only (`RecipeSeed`, recipe_seed.dart): one sequential multi-step task per occultation recipe (JuvoPops Orange, JuvoPops Strawberry, Rooibos Iced Tea, Flavoured Water, Mango Atchar), every ingredient as grams for a 10 L bucket batch (liquids converted by stated density; atchar premix with oil 1840 g at 0.92 g/ml in one bucket; separate task "Mango atchar: fill 90 g cups" (six tasks): per cup weigh 81-85 g atchar in a small container, seal oil 4.6-9.2 g into the empty cup, move the atchar in), recipe process steps in order, missing quantities marked "quantity missing in recipe". Not seeded for demo or any other account; written once per owner.
+
+## 1.7.5
+
+* fix(tasks): each plane of the tasks page (list, objective picker, compose, run and note panes) resolves its ground from its own build context instead of the `surface` the page closed over when the pane opened, so after a live dark/light switch the New task pane no longer paints the old dark ground under light-mode ink and light-filled fields.
+
+## 1.7.4
+
+* fix(theme): live theme flips. Text styles that took AppStyle's default ink (titles such as "New task", the "Remind me" / "Steps in order" labels) and every remaining static AppStyle surface/stroke/ink read in the tasks page, task card, list controls, reminder controls, objective picker, notes controls, mastery card, new-item sheet and the run view now resolve from Theme.of(context).brightness at build, so a dark-to-light (or back) switch restyles them instead of leaving dark-on-dark. Template chips use the same.
+* feat(tasks): "From template" is shown only for templates the backend offers (`MaintenanceTemplates.backendKeys`, empty by default); local templates are kept but not surfaced on their own.
+* feat(seed): "Phfix vessel maintenance" (`phfix_maintenance`), a manual vessel run shaped exactly like Megachar Maintenance (same seven stages, readings, photo, Weekly). Seeded for the plant owners and demo; owners already seeded at version 1 get only this task on next start (`MaintenanceSeed.seedVersion` = 2). New tr key `phfix_vessel_maintenance`.
+
+## 1.7.3
+
+* fix(icons): lib/ and the installed page templates use Remixicon (`Remix.*`) instead of Material `Icons.*`; `remixicon: ^1.4.1` declared.
+
+## 1.7.2
+
+* fix(theme): dark-mode sweep. Hardcoded light fills and dark ink now follow the active brightness via AppStyle.*For(Theme.of(context).brightness); static theme reads in builds replaced. Brand fills and white-on-primary left fixed.
+
+## 1.7.1
+
+* feat(productivity_sdk): THE RO PLANT, SEEDED. Ray: "make it a seedable
+  data ... seed as already setup". New `MaintenanceSeed`
+  (`lib/src/common/application/run/maintenance_seed.dart`). A demo session
+  (`DemoSession.demoActive`) now starts, once, with the plant record saved,
+  a finished Plant setup run, and Softener / Megachar Maintenance (Weekly,
+  due today), Pre-filter (Monthly, +30 days), RO filter (+180) and RO
+  membrane (+365) replacement as real tasks. A real account whose signed-in
+  email (base_sdk `LocalStorage.getUser()?.email`) is sinyage@gmail.com is
+  seeded the same way by `MaintenanceSeed.seedAccount`, once per owner,
+  with `ro-seed-<template>-<owner>` ids stable per account, through the
+  ordinary tasks save so the SyncEngine pushes them to the server. The
+  seed runs in Dart only; there is no backend seeder. A second device of
+  the same account pulls the tasks, finds the same ids and writes nothing
+  twice; `MaintenanceSeed.adoptPulled` restores the template key and full
+  step list and writes the device-local plant record. The "From template"
+  chooser is unchanged.
+* PLACEHOLDERS, to be corrected by editing the Plant setup run: 1 megaChar
+  vessel, 1 softener vessel, 1 membrane, every install date the seed day,
+  default water spec.
+
+## 1.7.0
+
+* feat(productivity_sdk): OWNER SCOPING FOR THIS SDK'S OWN TABLES. Every
+  table this SDK registers - `tasks_table`, `notes_table` and the six
+  recovery tables - gains an `owner` column IN ITS PRIMARY KEY, and every
+  read, update and delete in this package filters on it. Two accounts on one
+  device no longer see, overwrite or delete each other's tasks, notes, urge
+  logs, rituals or streaks. The follow-up to core PR #254, which did the same
+  for base_sdk's device-global `KeyValueTable` and `OutboxTable`.
+* VISIBILITY SCOPING, NEVER DELETION - Ray's ruling, unchanged and now
+  actually enforced. 1.6.9 stopped the sign-out hook deleting rows and said
+  in as many words what was still open: "one device shared by two accounts
+  still shows each the other's rows once the tables are read again". This is
+  that fix. Nothing is destroyed at sign-out, no column is dropped, and no
+  migration guesses an owner for an existing row.
+* AN EXISTING ROW WITH NO OWNER COUNTS AS THE CURRENT ACCOUNT'S -
+  `owner = '' OR owner = <me>`, base_sdk's `ownerVisible`. Every row on every
+  device in the field today has no owner, so a strict match would hide all of
+  them. Legacy rows stay exactly as visible as they are now, and are CLAIMED
+  by the account that next writes that id rather than being left as an
+  unowned twin beside the row just written.
+* Writes stamp `OwnerScope.instance.current` (base_sdk), which resolves the
+  signed-in account, a temp-local `offline:<id>` account, or - during a
+  sign-out teardown, when the identity is already gone - the account on its
+  way out, so a teardown write cannot land unowned and leak forward.
+* MIGRATION VERSION 20, declared in `manifest.json` (the shared fleetwide
+  namespace; 20 is above base_sdk's 19 and radio_sdk's 18). The step rebuilds
+  each table the long way round - rename aside, create, copy the shared
+  columns, drop - because SQLite cannot alter a primary key in place;
+  carried-over rows take the `''` default and come out unowned.
+  `notes_table`'s create moved into the same guard so no device sits between
+  the two numbers and misses it.
+* `ProductivityOwnerScope.ready()` is a floor under that numbering, awaited
+  by every read and write this SDK makes: a device whose stored
+  `user_version` already equals the composed maximum runs no migration at
+  all, and base_sdk's own `beforeOpen` floor can only reach base's tables.
+* KNOWN, PRE-EXISTING, NOT FIXED HERE: radio_sdk (RokctAI/agent radio/dart)
+  declares migration version 17, the number this manifest used to hold - a
+  live collision on one number, flagged rather than silently worked around.
+
+## 1.6.9
+
+* fix(productivity_sdk): SIGN-OUT DELETES NOTHING. 1.6.8's session-end hook
+  wiped the tasks rows, the notes rows, this SDK's still-pending outbox rows
+  and the pull cursor on every logout. Ray's ruling: user data does not get
+  wiped on logout - a local temp account that does real work and signs out
+  must not come back to an empty list, and the same holds for a seller.
+  Deletion is irreversible; the symptom that needed fixing never was.
+* WHAT THE SYMPTOM ACTUALLY WAS. Ray, 2026-09-19: "if on temp local user you
+  logout all your tasks still show" - the rows were still PAINTED, not merely
+  still on disk. `tasksStateProvider` is a plain `StateNotifierProvider`,
+  root-scoped and not `autoDispose`, so the notifier and the tasks it holds
+  outlive the `replaceMainRoute` a sign-out ends with: the page is rebuilt and
+  RE-READS the same surviving notifier. That is the half that
+  `TasksNotifier.clearLive` fixed, and it is the half that is kept.
+* `ProductivitySessionEnd.clear` is therefore now
+  `ProductivitySessionEnd.clearLiveView`, named for what it does. It makes two
+  in-memory writes and no others: `TasksNotifier.clearLive()`, and
+  `TaskPullService.lastFailure = null` - a transient "sync failed" notice that
+  belonged to the session that just ended, not user data. No store write, no
+  network call, no `AppDatabase` at all; the hook no longer takes a database.
+* THE PENDING OUTBOX ROWS ARE THE SHARPEST CASE. They are work the user did
+  that has not reached the server yet. 1.6.8 deleted them to stop a queued
+  push draining under the next session's token; that is a real concern, but
+  destroying the work outright is not the answer to it, and a queue that
+  drains under the wrong token is a sync-ownership question to settle in the
+  queue rather than by throwing the rows away.
+* `hookId` is UNCHANGED at `productivity_local_data`. It is only an
+  idempotency key inside users_sdk's `SessionEndHooks` registry: nothing
+  persists it, no other package reads it, and a rename would break any host
+  still composing the old wiring block for nothing in return. Checked by grep
+  over `.dart`, `.json`, `.yaml` and `.md` before deciding - the only other
+  mentions are this package's own tests and this file.
+* The manifest moves with it: the `boot_hooks` body now names
+  `clearLiveView`, and `_comment_boot_hooks` - which stated plainly that the
+  hook "deletes the tasks and notes rows, this SDK's still-pending outbox rows
+  and the pull cursor" - now describes the real behaviour and says outright
+  that it deletes nothing.
+* WHAT IS STILL OPEN, named rather than left unsaid. This clears the session,
+  not the ownership. One device shared by two accounts still shows each the
+  other's rows once the tables are read again, because `TasksTable.createdBy`
+  is written and never filtered on (`TodoRepositoryImpl.loadTodos` has no
+  WHERE clause) and `NotesTable` has no user column at all. The fix is owner
+  scoping - a predicate at the repository layer and a migration for notes -
+  not a wipe at sign-out. Scoped separately; no code for it here.
+* TESTS. `session_end_clears_local_data_test.dart` is now
+  `session_end_keeps_local_data_test.dart`, and its first test is the whole
+  point of this change: seed a session, run the hook, and every task row,
+  note row, outbox row and the cursor are still there while the notifier is
+  empty - plus a test that a fresh container (the page after signing back in)
+  loads the two tasks straight back. The older trap is kept and adapted: it
+  deletes the tasks rows BY HAND now, since the hook no longer will, and
+  still asserts the root-scoped notifier is holding both tasks afterwards -
+  proof that a store clear never addressed the reported symptom. The manifest
+  wiring test gains one that neither the hook body nor its comment may claim
+  a delete.
+
+## 1.6.8
+
+* fix(productivity_sdk): two rules the /tasks plus broke when it moved onto
+  the floating nav in 1.6.7, both of them base_sdk's own and both written
+  down in `adaptive_bar.md`. Follow-up to that change; nothing about the plus
+  itself is reconsidered.
+* THE LABEL IS TRANSLATED. `adaptive_bar.md` §8 is absolute - "No hardcoded
+  user-facing strings, INCLUDING ACCESSIBILITY LABELS" - and §7 item 6 wants
+  every string routed through `TrKeys` + `AppHelpers.getTranslation`.
+  `FloatingNavAction.label` is not a label the bar merely stores: base_sdk
+  feeds it to `Semantics(label:)` and to the long-press `Tooltip(message:)`,
+  so it IS painted and read out. It was `newItemSheetLabelFor(list)`, which
+  returns the bare literals 'New task' / 'New note'. It is now
+  `AppHelpers.getTranslation` of `new_task` / `new_note`.
+* PLAIN KEY LITERALS, the shape launch_sdk's `LauncherAppItem` already uses
+  for `use_as_phone`: this SDK's own lib cannot read the `TrKeys.<name>` the
+  composer injects (its tests run on a bare checkout), so it asks for the key
+  by value. Both keys are published from this manifest's `tr_keys` alongside
+  the section-47 ones, so a backend row can be seeded for any locale.
+* AND ENGLISH DOES NOT MOVE. With no row served, `getTranslation` falls
+  through `AppHelpers.humanizeTrKey`, which renders those two keys as exactly
+  "New task" and "New note" - the new-item sheet's own words - so the button
+  and the sheet it opens still cannot drift apart. Pinned as a test rather
+  than asserted here. The sheet's own rows and `newItemSheetLabelFor` are
+  untouched: they are not on the bar, and widening this to them would be a
+  different change.
+* THE BAR IS STACKED OVER THE PAGE BODY, not parked in the Scaffold slot.
+  base_sdk states the host contract plainly - "Hosts place it in a Stack over
+  the page body and hand it a `FloatingNavMode`" - and `adaptive_bar.md` §3
+  names the slot a host owes it: "a full-size Stack slot
+  (`Positioned.fill`, or the usual full-size `Align`)". The list plane used
+  `bottomNavigationBar:`, alone in the fleet; every other host stacks it.
+* THREE MECHANICAL CONSEQUENCES, which is why this is not a style note.
+  `Scaffold.bottomNavigationBar` reserves the pill's height as body inset, so
+  the bar was docked in a strip of its own while the housing is specified to
+  float "with a margin above the bottom edge, never docked flush"; the
+  frosted `BlurWrap` therefore had a flat background colour behind it instead
+  of the list it exists to sit over, which is the housing's whole purpose;
+  and the keyboard inset was counted TWICE - Scaffold lifts the slot above
+  `viewInsets` while the bar adds `MediaQuery.viewInsets.bottom` itself, so a
+  focused field on the list plane cost the body the pill height plus 18 plus
+  the safe area ON TOP OF the keyboard. Inside the body the bar reads that
+  inset as zero, because Scaffold has already removed it from the body it
+  shrank.
+* THE PILL DOES NOT MOVE, and nothing needed repadding. The bar brings its
+  own `SafeArea` plus `18.h`; nested inside the plane's existing `SafeArea`
+  the inner one contributes zero, so the pill still rests at the safe-area
+  inset plus `18.h` above the screen edge - where the bottom slot rested it.
+  Both list views already clear `88.h` below their last row and the housing
+  is `60.r` under that `18.h`, so the clearance sized for the old FAB covers
+  the pill with room over.
+* The two test expectations that described the old mount now pin the new one:
+  the harness mounts the bar the way the page does (and the way base_sdk's
+  own tests do), and the template assertion pins
+  `Positioned.fill` / `Align(bottomCenter)` / `ProductivityPlusNav` as one
+  nesting AND asserts `bottomNavigationBar:` is absent, so a move back to the
+  Scaffold slot fails on a test rather than on a screenshot. Nothing was
+  skipped, deleted or weakened; the file goes from 8 tests to 10.
+* The guided-tour fragment needed no change: it finds the plus by
+  `ProductivityPlusNav.navKey` and its glyph, never by the slot it sits in.
+
+## 1.6.7
+
+* Ray, 2026-09-20: "i think productivity plus should be in the floating nav
+  when you in its page. floating nav already accept modes and buttons". The
+  /tasks workspace's plus is now ONE CONTROL ON THE BAR rather than a
+  `FloatingActionButton` of the page's own.
+* NOTHING NEW WAS DRAWN, and the mechanism is the one Ray points at.
+  `ProductivityPlusNav` is base_sdk's `FloatingBottomNav` in
+  `FloatingNavControlsMode` with no `input` - the mode's documented "pill of
+  round buttons" shape - and the plus is one `FloatingNavAction` in
+  `leadingActions`, the slot whose own doc names this exact case: "any other
+  SDK's primary action - a tasks app's 'new task'".
+* ONE PLUS PER SCREEN, the same rule the bar's back segment already keeps
+  for back. The FAB is GONE from the list plane rather than duplicated
+  beside the bar, and the page keeps no decision about the control: the
+  widget owns the mode, the slot and the look.
+* THE LONG PRESS CAME WITH IT. "plus opens new but i think hlding it should
+  give me option like tasks notes" (Ray) rides
+  `FloatingNavAction.onLongPress` (base_sdk 1.66.10), so the tasks/notes
+  sheet is still a hold away. The FAB was wrapped in a `GestureDetector`
+  only because a FAB has no long press; the bar's controls always had one.
+* THE PLUS WEARS THE BAR'S RESTING CONTROL LOOK, not a brand fill: a
+  `FloatingNavAction` with `active: false`, which is what the reference
+  composer's leading "+" is. `active` is the mode's "this thing is ON"
+  language (mic live, camera on) and a new-item button is not a toggle. No
+  colour is named in this package for it at all - the bar paints its own
+  controls.
+* Its accessible label and tooltip are the sheet's own words for the list
+  (`newItemSheetLabelFor`: 'New task' / 'New note'), so the button and the
+  sheet it opens cannot drift apart. The bar prints no text under its
+  controls, which is why the label is not new copy on screen.
+* The guided-tour fragment's compose tap follows the control to the bar
+  (`ProductivityPlusNav.navKey` + its plus glyph) instead of the removed
+  `'tasks-compose'` key, so the /tasks stills are the screens the plus
+  actually opens.
+
+## 1.6.6
+
+* fix(productivity): a sign-out takes the tasks with it. Ray, 2026-09-19:
+  "if on temp local user you logout all your tasks still show" - and they
+  did, because NO SDK cleared its own on-device user data at sign-out.
+  users_sdk's `SessionEndHooks` has published that moment since it shipped
+  and had exactly one subscriber (auth_sdk's restore-key revoke, registered
+  from `auth/dart/manifest.json` - a grep for `SessionEndHooks` over `.dart`
+  files finds nothing, which is how that stayed easy to miss).
+* New `ProductivitySessionEnd.clear`, registered under
+  `productivity_local_data` from this manifest's new `productivity_session_end`
+  boot hook. It deletes the tasks and notes rows, this SDK's still-pending
+  outbox rows and the incremental pull cursor
+  (`AppDatabase.clearBox`, which had no production caller until now), and
+  clears the stale `TaskPullService.lastFailure` notice. Deleting the queued
+  pushes matters on its own: a task queued under the signed-out user's
+  session would otherwise drain later, under whatever token came next, and
+  land in someone else's account. Every call is local - nothing here reaches
+  the network, which is the point, since the users who need it most have
+  never had a backend.
+* AND THE ONE WITHOUT WHICH NONE OF THAT IS VISIBLE: `TasksNotifier` now
+  keeps a registry of the notifiers a process is holding, and
+  `TasksNotifier.clearLive()` empties them. `tasksStateProvider` is a plain
+  `StateNotifierProvider`, not `autoDispose`, so it lives in the root scope
+  for the whole process: a sign-out ends with `replaceMainRoute`, which
+  rebuilds the page and RE-READS the same surviving notifier, so emptying the
+  tables on its own changed nothing a user could see until the app restarted.
+  A registry rather than `ref.invalidate` because a session-end hook is a
+  plain callback with no `WidgetRef` and no `ProviderContainer` in reach.
+  Entries are removed in `dispose`, and `clearLive` checks `mounted`.
+* DELIBERATELY NOT CLEARED: the recovery tables (avoided habits, urge logs,
+  rituals, procrastination logs). Session-scoped in exactly the same way and
+  a leak of exactly the same shape, but irreversible in a way a task list is
+  not - held for Ray's word rather than decided here. Named in the code and
+  in the manifest comment rather than left unsaid.
+* Tests: `test/session_end_clears_local_data_test.dart` - the tasks, notes,
+  outbox rows and cursor are gone, and the surface reads back empty; a
+  store-only clear leaves the root-scoped notifier still holding the tasks
+  (Ray's symptom, pinned, so the day someone decides the store clear was
+  enough the suite says so); the sync-failure notice is cleared; `dispose`
+  unregisters and a clear with nothing live is safe; running twice is
+  harmless. `test/manifest_wiring_test.dart` gains the boot hook: it
+  registers against `SessionEndHooks`, names the clear off the class so the
+  manifest cannot drift from the Dart, the clear is exported from the barrel
+  the host reaches it through, and it declares no `imports` (every composed
+  `main.dart` already has them).
+* This is one third of the fix. The other two are users_sdk 1.4.1 (the local
+  session was cleared only when the server revoke succeeded - and a
+  temp-local account's `offline:<local user id>` token can never be revoked,
+  so sign-out was a guaranteed no-op for exactly those users) and base_sdk
+  1.66.9 (`ProfileNotifier.logOut` did not await the sign-out and cleared
+  nothing locally).
+* manifest.json 1.6.5 -> 1.6.6; no new base_sdk requirement (`clearBox` has
+  shipped since the key-value store did).
+
+## 1.6.5
+
+* The theme-blind widget sweep, finished: every `build` in this package's
+  `lib` and `templates` trees audited against the defect 1.6.3 fixed in
+  four pages and one strip (Ray, 2026-09-19: "glance doesnt change test
+  immediately untill you come back if you switched theme mode"). A widget
+  is theme-blind when its `build` decides a colour from one of `AppStyle`'s
+  mode-resolving statics and that same `build` registers no
+  inherited-widget dependency a mode flip reschedules — a static is not an
+  inherited widget, so the flip schedules no rebuild and the old mode's
+  colours stay until something else happens to rebuild the element.
+* 41 classes read such a static. THE REACHABILITY PASS DECIDED ALMOST ALL
+  OF THEM: a widget with no rescheduling read of its own, instantiated
+  NON-`const` from a build that has one, is rebuilt by that parent and its
+  statics resolve afresh. With 1.6.3's four pages now depending on the
+  inherited theme, 37 of the 41 sit on such a chain — the list, compose,
+  note, picker and run panes all reach `PlaneHost`, which mounts each pane
+  as `Builder(builder: page.builder)`, non-`const`. They were REJECTED, not
+  changed: no colour role was respelled to fit the pattern.
+* `WeeklyCheckInStrip`: the two reads left on statics in 1.6.3 because no
+  `Brightness`-taking seam existed for either role now go through
+  `AppStyle.cardAltFor` and `AppStyle.subtleStrokeFor`, so the card fill
+  and the hairline name the mode the strip's own `Theme.of` reports rather
+  than the app-wide flag. Same two values per mode as before.
+* `_NewItemSheet` (the /tasks add button's long press): FIXED. Its route
+  builds it `const`, and a `const` instantiation is a boundary the flip
+  cannot cross, so a mode change made while the sheet was open left every
+  row on the previous mode's ink, fill and stroke. The heading and the rows
+  now resolve against `Theme.of(context).brightness`, read once in `build`
+  and handed to the row helper.
+* The snooze sheet was AUDITED AND REJECTED for the opposite reason, and
+  the difference is exactly the `const` rule: `showSnoozeSheet` builds
+  `_SnoozeSheet(...)` non-`const`, and Flutter's own `_ModalBottomSheet`
+  reads the inherited theme for its defaults, so the flip marks that
+  element dirty and the route's builder runs again with a fresh widget.
+  The flip already reaches it.
+* `PausedRunLineView` (chip 859, the run badge on the host's Tasks row):
+  FIXED. Its only parent here, `PausedRunLine`, watches a store provider
+  and asks nothing inherited for the mode, and the row it is composed into
+  lives in the host — so no rebuild can be shown to reach the line at all,
+  the same position base_sdk's glance card was in behind its `const`
+  boundary. Its hairline and subline now name `AppStyle.subtleStrokeFor`
+  and `AppStyle.faintFor` for the mode the theme reports.
+* NO COLOUR VALUE CHANGED IN EITHER MODE, no hex literal was added to a
+  widget, and nothing was added to base_sdk: every seam used here shipped
+  in base_sdk 1.66.6.
+* Two reads are deliberately untouched and are NOT the defect: the
+  `backgroundColor:` each of `showNewItemSheet` and `showSnoozeSheet`
+  passes to `showModalBottomSheet`. Neither sits in a `build`, so neither
+  can register a dependency and neither can be made to reschedule
+  anything; both are evaluated when the sheet opens, when the flag is
+  current.
+* Tests: `sheet_theme_mode_test.dart` pumps both sheets, flips
+  `AppStyle.setBrightness` and `themeMode` the way `AppNotifier.changeTheme`
+  does and pumps again WITHOUT remounting — one test for the new-item sheet
+  as the fix, one pinning the snooze sheet's non-`const` builder as the
+  reason it was rejected. `weekly_check_in_strip_theme_mode_test.dart`
+  gains the case that tells a static read from a theme read apart: the flag
+  and the strip's subtree theme are set to disagree, which is the only
+  arrangement in which they can. `paused_run_line_theme_mode_test.dart`
+  reads the widget as source, because `paused_run.dart` pulls the
+  drift-backed repository whose generated sources this package does not
+  build — the same reason the shipped paused_run_line_test.dart is one of
+  this package's standing load failures.
+
+## 1.6.4
+
+* The launcher's Build (Smart) run stopped at the Dart front end in both the
+  Android and the Windows job with three errors, at identical positions in
+  each, none of them in a file any of 1.6.1-1.6.3 touched:
+  * `.rokct/cache/productivity/lib/src/common/application/tasks/tasks_state.dart:18:14`
+    and `:29:10` - Type 'TaskModel' not found.
+  * `.rokct/cache/productivity/lib/src/common/application/tasks/tasks_notifier.dart:63:42`
+    - Type 'ProcessingState' not found.
+  Both composer jobs reported success and pub pinned this SDK happily; the
+  break was purely at compile time.
+  THE CAUSE IS AN ISLAND THAT JOINED THE MAINLAND. Since the src/ reshuffle,
+  `application/tasks/{tasks_provider,tasks_notifier,tasks_state}.dart` had
+  named `TaskModel` and `ProcessingState` without importing either -
+  `tasks_state.dart` imported only `flutter_riverpod`, which it did not even
+  use, and `tasks_notifier.dart` reached for this package's own barrel, which
+  does not re-export base_sdk and so never put `ProcessingState` in scope.
+  Nothing reachable from `lib/productivity_sdk.dart` imported any of the
+  three, so the front end never walked into them and the missing imports cost
+  nothing. 1.6.2's `NeedsAttentionGlance` then imported the island - it
+  watches `tasksStateProvider` for the tasks half of the glance - the barrel
+  exports the glance, and the very next host build had to compile all three
+  files for the first time.
+  The fix is the imports those files always needed: `TaskModel` from this
+  package's `models/data/task_data.dart` in `tasks_state.dart` (replacing the
+  unused `flutter_riverpod` import), and `ProcessingState` from
+  `package:base_sdk/base_sdk.dart` in `tasks_notifier.dart`, whose two
+  members of this package (`TaskService`, `TaskModel`) now come from their own
+  libraries rather than back out through the barrel that exports the glance
+  that imports this file. No public API changed, in this SDK or any other: the
+  three types keep their declarations, their libraries and their exports.
+  WHY THE REPO'S OWN SUITE DID NOT CATCH IT, AND WHAT NOW DOES.
+  `dart analyze` here does name the three errors, but as 3 of ~100, because
+  the composed AppDatabase's drift code (`TaskEntity`, `tasksTable`,
+  `TasksTableCompanion`) exists only after composition, and every test in
+  this suite that imports the barrel - the only tests that would compile the
+  public surface - is already a load failure on those same composed-only
+  symbols. So no local signal distinguished a fatal error from the standing
+  noise.
+  `test/public_surface_reachability_test.dart` closes that gap from the other
+  side. It walks the same graph the front end walks - every library
+  transitively reachable from `lib/productivity_sdk.dart` through `import`
+  and `export` - and asserts that each one can see every type it names,
+  resolving this package's own libraries from source and base_sdk's through
+  `.dart_tool/package_config.json`. It models Dart's actual rule (an import
+  gives you the target's declarations and the target's `export` closure, and
+  nothing the target merely imports), it needs no generated code, and it
+  fails with exactly the two libraries and two type names the launcher build
+  failed on. An island that joins the public surface is audited from the
+  moment it joins.
+
+## 1.6.3
+
+* Ray, 2026-09-19: "glance doesnt change test immediately untill you come
+  back if you switched theme mode". The same defect, in this SDK's own
+  widgets: a `build` that decided a colour from one of `AppStyle`'s
+  mode-resolving statics and asked nothing inherited for the mode. A static
+  is not an inherited widget, so a theme-mode flip scheduled no rebuild of
+  those elements at all and they kept the previous mode's colours until the
+  reader left the screen and came back. Fixed where the staleness is
+  PROVABLE, i.e. where no parent rebuild can reach the widget either:
+  * `WeeklyCheckInStrip` (the personal-mastery weekly check-in), mounted
+    `const` by `templates/pages/vision/personal_mastery_page.dart` — the
+    same `const` child boundary base_sdk's glance card sat behind. Its two
+    facts now name their ink through `AppStyle.inkFor` and
+    `AppStyle.secondaryInkFor` for the mode `Theme.of(context).brightness`
+    reports, and the card and stroke ride the same rebuild.
+  * The four pushed route pages that painted their ground from
+    `AppStyle.surfaceDark`: the tasks workspace, the task-run push, personal
+    mastery and plan-on-a-page. A pushed `ModalRoute` caches the page it
+    built, so an ancestor rebuild provably never reaches it. Each now reads
+    the mode once in its own `build`, outside the `LayoutBuilder` and the
+    plane builders, and names its ground through `AppStyle.surfaceFor`; the
+    tasks workspace hands the resolved colour DOWN to its five panes (list,
+    compose, note editor, run, objective picker) so the whole page is
+    painted for one mode. The run push's absent-task line takes
+    `AppStyle.faintFor` the same way.
+  No new colour value anywhere: `inkFor`, `secondaryInkFor`, `surfaceFor`
+  and `faintFor` are base_sdk's existing mode seams, each returning the same
+  two values as the static it replaces. The ~41 remaining static reads in
+  this package sit inside builds that a parent already reschedules and are a
+  separate decision.
+  Tests: `test/weekly_check_in_strip_theme_mode_test.dart` flips the mode
+  with the strip mounted behind a `const` boundary and never remounts it;
+  `test/template_page_theme_mode_test.dart` pins the four pages' mechanism
+  in source, because none of them can be compiled by this package (they
+  import `auto_route`, `comms_sdk` and the generated-code barrel, none of
+  which is a dependency here) — the same reason the shipped suite pumps
+  components and frames rather than installed pages.
+
+## Unreleased
+
+* Build fix: `TaskPullService` read `AppConstants.isDemo`, which base_sdk
+  removed with the `--dart-define=IS_DEMO=true` define, so every composed
+  app failed to compile (`The getter 'isDemo' isn't defined for the type
+  'AppConstants'`). The pull gate now reads `DemoSession.demoActive`, the
+  one question every demo seam asks (the guided-tour build OR the runtime
+  session auth_sdk activates from the server-asserted demo-account marker).
+  Same boolean meaning, and it now also holds the pull back for a demo
+  session served from the in-app fixtures, matching auth_sdk's
+  `DemoHoldSyncHandler` on the push half. The `isDemoOverride` test seam is
+  unchanged.
+
+## 1.6.2
+
+* Ray, 2026-09-19: "in home the glance has 3 items, task, plan on a page,
+  personal mastery. all these are  productivity. having a productivity button
+  in floating nav is better and the glance show what need attention". The
+  three permanent doors this SDK injected into the launcher glance are gone.
+  The doors are now ONE Productivity entry on the launcher's floating nav
+  (launch_sdk 1.7.5, which also carries the widened glance seam); what this
+  SDK puts in the glance is what actually wants the reader.
+* New `ProductivityAttention` (`src/common/application/glance/`) is that rule,
+  PURE and over rows already in hand. It reads ONLY fields these models
+  already carry, because these doctypes are skeletal and no signal was
+  invented:
+  * TASKS - `TaskModel.dueDate` is today or past and `TaskModel.status` is
+    neither `completed` nor `cancelled`. Compared by DAY, so a task due at
+    09:00 still wants the reader at 17:00.
+  * PLAN ON A PAGE - the plan carries no dates at all (`vision_data.dart`: "no
+    objective status or dates"), so the only thing it can honestly ask for is
+    an objective that NOTHING MEASURES: a `PlanBoard.objectives` entry with no
+    `Kpi` linked, and only when `PlanBoard.kpisRead` says the KPIs were
+    actually read - an unreadable count is not zero, exactly as the board
+    itself already refuses to draw "0 KPIs" over a failed read.
+  * PERSONAL MASTERY - the goal has no status field either, so the child rows
+    speak: a `MasteryTodo` whose `date` is today or past and whose `status` is
+    neither Closed nor Cancelled, under a goal whose rows were actually sent
+    (`MasteryGoal.todos` non-null).
+* At most three lines from any one surface, soonest first. A glance is a
+  glance, and the whole list lives behind the Productivity entry.
+* New `NeedsAttentionGlance` (`src/common/presentation/glance/`) is the reader
+  and the dress: tasks from `tasksStateProvider`, the plan and the goals from
+  this SDK's own `VisionRepositoryFacade`. A failed read draws no lines rather
+  than an error on somebody's home screen - the plan and mastery pages already
+  print the backend's own message. Navigation is still by ROUTE PATH through
+  the host's `onOpen`, so this SDK still never imports launch_sdk (ADR-005),
+  the same contract `PausedRunLine` uses.
+* NOTHING needing attention renders NOTHING, and no line was written for it:
+  base_sdk's `GlanceCard` already collapses to `SizedBox.shrink()` on an empty
+  item list.
+* `manifest.json` now claims TWO markers on the launcher home instead of one,
+  exactly like the tasks-row pair: `// @launcher-glance-imports` takes
+  `import 'package:productivity_sdk/productivity_sdk.dart';` (the widget is
+  this SDK's own and the launcher home does not import it otherwise) and the
+  12-space-indented `// @launcher-glance` takes the widget. Both are skipped in
+  a host without launch_sdk, as before. No route, no tr_key and no database
+  version changed.
+* Icons are material (`Icons.task_alt` / `flag_outlined` / `star_outline`)
+  rather than the Remix set the injected doors used: the widget lives in this
+  package's `lib` and this package declares no icon-set dependency, which its
+  own pubspec comments forbid leaning on transitively.
+* 12 new tests in `test/productivity_attention_test.dart` pin every rule above
+  and the quiet case, and check the manifest injects one widget rather than
+  three doors. 294 tests pass (the 6 pre-existing drift-codegen load failures
+  are unchanged).
+
+## 1.6.1
+
+* Launcher Tasks page, Ray 2026-09-19 — four reports off today's build, one
+  pass.
+  * **"notes seem like cant save".** The notes table was never created on any
+    device that had the previous launcher installed. THE MIGRATION VERSION IN
+    A MANIFEST IS SHARED WITH EVERY OTHER SDK IN THE COMPOSED APP: the
+    composer sets the composed `AppDatabase.schemaVersion` to the MAXIMUM
+    version any manifest declares while each SDK writes its own
+    `if (from < N)` guards, so the numbers are one namespace with no
+    allocator. `auth_sdk` already declared 16 for its own table, which means
+    the launcher was ALREADY at schemaVersion 16 while this manifest said 15
+    — and 1.6.0's bump 15 -> 16 therefore raised nothing at all. Drift calls
+    `onUpgrade` only when `schemaVersion` exceeds the stored `user_version`,
+    so on an upgrading phone no migration ran, `notes_table` did not exist,
+    and every insert failed on `no such table`. Notes are now created at
+    **17**, above anything else composed. The manifest says the rule out loud
+    and `manifest_wiring_test.dart` enforces it: the declared version must be
+    past 16, no guard may sit above it, and the newest table must be created
+    AT it.
+  * **The same report, second half: the failure was invisible.**
+    `NoteRepositoryImpl.saveNote` caught the failed insert, wrote one
+    `debugPrint` and returned the note as though it had been stored, so the
+    editor closed over a note that was never written — a save that looked
+    like a save. A refused write now rethrows, and the editor keeps the pane
+    open with the reader's words still in it and says one line. A failed
+    READ still degrades to an empty list: a list that cannot be read has
+    nothing to keep open.
+  * **"tasks saved cant be edited".** On a wide window the card's tap opens
+    the task form in the detail plane; on the phone fold that same tap is
+    spoken for — frame 44d expands the card in place, which IS the fold — so
+    no gesture reached the form and a saved task could not be changed on a
+    phone at all. The expanded card now carries an **Edit** pill
+    (`TaskCard.onEdit` / `TaskCard.editKey`), in the run pill's shape and the
+    card's quiet stroke, and opening the form collapses the card behind it.
+    A done task offers it too: being finished is a field like any other and a
+    wrong one has to be fixable. Nothing changes on a wide window, which
+    passes no callback.
+  * **"plus opens new but i think hlding it should give me option like tasks
+    notes".** A TAP IS UNCHANGED and deliberately so — the add button still
+    opens a new item of whichever list the plane is drawing, a task on Tasks
+    and a note on Notes, because that is the one gesture that must never ask
+    a question. A LONG PRESS now opens `showNewItemSheet`, the snooze sheet's
+    control, naming both lists; choosing one switches the segment first and
+    then opens that list's form, so a note started from the tasks list is
+    never saved behind a list the reader is looking at.
+  * **"when thereis completed task switch from all to pending".** The status
+    tabs open on Pending when the list already holds finished work, and on
+    All when it does not, exactly as before. `InitialStatusFilter` is the
+    whole rule and it is PURE: derived from the list that just loaded, never
+    persisted, and it never picks Completed. It chooses an INITIAL value
+    only — once the reader touches the tabs the page stops choosing, so a
+    sync, a snooze or a save cannot move the filter under their hand.
+
+## 1.6.0
+
+* Launcher Tasks page, Ray 2026-09-18 — two reports, one pass.
+  * **"long term task is selected not automatically detected from end
+    date".** The long-term band (section 47m) shipped with a hand switch on
+    the compose form, and the frame said so: "set by hand ... nothing
+    derives it". It is derived now. `LongTermRule` holds the whole rule and
+    its one named cut-off, `LongTermRule.horizonDays` (30): a task whose
+    end date is more than that many days past its start — its `startDate`
+    when it has one, else the date it was created — is long term, and a
+    task with NO end date is not. The switch is gone from the form and one
+    derived line stands where it was, reading back what the deadline just
+    decided. The stored `isLongTerm` field is untouched and still the one
+    thing the card badge, the band split and the synced `is_long_term`
+    column read; what changed is who writes it. It is written in two
+    places on purpose — the page, so the band is right the moment you save,
+    and `TodoRepositoryImpl.saveTodos`, which is the choke point every
+    other local writer passes through (the recurrence roll-over, a
+    restored backup, a pulled task whose deadline the server moved).
+  * **"i cant do notes its only tasks and no seperate notes if need to
+    be".** The /tasks workspace now carries a second list. A Tasks / Notes
+    segment sits at the head of the list plane — chip 827's control, not a
+    TabBar, because this page's navigation is PlaneHost's — and the notes
+    half draws its own cards with none of the task furniture: no done
+    state, no priority tint, no deadline, no steps. A note is a title, a
+    plain-text body and the moment it last changed; create, edit and
+    delete land in the same last plane the task form uses, and switching
+    lists closes whatever that plane was carrying. New `NotesTable`
+    (migration 16), `NoteRepositoryImpl`, `NoteViewModel`, `NoteCard` and
+    `WorkspaceListSegment`.
+  * **NOTES ARE LOCAL ONLY, AND DELIBERATELY.** Tasks sync because a Task
+    doctype exists to sync to; no backend this app composes has a note
+    doctype, so there is no note outbox, no note pull, and no sync columns
+    invented on the table for a server that would not know what to do with
+    them. Give notes a doctype later and the table gains them in a
+    migration, exactly as tasks did.
+
 ## 1.5.4
 
 * Guided tour, tablet audit 2026-09-07: the `productivity_maintenance_readings`

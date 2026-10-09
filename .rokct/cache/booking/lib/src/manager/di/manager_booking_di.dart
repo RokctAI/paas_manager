@@ -15,11 +15,12 @@
 import 'package:flutter/widgets.dart';
 import 'package:get_it/get_it.dart';
 
-import 'package:base_sdk/src/constants/app_constants.dart';
+import 'package:base_sdk/base_sdk.dart' show DemoFixtures;
 import 'package:base_sdk/src/presentation/pages/profile/profile_section.dart';
 import 'package:base_sdk/src/presentation/pages/profile/profile_section_registry.dart';
+import 'package:booking_sdk/src/common/di/booking_di.dart'
+    show bookingDemoFixtureDirectory;
 import 'package:booking_sdk/src/manager/domain/interface/seller_booking.dart';
-import 'package:booking_sdk/src/manager/infrastructure/repositories/demo_seller_booking_repository.dart';
 import 'package:booking_sdk/src/manager/infrastructure/repositories/seller_booking_repository.dart';
 import 'package:booking_sdk/src/manager/presentation/booking_manager_hub_section.dart';
 
@@ -40,11 +41,12 @@ class ManagerBookingDependencies {
   static const int hubSectionOrder = 135;
 
   static void register(GetIt getIt) {
+    // Demo runs the real repository against the same fixtures the
+    // customer seam uses (a manager-only compose still needs them).
+    DemoFixtures.registerAssetDirectory(bookingDemoFixtureDirectory);
     if (!getIt.isRegistered<SellerBookingRepositoryFacade>()) {
       getIt.registerSingleton<SellerBookingRepositoryFacade>(
-        AppConstants.isDemo
-            ? DemoSellerBookingRepository()
-            : SellerBookingRepository(),
+        SellerBookingRepository(),
       );
     }
     registerBookingManagerHubSection();
@@ -54,10 +56,12 @@ class ManagerBookingDependencies {
   static void registerBookingManagerHubSection() {
     final registry = ProfileSectionRegistry.I;
     if (registry.contains(hubSectionId)) return;
-    registry.register(ProfileSection(
-      id: hubSectionId,
-      order: hubSectionOrder,
-      builder: (BuildContext context) => const BookingManagerHubSection(),
-    ));
+    registry.register(
+      ProfileSection(
+        id: hubSectionId,
+        order: hubSectionOrder,
+        builder: (BuildContext context) => const BookingManagerHubSection(),
+      ),
+    );
   }
 }

@@ -1,6 +1,6 @@
 name: hardware_sdk
 description: "Unified hardware peripheral interface package for RokctApp."
-version: 1.0.0
+version: 1.1.2
 # Internal SDK consumed via path/git, never published to pub.dev. Matches
 # base_sdk and keeps the path dependency below from tripping pub's
 # publishable-package lint.
@@ -12,6 +12,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  remixicon: ^1.4.1
   print_bluetooth_thermal: any
   flutter_riverpod: ^2.6.1
   permission_handler: ^12.0.1
@@ -24,7 +25,13 @@ dependencies:
 
   network_info_plus: any
   ping_discover_network_forked: any
-  flutter_pos_printer_platform_image_3: any
+  # Native ESC/POS plugin behind lib/src/pos/printer (MethodChannel
+  # com.sersoluciones.flutter_pos_printer_platform). The _sdt fork registers
+  # the same channels and methods but builds on image 4 (archive 4) instead
+  # of image_v3 (archive 3), which could not co-resolve with comms_sdk's
+  # live_activities -> image ^4.5.4. Held below 1.2.13: 1.2.13+ pulls
+  # permission_handler ^12 + universal_ble, which we do not need here.
+  flutter_pos_printer_platform_image_3_sdt: '>=1.2.12 <1.2.13'
   intl: ^0.19.0
   sensors_plus: ^5.0.1
 

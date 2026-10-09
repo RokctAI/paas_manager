@@ -12,7 +12,13 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+// TaskModel is this package's own model, and this library names it in its
+// field and in copyWith. It must be imported HERE rather than leaned on
+// through whatever library happens to import this one: nothing in the
+// public surface reached this file until the needs-attention glance did,
+// and the day it did the missing import became a compile error in every
+// app that composes this SDK.
+import '../../models/data/task_data.dart';
 
 class TasksState {
   final List<TaskModel> tasks;

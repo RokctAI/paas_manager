@@ -47,9 +47,9 @@ class RevenueTrendChart extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: AppStyle.cardDark,
+        color: AppStyle.cardFor(Theme.of(context).brightness),
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: AppStyle.strokeDarkSubtle),
+        border: Border.all(color: AppStyle.subtleStrokeFor(Theme.of(context).brightness)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -63,7 +63,7 @@ class RevenueTrendChart extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                   style: AppStyle.interSemi(
                     size: 11,
-                    color: AppStyle.textDarkSecondary,
+                    color: AppStyle.secondaryInkFor(Theme.of(context).brightness),
                     letterSpacing: 0.6,
                   ),
                 ),
@@ -83,7 +83,7 @@ class RevenueTrendChart extends StatelessWidget {
                       AppHelpers.getTranslation('no_data'),
                       style: AppStyle.interNormal(
                         size: 12,
-                        color: AppStyle.textDarkFaint,
+                        color: AppStyle.faintFor(Theme.of(context).brightness),
                       ),
                     ),
                   )
@@ -92,7 +92,7 @@ class RevenueTrendChart extends StatelessWidget {
                       series: series,
                       revenueColor: AppStyle.primary,
                       profitColor: AppStyle.green,
-                      gridColor: AppStyle.strokeDarkSubtle,
+                      gridColor: AppStyle.subtleStrokeFor(Theme.of(context).brightness),
                     ),
                   ),
           ),
@@ -109,7 +109,7 @@ class RevenueTrendChart extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                       style: AppStyle.interNormal(
                         size: 10,
-                        color: AppStyle.textDarkFaint,
+                        color: AppStyle.faintFor(Theme.of(context).brightness),
                       ),
                     ),
                   ),

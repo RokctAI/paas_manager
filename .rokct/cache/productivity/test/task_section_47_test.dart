@@ -26,7 +26,10 @@
 //     is no deadline in its result type to move;
 //   * "synced" is earned from two facts (no outbox row, a remote id) and
 //     never from a flag;
-//   * the long-term band keys off `isLongTerm` and nothing derives it.
+//   * the long-term band keys off `isLongTerm`, which is now DERIVED
+//     from the end date rather than picked on the form — the rule and
+//     its cut-off are pinned in test/long_term_rule_test.dart. The
+//     card and the band still read the FIELD, and must keep doing so.
 
 import 'package:base_sdk/base_sdk.dart' show OutboxStatus;
 import 'package:base_sdk/src/presentation/theme/app_style.dart';

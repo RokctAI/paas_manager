@@ -54,7 +54,10 @@ class TaskSyncNotice extends StatelessWidget {
       child: Text(
         message,
         textAlign: TextAlign.center,
-        style: AppStyle.interNormal(size: 12, color: AppStyle.textDarkFaint),
+        style: AppStyle.interNormal(
+          size: 12,
+          color: AppStyle.faintFor(Theme.of(context).brightness),
+        ),
       ),
     );
   }

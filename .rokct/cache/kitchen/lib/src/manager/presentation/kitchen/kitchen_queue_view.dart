@@ -23,6 +23,7 @@ import 'package:kitchen_sdk/src/manager/application/kitchen/kitchen_provider.dar
 import 'package:kitchen_sdk/src/manager/presentation/kitchen/kitchen_detail_page.dart';
 import 'package:kitchen_sdk/src/manager/presentation/kitchen/kitchen_order_card.dart';
 import 'package:kitchen_sdk/src/manager/presentation/kitchen/kitchen_status.dart';
+import 'package:remixicon/remixicon.dart';
 
 /// The kitchen queue workspace (the plane flow's root): header with the
 /// live count, search and the chime bell; the POS filter chips with
@@ -90,7 +91,7 @@ class _KitchenQueueViewState extends ConsumerState<KitchenQueueView> {
                       AppHelpers.getTranslation('no_orders'),
                       style: AppStyle.interNormal(
                         size: 12,
-                        color: AppStyle.textDarkSecondary,
+                        color: AppStyle.secondaryInkFor(Theme.of(context).brightness),
                       ),
                     ),
                   )
@@ -117,20 +118,20 @@ class _KitchenQueueViewState extends ConsumerState<KitchenQueueView> {
       children: [
         Text(
           AppHelpers.getTranslation('kitchen'),
-          style: AppStyle.interBold(size: 22, color: AppStyle.textPrimary),
+          style: AppStyle.interBold(size: 22, color: AppStyle.inkFor(Theme.of(context).brightness)),
         ),
         const SizedBox(width: 10),
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(100),
-            border: Border.all(color: AppStyle.strokeDark),
+            border: Border.all(color: AppStyle.strokeFor(Theme.of(context).brightness)),
           ),
           child: Text(
             '$liveCount ${AppHelpers.getTranslation('live')}',
             style: AppStyle.interNormal(
               size: 11,
-              color: AppStyle.textDarkSecondary,
+              color: AppStyle.secondaryInkFor(Theme.of(context).brightness),
             ),
           ),
         ),
@@ -146,7 +147,7 @@ class _KitchenQueueViewState extends ConsumerState<KitchenQueueView> {
                   onChanged: notifier.setQuery,
                   style: AppStyle.interNormal(
                     size: 13,
-                    color: AppStyle.textPrimary,
+                    color: AppStyle.inkFor(Theme.of(context).brightness),
                   ),
                   cursorColor: AppStyle.primary,
                   decoration: InputDecoration(
@@ -154,7 +155,7 @@ class _KitchenQueueViewState extends ConsumerState<KitchenQueueView> {
                     hintText: AppHelpers.getTranslation(TrKeys.search),
                     hintStyle: AppStyle.interNormal(
                       size: 13,
-                      color: AppStyle.textDarkFaint,
+                      color: AppStyle.faintFor(Theme.of(context).brightness),
                     ),
                     border: InputBorder.none,
                   ),
@@ -162,7 +163,7 @@ class _KitchenQueueViewState extends ConsumerState<KitchenQueueView> {
               : const SizedBox.shrink(),
         ),
         _iconButton(
-          icon: _searching ? Icons.close : Icons.search,
+          icon: _searching ? Remix.close_line : Remix.search_line,
           onTap: () {
             setState(() => _searching = !_searching);
             if (!_searching) {
@@ -173,7 +174,7 @@ class _KitchenQueueViewState extends ConsumerState<KitchenQueueView> {
         ),
         const SizedBox(width: 8),
         _iconButton(
-          icon: Icons.notifications_none,
+          icon: Remix.notification_3_line,
           dot: hasActivity,
           onTap: notifier.clearActivity,
         ),
@@ -193,13 +194,13 @@ class _KitchenQueueViewState extends ConsumerState<KitchenQueueView> {
         width: 36,
         height: 36,
         decoration: BoxDecoration(
-          color: AppStyle.cardDark,
+          color: AppStyle.cardFor(Theme.of(context).brightness),
           shape: BoxShape.circle,
-          border: Border.all(color: AppStyle.strokeDark),
+          border: Border.all(color: AppStyle.strokeFor(Theme.of(context).brightness)),
         ),
         child: Stack(
           children: [
-            Center(child: Icon(icon, size: 16, color: AppStyle.textPrimary)),
+            Center(child: Icon(icon, size: 16, color: AppStyle.inkFor(Theme.of(context).brightness))),
             if (dot)
               Positioned(
                 right: 6,
@@ -238,12 +239,12 @@ class _KitchenQueueViewState extends ConsumerState<KitchenQueueView> {
                   decoration: BoxDecoration(
                     color: state.filter == filter
                         ? AppStyle.primary
-                        : AppStyle.cardDark,
+                        : AppStyle.cardFor(Theme.of(context).brightness),
                     borderRadius: BorderRadius.circular(100),
                     border: Border.all(
                       color: state.filter == filter
                           ? AppStyle.primary
-                          : AppStyle.strokeDark,
+                          : AppStyle.strokeFor(Theme.of(context).brightness),
                     ),
                   ),
                   child: Row(
@@ -254,11 +255,11 @@ class _KitchenQueueViewState extends ConsumerState<KitchenQueueView> {
                         style: state.filter == filter
                             ? AppStyle.interSemi(
                                 size: 12,
-                                color: AppStyle.textPrimary,
+                                color: AppStyle.inkFor(Theme.of(context).brightness),
                               )
                             : AppStyle.interNormal(
                                 size: 12,
-                                color: AppStyle.textDarkSecondary,
+                                color: AppStyle.secondaryInkFor(Theme.of(context).brightness),
                               ),
                       ),
                       const SizedBox(width: 6),
@@ -270,7 +271,7 @@ class _KitchenQueueViewState extends ConsumerState<KitchenQueueView> {
                         decoration: BoxDecoration(
                           color: state.filter == filter
                               ? Colors.black.withValues(alpha: 0.22)
-                              : AppStyle.cardDarkAlt,
+                              : AppStyle.cardAltFor(Theme.of(context).brightness),
                           borderRadius: BorderRadius.circular(100),
                         ),
                         child: Text(
@@ -278,8 +279,8 @@ class _KitchenQueueViewState extends ConsumerState<KitchenQueueView> {
                           style: AppStyle.interSemi(
                             size: 10.5,
                             color: state.filter == filter
-                                ? AppStyle.textPrimary
-                                : AppStyle.textDarkFaint,
+                                ? AppStyle.inkFor(Theme.of(context).brightness)
+                                : AppStyle.faintFor(Theme.of(context).brightness),
                           ),
                         ),
                       ),
@@ -304,14 +305,14 @@ class _KitchenQueueViewState extends ConsumerState<KitchenQueueView> {
         margin: const EdgeInsets.fromLTRB(6, 4, 6, 8),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(100),
-          border: Border.all(color: AppStyle.strokeDark),
+          border: Border.all(color: AppStyle.strokeFor(Theme.of(context).brightness)),
         ),
         child: Center(
           child: Text(
             '${AppHelpers.getTranslation('view_more')}  ·  +$moreCount',
             style: AppStyle.interSemi(
               size: 11.5,
-              color: AppStyle.textDarkSecondary,
+              color: AppStyle.secondaryInkFor(Theme.of(context).brightness),
             ),
           ),
         ),

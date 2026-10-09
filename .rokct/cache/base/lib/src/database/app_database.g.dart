@@ -36,8 +36,18 @@ class $KeyValueTableTable extends KeyValueTable
     type: DriftSqlType.string,
     requiredDuringInsert: true,
   );
+  static const VerificationMeta _ownerMeta = const VerificationMeta('owner');
   @override
-  List<GeneratedColumn> get $columns => [box, id, data];
+  late final GeneratedColumn<String> owner = GeneratedColumn<String>(
+    'owner',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(kUnownedOwner),
+  );
+  @override
+  List<GeneratedColumn> get $columns => [box, id, data, owner];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -71,11 +81,17 @@ class $KeyValueTableTable extends KeyValueTable
     } else if (isInserting) {
       context.missing(_dataMeta);
     }
+    if (data.containsKey('owner')) {
+      context.handle(
+        _ownerMeta,
+        owner.isAcceptableOrUnknown(data['owner']!, _ownerMeta),
+      );
+    }
     return context;
   }
 
   @override
-  Set<GeneratedColumn> get $primaryKey => {box, id};
+  Set<GeneratedColumn> get $primaryKey => {box, id, owner};
   @override
   KeyValueEntity map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
@@ -92,6 +108,10 @@ class $KeyValueTableTable extends KeyValueTable
         DriftSqlType.string,
         data['${effectivePrefix}data'],
       )!,
+      owner: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}owner'],
+      )!,
     );
   }
 
@@ -105,10 +125,20 @@ class KeyValueEntity extends DataClass implements Insertable<KeyValueEntity> {
   final String box;
   final String id;
   final String data;
+
+  /// Account this row belongs to, or [kUnownedOwner] for a row that belongs
+  /// to nobody in particular (every row written before scoping existed, and
+  /// every row written by an app nobody has signed into).
+  ///
+  /// NOT NULL with a default rather than nullable: see [kUnownedOwner] for
+  /// why SQLite's tolerance of NULLs inside a composite PRIMARY KEY makes a
+  /// nullable version of this column unsafe.
+  final String owner;
   const KeyValueEntity({
     required this.box,
     required this.id,
     required this.data,
+    required this.owner,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -116,6 +146,7 @@ class KeyValueEntity extends DataClass implements Insertable<KeyValueEntity> {
     map['box'] = Variable<String>(box);
     map['id'] = Variable<String>(id);
     map['data'] = Variable<String>(data);
+    map['owner'] = Variable<String>(owner);
     return map;
   }
 
@@ -124,6 +155,7 @@ class KeyValueEntity extends DataClass implements Insertable<KeyValueEntity> {
       box: Value(box),
       id: Value(id),
       data: Value(data),
+      owner: Value(owner),
     );
   }
 
@@ -136,6 +168,7 @@ class KeyValueEntity extends DataClass implements Insertable<KeyValueEntity> {
       box: serializer.fromJson<String>(json['box']),
       id: serializer.fromJson<String>(json['id']),
       data: serializer.fromJson<String>(json['data']),
+      owner: serializer.fromJson<String>(json['owner']),
     );
   }
   @override
@@ -145,20 +178,27 @@ class KeyValueEntity extends DataClass implements Insertable<KeyValueEntity> {
       'box': serializer.toJson<String>(box),
       'id': serializer.toJson<String>(id),
       'data': serializer.toJson<String>(data),
+      'owner': serializer.toJson<String>(owner),
     };
   }
 
-  KeyValueEntity copyWith({String? box, String? id, String? data}) =>
-      KeyValueEntity(
-        box: box ?? this.box,
-        id: id ?? this.id,
-        data: data ?? this.data,
-      );
+  KeyValueEntity copyWith({
+    String? box,
+    String? id,
+    String? data,
+    String? owner,
+  }) => KeyValueEntity(
+    box: box ?? this.box,
+    id: id ?? this.id,
+    data: data ?? this.data,
+    owner: owner ?? this.owner,
+  );
   KeyValueEntity copyWithCompanion(KeyValueTableCompanion data) {
     return KeyValueEntity(
       box: data.box.present ? data.box.value : this.box,
       id: data.id.present ? data.id.value : this.id,
       data: data.data.present ? data.data.value : this.data,
+      owner: data.owner.present ? data.owner.value : this.owner,
     );
   }
 
@@ -167,37 +207,42 @@ class KeyValueEntity extends DataClass implements Insertable<KeyValueEntity> {
     return (StringBuffer('KeyValueEntity(')
           ..write('box: $box, ')
           ..write('id: $id, ')
-          ..write('data: $data')
+          ..write('data: $data, ')
+          ..write('owner: $owner')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(box, id, data);
+  int get hashCode => Object.hash(box, id, data, owner);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is KeyValueEntity &&
           other.box == this.box &&
           other.id == this.id &&
-          other.data == this.data);
+          other.data == this.data &&
+          other.owner == this.owner);
 }
 
 class KeyValueTableCompanion extends UpdateCompanion<KeyValueEntity> {
   final Value<String> box;
   final Value<String> id;
   final Value<String> data;
+  final Value<String> owner;
   final Value<int> rowid;
   const KeyValueTableCompanion({
     this.box = const Value.absent(),
     this.id = const Value.absent(),
     this.data = const Value.absent(),
+    this.owner = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   KeyValueTableCompanion.insert({
     required String box,
     required String id,
     required String data,
+    this.owner = const Value.absent(),
     this.rowid = const Value.absent(),
   }) : box = Value(box),
        id = Value(id),
@@ -206,12 +251,14 @@ class KeyValueTableCompanion extends UpdateCompanion<KeyValueEntity> {
     Expression<String>? box,
     Expression<String>? id,
     Expression<String>? data,
+    Expression<String>? owner,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
       if (box != null) 'box': box,
       if (id != null) 'id': id,
       if (data != null) 'data': data,
+      if (owner != null) 'owner': owner,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -220,12 +267,14 @@ class KeyValueTableCompanion extends UpdateCompanion<KeyValueEntity> {
     Value<String>? box,
     Value<String>? id,
     Value<String>? data,
+    Value<String>? owner,
     Value<int>? rowid,
   }) {
     return KeyValueTableCompanion(
       box: box ?? this.box,
       id: id ?? this.id,
       data: data ?? this.data,
+      owner: owner ?? this.owner,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -242,6 +291,9 @@ class KeyValueTableCompanion extends UpdateCompanion<KeyValueEntity> {
     if (data.present) {
       map['data'] = Variable<String>(data.value);
     }
+    if (owner.present) {
+      map['owner'] = Variable<String>(owner.value);
+    }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
     }
@@ -254,6 +306,7 @@ class KeyValueTableCompanion extends UpdateCompanion<KeyValueEntity> {
           ..write('box: $box, ')
           ..write('id: $id, ')
           ..write('data: $data, ')
+          ..write('owner: $owner, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -391,6 +444,16 @@ class $OutboxTableTable extends OutboxTable
     type: DriftSqlType.dateTime,
     requiredDuringInsert: true,
   );
+  static const VerificationMeta _ownerMeta = const VerificationMeta('owner');
+  @override
+  late final GeneratedColumn<String> owner = GeneratedColumn<String>(
+    'owner',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(kUnownedOwner),
+  );
   @override
   List<GeneratedColumn> get $columns => [
     id,
@@ -405,6 +468,7 @@ class $OutboxTableTable extends OutboxTable
     nextAttemptAt,
     createdAt,
     updatedAt,
+    owner,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -510,11 +574,17 @@ class $OutboxTableTable extends OutboxTable
     } else if (isInserting) {
       context.missing(_updatedAtMeta);
     }
+    if (data.containsKey('owner')) {
+      context.handle(
+        _ownerMeta,
+        owner.isAcceptableOrUnknown(data['owner']!, _ownerMeta),
+      );
+    }
     return context;
   }
 
   @override
-  Set<GeneratedColumn> get $primaryKey => {id};
+  Set<GeneratedColumn> get $primaryKey => {id, owner};
   @override
   OutboxEntry map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
@@ -567,6 +637,10 @@ class $OutboxTableTable extends OutboxTable
         DriftSqlType.dateTime,
         data['${effectivePrefix}updated_at'],
       )!,
+      owner: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}owner'],
+      )!,
     );
   }
 
@@ -610,6 +684,18 @@ class OutboxEntry extends DataClass implements Insertable<OutboxEntry> {
   final DateTime? nextAttemptAt;
   final DateTime createdAt;
   final DateTime updatedAt;
+
+  /// Account whose mutation this is, or [kUnownedOwner] for a row queued
+  /// before scoping existed (or by an app nobody has signed into).
+  ///
+  /// Without it the outbox is one queue for the whole device: user A signs
+  /// out with ops still pending, user B signs in, the next drain pushes A's
+  /// mutations under B's session, and they land in B's account. The drain and
+  /// every other read now filter on the owner instead.
+  ///
+  /// NOT NULL with a default rather than nullable, for the primary-key reason
+  /// documented on [kUnownedOwner].
+  final String owner;
   const OutboxEntry({
     required this.id,
     required this.opType,
@@ -623,6 +709,7 @@ class OutboxEntry extends DataClass implements Insertable<OutboxEntry> {
     this.nextAttemptAt,
     required this.createdAt,
     required this.updatedAt,
+    required this.owner,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -643,6 +730,7 @@ class OutboxEntry extends DataClass implements Insertable<OutboxEntry> {
     }
     map['created_at'] = Variable<DateTime>(createdAt);
     map['updated_at'] = Variable<DateTime>(updatedAt);
+    map['owner'] = Variable<String>(owner);
     return map;
   }
 
@@ -664,6 +752,7 @@ class OutboxEntry extends DataClass implements Insertable<OutboxEntry> {
           : Value(nextAttemptAt),
       createdAt: Value(createdAt),
       updatedAt: Value(updatedAt),
+      owner: Value(owner),
     );
   }
 
@@ -685,6 +774,7 @@ class OutboxEntry extends DataClass implements Insertable<OutboxEntry> {
       nextAttemptAt: serializer.fromJson<DateTime?>(json['nextAttemptAt']),
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
       updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
+      owner: serializer.fromJson<String>(json['owner']),
     );
   }
   @override
@@ -703,6 +793,7 @@ class OutboxEntry extends DataClass implements Insertable<OutboxEntry> {
       'nextAttemptAt': serializer.toJson<DateTime?>(nextAttemptAt),
       'createdAt': serializer.toJson<DateTime>(createdAt),
       'updatedAt': serializer.toJson<DateTime>(updatedAt),
+      'owner': serializer.toJson<String>(owner),
     };
   }
 
@@ -719,6 +810,7 @@ class OutboxEntry extends DataClass implements Insertable<OutboxEntry> {
     Value<DateTime?> nextAttemptAt = const Value.absent(),
     DateTime? createdAt,
     DateTime? updatedAt,
+    String? owner,
   }) => OutboxEntry(
     id: id ?? this.id,
     opType: opType ?? this.opType,
@@ -734,6 +826,7 @@ class OutboxEntry extends DataClass implements Insertable<OutboxEntry> {
         : this.nextAttemptAt,
     createdAt: createdAt ?? this.createdAt,
     updatedAt: updatedAt ?? this.updatedAt,
+    owner: owner ?? this.owner,
   );
   OutboxEntry copyWithCompanion(OutboxTableCompanion data) {
     return OutboxEntry(
@@ -751,6 +844,7 @@ class OutboxEntry extends DataClass implements Insertable<OutboxEntry> {
           : this.nextAttemptAt,
       createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
       updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
+      owner: data.owner.present ? data.owner.value : this.owner,
     );
   }
 
@@ -768,7 +862,8 @@ class OutboxEntry extends DataClass implements Insertable<OutboxEntry> {
           ..write('lastError: $lastError, ')
           ..write('nextAttemptAt: $nextAttemptAt, ')
           ..write('createdAt: $createdAt, ')
-          ..write('updatedAt: $updatedAt')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('owner: $owner')
           ..write(')'))
         .toString();
   }
@@ -787,6 +882,7 @@ class OutboxEntry extends DataClass implements Insertable<OutboxEntry> {
     nextAttemptAt,
     createdAt,
     updatedAt,
+    owner,
   );
   @override
   bool operator ==(Object other) =>
@@ -803,7 +899,8 @@ class OutboxEntry extends DataClass implements Insertable<OutboxEntry> {
           other.lastError == this.lastError &&
           other.nextAttemptAt == this.nextAttemptAt &&
           other.createdAt == this.createdAt &&
-          other.updatedAt == this.updatedAt);
+          other.updatedAt == this.updatedAt &&
+          other.owner == this.owner);
 }
 
 class OutboxTableCompanion extends UpdateCompanion<OutboxEntry> {
@@ -819,6 +916,7 @@ class OutboxTableCompanion extends UpdateCompanion<OutboxEntry> {
   final Value<DateTime?> nextAttemptAt;
   final Value<DateTime> createdAt;
   final Value<DateTime> updatedAt;
+  final Value<String> owner;
   final Value<int> rowid;
   const OutboxTableCompanion({
     this.id = const Value.absent(),
@@ -833,6 +931,7 @@ class OutboxTableCompanion extends UpdateCompanion<OutboxEntry> {
     this.nextAttemptAt = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.updatedAt = const Value.absent(),
+    this.owner = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   OutboxTableCompanion.insert({
@@ -848,6 +947,7 @@ class OutboxTableCompanion extends UpdateCompanion<OutboxEntry> {
     this.nextAttemptAt = const Value.absent(),
     required DateTime createdAt,
     required DateTime updatedAt,
+    this.owner = const Value.absent(),
     this.rowid = const Value.absent(),
   }) : id = Value(id),
        opType = Value(opType),
@@ -872,6 +972,7 @@ class OutboxTableCompanion extends UpdateCompanion<OutboxEntry> {
     Expression<DateTime>? nextAttemptAt,
     Expression<DateTime>? createdAt,
     Expression<DateTime>? updatedAt,
+    Expression<String>? owner,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
@@ -887,6 +988,7 @@ class OutboxTableCompanion extends UpdateCompanion<OutboxEntry> {
       if (nextAttemptAt != null) 'next_attempt_at': nextAttemptAt,
       if (createdAt != null) 'created_at': createdAt,
       if (updatedAt != null) 'updated_at': updatedAt,
+      if (owner != null) 'owner': owner,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -904,6 +1006,7 @@ class OutboxTableCompanion extends UpdateCompanion<OutboxEntry> {
     Value<DateTime?>? nextAttemptAt,
     Value<DateTime>? createdAt,
     Value<DateTime>? updatedAt,
+    Value<String>? owner,
     Value<int>? rowid,
   }) {
     return OutboxTableCompanion(
@@ -919,6 +1022,7 @@ class OutboxTableCompanion extends UpdateCompanion<OutboxEntry> {
       nextAttemptAt: nextAttemptAt ?? this.nextAttemptAt,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
+      owner: owner ?? this.owner,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -962,6 +1066,9 @@ class OutboxTableCompanion extends UpdateCompanion<OutboxEntry> {
     if (updatedAt.present) {
       map['updated_at'] = Variable<DateTime>(updatedAt.value);
     }
+    if (owner.present) {
+      map['owner'] = Variable<String>(owner.value);
+    }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
     }
@@ -983,6 +1090,7 @@ class OutboxTableCompanion extends UpdateCompanion<OutboxEntry> {
           ..write('nextAttemptAt: $nextAttemptAt, ')
           ..write('createdAt: $createdAt, ')
           ..write('updatedAt: $updatedAt, ')
+          ..write('owner: $owner, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -2114,6 +2222,16 @@ class $TasksTableTable extends TasksTable
     type: DriftSqlType.string,
     requiredDuringInsert: false,
   );
+  static const VerificationMeta _ownerMeta = const VerificationMeta('owner');
+  @override
+  late final GeneratedColumn<String> owner = GeneratedColumn<String>(
+    'owner',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(''),
+  );
   @override
   List<GeneratedColumn> get $columns => [
     id,
@@ -2127,6 +2245,7 @@ class $TasksTableTable extends TasksTable
     data,
     clientId,
     remoteId,
+    owner,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -2211,11 +2330,17 @@ class $TasksTableTable extends TasksTable
         remoteId.isAcceptableOrUnknown(data['remote_id']!, _remoteIdMeta),
       );
     }
+    if (data.containsKey('owner')) {
+      context.handle(
+        _ownerMeta,
+        owner.isAcceptableOrUnknown(data['owner']!, _ownerMeta),
+      );
+    }
     return context;
   }
 
   @override
-  Set<GeneratedColumn> get $primaryKey => {id};
+  Set<GeneratedColumn> get $primaryKey => {id, owner};
   @override
   TaskEntity map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
@@ -2264,6 +2389,10 @@ class $TasksTableTable extends TasksTable
         DriftSqlType.string,
         data['${effectivePrefix}remote_id'],
       ),
+      owner: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}owner'],
+      )!,
     );
   }
 
@@ -2306,6 +2435,29 @@ class TaskEntity extends DataClass implements Insertable<TaskEntity> {
   /// the local read path consults it, so a task with no [remoteId] behaves
   /// exactly like one that has never heard of a server.
   final String? remoteId;
+
+  /// Account this row belongs to, or the empty string for a row that
+  /// belongs to nobody in particular - every row written before owner
+  /// scoping existed, and every row written by an app nobody has signed
+  /// into.
+  ///
+  /// The empty string is base_sdk's `kUnownedOwner`, written here as a
+  /// literal rather than imported. This file is COPIED into base_sdk's own
+  /// package at compose time (sdk_installer_base.py
+  /// update_database_registration, because drift's modular analysis only
+  /// understands table classes defined inside the package being
+  /// generated), so a `package:base_sdk/...` import in it would become a
+  /// self-import of the package the copy now lives in. The value is the
+  /// one thing that has to agree, and a mismatch would show up as rows
+  /// nobody can see on the very first read.
+  ///
+  /// NOT NULL with a default rather than nullable: SQLite - unlike the SQL
+  /// standard - permits NULLs inside an ordinary rowid table's composite
+  /// PRIMARY KEY, and NULL != NULL in the backing unique index, so a
+  /// nullable owner would make `insertOnConflictUpdate` on an unowned row
+  /// miss its conflict target and append a second row instead of updating
+  /// the first.
+  final String owner;
   const TaskEntity({
     required this.id,
     required this.title,
@@ -2318,6 +2470,7 @@ class TaskEntity extends DataClass implements Insertable<TaskEntity> {
     this.data,
     this.clientId,
     this.remoteId,
+    required this.owner,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -2345,6 +2498,7 @@ class TaskEntity extends DataClass implements Insertable<TaskEntity> {
     if (!nullToAbsent || remoteId != null) {
       map['remote_id'] = Variable<String>(remoteId);
     }
+    map['owner'] = Variable<String>(owner);
     return map;
   }
 
@@ -2371,6 +2525,7 @@ class TaskEntity extends DataClass implements Insertable<TaskEntity> {
       remoteId: remoteId == null && nullToAbsent
           ? const Value.absent()
           : Value(remoteId),
+      owner: Value(owner),
     );
   }
 
@@ -2391,6 +2546,7 @@ class TaskEntity extends DataClass implements Insertable<TaskEntity> {
       data: serializer.fromJson<String?>(json['data']),
       clientId: serializer.fromJson<String?>(json['clientId']),
       remoteId: serializer.fromJson<String?>(json['remoteId']),
+      owner: serializer.fromJson<String>(json['owner']),
     );
   }
   @override
@@ -2408,6 +2564,7 @@ class TaskEntity extends DataClass implements Insertable<TaskEntity> {
       'data': serializer.toJson<String?>(data),
       'clientId': serializer.toJson<String?>(clientId),
       'remoteId': serializer.toJson<String?>(remoteId),
+      'owner': serializer.toJson<String>(owner),
     };
   }
 
@@ -2423,6 +2580,7 @@ class TaskEntity extends DataClass implements Insertable<TaskEntity> {
     Value<String?> data = const Value.absent(),
     Value<String?> clientId = const Value.absent(),
     Value<String?> remoteId = const Value.absent(),
+    String? owner,
   }) => TaskEntity(
     id: id ?? this.id,
     title: title ?? this.title,
@@ -2435,6 +2593,7 @@ class TaskEntity extends DataClass implements Insertable<TaskEntity> {
     data: data.present ? data.value : this.data,
     clientId: clientId.present ? clientId.value : this.clientId,
     remoteId: remoteId.present ? remoteId.value : this.remoteId,
+    owner: owner ?? this.owner,
   );
   TaskEntity copyWithCompanion(TasksTableCompanion data) {
     return TaskEntity(
@@ -2453,6 +2612,7 @@ class TaskEntity extends DataClass implements Insertable<TaskEntity> {
       data: data.data.present ? data.data.value : this.data,
       clientId: data.clientId.present ? data.clientId.value : this.clientId,
       remoteId: data.remoteId.present ? data.remoteId.value : this.remoteId,
+      owner: data.owner.present ? data.owner.value : this.owner,
     );
   }
 
@@ -2469,7 +2629,8 @@ class TaskEntity extends DataClass implements Insertable<TaskEntity> {
           ..write('createdBy: $createdBy, ')
           ..write('data: $data, ')
           ..write('clientId: $clientId, ')
-          ..write('remoteId: $remoteId')
+          ..write('remoteId: $remoteId, ')
+          ..write('owner: $owner')
           ..write(')'))
         .toString();
   }
@@ -2487,6 +2648,7 @@ class TaskEntity extends DataClass implements Insertable<TaskEntity> {
     data,
     clientId,
     remoteId,
+    owner,
   );
   @override
   bool operator ==(Object other) =>
@@ -2502,7 +2664,8 @@ class TaskEntity extends DataClass implements Insertable<TaskEntity> {
           other.createdBy == this.createdBy &&
           other.data == this.data &&
           other.clientId == this.clientId &&
-          other.remoteId == this.remoteId);
+          other.remoteId == this.remoteId &&
+          other.owner == this.owner);
 }
 
 class TasksTableCompanion extends UpdateCompanion<TaskEntity> {
@@ -2517,6 +2680,7 @@ class TasksTableCompanion extends UpdateCompanion<TaskEntity> {
   final Value<String?> data;
   final Value<String?> clientId;
   final Value<String?> remoteId;
+  final Value<String> owner;
   final Value<int> rowid;
   const TasksTableCompanion({
     this.id = const Value.absent(),
@@ -2530,6 +2694,7 @@ class TasksTableCompanion extends UpdateCompanion<TaskEntity> {
     this.data = const Value.absent(),
     this.clientId = const Value.absent(),
     this.remoteId = const Value.absent(),
+    this.owner = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   TasksTableCompanion.insert({
@@ -2544,6 +2709,7 @@ class TasksTableCompanion extends UpdateCompanion<TaskEntity> {
     this.data = const Value.absent(),
     this.clientId = const Value.absent(),
     this.remoteId = const Value.absent(),
+    this.owner = const Value.absent(),
     this.rowid = const Value.absent(),
   }) : title = Value(title);
   static Insertable<TaskEntity> custom({
@@ -2558,6 +2724,7 @@ class TasksTableCompanion extends UpdateCompanion<TaskEntity> {
     Expression<String>? data,
     Expression<String>? clientId,
     Expression<String>? remoteId,
+    Expression<String>? owner,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
@@ -2572,6 +2739,7 @@ class TasksTableCompanion extends UpdateCompanion<TaskEntity> {
       if (data != null) 'data': data,
       if (clientId != null) 'client_id': clientId,
       if (remoteId != null) 'remote_id': remoteId,
+      if (owner != null) 'owner': owner,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -2588,6 +2756,7 @@ class TasksTableCompanion extends UpdateCompanion<TaskEntity> {
     Value<String?>? data,
     Value<String?>? clientId,
     Value<String?>? remoteId,
+    Value<String>? owner,
     Value<int>? rowid,
   }) {
     return TasksTableCompanion(
@@ -2602,6 +2771,7 @@ class TasksTableCompanion extends UpdateCompanion<TaskEntity> {
       data: data ?? this.data,
       clientId: clientId ?? this.clientId,
       remoteId: remoteId ?? this.remoteId,
+      owner: owner ?? this.owner,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -2642,6 +2812,9 @@ class TasksTableCompanion extends UpdateCompanion<TaskEntity> {
     if (remoteId.present) {
       map['remote_id'] = Variable<String>(remoteId.value);
     }
+    if (owner.present) {
+      map['owner'] = Variable<String>(owner.value);
+    }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
     }
@@ -2662,6 +2835,428 @@ class TasksTableCompanion extends UpdateCompanion<TaskEntity> {
           ..write('data: $data, ')
           ..write('clientId: $clientId, ')
           ..write('remoteId: $remoteId, ')
+          ..write('owner: $owner, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $NotesTableTable extends NotesTable
+    with TableInfo<$NotesTableTable, NoteEntity> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $NotesTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    clientDefault: () => '',
+  );
+  static const VerificationMeta _titleMeta = const VerificationMeta('title');
+  @override
+  late final GeneratedColumn<String> title = GeneratedColumn<String>(
+    'title',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(''),
+  );
+  static const VerificationMeta _bodyMeta = const VerificationMeta('body');
+  @override
+  late final GeneratedColumn<String> body = GeneratedColumn<String>(
+    'body',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(''),
+  );
+  static const VerificationMeta _createdAtMeta = const VerificationMeta(
+    'createdAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+    'created_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+    defaultValue: currentDateAndTime,
+  );
+  static const VerificationMeta _updatedAtMeta = const VerificationMeta(
+    'updatedAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> updatedAt = GeneratedColumn<DateTime>(
+    'updated_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+    defaultValue: currentDateAndTime,
+  );
+  static const VerificationMeta _ownerMeta = const VerificationMeta('owner');
+  @override
+  late final GeneratedColumn<String> owner = GeneratedColumn<String>(
+    'owner',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(''),
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    title,
+    body,
+    createdAt,
+    updatedAt,
+    owner,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'notes_table';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<NoteEntity> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('title')) {
+      context.handle(
+        _titleMeta,
+        title.isAcceptableOrUnknown(data['title']!, _titleMeta),
+      );
+    }
+    if (data.containsKey('body')) {
+      context.handle(
+        _bodyMeta,
+        body.isAcceptableOrUnknown(data['body']!, _bodyMeta),
+      );
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(
+        _createdAtMeta,
+        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
+      );
+    }
+    if (data.containsKey('updated_at')) {
+      context.handle(
+        _updatedAtMeta,
+        updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta),
+      );
+    }
+    if (data.containsKey('owner')) {
+      context.handle(
+        _ownerMeta,
+        owner.isAcceptableOrUnknown(data['owner']!, _ownerMeta),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id, owner};
+  @override
+  NoteEntity map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return NoteEntity(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}id'],
+      )!,
+      title: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}title'],
+      )!,
+      body: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}body'],
+      )!,
+      createdAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}created_at'],
+      )!,
+      updatedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}updated_at'],
+      )!,
+      owner: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}owner'],
+      )!,
+    );
+  }
+
+  @override
+  $NotesTableTable createAlias(String alias) {
+    return $NotesTableTable(attachedDatabase, alias);
+  }
+}
+
+class NoteEntity extends DataClass implements Insertable<NoteEntity> {
+  final String id;
+
+  /// The note's heading. May be empty: a note jotted body-first is still
+  /// a note, and the list falls back to the body's first line.
+  final String title;
+
+  /// The note itself, plain text. Not markdown, not rich text — nothing
+  /// on the surface renders either, and a column that claimed to hold
+  /// them would be a promise this SDK does not keep.
+  final String body;
+  final DateTime createdAt;
+  final DateTime updatedAt;
+
+  /// Account this row belongs to, or the empty string for a row that
+  /// belongs to nobody in particular - every row written before owner
+  /// scoping existed, and every row written by an app nobody has signed
+  /// into.
+  ///
+  /// The empty string is base_sdk's `kUnownedOwner`, written here as a
+  /// literal rather than imported. This file is COPIED into base_sdk's own
+  /// package at compose time (sdk_installer_base.py
+  /// update_database_registration, because drift's modular analysis only
+  /// understands table classes defined inside the package being
+  /// generated), so a `package:base_sdk/...` import in it would become a
+  /// self-import of the package the copy now lives in. The value is the
+  /// one thing that has to agree, and a mismatch would show up as rows
+  /// nobody can see on the very first read.
+  ///
+  /// NOT NULL with a default rather than nullable: SQLite - unlike the SQL
+  /// standard - permits NULLs inside an ordinary rowid table's composite
+  /// PRIMARY KEY, and NULL != NULL in the backing unique index, so a
+  /// nullable owner would make `insertOnConflictUpdate` on an unowned row
+  /// miss its conflict target and append a second row instead of updating
+  /// the first.
+  final String owner;
+  const NoteEntity({
+    required this.id,
+    required this.title,
+    required this.body,
+    required this.createdAt,
+    required this.updatedAt,
+    required this.owner,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    map['title'] = Variable<String>(title);
+    map['body'] = Variable<String>(body);
+    map['created_at'] = Variable<DateTime>(createdAt);
+    map['updated_at'] = Variable<DateTime>(updatedAt);
+    map['owner'] = Variable<String>(owner);
+    return map;
+  }
+
+  NotesTableCompanion toCompanion(bool nullToAbsent) {
+    return NotesTableCompanion(
+      id: Value(id),
+      title: Value(title),
+      body: Value(body),
+      createdAt: Value(createdAt),
+      updatedAt: Value(updatedAt),
+      owner: Value(owner),
+    );
+  }
+
+  factory NoteEntity.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return NoteEntity(
+      id: serializer.fromJson<String>(json['id']),
+      title: serializer.fromJson<String>(json['title']),
+      body: serializer.fromJson<String>(json['body']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+      updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
+      owner: serializer.fromJson<String>(json['owner']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
+      'title': serializer.toJson<String>(title),
+      'body': serializer.toJson<String>(body),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
+      'updatedAt': serializer.toJson<DateTime>(updatedAt),
+      'owner': serializer.toJson<String>(owner),
+    };
+  }
+
+  NoteEntity copyWith({
+    String? id,
+    String? title,
+    String? body,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+    String? owner,
+  }) => NoteEntity(
+    id: id ?? this.id,
+    title: title ?? this.title,
+    body: body ?? this.body,
+    createdAt: createdAt ?? this.createdAt,
+    updatedAt: updatedAt ?? this.updatedAt,
+    owner: owner ?? this.owner,
+  );
+  NoteEntity copyWithCompanion(NotesTableCompanion data) {
+    return NoteEntity(
+      id: data.id.present ? data.id.value : this.id,
+      title: data.title.present ? data.title.value : this.title,
+      body: data.body.present ? data.body.value : this.body,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+      updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
+      owner: data.owner.present ? data.owner.value : this.owner,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('NoteEntity(')
+          ..write('id: $id, ')
+          ..write('title: $title, ')
+          ..write('body: $body, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('owner: $owner')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, title, body, createdAt, updatedAt, owner);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is NoteEntity &&
+          other.id == this.id &&
+          other.title == this.title &&
+          other.body == this.body &&
+          other.createdAt == this.createdAt &&
+          other.updatedAt == this.updatedAt &&
+          other.owner == this.owner);
+}
+
+class NotesTableCompanion extends UpdateCompanion<NoteEntity> {
+  final Value<String> id;
+  final Value<String> title;
+  final Value<String> body;
+  final Value<DateTime> createdAt;
+  final Value<DateTime> updatedAt;
+  final Value<String> owner;
+  final Value<int> rowid;
+  const NotesTableCompanion({
+    this.id = const Value.absent(),
+    this.title = const Value.absent(),
+    this.body = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+    this.owner = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  NotesTableCompanion.insert({
+    this.id = const Value.absent(),
+    this.title = const Value.absent(),
+    this.body = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+    this.owner = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  static Insertable<NoteEntity> custom({
+    Expression<String>? id,
+    Expression<String>? title,
+    Expression<String>? body,
+    Expression<DateTime>? createdAt,
+    Expression<DateTime>? updatedAt,
+    Expression<String>? owner,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (title != null) 'title': title,
+      if (body != null) 'body': body,
+      if (createdAt != null) 'created_at': createdAt,
+      if (updatedAt != null) 'updated_at': updatedAt,
+      if (owner != null) 'owner': owner,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  NotesTableCompanion copyWith({
+    Value<String>? id,
+    Value<String>? title,
+    Value<String>? body,
+    Value<DateTime>? createdAt,
+    Value<DateTime>? updatedAt,
+    Value<String>? owner,
+    Value<int>? rowid,
+  }) {
+    return NotesTableCompanion(
+      id: id ?? this.id,
+      title: title ?? this.title,
+      body: body ?? this.body,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+      owner: owner ?? this.owner,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (title.present) {
+      map['title'] = Variable<String>(title.value);
+    }
+    if (body.present) {
+      map['body'] = Variable<String>(body.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    if (updatedAt.present) {
+      map['updated_at'] = Variable<DateTime>(updatedAt.value);
+    }
+    if (owner.present) {
+      map['owner'] = Variable<String>(owner.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('NotesTableCompanion(')
+          ..write('id: $id, ')
+          ..write('title: $title, ')
+          ..write('body: $body, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('owner: $owner, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -2730,6 +3325,16 @@ class $RecoveryProfilesTableTable extends RecoveryProfilesTable
     type: DriftSqlType.string,
     requiredDuringInsert: false,
   );
+  static const VerificationMeta _ownerMeta = const VerificationMeta('owner');
+  @override
+  late final GeneratedColumn<String> owner = GeneratedColumn<String>(
+    'owner',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(''),
+  );
   @override
   List<GeneratedColumn> get $columns => [
     id,
@@ -2737,6 +3342,7 @@ class $RecoveryProfilesTableTable extends RecoveryProfilesTable
     longestStreak,
     currentStreak,
     primaryTrigger,
+    owner,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -2788,11 +3394,17 @@ class $RecoveryProfilesTableTable extends RecoveryProfilesTable
         ),
       );
     }
+    if (data.containsKey('owner')) {
+      context.handle(
+        _ownerMeta,
+        owner.isAcceptableOrUnknown(data['owner']!, _ownerMeta),
+      );
+    }
     return context;
   }
 
   @override
-  Set<GeneratedColumn> get $primaryKey => {id};
+  Set<GeneratedColumn> get $primaryKey => {id, owner};
   @override
   RecoveryProfileEntity map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
@@ -2817,6 +3429,10 @@ class $RecoveryProfilesTableTable extends RecoveryProfilesTable
         DriftSqlType.string,
         data['${effectivePrefix}primary_trigger'],
       ),
+      owner: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}owner'],
+      )!,
     );
   }
 
@@ -2833,12 +3449,36 @@ class RecoveryProfileEntity extends DataClass
   final int longestStreak;
   final int currentStreak;
   final String? primaryTrigger;
+
+  /// Account this row belongs to, or the empty string for a row that
+  /// belongs to nobody in particular - every row written before owner
+  /// scoping existed, and every row written by an app nobody has signed
+  /// into.
+  ///
+  /// The empty string is base_sdk's `kUnownedOwner`, written here as a
+  /// literal rather than imported. This file is COPIED into base_sdk's own
+  /// package at compose time (sdk_installer_base.py
+  /// update_database_registration, because drift's modular analysis only
+  /// understands table classes defined inside the package being
+  /// generated), so a `package:base_sdk/...` import in it would become a
+  /// self-import of the package the copy now lives in. The value is the
+  /// one thing that has to agree, and a mismatch would show up as rows
+  /// nobody can see on the very first read.
+  ///
+  /// NOT NULL with a default rather than nullable: SQLite - unlike the SQL
+  /// standard - permits NULLs inside an ordinary rowid table's composite
+  /// PRIMARY KEY, and NULL != NULL in the backing unique index, so a
+  /// nullable owner would make `insertOnConflictUpdate` on an unowned row
+  /// miss its conflict target and append a second row instead of updating
+  /// the first.
+  final String owner;
   const RecoveryProfileEntity({
     required this.id,
     required this.startDate,
     required this.longestStreak,
     required this.currentStreak,
     this.primaryTrigger,
+    required this.owner,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -2850,6 +3490,7 @@ class RecoveryProfileEntity extends DataClass
     if (!nullToAbsent || primaryTrigger != null) {
       map['primary_trigger'] = Variable<String>(primaryTrigger);
     }
+    map['owner'] = Variable<String>(owner);
     return map;
   }
 
@@ -2862,6 +3503,7 @@ class RecoveryProfileEntity extends DataClass
       primaryTrigger: primaryTrigger == null && nullToAbsent
           ? const Value.absent()
           : Value(primaryTrigger),
+      owner: Value(owner),
     );
   }
 
@@ -2876,6 +3518,7 @@ class RecoveryProfileEntity extends DataClass
       longestStreak: serializer.fromJson<int>(json['longestStreak']),
       currentStreak: serializer.fromJson<int>(json['currentStreak']),
       primaryTrigger: serializer.fromJson<String?>(json['primaryTrigger']),
+      owner: serializer.fromJson<String>(json['owner']),
     );
   }
   @override
@@ -2887,6 +3530,7 @@ class RecoveryProfileEntity extends DataClass
       'longestStreak': serializer.toJson<int>(longestStreak),
       'currentStreak': serializer.toJson<int>(currentStreak),
       'primaryTrigger': serializer.toJson<String?>(primaryTrigger),
+      'owner': serializer.toJson<String>(owner),
     };
   }
 
@@ -2896,6 +3540,7 @@ class RecoveryProfileEntity extends DataClass
     int? longestStreak,
     int? currentStreak,
     Value<String?> primaryTrigger = const Value.absent(),
+    String? owner,
   }) => RecoveryProfileEntity(
     id: id ?? this.id,
     startDate: startDate ?? this.startDate,
@@ -2904,6 +3549,7 @@ class RecoveryProfileEntity extends DataClass
     primaryTrigger: primaryTrigger.present
         ? primaryTrigger.value
         : this.primaryTrigger,
+    owner: owner ?? this.owner,
   );
   RecoveryProfileEntity copyWithCompanion(RecoveryProfilesTableCompanion data) {
     return RecoveryProfileEntity(
@@ -2918,6 +3564,7 @@ class RecoveryProfileEntity extends DataClass
       primaryTrigger: data.primaryTrigger.present
           ? data.primaryTrigger.value
           : this.primaryTrigger,
+      owner: data.owner.present ? data.owner.value : this.owner,
     );
   }
 
@@ -2928,14 +3575,21 @@ class RecoveryProfileEntity extends DataClass
           ..write('startDate: $startDate, ')
           ..write('longestStreak: $longestStreak, ')
           ..write('currentStreak: $currentStreak, ')
-          ..write('primaryTrigger: $primaryTrigger')
+          ..write('primaryTrigger: $primaryTrigger, ')
+          ..write('owner: $owner')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode =>
-      Object.hash(id, startDate, longestStreak, currentStreak, primaryTrigger);
+  int get hashCode => Object.hash(
+    id,
+    startDate,
+    longestStreak,
+    currentStreak,
+    primaryTrigger,
+    owner,
+  );
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -2944,7 +3598,8 @@ class RecoveryProfileEntity extends DataClass
           other.startDate == this.startDate &&
           other.longestStreak == this.longestStreak &&
           other.currentStreak == this.currentStreak &&
-          other.primaryTrigger == this.primaryTrigger);
+          other.primaryTrigger == this.primaryTrigger &&
+          other.owner == this.owner);
 }
 
 class RecoveryProfilesTableCompanion
@@ -2954,6 +3609,7 @@ class RecoveryProfilesTableCompanion
   final Value<int> longestStreak;
   final Value<int> currentStreak;
   final Value<String?> primaryTrigger;
+  final Value<String> owner;
   final Value<int> rowid;
   const RecoveryProfilesTableCompanion({
     this.id = const Value.absent(),
@@ -2961,6 +3617,7 @@ class RecoveryProfilesTableCompanion
     this.longestStreak = const Value.absent(),
     this.currentStreak = const Value.absent(),
     this.primaryTrigger = const Value.absent(),
+    this.owner = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   RecoveryProfilesTableCompanion.insert({
@@ -2969,6 +3626,7 @@ class RecoveryProfilesTableCompanion
     this.longestStreak = const Value.absent(),
     this.currentStreak = const Value.absent(),
     this.primaryTrigger = const Value.absent(),
+    this.owner = const Value.absent(),
     this.rowid = const Value.absent(),
   }) : startDate = Value(startDate);
   static Insertable<RecoveryProfileEntity> custom({
@@ -2977,6 +3635,7 @@ class RecoveryProfilesTableCompanion
     Expression<int>? longestStreak,
     Expression<int>? currentStreak,
     Expression<String>? primaryTrigger,
+    Expression<String>? owner,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
@@ -2985,6 +3644,7 @@ class RecoveryProfilesTableCompanion
       if (longestStreak != null) 'longest_streak': longestStreak,
       if (currentStreak != null) 'current_streak': currentStreak,
       if (primaryTrigger != null) 'primary_trigger': primaryTrigger,
+      if (owner != null) 'owner': owner,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -2995,6 +3655,7 @@ class RecoveryProfilesTableCompanion
     Value<int>? longestStreak,
     Value<int>? currentStreak,
     Value<String?>? primaryTrigger,
+    Value<String>? owner,
     Value<int>? rowid,
   }) {
     return RecoveryProfilesTableCompanion(
@@ -3003,6 +3664,7 @@ class RecoveryProfilesTableCompanion
       longestStreak: longestStreak ?? this.longestStreak,
       currentStreak: currentStreak ?? this.currentStreak,
       primaryTrigger: primaryTrigger ?? this.primaryTrigger,
+      owner: owner ?? this.owner,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -3025,6 +3687,9 @@ class RecoveryProfilesTableCompanion
     if (primaryTrigger.present) {
       map['primary_trigger'] = Variable<String>(primaryTrigger.value);
     }
+    if (owner.present) {
+      map['owner'] = Variable<String>(owner.value);
+    }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
     }
@@ -3039,6 +3704,7 @@ class RecoveryProfilesTableCompanion
           ..write('longestStreak: $longestStreak, ')
           ..write('currentStreak: $currentStreak, ')
           ..write('primaryTrigger: $primaryTrigger, ')
+          ..write('owner: $owner, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -3092,8 +3758,24 @@ class $AvoidedHabitsTableTable extends AvoidedHabitsTable
     type: DriftSqlType.dateTime,
     requiredDuringInsert: true,
   );
+  static const VerificationMeta _ownerMeta = const VerificationMeta('owner');
   @override
-  List<GeneratedColumn> get $columns => [id, title, motivation, createdDate];
+  late final GeneratedColumn<String> owner = GeneratedColumn<String>(
+    'owner',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(''),
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    title,
+    motivation,
+    createdDate,
+    owner,
+  ];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -3134,11 +3816,17 @@ class $AvoidedHabitsTableTable extends AvoidedHabitsTable
     } else if (isInserting) {
       context.missing(_createdDateMeta);
     }
+    if (data.containsKey('owner')) {
+      context.handle(
+        _ownerMeta,
+        owner.isAcceptableOrUnknown(data['owner']!, _ownerMeta),
+      );
+    }
     return context;
   }
 
   @override
-  Set<GeneratedColumn> get $primaryKey => {id};
+  Set<GeneratedColumn> get $primaryKey => {id, owner};
   @override
   AvoidedHabitEntity map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
@@ -3159,6 +3847,10 @@ class $AvoidedHabitsTableTable extends AvoidedHabitsTable
         DriftSqlType.dateTime,
         data['${effectivePrefix}created_date'],
       )!,
+      owner: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}owner'],
+      )!,
     );
   }
 
@@ -3174,11 +3866,35 @@ class AvoidedHabitEntity extends DataClass
   final String title;
   final String? motivation;
   final DateTime createdDate;
+
+  /// Account this row belongs to, or the empty string for a row that
+  /// belongs to nobody in particular - every row written before owner
+  /// scoping existed, and every row written by an app nobody has signed
+  /// into.
+  ///
+  /// The empty string is base_sdk's `kUnownedOwner`, written here as a
+  /// literal rather than imported. This file is COPIED into base_sdk's own
+  /// package at compose time (sdk_installer_base.py
+  /// update_database_registration, because drift's modular analysis only
+  /// understands table classes defined inside the package being
+  /// generated), so a `package:base_sdk/...` import in it would become a
+  /// self-import of the package the copy now lives in. The value is the
+  /// one thing that has to agree, and a mismatch would show up as rows
+  /// nobody can see on the very first read.
+  ///
+  /// NOT NULL with a default rather than nullable: SQLite - unlike the SQL
+  /// standard - permits NULLs inside an ordinary rowid table's composite
+  /// PRIMARY KEY, and NULL != NULL in the backing unique index, so a
+  /// nullable owner would make `insertOnConflictUpdate` on an unowned row
+  /// miss its conflict target and append a second row instead of updating
+  /// the first.
+  final String owner;
   const AvoidedHabitEntity({
     required this.id,
     required this.title,
     this.motivation,
     required this.createdDate,
+    required this.owner,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -3189,6 +3905,7 @@ class AvoidedHabitEntity extends DataClass
       map['motivation'] = Variable<String>(motivation);
     }
     map['created_date'] = Variable<DateTime>(createdDate);
+    map['owner'] = Variable<String>(owner);
     return map;
   }
 
@@ -3200,6 +3917,7 @@ class AvoidedHabitEntity extends DataClass
           ? const Value.absent()
           : Value(motivation),
       createdDate: Value(createdDate),
+      owner: Value(owner),
     );
   }
 
@@ -3213,6 +3931,7 @@ class AvoidedHabitEntity extends DataClass
       title: serializer.fromJson<String>(json['title']),
       motivation: serializer.fromJson<String?>(json['motivation']),
       createdDate: serializer.fromJson<DateTime>(json['createdDate']),
+      owner: serializer.fromJson<String>(json['owner']),
     );
   }
   @override
@@ -3223,6 +3942,7 @@ class AvoidedHabitEntity extends DataClass
       'title': serializer.toJson<String>(title),
       'motivation': serializer.toJson<String?>(motivation),
       'createdDate': serializer.toJson<DateTime>(createdDate),
+      'owner': serializer.toJson<String>(owner),
     };
   }
 
@@ -3231,11 +3951,13 @@ class AvoidedHabitEntity extends DataClass
     String? title,
     Value<String?> motivation = const Value.absent(),
     DateTime? createdDate,
+    String? owner,
   }) => AvoidedHabitEntity(
     id: id ?? this.id,
     title: title ?? this.title,
     motivation: motivation.present ? motivation.value : this.motivation,
     createdDate: createdDate ?? this.createdDate,
+    owner: owner ?? this.owner,
   );
   AvoidedHabitEntity copyWithCompanion(AvoidedHabitsTableCompanion data) {
     return AvoidedHabitEntity(
@@ -3247,6 +3969,7 @@ class AvoidedHabitEntity extends DataClass
       createdDate: data.createdDate.present
           ? data.createdDate.value
           : this.createdDate,
+      owner: data.owner.present ? data.owner.value : this.owner,
     );
   }
 
@@ -3256,13 +3979,14 @@ class AvoidedHabitEntity extends DataClass
           ..write('id: $id, ')
           ..write('title: $title, ')
           ..write('motivation: $motivation, ')
-          ..write('createdDate: $createdDate')
+          ..write('createdDate: $createdDate, ')
+          ..write('owner: $owner')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, title, motivation, createdDate);
+  int get hashCode => Object.hash(id, title, motivation, createdDate, owner);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -3270,7 +3994,8 @@ class AvoidedHabitEntity extends DataClass
           other.id == this.id &&
           other.title == this.title &&
           other.motivation == this.motivation &&
-          other.createdDate == this.createdDate);
+          other.createdDate == this.createdDate &&
+          other.owner == this.owner);
 }
 
 class AvoidedHabitsTableCompanion extends UpdateCompanion<AvoidedHabitEntity> {
@@ -3278,12 +4003,14 @@ class AvoidedHabitsTableCompanion extends UpdateCompanion<AvoidedHabitEntity> {
   final Value<String> title;
   final Value<String?> motivation;
   final Value<DateTime> createdDate;
+  final Value<String> owner;
   final Value<int> rowid;
   const AvoidedHabitsTableCompanion({
     this.id = const Value.absent(),
     this.title = const Value.absent(),
     this.motivation = const Value.absent(),
     this.createdDate = const Value.absent(),
+    this.owner = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   AvoidedHabitsTableCompanion.insert({
@@ -3291,6 +4018,7 @@ class AvoidedHabitsTableCompanion extends UpdateCompanion<AvoidedHabitEntity> {
     required String title,
     this.motivation = const Value.absent(),
     required DateTime createdDate,
+    this.owner = const Value.absent(),
     this.rowid = const Value.absent(),
   }) : title = Value(title),
        createdDate = Value(createdDate);
@@ -3299,6 +4027,7 @@ class AvoidedHabitsTableCompanion extends UpdateCompanion<AvoidedHabitEntity> {
     Expression<String>? title,
     Expression<String>? motivation,
     Expression<DateTime>? createdDate,
+    Expression<String>? owner,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
@@ -3306,6 +4035,7 @@ class AvoidedHabitsTableCompanion extends UpdateCompanion<AvoidedHabitEntity> {
       if (title != null) 'title': title,
       if (motivation != null) 'motivation': motivation,
       if (createdDate != null) 'created_date': createdDate,
+      if (owner != null) 'owner': owner,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -3315,6 +4045,7 @@ class AvoidedHabitsTableCompanion extends UpdateCompanion<AvoidedHabitEntity> {
     Value<String>? title,
     Value<String?>? motivation,
     Value<DateTime>? createdDate,
+    Value<String>? owner,
     Value<int>? rowid,
   }) {
     return AvoidedHabitsTableCompanion(
@@ -3322,6 +4053,7 @@ class AvoidedHabitsTableCompanion extends UpdateCompanion<AvoidedHabitEntity> {
       title: title ?? this.title,
       motivation: motivation ?? this.motivation,
       createdDate: createdDate ?? this.createdDate,
+      owner: owner ?? this.owner,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -3341,6 +4073,9 @@ class AvoidedHabitsTableCompanion extends UpdateCompanion<AvoidedHabitEntity> {
     if (createdDate.present) {
       map['created_date'] = Variable<DateTime>(createdDate.value);
     }
+    if (owner.present) {
+      map['owner'] = Variable<String>(owner.value);
+    }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
     }
@@ -3354,6 +4089,7 @@ class AvoidedHabitsTableCompanion extends UpdateCompanion<AvoidedHabitEntity> {
           ..write('title: $title, ')
           ..write('motivation: $motivation, ')
           ..write('createdDate: $createdDate, ')
+          ..write('owner: $owner, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -3442,6 +4178,16 @@ class $UrgeLogsTableTable extends UrgeLogsTable
     type: DriftSqlType.string,
     requiredDuringInsert: false,
   );
+  static const VerificationMeta _ownerMeta = const VerificationMeta('owner');
+  @override
+  late final GeneratedColumn<String> owner = GeneratedColumn<String>(
+    'owner',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(''),
+  );
   @override
   List<GeneratedColumn> get $columns => [
     id,
@@ -3451,6 +4197,7 @@ class $UrgeLogsTableTable extends UrgeLogsTable
     triggerType,
     outcome,
     reflectionNotes,
+    owner,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -3517,11 +4264,17 @@ class $UrgeLogsTableTable extends UrgeLogsTable
         ),
       );
     }
+    if (data.containsKey('owner')) {
+      context.handle(
+        _ownerMeta,
+        owner.isAcceptableOrUnknown(data['owner']!, _ownerMeta),
+      );
+    }
     return context;
   }
 
   @override
-  Set<GeneratedColumn> get $primaryKey => {id};
+  Set<GeneratedColumn> get $primaryKey => {id, owner};
   @override
   UrgeLogEntity map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
@@ -3554,6 +4307,10 @@ class $UrgeLogsTableTable extends UrgeLogsTable
         DriftSqlType.string,
         data['${effectivePrefix}reflection_notes'],
       ),
+      owner: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}owner'],
+      )!,
     );
   }
 
@@ -3571,6 +4328,29 @@ class UrgeLogEntity extends DataClass implements Insertable<UrgeLogEntity> {
   final String triggerType;
   final String outcome;
   final String? reflectionNotes;
+
+  /// Account this row belongs to, or the empty string for a row that
+  /// belongs to nobody in particular - every row written before owner
+  /// scoping existed, and every row written by an app nobody has signed
+  /// into.
+  ///
+  /// The empty string is base_sdk's `kUnownedOwner`, written here as a
+  /// literal rather than imported. This file is COPIED into base_sdk's own
+  /// package at compose time (sdk_installer_base.py
+  /// update_database_registration, because drift's modular analysis only
+  /// understands table classes defined inside the package being
+  /// generated), so a `package:base_sdk/...` import in it would become a
+  /// self-import of the package the copy now lives in. The value is the
+  /// one thing that has to agree, and a mismatch would show up as rows
+  /// nobody can see on the very first read.
+  ///
+  /// NOT NULL with a default rather than nullable: SQLite - unlike the SQL
+  /// standard - permits NULLs inside an ordinary rowid table's composite
+  /// PRIMARY KEY, and NULL != NULL in the backing unique index, so a
+  /// nullable owner would make `insertOnConflictUpdate` on an unowned row
+  /// miss its conflict target and append a second row instead of updating
+  /// the first.
+  final String owner;
   const UrgeLogEntity({
     required this.id,
     this.habitId,
@@ -3579,6 +4359,7 @@ class UrgeLogEntity extends DataClass implements Insertable<UrgeLogEntity> {
     required this.triggerType,
     required this.outcome,
     this.reflectionNotes,
+    required this.owner,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -3594,6 +4375,7 @@ class UrgeLogEntity extends DataClass implements Insertable<UrgeLogEntity> {
     if (!nullToAbsent || reflectionNotes != null) {
       map['reflection_notes'] = Variable<String>(reflectionNotes);
     }
+    map['owner'] = Variable<String>(owner);
     return map;
   }
 
@@ -3610,6 +4392,7 @@ class UrgeLogEntity extends DataClass implements Insertable<UrgeLogEntity> {
       reflectionNotes: reflectionNotes == null && nullToAbsent
           ? const Value.absent()
           : Value(reflectionNotes),
+      owner: Value(owner),
     );
   }
 
@@ -3626,6 +4409,7 @@ class UrgeLogEntity extends DataClass implements Insertable<UrgeLogEntity> {
       triggerType: serializer.fromJson<String>(json['triggerType']),
       outcome: serializer.fromJson<String>(json['outcome']),
       reflectionNotes: serializer.fromJson<String?>(json['reflectionNotes']),
+      owner: serializer.fromJson<String>(json['owner']),
     );
   }
   @override
@@ -3639,6 +4423,7 @@ class UrgeLogEntity extends DataClass implements Insertable<UrgeLogEntity> {
       'triggerType': serializer.toJson<String>(triggerType),
       'outcome': serializer.toJson<String>(outcome),
       'reflectionNotes': serializer.toJson<String?>(reflectionNotes),
+      'owner': serializer.toJson<String>(owner),
     };
   }
 
@@ -3650,6 +4435,7 @@ class UrgeLogEntity extends DataClass implements Insertable<UrgeLogEntity> {
     String? triggerType,
     String? outcome,
     Value<String?> reflectionNotes = const Value.absent(),
+    String? owner,
   }) => UrgeLogEntity(
     id: id ?? this.id,
     habitId: habitId.present ? habitId.value : this.habitId,
@@ -3660,6 +4446,7 @@ class UrgeLogEntity extends DataClass implements Insertable<UrgeLogEntity> {
     reflectionNotes: reflectionNotes.present
         ? reflectionNotes.value
         : this.reflectionNotes,
+    owner: owner ?? this.owner,
   );
   UrgeLogEntity copyWithCompanion(UrgeLogsTableCompanion data) {
     return UrgeLogEntity(
@@ -3674,6 +4461,7 @@ class UrgeLogEntity extends DataClass implements Insertable<UrgeLogEntity> {
       reflectionNotes: data.reflectionNotes.present
           ? data.reflectionNotes.value
           : this.reflectionNotes,
+      owner: data.owner.present ? data.owner.value : this.owner,
     );
   }
 
@@ -3686,7 +4474,8 @@ class UrgeLogEntity extends DataClass implements Insertable<UrgeLogEntity> {
           ..write('intensity: $intensity, ')
           ..write('triggerType: $triggerType, ')
           ..write('outcome: $outcome, ')
-          ..write('reflectionNotes: $reflectionNotes')
+          ..write('reflectionNotes: $reflectionNotes, ')
+          ..write('owner: $owner')
           ..write(')'))
         .toString();
   }
@@ -3700,6 +4489,7 @@ class UrgeLogEntity extends DataClass implements Insertable<UrgeLogEntity> {
     triggerType,
     outcome,
     reflectionNotes,
+    owner,
   );
   @override
   bool operator ==(Object other) =>
@@ -3711,7 +4501,8 @@ class UrgeLogEntity extends DataClass implements Insertable<UrgeLogEntity> {
           other.intensity == this.intensity &&
           other.triggerType == this.triggerType &&
           other.outcome == this.outcome &&
-          other.reflectionNotes == this.reflectionNotes);
+          other.reflectionNotes == this.reflectionNotes &&
+          other.owner == this.owner);
 }
 
 class UrgeLogsTableCompanion extends UpdateCompanion<UrgeLogEntity> {
@@ -3722,6 +4513,7 @@ class UrgeLogsTableCompanion extends UpdateCompanion<UrgeLogEntity> {
   final Value<String> triggerType;
   final Value<String> outcome;
   final Value<String?> reflectionNotes;
+  final Value<String> owner;
   final Value<int> rowid;
   const UrgeLogsTableCompanion({
     this.id = const Value.absent(),
@@ -3731,6 +4523,7 @@ class UrgeLogsTableCompanion extends UpdateCompanion<UrgeLogEntity> {
     this.triggerType = const Value.absent(),
     this.outcome = const Value.absent(),
     this.reflectionNotes = const Value.absent(),
+    this.owner = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   UrgeLogsTableCompanion.insert({
@@ -3741,6 +4534,7 @@ class UrgeLogsTableCompanion extends UpdateCompanion<UrgeLogEntity> {
     required String triggerType,
     required String outcome,
     this.reflectionNotes = const Value.absent(),
+    this.owner = const Value.absent(),
     this.rowid = const Value.absent(),
   }) : timestamp = Value(timestamp),
        intensity = Value(intensity),
@@ -3754,6 +4548,7 @@ class UrgeLogsTableCompanion extends UpdateCompanion<UrgeLogEntity> {
     Expression<String>? triggerType,
     Expression<String>? outcome,
     Expression<String>? reflectionNotes,
+    Expression<String>? owner,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
@@ -3764,6 +4559,7 @@ class UrgeLogsTableCompanion extends UpdateCompanion<UrgeLogEntity> {
       if (triggerType != null) 'trigger_type': triggerType,
       if (outcome != null) 'outcome': outcome,
       if (reflectionNotes != null) 'reflection_notes': reflectionNotes,
+      if (owner != null) 'owner': owner,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -3776,6 +4572,7 @@ class UrgeLogsTableCompanion extends UpdateCompanion<UrgeLogEntity> {
     Value<String>? triggerType,
     Value<String>? outcome,
     Value<String?>? reflectionNotes,
+    Value<String>? owner,
     Value<int>? rowid,
   }) {
     return UrgeLogsTableCompanion(
@@ -3786,6 +4583,7 @@ class UrgeLogsTableCompanion extends UpdateCompanion<UrgeLogEntity> {
       triggerType: triggerType ?? this.triggerType,
       outcome: outcome ?? this.outcome,
       reflectionNotes: reflectionNotes ?? this.reflectionNotes,
+      owner: owner ?? this.owner,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -3814,6 +4612,9 @@ class UrgeLogsTableCompanion extends UpdateCompanion<UrgeLogEntity> {
     if (reflectionNotes.present) {
       map['reflection_notes'] = Variable<String>(reflectionNotes.value);
     }
+    if (owner.present) {
+      map['owner'] = Variable<String>(owner.value);
+    }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
     }
@@ -3830,6 +4631,7 @@ class UrgeLogsTableCompanion extends UpdateCompanion<UrgeLogEntity> {
           ..write('triggerType: $triggerType, ')
           ..write('outcome: $outcome, ')
           ..write('reflectionNotes: $reflectionNotes, ')
+          ..write('owner: $owner, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -3906,6 +4708,16 @@ class $DailyRitualsTableTable extends DailyRitualsTable
     requiredDuringInsert: false,
     defaultValue: const Constant(5),
   );
+  static const VerificationMeta _ownerMeta = const VerificationMeta('owner');
+  @override
+  late final GeneratedColumn<String> owner = GeneratedColumn<String>(
+    'owner',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(''),
+  );
   @override
   List<GeneratedColumn> get $columns => [
     id,
@@ -3914,6 +4726,7 @@ class $DailyRitualsTableTable extends DailyRitualsTable
     routineType,
     iconEmoji,
     targetDurationMinutes,
+    owner,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -3973,11 +4786,17 @@ class $DailyRitualsTableTable extends DailyRitualsTable
         ),
       );
     }
+    if (data.containsKey('owner')) {
+      context.handle(
+        _ownerMeta,
+        owner.isAcceptableOrUnknown(data['owner']!, _ownerMeta),
+      );
+    }
     return context;
   }
 
   @override
-  Set<GeneratedColumn> get $primaryKey => {id};
+  Set<GeneratedColumn> get $primaryKey => {id, owner};
   @override
   DailyRitualEntity map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
@@ -4006,6 +4825,10 @@ class $DailyRitualsTableTable extends DailyRitualsTable
         DriftSqlType.int,
         data['${effectivePrefix}target_duration_minutes'],
       )!,
+      owner: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}owner'],
+      )!,
     );
   }
 
@@ -4023,6 +4846,29 @@ class DailyRitualEntity extends DataClass
   final String routineType;
   final String iconEmoji;
   final int targetDurationMinutes;
+
+  /// Account this row belongs to, or the empty string for a row that
+  /// belongs to nobody in particular - every row written before owner
+  /// scoping existed, and every row written by an app nobody has signed
+  /// into.
+  ///
+  /// The empty string is base_sdk's `kUnownedOwner`, written here as a
+  /// literal rather than imported. This file is COPIED into base_sdk's own
+  /// package at compose time (sdk_installer_base.py
+  /// update_database_registration, because drift's modular analysis only
+  /// understands table classes defined inside the package being
+  /// generated), so a `package:base_sdk/...` import in it would become a
+  /// self-import of the package the copy now lives in. The value is the
+  /// one thing that has to agree, and a mismatch would show up as rows
+  /// nobody can see on the very first read.
+  ///
+  /// NOT NULL with a default rather than nullable: SQLite - unlike the SQL
+  /// standard - permits NULLs inside an ordinary rowid table's composite
+  /// PRIMARY KEY, and NULL != NULL in the backing unique index, so a
+  /// nullable owner would make `insertOnConflictUpdate` on an unowned row
+  /// miss its conflict target and append a second row instead of updating
+  /// the first.
+  final String owner;
   const DailyRitualEntity({
     required this.id,
     required this.title,
@@ -4030,6 +4876,7 @@ class DailyRitualEntity extends DataClass
     required this.routineType,
     required this.iconEmoji,
     required this.targetDurationMinutes,
+    required this.owner,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -4042,6 +4889,7 @@ class DailyRitualEntity extends DataClass
     map['routine_type'] = Variable<String>(routineType);
     map['icon_emoji'] = Variable<String>(iconEmoji);
     map['target_duration_minutes'] = Variable<int>(targetDurationMinutes);
+    map['owner'] = Variable<String>(owner);
     return map;
   }
 
@@ -4055,6 +4903,7 @@ class DailyRitualEntity extends DataClass
       routineType: Value(routineType),
       iconEmoji: Value(iconEmoji),
       targetDurationMinutes: Value(targetDurationMinutes),
+      owner: Value(owner),
     );
   }
 
@@ -4072,6 +4921,7 @@ class DailyRitualEntity extends DataClass
       targetDurationMinutes: serializer.fromJson<int>(
         json['targetDurationMinutes'],
       ),
+      owner: serializer.fromJson<String>(json['owner']),
     );
   }
   @override
@@ -4084,6 +4934,7 @@ class DailyRitualEntity extends DataClass
       'routineType': serializer.toJson<String>(routineType),
       'iconEmoji': serializer.toJson<String>(iconEmoji),
       'targetDurationMinutes': serializer.toJson<int>(targetDurationMinutes),
+      'owner': serializer.toJson<String>(owner),
     };
   }
 
@@ -4094,6 +4945,7 @@ class DailyRitualEntity extends DataClass
     String? routineType,
     String? iconEmoji,
     int? targetDurationMinutes,
+    String? owner,
   }) => DailyRitualEntity(
     id: id ?? this.id,
     title: title ?? this.title,
@@ -4101,6 +4953,7 @@ class DailyRitualEntity extends DataClass
     routineType: routineType ?? this.routineType,
     iconEmoji: iconEmoji ?? this.iconEmoji,
     targetDurationMinutes: targetDurationMinutes ?? this.targetDurationMinutes,
+    owner: owner ?? this.owner,
   );
   DailyRitualEntity copyWithCompanion(DailyRitualsTableCompanion data) {
     return DailyRitualEntity(
@@ -4116,6 +4969,7 @@ class DailyRitualEntity extends DataClass
       targetDurationMinutes: data.targetDurationMinutes.present
           ? data.targetDurationMinutes.value
           : this.targetDurationMinutes,
+      owner: data.owner.present ? data.owner.value : this.owner,
     );
   }
 
@@ -4127,7 +4981,8 @@ class DailyRitualEntity extends DataClass
           ..write('description: $description, ')
           ..write('routineType: $routineType, ')
           ..write('iconEmoji: $iconEmoji, ')
-          ..write('targetDurationMinutes: $targetDurationMinutes')
+          ..write('targetDurationMinutes: $targetDurationMinutes, ')
+          ..write('owner: $owner')
           ..write(')'))
         .toString();
   }
@@ -4140,6 +4995,7 @@ class DailyRitualEntity extends DataClass
     routineType,
     iconEmoji,
     targetDurationMinutes,
+    owner,
   );
   @override
   bool operator ==(Object other) =>
@@ -4150,7 +5006,8 @@ class DailyRitualEntity extends DataClass
           other.description == this.description &&
           other.routineType == this.routineType &&
           other.iconEmoji == this.iconEmoji &&
-          other.targetDurationMinutes == this.targetDurationMinutes);
+          other.targetDurationMinutes == this.targetDurationMinutes &&
+          other.owner == this.owner);
 }
 
 class DailyRitualsTableCompanion extends UpdateCompanion<DailyRitualEntity> {
@@ -4160,6 +5017,7 @@ class DailyRitualsTableCompanion extends UpdateCompanion<DailyRitualEntity> {
   final Value<String> routineType;
   final Value<String> iconEmoji;
   final Value<int> targetDurationMinutes;
+  final Value<String> owner;
   final Value<int> rowid;
   const DailyRitualsTableCompanion({
     this.id = const Value.absent(),
@@ -4168,6 +5026,7 @@ class DailyRitualsTableCompanion extends UpdateCompanion<DailyRitualEntity> {
     this.routineType = const Value.absent(),
     this.iconEmoji = const Value.absent(),
     this.targetDurationMinutes = const Value.absent(),
+    this.owner = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   DailyRitualsTableCompanion.insert({
@@ -4177,6 +5036,7 @@ class DailyRitualsTableCompanion extends UpdateCompanion<DailyRitualEntity> {
     required String routineType,
     this.iconEmoji = const Value.absent(),
     this.targetDurationMinutes = const Value.absent(),
+    this.owner = const Value.absent(),
     this.rowid = const Value.absent(),
   }) : title = Value(title),
        routineType = Value(routineType);
@@ -4187,6 +5047,7 @@ class DailyRitualsTableCompanion extends UpdateCompanion<DailyRitualEntity> {
     Expression<String>? routineType,
     Expression<String>? iconEmoji,
     Expression<int>? targetDurationMinutes,
+    Expression<String>? owner,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
@@ -4197,6 +5058,7 @@ class DailyRitualsTableCompanion extends UpdateCompanion<DailyRitualEntity> {
       if (iconEmoji != null) 'icon_emoji': iconEmoji,
       if (targetDurationMinutes != null)
         'target_duration_minutes': targetDurationMinutes,
+      if (owner != null) 'owner': owner,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -4208,6 +5070,7 @@ class DailyRitualsTableCompanion extends UpdateCompanion<DailyRitualEntity> {
     Value<String>? routineType,
     Value<String>? iconEmoji,
     Value<int>? targetDurationMinutes,
+    Value<String>? owner,
     Value<int>? rowid,
   }) {
     return DailyRitualsTableCompanion(
@@ -4218,6 +5081,7 @@ class DailyRitualsTableCompanion extends UpdateCompanion<DailyRitualEntity> {
       iconEmoji: iconEmoji ?? this.iconEmoji,
       targetDurationMinutes:
           targetDurationMinutes ?? this.targetDurationMinutes,
+      owner: owner ?? this.owner,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -4245,6 +5109,9 @@ class DailyRitualsTableCompanion extends UpdateCompanion<DailyRitualEntity> {
         targetDurationMinutes.value,
       );
     }
+    if (owner.present) {
+      map['owner'] = Variable<String>(owner.value);
+    }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
     }
@@ -4260,6 +5127,7 @@ class DailyRitualsTableCompanion extends UpdateCompanion<DailyRitualEntity> {
           ..write('routineType: $routineType, ')
           ..write('iconEmoji: $iconEmoji, ')
           ..write('targetDurationMinutes: $targetDurationMinutes, ')
+          ..write('owner: $owner, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -4304,8 +5172,18 @@ class $RitualLogsTableTable extends RitualLogsTable
     type: DriftSqlType.dateTime,
     requiredDuringInsert: true,
   );
+  static const VerificationMeta _ownerMeta = const VerificationMeta('owner');
   @override
-  List<GeneratedColumn> get $columns => [id, ritualId, completedAt];
+  late final GeneratedColumn<String> owner = GeneratedColumn<String>(
+    'owner',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(''),
+  );
+  @override
+  List<GeneratedColumn> get $columns => [id, ritualId, completedAt, owner];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -4340,11 +5218,17 @@ class $RitualLogsTableTable extends RitualLogsTable
     } else if (isInserting) {
       context.missing(_completedAtMeta);
     }
+    if (data.containsKey('owner')) {
+      context.handle(
+        _ownerMeta,
+        owner.isAcceptableOrUnknown(data['owner']!, _ownerMeta),
+      );
+    }
     return context;
   }
 
   @override
-  Set<GeneratedColumn> get $primaryKey => {id};
+  Set<GeneratedColumn> get $primaryKey => {id, owner};
   @override
   RitualLogEntity map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
@@ -4361,6 +5245,10 @@ class $RitualLogsTableTable extends RitualLogsTable
         DriftSqlType.dateTime,
         data['${effectivePrefix}completed_at'],
       )!,
+      owner: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}owner'],
+      )!,
     );
   }
 
@@ -4374,10 +5262,34 @@ class RitualLogEntity extends DataClass implements Insertable<RitualLogEntity> {
   final String id;
   final String ritualId;
   final DateTime completedAt;
+
+  /// Account this row belongs to, or the empty string for a row that
+  /// belongs to nobody in particular - every row written before owner
+  /// scoping existed, and every row written by an app nobody has signed
+  /// into.
+  ///
+  /// The empty string is base_sdk's `kUnownedOwner`, written here as a
+  /// literal rather than imported. This file is COPIED into base_sdk's own
+  /// package at compose time (sdk_installer_base.py
+  /// update_database_registration, because drift's modular analysis only
+  /// understands table classes defined inside the package being
+  /// generated), so a `package:base_sdk/...` import in it would become a
+  /// self-import of the package the copy now lives in. The value is the
+  /// one thing that has to agree, and a mismatch would show up as rows
+  /// nobody can see on the very first read.
+  ///
+  /// NOT NULL with a default rather than nullable: SQLite - unlike the SQL
+  /// standard - permits NULLs inside an ordinary rowid table's composite
+  /// PRIMARY KEY, and NULL != NULL in the backing unique index, so a
+  /// nullable owner would make `insertOnConflictUpdate` on an unowned row
+  /// miss its conflict target and append a second row instead of updating
+  /// the first.
+  final String owner;
   const RitualLogEntity({
     required this.id,
     required this.ritualId,
     required this.completedAt,
+    required this.owner,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -4385,6 +5297,7 @@ class RitualLogEntity extends DataClass implements Insertable<RitualLogEntity> {
     map['id'] = Variable<String>(id);
     map['ritual_id'] = Variable<String>(ritualId);
     map['completed_at'] = Variable<DateTime>(completedAt);
+    map['owner'] = Variable<String>(owner);
     return map;
   }
 
@@ -4393,6 +5306,7 @@ class RitualLogEntity extends DataClass implements Insertable<RitualLogEntity> {
       id: Value(id),
       ritualId: Value(ritualId),
       completedAt: Value(completedAt),
+      owner: Value(owner),
     );
   }
 
@@ -4405,6 +5319,7 @@ class RitualLogEntity extends DataClass implements Insertable<RitualLogEntity> {
       id: serializer.fromJson<String>(json['id']),
       ritualId: serializer.fromJson<String>(json['ritualId']),
       completedAt: serializer.fromJson<DateTime>(json['completedAt']),
+      owner: serializer.fromJson<String>(json['owner']),
     );
   }
   @override
@@ -4414,6 +5329,7 @@ class RitualLogEntity extends DataClass implements Insertable<RitualLogEntity> {
       'id': serializer.toJson<String>(id),
       'ritualId': serializer.toJson<String>(ritualId),
       'completedAt': serializer.toJson<DateTime>(completedAt),
+      'owner': serializer.toJson<String>(owner),
     };
   }
 
@@ -4421,10 +5337,12 @@ class RitualLogEntity extends DataClass implements Insertable<RitualLogEntity> {
     String? id,
     String? ritualId,
     DateTime? completedAt,
+    String? owner,
   }) => RitualLogEntity(
     id: id ?? this.id,
     ritualId: ritualId ?? this.ritualId,
     completedAt: completedAt ?? this.completedAt,
+    owner: owner ?? this.owner,
   );
   RitualLogEntity copyWithCompanion(RitualLogsTableCompanion data) {
     return RitualLogEntity(
@@ -4433,6 +5351,7 @@ class RitualLogEntity extends DataClass implements Insertable<RitualLogEntity> {
       completedAt: data.completedAt.present
           ? data.completedAt.value
           : this.completedAt,
+      owner: data.owner.present ? data.owner.value : this.owner,
     );
   }
 
@@ -4441,37 +5360,42 @@ class RitualLogEntity extends DataClass implements Insertable<RitualLogEntity> {
     return (StringBuffer('RitualLogEntity(')
           ..write('id: $id, ')
           ..write('ritualId: $ritualId, ')
-          ..write('completedAt: $completedAt')
+          ..write('completedAt: $completedAt, ')
+          ..write('owner: $owner')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, ritualId, completedAt);
+  int get hashCode => Object.hash(id, ritualId, completedAt, owner);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is RitualLogEntity &&
           other.id == this.id &&
           other.ritualId == this.ritualId &&
-          other.completedAt == this.completedAt);
+          other.completedAt == this.completedAt &&
+          other.owner == this.owner);
 }
 
 class RitualLogsTableCompanion extends UpdateCompanion<RitualLogEntity> {
   final Value<String> id;
   final Value<String> ritualId;
   final Value<DateTime> completedAt;
+  final Value<String> owner;
   final Value<int> rowid;
   const RitualLogsTableCompanion({
     this.id = const Value.absent(),
     this.ritualId = const Value.absent(),
     this.completedAt = const Value.absent(),
+    this.owner = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   RitualLogsTableCompanion.insert({
     this.id = const Value.absent(),
     required String ritualId,
     required DateTime completedAt,
+    this.owner = const Value.absent(),
     this.rowid = const Value.absent(),
   }) : ritualId = Value(ritualId),
        completedAt = Value(completedAt);
@@ -4479,12 +5403,14 @@ class RitualLogsTableCompanion extends UpdateCompanion<RitualLogEntity> {
     Expression<String>? id,
     Expression<String>? ritualId,
     Expression<DateTime>? completedAt,
+    Expression<String>? owner,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (ritualId != null) 'ritual_id': ritualId,
       if (completedAt != null) 'completed_at': completedAt,
+      if (owner != null) 'owner': owner,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -4493,12 +5419,14 @@ class RitualLogsTableCompanion extends UpdateCompanion<RitualLogEntity> {
     Value<String>? id,
     Value<String>? ritualId,
     Value<DateTime>? completedAt,
+    Value<String>? owner,
     Value<int>? rowid,
   }) {
     return RitualLogsTableCompanion(
       id: id ?? this.id,
       ritualId: ritualId ?? this.ritualId,
       completedAt: completedAt ?? this.completedAt,
+      owner: owner ?? this.owner,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -4515,6 +5443,9 @@ class RitualLogsTableCompanion extends UpdateCompanion<RitualLogEntity> {
     if (completedAt.present) {
       map['completed_at'] = Variable<DateTime>(completedAt.value);
     }
+    if (owner.present) {
+      map['owner'] = Variable<String>(owner.value);
+    }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
     }
@@ -4527,6 +5458,7 @@ class RitualLogsTableCompanion extends UpdateCompanion<RitualLogEntity> {
           ..write('id: $id, ')
           ..write('ritualId: $ritualId, ')
           ..write('completedAt: $completedAt, ')
+          ..write('owner: $owner, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -4621,6 +5553,16 @@ class $ProcrastinationLogsTableTable extends ProcrastinationLogsTable
         ),
         defaultValue: const Constant(false),
       );
+  static const VerificationMeta _ownerMeta = const VerificationMeta('owner');
+  @override
+  late final GeneratedColumn<String> owner = GeneratedColumn<String>(
+    'owner',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(''),
+  );
   @override
   List<GeneratedColumn> get $columns => [
     id,
@@ -4630,6 +5572,7 @@ class $ProcrastinationLogsTableTable extends ProcrastinationLogsTable
     delayCount,
     procrastinationReason,
     wasCompletedEventually,
+    owner,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -4695,11 +5638,17 @@ class $ProcrastinationLogsTableTable extends ProcrastinationLogsTable
         ),
       );
     }
+    if (data.containsKey('owner')) {
+      context.handle(
+        _ownerMeta,
+        owner.isAcceptableOrUnknown(data['owner']!, _ownerMeta),
+      );
+    }
     return context;
   }
 
   @override
-  Set<GeneratedColumn> get $primaryKey => {id};
+  Set<GeneratedColumn> get $primaryKey => {id, owner};
   @override
   ProcrastinationLogEntity map(
     Map<String, dynamic> data, {
@@ -4735,6 +5684,10 @@ class $ProcrastinationLogsTableTable extends ProcrastinationLogsTable
         DriftSqlType.bool,
         data['${effectivePrefix}was_completed_eventually'],
       )!,
+      owner: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}owner'],
+      )!,
     );
   }
 
@@ -4753,6 +5706,29 @@ class ProcrastinationLogEntity extends DataClass
   final int delayCount;
   final String? procrastinationReason;
   final bool wasCompletedEventually;
+
+  /// Account this row belongs to, or the empty string for a row that
+  /// belongs to nobody in particular - every row written before owner
+  /// scoping existed, and every row written by an app nobody has signed
+  /// into.
+  ///
+  /// The empty string is base_sdk's `kUnownedOwner`, written here as a
+  /// literal rather than imported. This file is COPIED into base_sdk's own
+  /// package at compose time (sdk_installer_base.py
+  /// update_database_registration, because drift's modular analysis only
+  /// understands table classes defined inside the package being
+  /// generated), so a `package:base_sdk/...` import in it would become a
+  /// self-import of the package the copy now lives in. The value is the
+  /// one thing that has to agree, and a mismatch would show up as rows
+  /// nobody can see on the very first read.
+  ///
+  /// NOT NULL with a default rather than nullable: SQLite - unlike the SQL
+  /// standard - permits NULLs inside an ordinary rowid table's composite
+  /// PRIMARY KEY, and NULL != NULL in the backing unique index, so a
+  /// nullable owner would make `insertOnConflictUpdate` on an unowned row
+  /// miss its conflict target and append a second row instead of updating
+  /// the first.
+  final String owner;
   const ProcrastinationLogEntity({
     required this.id,
     this.ritualId,
@@ -4761,6 +5737,7 @@ class ProcrastinationLogEntity extends DataClass
     required this.delayCount,
     this.procrastinationReason,
     required this.wasCompletedEventually,
+    required this.owner,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -4776,6 +5753,7 @@ class ProcrastinationLogEntity extends DataClass
       map['procrastination_reason'] = Variable<String>(procrastinationReason);
     }
     map['was_completed_eventually'] = Variable<bool>(wasCompletedEventually);
+    map['owner'] = Variable<String>(owner);
     return map;
   }
 
@@ -4792,6 +5770,7 @@ class ProcrastinationLogEntity extends DataClass
           ? const Value.absent()
           : Value(procrastinationReason),
       wasCompletedEventually: Value(wasCompletedEventually),
+      owner: Value(owner),
     );
   }
 
@@ -4812,6 +5791,7 @@ class ProcrastinationLogEntity extends DataClass
       wasCompletedEventually: serializer.fromJson<bool>(
         json['wasCompletedEventually'],
       ),
+      owner: serializer.fromJson<String>(json['owner']),
     );
   }
   @override
@@ -4827,6 +5807,7 @@ class ProcrastinationLogEntity extends DataClass
         procrastinationReason,
       ),
       'wasCompletedEventually': serializer.toJson<bool>(wasCompletedEventually),
+      'owner': serializer.toJson<String>(owner),
     };
   }
 
@@ -4838,6 +5819,7 @@ class ProcrastinationLogEntity extends DataClass
     int? delayCount,
     Value<String?> procrastinationReason = const Value.absent(),
     bool? wasCompletedEventually,
+    String? owner,
   }) => ProcrastinationLogEntity(
     id: id ?? this.id,
     ritualId: ritualId.present ? ritualId.value : this.ritualId,
@@ -4849,6 +5831,7 @@ class ProcrastinationLogEntity extends DataClass
         : this.procrastinationReason,
     wasCompletedEventually:
         wasCompletedEventually ?? this.wasCompletedEventually,
+    owner: owner ?? this.owner,
   );
   ProcrastinationLogEntity copyWithCompanion(
     ProcrastinationLogsTableCompanion data,
@@ -4869,6 +5852,7 @@ class ProcrastinationLogEntity extends DataClass
       wasCompletedEventually: data.wasCompletedEventually.present
           ? data.wasCompletedEventually.value
           : this.wasCompletedEventually,
+      owner: data.owner.present ? data.owner.value : this.owner,
     );
   }
 
@@ -4881,7 +5865,8 @@ class ProcrastinationLogEntity extends DataClass
           ..write('logTime: $logTime, ')
           ..write('delayCount: $delayCount, ')
           ..write('procrastinationReason: $procrastinationReason, ')
-          ..write('wasCompletedEventually: $wasCompletedEventually')
+          ..write('wasCompletedEventually: $wasCompletedEventually, ')
+          ..write('owner: $owner')
           ..write(')'))
         .toString();
   }
@@ -4895,6 +5880,7 @@ class ProcrastinationLogEntity extends DataClass
     delayCount,
     procrastinationReason,
     wasCompletedEventually,
+    owner,
   );
   @override
   bool operator ==(Object other) =>
@@ -4906,7 +5892,8 @@ class ProcrastinationLogEntity extends DataClass
           other.logTime == this.logTime &&
           other.delayCount == this.delayCount &&
           other.procrastinationReason == this.procrastinationReason &&
-          other.wasCompletedEventually == this.wasCompletedEventually);
+          other.wasCompletedEventually == this.wasCompletedEventually &&
+          other.owner == this.owner);
 }
 
 class ProcrastinationLogsTableCompanion
@@ -4918,6 +5905,7 @@ class ProcrastinationLogsTableCompanion
   final Value<int> delayCount;
   final Value<String?> procrastinationReason;
   final Value<bool> wasCompletedEventually;
+  final Value<String> owner;
   final Value<int> rowid;
   const ProcrastinationLogsTableCompanion({
     this.id = const Value.absent(),
@@ -4927,6 +5915,7 @@ class ProcrastinationLogsTableCompanion
     this.delayCount = const Value.absent(),
     this.procrastinationReason = const Value.absent(),
     this.wasCompletedEventually = const Value.absent(),
+    this.owner = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   ProcrastinationLogsTableCompanion.insert({
@@ -4937,6 +5926,7 @@ class ProcrastinationLogsTableCompanion
     this.delayCount = const Value.absent(),
     this.procrastinationReason = const Value.absent(),
     this.wasCompletedEventually = const Value.absent(),
+    this.owner = const Value.absent(),
     this.rowid = const Value.absent(),
   }) : scheduledTime = Value(scheduledTime),
        logTime = Value(logTime);
@@ -4948,6 +5938,7 @@ class ProcrastinationLogsTableCompanion
     Expression<int>? delayCount,
     Expression<String>? procrastinationReason,
     Expression<bool>? wasCompletedEventually,
+    Expression<String>? owner,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
@@ -4960,6 +5951,7 @@ class ProcrastinationLogsTableCompanion
         'procrastination_reason': procrastinationReason,
       if (wasCompletedEventually != null)
         'was_completed_eventually': wasCompletedEventually,
+      if (owner != null) 'owner': owner,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -4972,6 +5964,7 @@ class ProcrastinationLogsTableCompanion
     Value<int>? delayCount,
     Value<String?>? procrastinationReason,
     Value<bool>? wasCompletedEventually,
+    Value<String>? owner,
     Value<int>? rowid,
   }) {
     return ProcrastinationLogsTableCompanion(
@@ -4984,6 +5977,7 @@ class ProcrastinationLogsTableCompanion
           procrastinationReason ?? this.procrastinationReason,
       wasCompletedEventually:
           wasCompletedEventually ?? this.wasCompletedEventually,
+      owner: owner ?? this.owner,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -5016,6 +6010,9 @@ class ProcrastinationLogsTableCompanion
         wasCompletedEventually.value,
       );
     }
+    if (owner.present) {
+      map['owner'] = Variable<String>(owner.value);
+    }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
     }
@@ -5032,6 +6029,7 @@ class ProcrastinationLogsTableCompanion
           ..write('delayCount: $delayCount, ')
           ..write('procrastinationReason: $procrastinationReason, ')
           ..write('wasCompletedEventually: $wasCompletedEventually, ')
+          ..write('owner: $owner, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -5426,6 +6424,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $OfflineUsersTableTable offlineUsersTable =
       $OfflineUsersTableTable(this);
   late final $TasksTableTable tasksTable = $TasksTableTable(this);
+  late final $NotesTableTable notesTable = $NotesTableTable(this);
   late final $RecoveryProfilesTableTable recoveryProfilesTable =
       $RecoveryProfilesTableTable(this);
   late final $AvoidedHabitsTableTable avoidedHabitsTable =
@@ -5450,6 +6449,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     idMappingsTable,
     offlineUsersTable,
     tasksTable,
+    notesTable,
     recoveryProfilesTable,
     avoidedHabitsTable,
     urgeLogsTable,
@@ -5465,6 +6465,7 @@ typedef $$KeyValueTableTableCreateCompanionBuilder =
       required String box,
       required String id,
       required String data,
+      Value<String> owner,
       Value<int> rowid,
     });
 typedef $$KeyValueTableTableUpdateCompanionBuilder =
@@ -5472,6 +6473,7 @@ typedef $$KeyValueTableTableUpdateCompanionBuilder =
       Value<String> box,
       Value<String> id,
       Value<String> data,
+      Value<String> owner,
       Value<int> rowid,
     });
 
@@ -5496,6 +6498,11 @@ class $$KeyValueTableTableFilterComposer
 
   ColumnFilters<String> get data => $composableBuilder(
     column: $table.data,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get owner => $composableBuilder(
+    column: $table.owner,
     builder: (column) => ColumnFilters(column),
   );
 }
@@ -5523,6 +6530,11 @@ class $$KeyValueTableTableOrderingComposer
     column: $table.data,
     builder: (column) => ColumnOrderings(column),
   );
+
+  ColumnOrderings<String> get owner => $composableBuilder(
+    column: $table.owner,
+    builder: (column) => ColumnOrderings(column),
+  );
 }
 
 class $$KeyValueTableTableAnnotationComposer
@@ -5542,6 +6554,9 @@ class $$KeyValueTableTableAnnotationComposer
 
   GeneratedColumn<String> get data =>
       $composableBuilder(column: $table.data, builder: (column) => column);
+
+  GeneratedColumn<String> get owner =>
+      $composableBuilder(column: $table.owner, builder: (column) => column);
 }
 
 class $$KeyValueTableTableTableManager
@@ -5578,11 +6593,13 @@ class $$KeyValueTableTableTableManager
                 Value<String> box = const Value.absent(),
                 Value<String> id = const Value.absent(),
                 Value<String> data = const Value.absent(),
+                Value<String> owner = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => KeyValueTableCompanion(
                 box: box,
                 id: id,
                 data: data,
+                owner: owner,
                 rowid: rowid,
               ),
           createCompanionCallback:
@@ -5590,11 +6607,13 @@ class $$KeyValueTableTableTableManager
                 required String box,
                 required String id,
                 required String data,
+                Value<String> owner = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => KeyValueTableCompanion.insert(
                 box: box,
                 id: id,
                 data: data,
+                owner: owner,
                 rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0
@@ -5636,6 +6655,7 @@ typedef $$OutboxTableTableCreateCompanionBuilder =
       Value<DateTime?> nextAttemptAt,
       required DateTime createdAt,
       required DateTime updatedAt,
+      Value<String> owner,
       Value<int> rowid,
     });
 typedef $$OutboxTableTableUpdateCompanionBuilder =
@@ -5652,6 +6672,7 @@ typedef $$OutboxTableTableUpdateCompanionBuilder =
       Value<DateTime?> nextAttemptAt,
       Value<DateTime> createdAt,
       Value<DateTime> updatedAt,
+      Value<String> owner,
       Value<int> rowid,
     });
 
@@ -5721,6 +6742,11 @@ class $$OutboxTableTableFilterComposer
 
   ColumnFilters<DateTime> get updatedAt => $composableBuilder(
     column: $table.updatedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get owner => $composableBuilder(
+    column: $table.owner,
     builder: (column) => ColumnFilters(column),
   );
 }
@@ -5793,6 +6819,11 @@ class $$OutboxTableTableOrderingComposer
     column: $table.updatedAt,
     builder: (column) => ColumnOrderings(column),
   );
+
+  ColumnOrderings<String> get owner => $composableBuilder(
+    column: $table.owner,
+    builder: (column) => ColumnOrderings(column),
+  );
 }
 
 class $$OutboxTableTableAnnotationComposer
@@ -5841,6 +6872,9 @@ class $$OutboxTableTableAnnotationComposer
 
   GeneratedColumn<DateTime> get updatedAt =>
       $composableBuilder(column: $table.updatedAt, builder: (column) => column);
+
+  GeneratedColumn<String> get owner =>
+      $composableBuilder(column: $table.owner, builder: (column) => column);
 }
 
 class $$OutboxTableTableTableManager
@@ -5886,6 +6920,7 @@ class $$OutboxTableTableTableManager
                 Value<DateTime?> nextAttemptAt = const Value.absent(),
                 Value<DateTime> createdAt = const Value.absent(),
                 Value<DateTime> updatedAt = const Value.absent(),
+                Value<String> owner = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => OutboxTableCompanion(
                 id: id,
@@ -5900,6 +6935,7 @@ class $$OutboxTableTableTableManager
                 nextAttemptAt: nextAttemptAt,
                 createdAt: createdAt,
                 updatedAt: updatedAt,
+                owner: owner,
                 rowid: rowid,
               ),
           createCompanionCallback:
@@ -5916,6 +6952,7 @@ class $$OutboxTableTableTableManager
                 Value<DateTime?> nextAttemptAt = const Value.absent(),
                 required DateTime createdAt,
                 required DateTime updatedAt,
+                Value<String> owner = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => OutboxTableCompanion.insert(
                 id: id,
@@ -5930,6 +6967,7 @@ class $$OutboxTableTableTableManager
                 nextAttemptAt: nextAttemptAt,
                 createdAt: createdAt,
                 updatedAt: updatedAt,
+                owner: owner,
                 rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0
@@ -6488,6 +7526,7 @@ typedef $$TasksTableTableCreateCompanionBuilder =
       Value<String?> data,
       Value<String?> clientId,
       Value<String?> remoteId,
+      Value<String> owner,
       Value<int> rowid,
     });
 typedef $$TasksTableTableUpdateCompanionBuilder =
@@ -6503,6 +7542,7 @@ typedef $$TasksTableTableUpdateCompanionBuilder =
       Value<String?> data,
       Value<String?> clientId,
       Value<String?> remoteId,
+      Value<String> owner,
       Value<int> rowid,
     });
 
@@ -6567,6 +7607,11 @@ class $$TasksTableTableFilterComposer
 
   ColumnFilters<String> get remoteId => $composableBuilder(
     column: $table.remoteId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get owner => $composableBuilder(
+    column: $table.owner,
     builder: (column) => ColumnFilters(column),
   );
 }
@@ -6634,6 +7679,11 @@ class $$TasksTableTableOrderingComposer
     column: $table.remoteId,
     builder: (column) => ColumnOrderings(column),
   );
+
+  ColumnOrderings<String> get owner => $composableBuilder(
+    column: $table.owner,
+    builder: (column) => ColumnOrderings(column),
+  );
 }
 
 class $$TasksTableTableAnnotationComposer
@@ -6681,6 +7731,9 @@ class $$TasksTableTableAnnotationComposer
 
   GeneratedColumn<String> get remoteId =>
       $composableBuilder(column: $table.remoteId, builder: (column) => column);
+
+  GeneratedColumn<String> get owner =>
+      $composableBuilder(column: $table.owner, builder: (column) => column);
 }
 
 class $$TasksTableTableTableManager
@@ -6725,6 +7778,7 @@ class $$TasksTableTableTableManager
                 Value<String?> data = const Value.absent(),
                 Value<String?> clientId = const Value.absent(),
                 Value<String?> remoteId = const Value.absent(),
+                Value<String> owner = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => TasksTableCompanion(
                 id: id,
@@ -6738,6 +7792,7 @@ class $$TasksTableTableTableManager
                 data: data,
                 clientId: clientId,
                 remoteId: remoteId,
+                owner: owner,
                 rowid: rowid,
               ),
           createCompanionCallback:
@@ -6753,6 +7808,7 @@ class $$TasksTableTableTableManager
                 Value<String?> data = const Value.absent(),
                 Value<String?> clientId = const Value.absent(),
                 Value<String?> remoteId = const Value.absent(),
+                Value<String> owner = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => TasksTableCompanion.insert(
                 id: id,
@@ -6766,6 +7822,7 @@ class $$TasksTableTableTableManager
                 data: data,
                 clientId: clientId,
                 remoteId: remoteId,
+                owner: owner,
                 rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0
@@ -6790,6 +7847,222 @@ typedef $$TasksTableTableProcessedTableManager =
       TaskEntity,
       PrefetchHooks Function()
     >;
+typedef $$NotesTableTableCreateCompanionBuilder =
+    NotesTableCompanion Function({
+      Value<String> id,
+      Value<String> title,
+      Value<String> body,
+      Value<DateTime> createdAt,
+      Value<DateTime> updatedAt,
+      Value<String> owner,
+      Value<int> rowid,
+    });
+typedef $$NotesTableTableUpdateCompanionBuilder =
+    NotesTableCompanion Function({
+      Value<String> id,
+      Value<String> title,
+      Value<String> body,
+      Value<DateTime> createdAt,
+      Value<DateTime> updatedAt,
+      Value<String> owner,
+      Value<int> rowid,
+    });
+
+class $$NotesTableTableFilterComposer
+    extends Composer<_$AppDatabase, $NotesTableTable> {
+  $$NotesTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get title => $composableBuilder(
+    column: $table.title,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get body => $composableBuilder(
+    column: $table.body,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get owner => $composableBuilder(
+    column: $table.owner,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$NotesTableTableOrderingComposer
+    extends Composer<_$AppDatabase, $NotesTableTable> {
+  $$NotesTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get title => $composableBuilder(
+    column: $table.title,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get body => $composableBuilder(
+    column: $table.body,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get owner => $composableBuilder(
+    column: $table.owner,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$NotesTableTableAnnotationComposer
+    extends Composer<_$AppDatabase, $NotesTableTable> {
+  $$NotesTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get title =>
+      $composableBuilder(column: $table.title, builder: (column) => column);
+
+  GeneratedColumn<String> get body =>
+      $composableBuilder(column: $table.body, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get updatedAt =>
+      $composableBuilder(column: $table.updatedAt, builder: (column) => column);
+
+  GeneratedColumn<String> get owner =>
+      $composableBuilder(column: $table.owner, builder: (column) => column);
+}
+
+class $$NotesTableTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $NotesTableTable,
+          NoteEntity,
+          $$NotesTableTableFilterComposer,
+          $$NotesTableTableOrderingComposer,
+          $$NotesTableTableAnnotationComposer,
+          $$NotesTableTableCreateCompanionBuilder,
+          $$NotesTableTableUpdateCompanionBuilder,
+          (
+            NoteEntity,
+            BaseReferences<_$AppDatabase, $NotesTableTable, NoteEntity>,
+          ),
+          NoteEntity,
+          PrefetchHooks Function()
+        > {
+  $$NotesTableTableTableManager(_$AppDatabase db, $NotesTableTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$NotesTableTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$NotesTableTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$NotesTableTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<String> title = const Value.absent(),
+                Value<String> body = const Value.absent(),
+                Value<DateTime> createdAt = const Value.absent(),
+                Value<DateTime> updatedAt = const Value.absent(),
+                Value<String> owner = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => NotesTableCompanion(
+                id: id,
+                title: title,
+                body: body,
+                createdAt: createdAt,
+                updatedAt: updatedAt,
+                owner: owner,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<String> title = const Value.absent(),
+                Value<String> body = const Value.absent(),
+                Value<DateTime> createdAt = const Value.absent(),
+                Value<DateTime> updatedAt = const Value.absent(),
+                Value<String> owner = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => NotesTableCompanion.insert(
+                id: id,
+                title: title,
+                body: body,
+                createdAt: createdAt,
+                updatedAt: updatedAt,
+                owner: owner,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$NotesTableTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $NotesTableTable,
+      NoteEntity,
+      $$NotesTableTableFilterComposer,
+      $$NotesTableTableOrderingComposer,
+      $$NotesTableTableAnnotationComposer,
+      $$NotesTableTableCreateCompanionBuilder,
+      $$NotesTableTableUpdateCompanionBuilder,
+      (NoteEntity, BaseReferences<_$AppDatabase, $NotesTableTable, NoteEntity>),
+      NoteEntity,
+      PrefetchHooks Function()
+    >;
 typedef $$RecoveryProfilesTableTableCreateCompanionBuilder =
     RecoveryProfilesTableCompanion Function({
       Value<String> id,
@@ -6797,6 +8070,7 @@ typedef $$RecoveryProfilesTableTableCreateCompanionBuilder =
       Value<int> longestStreak,
       Value<int> currentStreak,
       Value<String?> primaryTrigger,
+      Value<String> owner,
       Value<int> rowid,
     });
 typedef $$RecoveryProfilesTableTableUpdateCompanionBuilder =
@@ -6806,6 +8080,7 @@ typedef $$RecoveryProfilesTableTableUpdateCompanionBuilder =
       Value<int> longestStreak,
       Value<int> currentStreak,
       Value<String?> primaryTrigger,
+      Value<String> owner,
       Value<int> rowid,
     });
 
@@ -6840,6 +8115,11 @@ class $$RecoveryProfilesTableTableFilterComposer
 
   ColumnFilters<String> get primaryTrigger => $composableBuilder(
     column: $table.primaryTrigger,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get owner => $composableBuilder(
+    column: $table.owner,
     builder: (column) => ColumnFilters(column),
   );
 }
@@ -6877,6 +8157,11 @@ class $$RecoveryProfilesTableTableOrderingComposer
     column: $table.primaryTrigger,
     builder: (column) => ColumnOrderings(column),
   );
+
+  ColumnOrderings<String> get owner => $composableBuilder(
+    column: $table.owner,
+    builder: (column) => ColumnOrderings(column),
+  );
 }
 
 class $$RecoveryProfilesTableTableAnnotationComposer
@@ -6908,6 +8193,9 @@ class $$RecoveryProfilesTableTableAnnotationComposer
     column: $table.primaryTrigger,
     builder: (column) => column,
   );
+
+  GeneratedColumn<String> get owner =>
+      $composableBuilder(column: $table.owner, builder: (column) => column);
 }
 
 class $$RecoveryProfilesTableTableTableManager
@@ -6961,6 +8249,7 @@ class $$RecoveryProfilesTableTableTableManager
                 Value<int> longestStreak = const Value.absent(),
                 Value<int> currentStreak = const Value.absent(),
                 Value<String?> primaryTrigger = const Value.absent(),
+                Value<String> owner = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => RecoveryProfilesTableCompanion(
                 id: id,
@@ -6968,6 +8257,7 @@ class $$RecoveryProfilesTableTableTableManager
                 longestStreak: longestStreak,
                 currentStreak: currentStreak,
                 primaryTrigger: primaryTrigger,
+                owner: owner,
                 rowid: rowid,
               ),
           createCompanionCallback:
@@ -6977,6 +8267,7 @@ class $$RecoveryProfilesTableTableTableManager
                 Value<int> longestStreak = const Value.absent(),
                 Value<int> currentStreak = const Value.absent(),
                 Value<String?> primaryTrigger = const Value.absent(),
+                Value<String> owner = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => RecoveryProfilesTableCompanion.insert(
                 id: id,
@@ -6984,6 +8275,7 @@ class $$RecoveryProfilesTableTableTableManager
                 longestStreak: longestStreak,
                 currentStreak: currentStreak,
                 primaryTrigger: primaryTrigger,
+                owner: owner,
                 rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0
@@ -7021,6 +8313,7 @@ typedef $$AvoidedHabitsTableTableCreateCompanionBuilder =
       required String title,
       Value<String?> motivation,
       required DateTime createdDate,
+      Value<String> owner,
       Value<int> rowid,
     });
 typedef $$AvoidedHabitsTableTableUpdateCompanionBuilder =
@@ -7029,6 +8322,7 @@ typedef $$AvoidedHabitsTableTableUpdateCompanionBuilder =
       Value<String> title,
       Value<String?> motivation,
       Value<DateTime> createdDate,
+      Value<String> owner,
       Value<int> rowid,
     });
 
@@ -7058,6 +8352,11 @@ class $$AvoidedHabitsTableTableFilterComposer
 
   ColumnFilters<DateTime> get createdDate => $composableBuilder(
     column: $table.createdDate,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get owner => $composableBuilder(
+    column: $table.owner,
     builder: (column) => ColumnFilters(column),
   );
 }
@@ -7090,6 +8389,11 @@ class $$AvoidedHabitsTableTableOrderingComposer
     column: $table.createdDate,
     builder: (column) => ColumnOrderings(column),
   );
+
+  ColumnOrderings<String> get owner => $composableBuilder(
+    column: $table.owner,
+    builder: (column) => ColumnOrderings(column),
+  );
 }
 
 class $$AvoidedHabitsTableTableAnnotationComposer
@@ -7116,6 +8420,9 @@ class $$AvoidedHabitsTableTableAnnotationComposer
     column: $table.createdDate,
     builder: (column) => column,
   );
+
+  GeneratedColumn<String> get owner =>
+      $composableBuilder(column: $table.owner, builder: (column) => column);
 }
 
 class $$AvoidedHabitsTableTableTableManager
@@ -7162,12 +8469,14 @@ class $$AvoidedHabitsTableTableTableManager
                 Value<String> title = const Value.absent(),
                 Value<String?> motivation = const Value.absent(),
                 Value<DateTime> createdDate = const Value.absent(),
+                Value<String> owner = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => AvoidedHabitsTableCompanion(
                 id: id,
                 title: title,
                 motivation: motivation,
                 createdDate: createdDate,
+                owner: owner,
                 rowid: rowid,
               ),
           createCompanionCallback:
@@ -7176,12 +8485,14 @@ class $$AvoidedHabitsTableTableTableManager
                 required String title,
                 Value<String?> motivation = const Value.absent(),
                 required DateTime createdDate,
+                Value<String> owner = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => AvoidedHabitsTableCompanion.insert(
                 id: id,
                 title: title,
                 motivation: motivation,
                 createdDate: createdDate,
+                owner: owner,
                 rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0
@@ -7222,6 +8533,7 @@ typedef $$UrgeLogsTableTableCreateCompanionBuilder =
       required String triggerType,
       required String outcome,
       Value<String?> reflectionNotes,
+      Value<String> owner,
       Value<int> rowid,
     });
 typedef $$UrgeLogsTableTableUpdateCompanionBuilder =
@@ -7233,6 +8545,7 @@ typedef $$UrgeLogsTableTableUpdateCompanionBuilder =
       Value<String> triggerType,
       Value<String> outcome,
       Value<String?> reflectionNotes,
+      Value<String> owner,
       Value<int> rowid,
     });
 
@@ -7277,6 +8590,11 @@ class $$UrgeLogsTableTableFilterComposer
 
   ColumnFilters<String> get reflectionNotes => $composableBuilder(
     column: $table.reflectionNotes,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get owner => $composableBuilder(
+    column: $table.owner,
     builder: (column) => ColumnFilters(column),
   );
 }
@@ -7324,6 +8642,11 @@ class $$UrgeLogsTableTableOrderingComposer
     column: $table.reflectionNotes,
     builder: (column) => ColumnOrderings(column),
   );
+
+  ColumnOrderings<String> get owner => $composableBuilder(
+    column: $table.owner,
+    builder: (column) => ColumnOrderings(column),
+  );
 }
 
 class $$UrgeLogsTableTableAnnotationComposer
@@ -7359,6 +8682,9 @@ class $$UrgeLogsTableTableAnnotationComposer
     column: $table.reflectionNotes,
     builder: (column) => column,
   );
+
+  GeneratedColumn<String> get owner =>
+      $composableBuilder(column: $table.owner, builder: (column) => column);
 }
 
 class $$UrgeLogsTableTableTableManager
@@ -7399,6 +8725,7 @@ class $$UrgeLogsTableTableTableManager
                 Value<String> triggerType = const Value.absent(),
                 Value<String> outcome = const Value.absent(),
                 Value<String?> reflectionNotes = const Value.absent(),
+                Value<String> owner = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => UrgeLogsTableCompanion(
                 id: id,
@@ -7408,6 +8735,7 @@ class $$UrgeLogsTableTableTableManager
                 triggerType: triggerType,
                 outcome: outcome,
                 reflectionNotes: reflectionNotes,
+                owner: owner,
                 rowid: rowid,
               ),
           createCompanionCallback:
@@ -7419,6 +8747,7 @@ class $$UrgeLogsTableTableTableManager
                 required String triggerType,
                 required String outcome,
                 Value<String?> reflectionNotes = const Value.absent(),
+                Value<String> owner = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => UrgeLogsTableCompanion.insert(
                 id: id,
@@ -7428,6 +8757,7 @@ class $$UrgeLogsTableTableTableManager
                 triggerType: triggerType,
                 outcome: outcome,
                 reflectionNotes: reflectionNotes,
+                owner: owner,
                 rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0
@@ -7463,6 +8793,7 @@ typedef $$DailyRitualsTableTableCreateCompanionBuilder =
       required String routineType,
       Value<String> iconEmoji,
       Value<int> targetDurationMinutes,
+      Value<String> owner,
       Value<int> rowid,
     });
 typedef $$DailyRitualsTableTableUpdateCompanionBuilder =
@@ -7473,6 +8804,7 @@ typedef $$DailyRitualsTableTableUpdateCompanionBuilder =
       Value<String> routineType,
       Value<String> iconEmoji,
       Value<int> targetDurationMinutes,
+      Value<String> owner,
       Value<int> rowid,
     });
 
@@ -7512,6 +8844,11 @@ class $$DailyRitualsTableTableFilterComposer
 
   ColumnFilters<int> get targetDurationMinutes => $composableBuilder(
     column: $table.targetDurationMinutes,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get owner => $composableBuilder(
+    column: $table.owner,
     builder: (column) => ColumnFilters(column),
   );
 }
@@ -7554,6 +8891,11 @@ class $$DailyRitualsTableTableOrderingComposer
     column: $table.targetDurationMinutes,
     builder: (column) => ColumnOrderings(column),
   );
+
+  ColumnOrderings<String> get owner => $composableBuilder(
+    column: $table.owner,
+    builder: (column) => ColumnOrderings(column),
+  );
 }
 
 class $$DailyRitualsTableTableAnnotationComposer
@@ -7588,6 +8930,9 @@ class $$DailyRitualsTableTableAnnotationComposer
     column: $table.targetDurationMinutes,
     builder: (column) => column,
   );
+
+  GeneratedColumn<String> get owner =>
+      $composableBuilder(column: $table.owner, builder: (column) => column);
 }
 
 class $$DailyRitualsTableTableTableManager
@@ -7636,6 +8981,7 @@ class $$DailyRitualsTableTableTableManager
                 Value<String> routineType = const Value.absent(),
                 Value<String> iconEmoji = const Value.absent(),
                 Value<int> targetDurationMinutes = const Value.absent(),
+                Value<String> owner = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => DailyRitualsTableCompanion(
                 id: id,
@@ -7644,6 +8990,7 @@ class $$DailyRitualsTableTableTableManager
                 routineType: routineType,
                 iconEmoji: iconEmoji,
                 targetDurationMinutes: targetDurationMinutes,
+                owner: owner,
                 rowid: rowid,
               ),
           createCompanionCallback:
@@ -7654,6 +9001,7 @@ class $$DailyRitualsTableTableTableManager
                 required String routineType,
                 Value<String> iconEmoji = const Value.absent(),
                 Value<int> targetDurationMinutes = const Value.absent(),
+                Value<String> owner = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => DailyRitualsTableCompanion.insert(
                 id: id,
@@ -7662,6 +9010,7 @@ class $$DailyRitualsTableTableTableManager
                 routineType: routineType,
                 iconEmoji: iconEmoji,
                 targetDurationMinutes: targetDurationMinutes,
+                owner: owner,
                 rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0
@@ -7698,6 +9047,7 @@ typedef $$RitualLogsTableTableCreateCompanionBuilder =
       Value<String> id,
       required String ritualId,
       required DateTime completedAt,
+      Value<String> owner,
       Value<int> rowid,
     });
 typedef $$RitualLogsTableTableUpdateCompanionBuilder =
@@ -7705,6 +9055,7 @@ typedef $$RitualLogsTableTableUpdateCompanionBuilder =
       Value<String> id,
       Value<String> ritualId,
       Value<DateTime> completedAt,
+      Value<String> owner,
       Value<int> rowid,
     });
 
@@ -7729,6 +9080,11 @@ class $$RitualLogsTableTableFilterComposer
 
   ColumnFilters<DateTime> get completedAt => $composableBuilder(
     column: $table.completedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get owner => $composableBuilder(
+    column: $table.owner,
     builder: (column) => ColumnFilters(column),
   );
 }
@@ -7756,6 +9112,11 @@ class $$RitualLogsTableTableOrderingComposer
     column: $table.completedAt,
     builder: (column) => ColumnOrderings(column),
   );
+
+  ColumnOrderings<String> get owner => $composableBuilder(
+    column: $table.owner,
+    builder: (column) => ColumnOrderings(column),
+  );
 }
 
 class $$RitualLogsTableTableAnnotationComposer
@@ -7777,6 +9138,9 @@ class $$RitualLogsTableTableAnnotationComposer
     column: $table.completedAt,
     builder: (column) => column,
   );
+
+  GeneratedColumn<String> get owner =>
+      $composableBuilder(column: $table.owner, builder: (column) => column);
 }
 
 class $$RitualLogsTableTableTableManager
@@ -7819,11 +9183,13 @@ class $$RitualLogsTableTableTableManager
                 Value<String> id = const Value.absent(),
                 Value<String> ritualId = const Value.absent(),
                 Value<DateTime> completedAt = const Value.absent(),
+                Value<String> owner = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => RitualLogsTableCompanion(
                 id: id,
                 ritualId: ritualId,
                 completedAt: completedAt,
+                owner: owner,
                 rowid: rowid,
               ),
           createCompanionCallback:
@@ -7831,11 +9197,13 @@ class $$RitualLogsTableTableTableManager
                 Value<String> id = const Value.absent(),
                 required String ritualId,
                 required DateTime completedAt,
+                Value<String> owner = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => RitualLogsTableCompanion.insert(
                 id: id,
                 ritualId: ritualId,
                 completedAt: completedAt,
+                owner: owner,
                 rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0
@@ -7872,6 +9240,7 @@ typedef $$ProcrastinationLogsTableTableCreateCompanionBuilder =
       Value<int> delayCount,
       Value<String?> procrastinationReason,
       Value<bool> wasCompletedEventually,
+      Value<String> owner,
       Value<int> rowid,
     });
 typedef $$ProcrastinationLogsTableTableUpdateCompanionBuilder =
@@ -7883,6 +9252,7 @@ typedef $$ProcrastinationLogsTableTableUpdateCompanionBuilder =
       Value<int> delayCount,
       Value<String?> procrastinationReason,
       Value<bool> wasCompletedEventually,
+      Value<String> owner,
       Value<int> rowid,
     });
 
@@ -7927,6 +9297,11 @@ class $$ProcrastinationLogsTableTableFilterComposer
 
   ColumnFilters<bool> get wasCompletedEventually => $composableBuilder(
     column: $table.wasCompletedEventually,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get owner => $composableBuilder(
+    column: $table.owner,
     builder: (column) => ColumnFilters(column),
   );
 }
@@ -7974,6 +9349,11 @@ class $$ProcrastinationLogsTableTableOrderingComposer
     column: $table.wasCompletedEventually,
     builder: (column) => ColumnOrderings(column),
   );
+
+  ColumnOrderings<String> get owner => $composableBuilder(
+    column: $table.owner,
+    builder: (column) => ColumnOrderings(column),
+  );
 }
 
 class $$ProcrastinationLogsTableTableAnnotationComposer
@@ -8013,6 +9393,9 @@ class $$ProcrastinationLogsTableTableAnnotationComposer
     column: $table.wasCompletedEventually,
     builder: (column) => column,
   );
+
+  GeneratedColumn<String> get owner =>
+      $composableBuilder(column: $table.owner, builder: (column) => column);
 }
 
 class $$ProcrastinationLogsTableTableTableManager
@@ -8068,6 +9451,7 @@ class $$ProcrastinationLogsTableTableTableManager
                 Value<int> delayCount = const Value.absent(),
                 Value<String?> procrastinationReason = const Value.absent(),
                 Value<bool> wasCompletedEventually = const Value.absent(),
+                Value<String> owner = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => ProcrastinationLogsTableCompanion(
                 id: id,
@@ -8077,6 +9461,7 @@ class $$ProcrastinationLogsTableTableTableManager
                 delayCount: delayCount,
                 procrastinationReason: procrastinationReason,
                 wasCompletedEventually: wasCompletedEventually,
+                owner: owner,
                 rowid: rowid,
               ),
           createCompanionCallback:
@@ -8088,6 +9473,7 @@ class $$ProcrastinationLogsTableTableTableManager
                 Value<int> delayCount = const Value.absent(),
                 Value<String?> procrastinationReason = const Value.absent(),
                 Value<bool> wasCompletedEventually = const Value.absent(),
+                Value<String> owner = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => ProcrastinationLogsTableCompanion.insert(
                 id: id,
@@ -8097,6 +9483,7 @@ class $$ProcrastinationLogsTableTableTableManager
                 delayCount: delayCount,
                 procrastinationReason: procrastinationReason,
                 wasCompletedEventually: wasCompletedEventually,
+                owner: owner,
                 rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0
@@ -8365,6 +9752,8 @@ class $AppDatabaseManager {
       $$OfflineUsersTableTableTableManager(_db, _db.offlineUsersTable);
   $$TasksTableTableTableManager get tasksTable =>
       $$TasksTableTableTableManager(_db, _db.tasksTable);
+  $$NotesTableTableTableManager get notesTable =>
+      $$NotesTableTableTableManager(_db, _db.notesTable);
   $$RecoveryProfilesTableTableTableManager get recoveryProfilesTable =>
       $$RecoveryProfilesTableTableTableManager(_db, _db.recoveryProfilesTable);
   $$AvoidedHabitsTableTableTableManager get avoidedHabitsTable =>

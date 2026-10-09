@@ -39,6 +39,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:productivity_sdk/src/common/application/sync/task_sync_state.dart';
 import 'package:productivity_sdk/src/common/presentation/tasks/task_view_model.dart';
+import 'package:remixicon/remixicon.dart';
 
 /// The shipped deadline format, so REMIND and DUE read alike.
 final DateFormat _kClockFormat = DateFormat('EEE dd MMM, hh:mm a');
@@ -66,7 +67,7 @@ class TaskReminderRow extends StatelessWidget {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 10.h),
       decoration: BoxDecoration(
-        color: AppStyle.cardDarkAlt,
+        color: AppStyle.cardAltFor(Theme.of(context).brightness),
         borderRadius: BorderRadius.circular(10.r),
       ),
       child: Column(
@@ -78,19 +79,21 @@ class TaskReminderRow extends StatelessWidget {
             children: <Widget>[
               Expanded(
                 child: _clock(
+                  context,
                   'REMIND',
                   remind,
-                  icon: Icons.notifications_none,
+                  icon: Remix.notification_line,
                   tint: AppStyle.primary,
                 ),
               ),
               10.horizontalSpace,
               Expanded(
                 child: _clock(
+                  context,
                   'DUE',
                   due,
-                  icon: Icons.schedule,
-                  tint: AppStyle.textPrimary,
+                  icon: Remix.time_line,
+                  tint: AppStyle.inkFor(Theme.of(context).brightness),
                 ),
               ),
             ],
@@ -103,7 +106,7 @@ class TaskReminderRow extends StatelessWidget {
                   'Snoozing moves the reminder, never the deadline.',
                   style: AppStyle.interNormal(
                     size: 11,
-                    color: AppStyle.textDarkFaint,
+                    color: AppStyle.faintFor(Theme.of(context).brightness),
                   ),
                 ),
               ),
@@ -119,6 +122,7 @@ class TaskReminderRow extends StatelessWidget {
   }
 
   Widget _clock(
+    BuildContext context,
     String label,
     DateTime? at, {
     required IconData icon,
@@ -132,7 +136,7 @@ class TaskReminderRow extends StatelessWidget {
           label,
           style: AppStyle.interNormal(
             size: 10,
-            color: AppStyle.textDarkFaint,
+            color: AppStyle.faintFor(Theme.of(context).brightness),
             letterSpacing: 0.8,
           ),
         ),
@@ -178,7 +182,7 @@ class _SnoozeControl extends StatelessWidget {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            Icon(Icons.snooze, size: 13.r, color: AppStyle.primary),
+            Icon(Remix.alarm_snooze_line, size: 13.r, color: AppStyle.primary),
             4.horizontalSpace,
             Text(
               count > 0 ? 'Snoozed ×$count' : 'Snooze',
@@ -209,7 +213,10 @@ List<SnoozeOption> snoozeOptions(DateTime now) {
   final DateTime tomorrow = now.add(const Duration(days: 1));
   final DateTime nextWeek = now.add(const Duration(days: 7));
   return <SnoozeOption>[
-    SnoozeOption(label: 'In an hour', remindAt: now.add(const Duration(hours: 1))),
+    SnoozeOption(
+      label: 'In an hour',
+      remindAt: now.add(const Duration(hours: 1)),
+    ),
     SnoozeOption(label: 'Tomorrow morning', remindAt: morningOf(tomorrow)),
     SnoozeOption(label: 'Next week', remindAt: morningOf(nextWeek)),
   ];
@@ -229,7 +236,7 @@ Future<DateTime?> showSnoozeSheet(
 }) {
   return showModalBottomSheet<DateTime>(
     context: context,
-    backgroundColor: AppStyle.cardDark,
+    backgroundColor: AppStyle.cardFor(Theme.of(context).brightness),
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(top: Radius.circular(16.r)),
     ),
@@ -286,14 +293,20 @@ class _SnoozeSheetState extends State<_SnoozeSheet> {
           children: <Widget>[
             Text(
               'Snooze the reminder',
-              style: AppStyle.interSemi(size: 16, color: AppStyle.textPrimary),
+              style: AppStyle.interSemi(
+                size: 16,
+                color: AppStyle.inkFor(Theme.of(context).brightness),
+              ),
             ),
             4.verticalSpace,
             Text(
               widget.task.title,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: AppStyle.interNormal(size: 12, color: AppStyle.textDarkFaint),
+              style: AppStyle.interNormal(
+                size: 12,
+                color: AppStyle.faintFor(Theme.of(context).brightness),
+              ),
             ),
             12.verticalSpace,
             for (int i = 0; i < _options.length; i++)
@@ -318,7 +331,7 @@ class _SnoozeSheetState extends State<_SnoozeSheet> {
             Container(
               padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 8.h),
               decoration: BoxDecoration(
-                color: AppStyle.cardDarkAlt,
+                color: AppStyle.cardAltFor(Theme.of(context).brightness),
                 borderRadius: BorderRadius.circular(8.r),
               ),
               child: Text(
@@ -328,7 +341,7 @@ class _SnoozeSheetState extends State<_SnoozeSheet> {
                           'the reminder, never the deadline.',
                 style: AppStyle.interNormal(
                   size: 11,
-                  color: AppStyle.textDarkSecondary,
+                  color: AppStyle.secondaryInkFor(Theme.of(context).brightness),
                 ),
               ),
             ),
@@ -345,7 +358,10 @@ class _SnoozeSheetState extends State<_SnoozeSheet> {
               ),
               child: Text(
                 'Remind me ${_kClockFormat.format(_chosen)}',
-                style: AppStyle.interSemi(size: 13, color: AppStyle.blackColor),
+                style: AppStyle.interSemi(
+                  size: 13,
+                  color: AppStyle.inkFor(Theme.of(context).brightness),
+                ),
               ),
             ),
           ],
@@ -374,7 +390,9 @@ class _SnoozeSheetState extends State<_SnoozeSheet> {
                 label,
                 style: AppStyle.interSemi(
                   size: 13,
-                  color: selected ? AppStyle.primary : AppStyle.textPrimary,
+                  color: selected
+                      ? AppStyle.primary
+                      : AppStyle.inkFor(Theme.of(context).brightness),
                 ),
               ),
             ),
@@ -382,14 +400,18 @@ class _SnoozeSheetState extends State<_SnoozeSheet> {
               when == null ? '' : _kClockFormat.format(when),
               style: AppStyle.interNormal(
                 size: 11,
-                color: AppStyle.textDarkFaint,
+                color: AppStyle.faintFor(Theme.of(context).brightness),
               ),
             ),
             8.horizontalSpace,
             Icon(
-              selected ? Icons.check_circle : Icons.circle_outlined,
+              selected
+                  ? Remix.checkbox_circle_fill
+                  : Remix.checkbox_blank_circle_line,
               size: 16.r,
-              color: selected ? AppStyle.primary : AppStyle.strokeDark,
+              color: selected
+                  ? AppStyle.primary
+                  : AppStyle.strokeFor(Theme.of(context).brightness),
             ),
           ],
         ),
@@ -414,19 +436,28 @@ class LongTermBandHeader extends StatelessWidget {
       padding: EdgeInsets.only(bottom: 6.h),
       child: Row(
         children: <Widget>[
-          Icon(Icons.horizontal_rule, size: 14.r, color: tint),
+          Icon(Remix.subtract_line, size: 14.r, color: tint),
           6.horizontalSpace,
           Text(
             'LONG TERM',
-            style: AppStyle.interSemi(size: 11, color: tint, letterSpacing: 0.8),
+            style: AppStyle.interSemi(
+              size: 11,
+              color: tint,
+              letterSpacing: 0.8,
+            ),
           ),
           6.horizontalSpace,
           Text(
             '$count',
-            style: AppStyle.interNormal(size: 11, color: AppStyle.textDarkFaint),
+            style: AppStyle.interNormal(
+              size: 11,
+              color: AppStyle.faintFor(Theme.of(context).brightness),
+            ),
           ),
           8.horizontalSpace,
-          Expanded(child: Divider(color: tint.withValues(alpha: 0.35), height: 1)),
+          Expanded(
+            child: Divider(color: tint.withValues(alpha: 0.35), height: 1),
+          ),
         ],
       ),
     );
@@ -451,26 +482,30 @@ class TaskSyncBadge extends StatelessWidget {
   };
 
   static IconData iconFor(TaskSyncState state) => switch (state) {
-    TaskSyncState.thisDevice => Icons.smartphone,
-    TaskSyncState.syncing => Icons.sync,
-    TaskSyncState.synced => Icons.cloud_done_outlined,
-    TaskSyncState.failed => Icons.error_outline,
+    TaskSyncState.thisDevice => Remix.smartphone_line,
+    TaskSyncState.syncing => Remix.refresh_line,
+    TaskSyncState.synced => Remix.cloud_line,
+    TaskSyncState.failed => Remix.error_warning_line,
   };
 
-  static Color tintFor(TaskSyncState state) => switch (state) {
-    TaskSyncState.thisDevice => AppStyle.textDarkSecondary,
-    TaskSyncState.syncing => AppStyle.starColor,
-    TaskSyncState.synced => AppStyle.green,
-    TaskSyncState.failed => AppStyle.red,
-  };
+  /// [brightness] is the inherited theme's; omitted, the app-wide flag.
+  static Color tintFor(TaskSyncState state, [Brightness? brightness]) =>
+      switch (state) {
+        TaskSyncState.thisDevice => AppStyle.secondaryInkFor(
+          brightness ?? (AppStyle.isDark ? Brightness.dark : Brightness.light),
+        ),
+        TaskSyncState.syncing => AppStyle.starColor,
+        TaskSyncState.synced => AppStyle.green,
+        TaskSyncState.failed => AppStyle.red,
+      };
 
   @override
   Widget build(BuildContext context) {
-    final Color color = tintFor(state);
+    final Color color = tintFor(state, Theme.of(context).brightness);
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 2.h),
       decoration: BoxDecoration(
-        color: AppStyle.cardDarkAlt,
+        color: AppStyle.cardAltFor(Theme.of(context).brightness),
         borderRadius: BorderRadius.circular(6.r),
       ),
       child: Row(

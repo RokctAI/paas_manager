@@ -86,7 +86,7 @@ class _RevenueWorkspaceState extends ConsumerState<RevenueWorkspace> {
     final selected =
         ref.watch(profitDashboardProvider.select((s) => s.selectedProduct));
     return ColoredBox(
-      color: AppStyle.surfaceDark,
+      color: AppStyle.surfaceFor(Theme.of(context).brightness),
       child: LayoutBuilder(
         builder: (context, constraints) {
           // On a ONE-plane (phone) width the detail is a real pushed route
@@ -387,7 +387,7 @@ class _Dashboard extends ConsumerWidget {
       children: [
         Text(
           AppHelpers.getTranslation('revenue'),
-          style: AppStyle.interBold(size: 24, color: AppStyle.textPrimary),
+          style: AppStyle.interBold(size: 24, color: AppStyle.inkFor(Theme.of(context).brightness)),
         ),
         if (shopName != null && shopName!.isNotEmpty) ...[
           const SizedBox(width: 10),
@@ -397,7 +397,7 @@ class _Dashboard extends ConsumerWidget {
               shopName!,
               style: AppStyle.interNormal(
                 size: 13,
-                color: AppStyle.textDarkSecondary,
+                color: AppStyle.secondaryInkFor(Theme.of(context).brightness),
               ),
             ),
           ),
@@ -415,7 +415,7 @@ class _Dashboard extends ConsumerWidget {
             _windowLabel(state),
             style: AppStyle.interNormal(
               size: 12,
-              color: AppStyle.textDarkSecondary,
+              color: AppStyle.secondaryInkFor(Theme.of(context).brightness),
             ),
           ),
         ],
@@ -748,7 +748,7 @@ class PeriodControl extends ConsumerWidget {
             style: AppStyle.interSemi(
               size: 13,
               color:
-                  active ? AppStyle.blackColor : AppStyle.textDarkSecondary,
+                  active ? AppStyle.blackColor : AppStyle.secondaryInkFor(Theme.of(context).brightness),
             ),
           ),
         ),
@@ -758,9 +758,9 @@ class PeriodControl extends ConsumerWidget {
     return Container(
       padding: const EdgeInsets.all(3),
       decoration: BoxDecoration(
-        color: AppStyle.cardDark,
+        color: AppStyle.cardFor(Theme.of(context).brightness),
         borderRadius: BorderRadius.circular(100),
-        border: Border.all(color: AppStyle.strokeDarkSubtle),
+        border: Border.all(color: AppStyle.subtleStrokeFor(Theme.of(context).brightness)),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -809,26 +809,26 @@ class RangeChip extends ConsumerWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
         decoration: BoxDecoration(
-          color: AppStyle.cardDark,
+          color: AppStyle.cardFor(Theme.of(context).brightness),
           borderRadius: BorderRadius.circular(100),
-          border: Border.all(color: AppStyle.strokeDarkSubtle),
+          border: Border.all(color: AppStyle.subtleStrokeFor(Theme.of(context).brightness)),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
             Icon(Remix.calendar_line,
-                size: 15, color: AppStyle.textDarkSecondary),
+                size: 15, color: AppStyle.secondaryInkFor(Theme.of(context).brightness)),
             const SizedBox(width: 6),
             Text(
               '${format.format(window.from)} – ${format.format(window.to)}',
               style: AppStyle.interSemi(
                 size: 12,
-                color: AppStyle.textPrimary,
+                color: AppStyle.inkFor(Theme.of(context).brightness),
               ),
             ),
             const SizedBox(width: 4),
             Icon(Remix.arrow_down_s_line,
-                size: 14, color: AppStyle.textDarkSecondary),
+                size: 14, color: AppStyle.secondaryInkFor(Theme.of(context).brightness)),
           ],
         ),
       ),

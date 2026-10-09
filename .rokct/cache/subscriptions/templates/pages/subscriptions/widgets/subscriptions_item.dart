@@ -81,7 +81,7 @@ class SubscriptionsItem extends StatelessWidget {
       width: double.infinity,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16.r),
-        color: AppStyle.cardDark,
+        color: AppStyle.cardFor(Theme.of(context).brightness),
         border: isSelected
             ? Border.all(color: AppStyle.primary, width: 1.5)
             : null,
@@ -126,7 +126,7 @@ class SubscriptionsItem extends StatelessWidget {
                   cycle,
                   style: AppStyle.interRegular(
                     size: 14,
-                    color: AppStyle.textDarkSecondary,
+                    color: AppStyle.secondaryInkFor(Theme.of(context).brightness),
                   ),
                 ),
               ],
@@ -134,7 +134,7 @@ class SubscriptionsItem extends StatelessWidget {
           ),
           if (includes.isNotEmpty) ...[
             16.verticalSpace,
-            Container(height: 1, color: AppStyle.strokeDarkSubtle),
+            Container(height: 1, color: AppStyle.subtleStrokeFor(Theme.of(context).brightness)),
             16.verticalSpace,
             // Chip 763: the includes ON the card face. The shipped
             // "?"-CircleButton info dialog is deliberately retired — with
@@ -163,7 +163,7 @@ class SubscriptionsItem extends StatelessWidget {
                             line.text,
                             style: AppStyle.interRegular(
                               size: 14,
-                              color: AppStyle.textDarkSecondary,
+                              color: AppStyle.secondaryInkFor(Theme.of(context).brightness),
                             ),
                           ),
                           if (line.badge != null)
@@ -203,14 +203,14 @@ class SubscriptionsItem extends StatelessWidget {
                 padding: REdgeInsets.symmetric(vertical: 13),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(100.r),
-                  border: Border.all(color: AppStyle.strokeDark),
+                  border: Border.all(color: AppStyle.strokeFor(Theme.of(context).brightness)),
                 ),
                 child: Text(
                   AppHelpers.getTranslation('current.plan'),
                   textAlign: TextAlign.center,
                   style: AppStyle.interNoSemi(
                     size: 15,
-                    color: AppStyle.textDarkFaint,
+                    color: AppStyle.faintFor(Theme.of(context).brightness),
                   ),
                 ),
               )

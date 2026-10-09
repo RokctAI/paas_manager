@@ -28,6 +28,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:productivity_sdk/src/common/application/run/paused_run.dart';
+import 'package:remixicon/remixicon.dart';
 
 /// The line, over [pausedRunProvider].
 ///
@@ -90,6 +91,21 @@ class PausedRunLineView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // A BuildContext lookup for the mode, not the app-wide AppStyle.isDark
+    // static (Ray, 2026-09-19: "glance doesnt change test immediately
+    // untill you come back if you switched theme mode").
+    //
+    // This line is composed into the HOST's Tasks row, and nothing above it
+    // here asks anything inherited for the mode: [PausedRunLine] watches a
+    // store provider and hands the derivation down, so the only mode input
+    // on this path was AppStyle's app-wide flag — which is a mutable static,
+    // not an inherited widget, so reading it registers no dependency and a
+    // theme-mode flip scheduled no rebuild of this element at all. Whether
+    // a rebuild reaches it is then the host row's business, exactly as it
+    // was for the shared glance card that sat behind a `const` boundary.
+    // Reading the inherited theme here makes this element a dependent of
+    // its own, so the flip itself restyles the line wherever it is mounted.
+    final Brightness brightness = Theme.of(context).brightness;
     final PausedRun run = summary.first;
     final String? sub = subline(summary, now: now);
     final void Function(String)? open = onOpen;
@@ -106,7 +122,10 @@ class PausedRunLineView extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              Divider(height: 1, color: AppStyle.strokeDarkSubtle),
+              Divider(
+                height: 1,
+                color: AppStyle.subtleStrokeFor(brightness),
+              ),
               8.verticalSpace,
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -114,7 +133,7 @@ class PausedRunLineView extends StatelessWidget {
                   Padding(
                     padding: EdgeInsets.only(top: 1.h),
                     child: Icon(
-                      Icons.radio_button_checked,
+                      Remix.radio_button_fill,
                       size: 14.r,
                       color: AppStyle.primary,
                     ),
@@ -138,7 +157,7 @@ class PausedRunLineView extends StatelessWidget {
                             overflow: TextOverflow.ellipsis,
                             style: AppStyle.interNormal(
                               size: 11,
-                              color: AppStyle.textDarkFaint,
+                              color: AppStyle.faintFor(brightness),
                             ),
                           ),
                       ],

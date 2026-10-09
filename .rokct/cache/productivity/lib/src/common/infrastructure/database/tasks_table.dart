@@ -52,6 +52,113 @@ class TasksTable extends Table {
   /// exactly like one that has never heard of a server.
   TextColumn get remoteId => text().nullable()();
 
+  /// Account this row belongs to, or the empty string for a row that
+  /// belongs to nobody in particular - every row written before owner
+  /// scoping existed, and every row written by an app nobody has signed
+  /// into.
+  ///
+  /// The empty string is base_sdk's `kUnownedOwner`, written here as a
+  /// literal rather than imported. This file is COPIED into base_sdk's own
+  /// package at compose time (sdk_installer_base.py
+  /// update_database_registration, because drift's modular analysis only
+  /// understands table classes defined inside the package being
+  /// generated), so a `package:base_sdk/...` import in it would become a
+  /// self-import of the package the copy now lives in. The value is the
+  /// one thing that has to agree, and a mismatch would show up as rows
+  /// nobody can see on the very first read.
+  ///
+  /// NOT NULL with a default rather than nullable: SQLite - unlike the SQL
+  /// standard - permits NULLs inside an ordinary rowid table's composite
+  /// PRIMARY KEY, and NULL != NULL in the backing unique index, so a
+  /// nullable owner would make `insertOnConflictUpdate` on an unowned row
+  /// miss its conflict target and append a second row instead of updating
+  /// the first.
+  TextColumn get owner => text().withDefault(const Constant(''))();
+
+  /// [owner] is part of the key, so two accounts on one device can hold
+  /// rows with the same id side by side instead of one silently replacing
+  /// the other's. Every read filters the key down to the rows the current
+  /// account may see, with base_sdk's `ownerVisible`.
   @override
-  Set<Column> get primaryKey => {id};
+  Set<Column> get primaryKey => {id, owner};
+}
+
+/// Brings this SDK's owner-scoped tables up to their current definition when
+/// the opened file predates owner scoping, and does nothing at all when it
+/// does not. Returns the tables it actually rebuilt.
+///
+/// WHY IT LIVES IN A TABLE SOURCE. The composed `AppDatabase` belongs to
+/// base_sdk; this package cannot add a method to it. What it CAN reach is
+/// whatever the composer copies into base_sdk's package, and the composer
+/// copies exactly the files named by `database.tables` in manifest.json -
+/// this one among them (sdk_installer_base.py
+/// `update_database_registration`). So the migration step declared in that
+/// manifest calls this function, and the copy of this file that travels
+/// beside the tables is what defines it. Everything it needs is on
+/// [GeneratedDatabase]; it names no table getter, because the getters only
+/// exist in the composed database's generated code.
+///
+/// WHY A REBUILD RATHER THAN `ALTER TABLE ... ADD COLUMN`. `owner` joins the
+/// PRIMARY KEY of every table listed, so two accounts can hold the same id,
+/// and SQLite cannot alter a primary key in place. Each table is therefore
+/// rebuilt the long way round: rename the old one aside, create the new one
+/// from its current Dart definition, copy every column the two have in
+/// common, drop the old one. `owner` is not among the copied columns, so
+/// every row already on the device takes its `''` default and comes out
+/// UNOWNED - which is the state the visibility rule treats as the current
+/// user's. Nothing is deleted and no owner is guessed.
+///
+/// Idempotent and self-checking (it reads the columns first), so running it
+/// in the migration step, as a floor before the first read, or in both,
+/// comes to the same thing.
+Future<List<String>> ensureProductivityOwnerColumns(
+  GeneratedDatabase db,
+  List<TableInfo<Table, dynamic>> tables,
+) async {
+  final List<String> rebuilt = <String>[];
+  // `Migrator(db)` rather than `db.createMigrator()`: the latter is both
+  // @protected and @visibleForTesting, so calling it from a free function
+  // raises two analyzer warnings in the HOST app that composes this file.
+  // The public constructor is the same object.
+  final Migrator m = Migrator(db);
+  for (final TableInfo<Table, dynamic> table in tables) {
+    final String name = table.actualTableName;
+    final List<String> before = await _productivityColumnNames(db, name);
+    // An absent table has no columns at all. base_sdk's own beforeOpen floor
+    // creates whole missing tables, and it creates them from the current
+    // definition, so one already has its owner column.
+    if (before.isEmpty || before.contains('owner')) continue;
+    final String carried = before
+        .where(table.columnsByName.containsKey)
+        .map((String c) => '"$c"')
+        .join(', ');
+    final String parked = '${name}_pre_owner_scope';
+    await db.customStatement('DROP TABLE IF EXISTS "$parked"');
+    await db.customStatement('ALTER TABLE "$name" RENAME TO "$parked"');
+    await m.createTable(table);
+    if (carried.isNotEmpty) {
+      await db.customStatement(
+        'INSERT INTO "$name" ($carried) SELECT $carried FROM "$parked"',
+      );
+    }
+    await db.customStatement('DROP TABLE "$parked"');
+    rebuilt.add(name);
+  }
+  return rebuilt;
+}
+
+/// Column names [table] has in the opened file, empty when there is no such
+/// table. Reads `pragma_table_info` as a table-valued function so the name
+/// binds as a parameter instead of being interpolated into SQL.
+Future<List<String>> _productivityColumnNames(
+  GeneratedDatabase db,
+  String table,
+) async {
+  final rows = await db
+      .customSelect(
+        'SELECT name FROM pragma_table_info(?1)',
+        variables: <Variable<Object>>[Variable<String>(table)],
+      )
+      .get();
+  return rows.map((row) => row.read<String>('name')).toList();
 }

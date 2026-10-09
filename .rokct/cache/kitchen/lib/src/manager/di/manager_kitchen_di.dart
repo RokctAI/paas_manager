@@ -14,9 +14,10 @@
 
 import 'package:get_it/get_it.dart';
 
-import 'package:base_sdk/src/constants/app_constants.dart';
+import 'package:base_sdk/base_sdk.dart' show DemoFixtures;
+import 'package:kitchen_sdk/src/common/di/kitchen_di.dart'
+    show kitchenDemoFixtureDirectory;
 import 'package:kitchen_sdk/src/manager/domain/interface/kitchen_orders.dart';
-import 'package:kitchen_sdk/src/manager/infrastructure/repositories/demo_kitchen_orders_repository.dart';
 import 'package:kitchen_sdk/src/manager/infrastructure/repositories/kitchen_orders_repository.dart';
 
 /// Manager-role DI hook (orders_sdk's `ManagerOrdersDependencies` pattern):
@@ -26,16 +27,15 @@ import 'package:kitchen_sdk/src/manager/infrastructure/repositories/kitchen_orde
 /// call it too.
 class ManagerKitchenDependencies {
   static void register(GetIt getIt) {
-    // Demo-gated like merchants_sdk's POS seams and products_sdk's catalog
-    // facades: --dart-define=IS_DEMO=true serves a seeded kitchen service
-    // from memory, so the Kitchen tab shows a live queue with ticking
-    // clocks and dish pills instead of its empty state, with zero backend
-    // contact. The production path is untouched.
+    // Demo runs the REAL repository: base_sdk's DemoGatewayInterceptor
+    // answers its cmds from the `<cmd>.json` fixtures in
+    // [kitchenDemoFixtureDirectory] (a seeded service of five tickets)
+    // while DemoSession.demoActive; an unknown cmd fails loudly with
+    // DemoFixtureMissing. The production path is untouched.
+    DemoFixtures.registerAssetDirectory(kitchenDemoFixtureDirectory);
     if (!getIt.isRegistered<KitchenOrdersRepositoryFacade>()) {
       getIt.registerSingleton<KitchenOrdersRepositoryFacade>(
-        AppConstants.isDemo
-            ? DemoKitchenOrdersRepository()
-            : KitchenOrdersRepository(),
+        KitchenOrdersRepository(),
       );
     }
   }

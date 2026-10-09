@@ -11,7 +11,7 @@ list(APPEND FLUTTER_PLUGIN_LIST
   firebase_auth
   firebase_core
   flutter_inappwebview_windows
-  flutter_pos_printer_platform_image_3
+  flutter_pos_printer_platform_image_3_sdt
   flutter_secure_storage_windows
   geolocator_windows
   permission_handler_windows

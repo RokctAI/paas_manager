@@ -25,6 +25,7 @@ import 'package:base_sdk/src/presentation/theme/app_style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:productivity_sdk/src/common/presentation/tasks/task_view_model.dart';
+import 'package:remixicon/remixicon.dart';
 
 /// CANONICAL 700 — the section-33 list header: title plus count pill.
 class TaskListHeader extends StatelessWidget {
@@ -51,21 +52,24 @@ class TaskListHeader extends StatelessWidget {
             title,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
-            style: AppStyle.interSemi(size: 18, color: AppStyle.textPrimary),
+            style: AppStyle.interSemi(
+              size: 18,
+              color: AppStyle.inkFor(Theme.of(context).brightness),
+            ),
           ),
         ),
         8.horizontalSpace,
         Container(
           padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 2.h),
           decoration: BoxDecoration(
-            color: AppStyle.cardDarkAlt,
+            color: AppStyle.cardAltFor(Theme.of(context).brightness),
             borderRadius: BorderRadius.circular(20.r),
           ),
           child: Text(
             '$count',
             style: AppStyle.interSemi(
               size: 12,
-              color: AppStyle.textDarkSecondary,
+              color: AppStyle.secondaryInkFor(Theme.of(context).brightness),
             ),
           ),
         ),
@@ -117,14 +121,14 @@ class TaskStatusTabs extends StatelessWidget {
     return Row(
       children: [
         for (final filter in TaskStatusFilter.values) ...[
-          _tab(filter),
+          _tab(context, filter),
           if (filter != TaskStatusFilter.values.last) 8.horizontalSpace,
         ],
       ],
     );
   }
 
-  Widget _tab(TaskStatusFilter filter) {
+  Widget _tab(BuildContext context, TaskStatusFilter filter) {
     final isActive = filter == active;
     final tint = tintFor(filter);
     return GestureDetector(
@@ -136,7 +140,9 @@ class TaskStatusTabs extends StatelessWidget {
           color: isActive ? tint.withValues(alpha: 0.16) : AppStyle.transparent,
           borderRadius: BorderRadius.circular(20.r),
           border: Border.all(
-            color: isActive ? tint : AppStyle.strokeDarkSubtle,
+            color: isActive
+                ? tint
+                : AppStyle.subtleStrokeFor(Theme.of(context).brightness),
           ),
         ),
         child: Row(
@@ -146,7 +152,9 @@ class TaskStatusTabs extends StatelessWidget {
               _labels[filter]!,
               style: AppStyle.interSemi(
                 size: 12,
-                color: isActive ? tint : AppStyle.textDarkSecondary,
+                color: isActive
+                    ? tint
+                    : AppStyle.secondaryInkFor(Theme.of(context).brightness),
               ),
             ),
             6.horizontalSpace,
@@ -154,7 +162,9 @@ class TaskStatusTabs extends StatelessWidget {
               '${counts[filter] ?? 0}',
               style: AppStyle.interNormal(
                 size: 11,
-                color: isActive ? tint : AppStyle.textDarkFaint,
+                color: isActive
+                    ? tint
+                    : AppStyle.faintFor(Theme.of(context).brightness),
               ),
             ),
           ],
@@ -190,19 +200,21 @@ class TaskSortSegment extends StatelessWidget {
     return Container(
       height: 30.h,
       decoration: BoxDecoration(
-        color: AppStyle.cardDarkAlt,
+        color: AppStyle.cardAltFor(Theme.of(context).brightness),
         borderRadius: BorderRadius.circular(8.r),
-        border: Border.all(color: AppStyle.strokeDarkSubtle),
+        border: Border.all(
+          color: AppStyle.subtleStrokeFor(Theme.of(context).brightness),
+        ),
       ),
       padding: EdgeInsets.all(2.r),
       child: Row(
         mainAxisSize: MainAxisSize.min,
-        children: [for (final sort in TaskSort.values) _segment(sort)],
+        children: [for (final sort in TaskSort.values) _segment(context, sort)],
       ),
     );
   }
 
-  Widget _segment(TaskSort sort) {
+  Widget _segment(BuildContext context, TaskSort sort) {
     final isActive = sort == active;
     return GestureDetector(
       onTap: () => onChanged(sort),
@@ -218,7 +230,9 @@ class TaskSortSegment extends StatelessWidget {
           _labels[sort]!,
           style: AppStyle.interSemi(
             size: 11,
-            color: isActive ? AppStyle.blackColor : AppStyle.textDarkSecondary,
+            color: isActive
+                ? AppStyle.blackColor
+                : AppStyle.secondaryInkFor(Theme.of(context).brightness),
           ),
         ),
       ),
@@ -247,19 +261,26 @@ class SubtaskComposerRow extends StatelessWidget {
       onTap: onTap,
       behavior: HitTestBehavior.opaque,
       child: CustomPaint(
-        painter: _DashedBorderPainter(color: AppStyle.strokeDark, radius: 10.r),
+        painter: _DashedBorderPainter(
+          color: AppStyle.strokeFor(Theme.of(context).brightness),
+          radius: 10.r,
+        ),
         child: SizedBox(
           height: 44.h,
           child: Row(
             children: [
               10.horizontalSpace,
-              Icon(Icons.add, size: 16.r, color: AppStyle.textDarkSecondary),
+              Icon(
+                Remix.add_line,
+                size: 16.r,
+                color: AppStyle.secondaryInkFor(Theme.of(context).brightness),
+              ),
               8.horizontalSpace,
               Text(
                 label,
                 style: AppStyle.interNormal(
                   size: 12,
-                  color: AppStyle.textDarkSecondary,
+                  color: AppStyle.secondaryInkFor(Theme.of(context).brightness),
                 ),
               ),
             ],

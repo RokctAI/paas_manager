@@ -1,5 +1,34 @@
 # Changelog
 
+## 1.5.3
+
+* fix(theme): widgets read their surface, card, stroke and ink colours from Theme.of(context) at build time (AppStyle.surfaceFor/cardFor/cardAltFor/strokeFor/subtleStrokeFor/inkFor/secondaryInkFor/faintFor) instead of the AppStyle.isDark-resolved statics, so a live dark/light switch restyles open pages instead of leaving the old mode's colours (Ray, 2026-10-04).
+
+## 1.5.2
+
+* fix(icons): every icon is Remixicon (`package:remixicon`, `Remix.*`), the
+  fleet's one icon set. Material `Icons.*`, `CupertinoIcons.*` and
+  `flutter_remix` uses are replaced with their Remixicon equivalents;
+  `flutter_remix` is dropped and `remixicon: ^1.4.1` is required. Icons only.
+
+## 1.5.1
+
+* fix(manifest): install the `assets/demo/kitchen` fixtures from the top-level
+  `installs` instead of one `app_type` block, so every compose that
+  registers the `assets/demo/kitchen/` pubspec entry also has the directory
+  behind it (flutter failed with "unable to find directory entry").
+
+## 1.5.0
+
+* feat(demo): demo runs the real repositories through base_sdk's
+  `DemoGatewayInterceptor` (requires base_sdk >= 1.73.0). The DI hooks
+  register only the real repositories and register the
+  `assets/demo/kitchen` fixture directory; every platform cmd a demo session
+  sends is answered from `templates/assets/demo/kitchen/<cmd>.json`, and an
+  unknown cmd fails loudly with `DemoFixtureMissing`.
+* Removed: `DemoKitchenOrdersRepository`, and the demo-session swap code
+  that chose them.
+
 ## 1.4.1
 
 * fix(demo): demo ticket numbers stop announcing themselves as demo (Ray

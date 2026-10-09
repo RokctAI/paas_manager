@@ -24,9 +24,9 @@ import 'package:base_sdk/src/models/response/products_paginate_response.dart';
 /// pane's category chip bar (approved design strip frame 11m, chip 349) -
 /// by category. The real implementation delegates to the composed app's
 /// registered products and categories facades (products_sdk registers
-/// both in every manager compose); the demo implementation
-/// (`MockProductsRepository`, this SDK's) answers locally so headless
-/// tours and the standalone test harness never touch a backend.
+/// both in every manager compose); a demo session runs the same code, with
+/// products_sdk's demo fixtures answering (base_sdk's
+/// DemoGatewayInterceptor), so headless tours never touch a backend.
 abstract class PosCatalogRepositoryFacade {
   /// Product search by free text or barcode — the same call the legacy
   /// Spazafy scanner made (`searchProducts(text: barcode)` → first match).

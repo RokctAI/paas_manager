@@ -14,6 +14,7 @@
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:remixicon/remixicon.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -125,14 +126,14 @@ class _PayFastWebViewWindowsState extends State<PayFastWebViewWindows> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: AppStyle.cardDark,
+        backgroundColor: AppStyle.cardFor(Theme.of(context).brightness),
         elevation: 0,
         title: Text(
           AppHelpers.getTranslation(TrKeys.checkout),
           style: AppStyle.interNormal(),
         ),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: AppStyle.black),
+          icon: const Icon(Remix.arrow_left_line, color: AppStyle.black),
           onPressed: () {
             // Confirm before closing the payment
             AppHelpers.showAlertDialog(
@@ -206,7 +207,7 @@ class _PayFastWebViewWindowsState extends State<PayFastWebViewWindows> {
             ),
             shouldOverrideUrlLoading: (controller, navigationAction) async {
               final url = navigationAction.request.url?.toString() ?? '';
-              debugPrint('PayFast WebView (Windows) navigation: $url');
+              debugPrint('PayFast WebView (Windows) navigation: ${payFastLogUrl(url)}');
 
               // Check for success or cancel URLs
               if (_checkForPaymentCompletion(url)) {
@@ -222,7 +223,7 @@ class _PayFastWebViewWindowsState extends State<PayFastWebViewWindows> {
                   isLoading = false;
                 });
               }
-              debugPrint('PayFast WebView (Windows) finished loading: $url');
+              debugPrint('PayFast WebView (Windows) finished loading: ${payFastLogUrl(url?.toString() ?? '')}');
 
               // Check for success or return URLs
               if (url != null) {
@@ -291,7 +292,7 @@ class _PayFastWebViewWindowsState extends State<PayFastWebViewWindows> {
             mainAxisSize: MainAxisSize.min,
             children: [
               const Icon(
-                Icons.travel_explore,
+                Remix.compass_discover_line,
                 size: 48,
                 color: AppStyle.textGrey,
               ),

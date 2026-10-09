@@ -60,7 +60,7 @@ class HaveSubscription extends StatelessWidget {
             renews,
             style: AppStyle.interRegular(
               size: 13,
-              color: AppStyle.textDarkSecondary,
+              color: AppStyle.secondaryInkFor(Theme.of(context).brightness),
             ),
           );
 
@@ -68,7 +68,7 @@ class HaveSubscription extends StatelessWidget {
       width: double.infinity,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16.r),
-        color: AppStyle.cardDark,
+        color: AppStyle.cardFor(Theme.of(context).brightness),
       ),
       padding: REdgeInsets.all(16),
       child: Row(
@@ -95,7 +95,7 @@ class HaveSubscription extends StatelessWidget {
                         AppHelpers.getTranslation('current.plan'),
                         style: AppStyle.interRegular(
                           size: 13,
-                          color: AppStyle.textDarkSecondary,
+                          color: AppStyle.secondaryInkFor(Theme.of(context).brightness),
                         ),
                       ),
                     ),

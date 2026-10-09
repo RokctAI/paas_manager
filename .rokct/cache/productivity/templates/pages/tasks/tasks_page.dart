@@ -26,6 +26,7 @@ import 'package:productivity_sdk/productivity_sdk.dart';
 import 'package:auto_route/auto_route.dart';
 import 'dart:async';
 import 'dart:math';
+import 'package:remixicon/remixicon.dart';
 
 /// The installed /tasks route page: frame 44a's workspace, hosted by
 /// [TasksWorkspace].
@@ -68,6 +69,34 @@ class TasksWorkspace extends StatefulWidget {
 class _TasksWorkspaceState extends State<TasksWorkspace> {
   late final TodoRepositoryFacade _repository;
 
+  /// NOTES — Ray 2026-09-18, on this page: "i cant do notes its only tasks
+  /// and no seperate notes if need to be". A note is not a task with the
+  /// task parts left blank: it has no done state, no deadline, no priority
+  /// and no steps, so it gets its own store, its own list and its own
+  /// editor rather than a mode of the task form.
+  ///
+  /// LOCAL ONLY, AND SAID OUT LOUD. Tasks sync because a Task doctype
+  /// exists to sync to; no backend this app composes holds a note, so
+  /// there is no note outbox, no note pull and nothing on this half of the
+  /// page that can fail for want of a network.
+  late final NoteRepositoryFacade _noteRepository;
+  List<Map<String, dynamic>> _notes = <Map<String, dynamic>>[];
+
+  /// Which list the first plane is drawing.
+  WorkspaceList _list = WorkspaceList.tasks;
+
+  String? _editingNoteId;
+  bool _composingNote = false;
+
+  /// One line the note editor says when the store refused the write, and
+  /// nothing else — Ray: "notes seem like cant save". `saveNote` used to
+  /// swallow a failed insert and report the note as saved, so the pane
+  /// closed over a note that was never written. Now a refused write keeps
+  /// the pane open with what the reader typed still in it.
+  bool _noteSaveFailed = false;
+  final TextEditingController _noteTitleController = TextEditingController();
+  final TextEditingController _noteBodyController = TextEditingController();
+
   List<Map<String, dynamic>> _todos = [];
   final TextEditingController _controller = TextEditingController();
   final TextEditingController _categoryController = TextEditingController();
@@ -83,6 +112,16 @@ class _TasksWorkspaceState extends State<TasksWorkspace> {
   bool _isReminderSet = false;
   String _selectedPriority = 'Medium';
   String _filterStatus = 'All'; // All, Pending, Completed
+
+  /// Whether the reader has picked a status filter themselves this session.
+  ///
+  /// Ray: "when thereis completed task switch from all to pending". The
+  /// tabs open on Pending when the list already holds finished work
+  /// ([InitialStatusFilter]) — but that is an INITIAL value, so it is
+  /// chosen only while this is false. The moment the tabs are touched the
+  /// page stops choosing, or every load of the list would throw away the
+  /// filter the reader had just set.
+  bool _filterTouched = false;
   String _sortBy = 'Created'; // Created, Deadline, Priority
   String _recurrence = 'None'; // None, Daily, Weekly, Monthly
   bool _showCalendar = false;
@@ -96,9 +135,6 @@ class _TasksWorkspaceState extends State<TasksWorkspace> {
 
   /// Section 46: `stepsAreSequential` for the task being composed.
   bool _stepsInOrder = false;
-
-  /// Section 47m: `isLongTerm` for the task being composed.
-  bool _isLongTerm = false;
 
   /// Section 47 (47a–47d): the maintenance template the task being
   /// composed was filled from, if any. Written to the task map's
@@ -155,6 +191,7 @@ class _TasksWorkspaceState extends State<TasksWorkspace> {
   void initState() {
     super.initState();
     _repository = TodoRepositoryImpl(AppDatabase());
+    _noteRepository = NoteRepositoryImpl(AppDatabase());
     _objectives = const ObjectivesRepositoryImpl();
     _selectedDay = _focusedDay;
     // Frame 47a's hand-off from /tasks/run on a wide window: the run pane
@@ -163,6 +200,7 @@ class _TasksWorkspaceState extends State<TasksWorkspace> {
     _runningId = widget.initialRunId;
     _initNotifications();
     _loadTodos();
+    _loadNotes();
     TaskPullService.lastFailure.addListener(_onPullStatusChanged);
     // Sync runs BESIDE the page, never in front of it. The list above is
     // already being read from the local store; this asks the backend for
@@ -178,6 +216,8 @@ class _TasksWorkspaceState extends State<TasksWorkspace> {
   @override
   void dispose() {
     TaskPullService.lastFailure.removeListener(_onPullStatusChanged);
+    _noteTitleController.dispose();
+    _noteBodyController.dispose();
     super.dispose();
   }
 
@@ -212,10 +252,48 @@ class _TasksWorkspaceState extends State<TasksWorkspace> {
   }
 
   Future<void> _loadTodos() async {
+    // The RO plant, SEEDED (maintenance_seed.dart). A demo session starts
+    // with the plant described and its service tasks on the list, written
+    // once; a plant owner's account is seeded the same way, once per
+    // owner, and the save pushes the tasks to the server. Tasks pulled on
+    // another device are made whole here (template key, step kinds, the
+    // device-local plant record).
+    if (DemoSession.demoActive) {
+      await MaintenanceSeed.seedDemo(
+        load: _repository.loadTodos,
+        save: _repository.saveTodos,
+      );
+    } else {
+      await MaintenanceSeed.seedAccount(
+        load: _repository.loadTodos,
+        save: _repository.saveTodos,
+      );
+      // R&D recipe test batches, sinyage@gmail.com only (recipe_seed.dart).
+      await RecipeSeed.seedAccount(
+        load: _repository.loadTodos,
+        save: _repository.saveTodos,
+      );
+    }
     final todos = await _repository.loadTodos();
+    final List<Map<String, dynamic>> adopted =
+        await MaintenanceSeed.adoptPulled(todos);
+    if (adopted.isNotEmpty) await _repository.saveTodos(todos);
     if (mounted) {
       setState(() {
         _todos = todos;
+        // THE TABS' OPENING VALUE, DERIVED FROM THE LIST THAT JUST LANDED —
+        // Ray: "when thereis completed task switch from all to pending".
+        // Only while the reader has not picked one themselves, and only
+        // from the default the page was built with: a list read again
+        // mid-session (a sync, a snooze, a save) must not move the tabs
+        // under the reader's hand.
+        if (!_filterTouched) {
+          _filterStatus = switch (InitialStatusFilter.forTodos(_todos)) {
+            TaskStatusFilter.pending => 'Pending',
+            TaskStatusFilter.completed => 'Completed',
+            TaskStatusFilter.all => 'All',
+          };
+        }
         // A run pane for a task the store does not hold has nothing to
         // show — the id came in by route (the 47a hand-off) or a pull took
         // the row — so the pane closes and the list stands alone.
@@ -244,9 +322,270 @@ class _TasksWorkspaceState extends State<TasksWorkspace> {
         if ((t['clientId'] ?? '').toString().isNotEmpty)
           t['clientId'].toString(): (t['remoteId'] ?? '').toString().isNotEmpty,
     };
-    final Map<String, TaskSyncState> states =
-        await TaskSyncQueue.statesFor(byClientId);
+    final Map<String, TaskSyncState> states = await TaskSyncQueue.statesFor(
+      byClientId,
+    );
     if (mounted) setState(() => _syncStates = states);
+  }
+
+  // =================================================================
+  // NOTES — the second list, its editor and its store. Every method here
+  // is the tasks equivalent with the task-only halves absent: there is no
+  // sync state to refresh, no reminder to schedule, no recurrence to roll
+  // over and no subtask list to deep-copy.
+  // =================================================================
+
+  Future<void> _loadNotes() async {
+    final List<Map<String, dynamic>> notes = await _noteRepository.loadNotes();
+    if (mounted) setState(() => _notes = notes);
+  }
+
+  /// Switches the list plane between tasks and notes.
+  ///
+  /// CLOSES WHATEVER THE LAST PLANE IS CARRYING. A task form left open
+  /// over the notes list would save a task the reader cannot see, and the
+  /// corner pill would pop a pane belonging to a list that is no longer
+  /// drawn. One list, one pane.
+  void _showList(WorkspaceList list) {
+    if (list == _list) return;
+    _closePane();
+    _closeNotePane();
+    setState(() => _list = list);
+  }
+
+  /// True while the last plane is carrying a note.
+  bool get _notePaneOpen => _editingNoteId != null || _composingNote;
+
+  void _openNoteComposer() {
+    _closeNotePane();
+    setState(() => _composingNote = true);
+  }
+
+  /// The add button's long press — names both lists and opens the chosen
+  /// one's new-item form (Ray: "plus opens new but i think hlding it should
+  /// give me option like tasks notes").
+  ///
+  /// SWITCHES THE LIST WITH THE CHOICE. Starting a note from the tasks list
+  /// and leaving the tasks list drawn would save the note behind the list
+  /// the reader is looking at, which is the very thing `_showList` closes
+  /// panes to prevent. So the segment moves first, then the composer opens.
+  Future<void> _chooseNewItem() async {
+    final WorkspaceList? chosen = await showNewItemSheet(context);
+    if (chosen == null || !mounted) return;
+    _showList(chosen);
+    if (chosen == WorkspaceList.notes) {
+      _openNoteComposer();
+    } else {
+      _openCompose();
+    }
+  }
+
+  void _startEditingNote(Map<String, dynamic> note) {
+    final NoteViewModel model = NoteViewModel.fromMap(note);
+    setState(() {
+      _composingNote = false;
+      _editingNoteId = model.id;
+      _noteTitleController.text = model.title;
+      _noteBodyController.text = model.body;
+    });
+  }
+
+  void _closeNotePane() {
+    setState(() {
+      _composingNote = false;
+      _editingNoteId = null;
+      _noteSaveFailed = false;
+      _noteTitleController.clear();
+      _noteBodyController.clear();
+    });
+  }
+
+  /// Writes the open note and closes the pane.
+  ///
+  /// AN EMPTY NOTE IS NOT SAVED. A new note with neither a title nor a
+  /// body is nothing at all, and storing it would put an untitled blank in
+  /// the list; an EXISTING note emptied out is deleted instead, because
+  /// that is what emptying it asks for.
+  Future<void> _saveNote() async {
+    final String title = _noteTitleController.text.trim();
+    final String body = _noteBodyController.text;
+    final String? id = _editingNoteId;
+    if (title.isEmpty && body.trim().isEmpty) {
+      if (id != null) {
+        await _deleteNote(id);
+        return;
+      }
+      _closeNotePane();
+      return;
+    }
+    final Map<String, dynamic> existing = id == null
+        ? const <String, dynamic>{}
+        : _notes.firstWhere(
+            (n) => '${n['id'] ?? ''}' == id,
+            orElse: () => const <String, dynamic>{},
+          );
+    try {
+      await _noteRepository.saveNote(<String, dynamic>{
+        if (id != null) 'id': id,
+        if (existing['createdAt'] != null) 'createdAt': existing['createdAt'],
+        'title': title,
+        'body': body,
+      });
+    } catch (_) {
+      // THE PANE STAYS OPEN AND KEEPS THE WORDS. Closing it here is what
+      // made a refused write look like a save; the reader's note is still
+      // in the two controllers, so the only thing this does is say so and
+      // leave the Save note button where it was.
+      if (mounted) setState(() => _noteSaveFailed = true);
+      return;
+    }
+    _closeNotePane();
+    // The store stamped the updatedAt the list sorts on; read it back
+    // rather than guessing at it.
+    await _loadNotes();
+  }
+
+  Future<void> _deleteNote(String id) async {
+    await _noteRepository.deleteNote(id);
+    if (_editingNoteId == id) _closeNotePane();
+    await _loadNotes();
+  }
+
+  /// PLANE 3, NOTES — the note editor, the compose pane's twin. Title,
+  /// body, and the two actions a note has.
+  Widget _noteEditorPane(BuildContext context, Color surface) {
+    final bool editing = _editingNoteId != null;
+    return Scaffold(
+      backgroundColor: surface,
+      body: SafeArea(
+        // The same back-pill clearance the compose pane reserves: the
+        // corner pill floats over THIS plane's foot, and the actions row
+        // sat under it without this.
+        child: PlaneBackClearance(
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16.w),
+            child: ListView(
+              padding: EdgeInsets.only(top: 12.h, bottom: 12.h),
+              children: [
+                Text(
+                  editing ? 'Note' : 'New note',
+                  style: AppStyle.interSemi(
+                    size: 18,
+                    color: AppStyle.inkFor(Theme.of(context).brightness),
+                  ),
+                ),
+                14.verticalSpace,
+                _fieldLabel('TITLE'),
+                _textField(_noteTitleController, 'What is this about?'),
+                14.verticalSpace,
+                _fieldLabel('NOTE'),
+                // Plain text, and the field says so by being one: no
+                // toolbar, no formatting marks, nothing this SDK cannot
+                // render back.
+                TextField(
+                  key: const ValueKey<String>('note-body'),
+                  controller: _noteBodyController,
+                  minLines: 8,
+                  maxLines: null,
+                  keyboardType: TextInputType.multiline,
+                  style: AppStyle.interNormal(
+                    size: 13,
+                    color: AppStyle.inkFor(Theme.of(context).brightness),
+                  ),
+                  decoration: InputDecoration(
+                    hintText: 'Write it down…',
+                    hintStyle: AppStyle.interNormal(
+                      size: 13,
+                      color: AppStyle.faintFor(Theme.of(context).brightness),
+                    ),
+                    filled: true,
+                    fillColor: AppStyle.cardAltFor(
+                      Theme.of(context).brightness,
+                    ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8.r),
+                      borderSide: BorderSide.none,
+                    ),
+                  ),
+                ),
+                if (_noteSaveFailed) ...[
+                  12.verticalSpace,
+                  _noteSaveFailedLine(),
+                ],
+                20.verticalSpace,
+                _noteActions(),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  /// The one line a refused note write earns. Names nothing technical:
+  /// the reader cannot act on a table name and this page never prints one.
+  Widget _noteSaveFailedLine() {
+    return Container(
+      key: const ValueKey<String>('note-save-failed'),
+      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 8.h),
+      decoration: BoxDecoration(
+        color: AppStyle.cardAltFor(Theme.of(context).brightness),
+        borderRadius: BorderRadius.circular(8.r),
+        border: Border.all(color: AppStyle.red),
+      ),
+      child: Text(
+        'This note could not be saved on this device. Your words are still '
+        'here — try Save note again.',
+        style: AppStyle.interNormal(size: 11, color: AppStyle.red),
+      ),
+    );
+  }
+
+  Widget _noteActions() {
+    final String? id = _editingNoteId;
+    return Row(
+      children: [
+        if (id != null) ...[
+          Expanded(
+            flex: 2,
+            child: OutlinedButton(
+              onPressed: () => _deleteNote(id),
+              style: OutlinedButton.styleFrom(
+                minimumSize: Size(0, 44.h),
+                side: BorderSide(color: AppStyle.red),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.r),
+                ),
+              ),
+              child: Text(
+                'Delete',
+                style: AppStyle.interSemi(size: 13, color: AppStyle.red),
+              ),
+            ),
+          ),
+          10.horizontalSpace,
+        ],
+        Expanded(
+          flex: 3,
+          child: ElevatedButton(
+            key: const ValueKey<String>('note-save'),
+            onPressed: _saveNote,
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppStyle.primary,
+              foregroundColor: AppStyle.blackColor,
+              minimumSize: Size(0, 44.h),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.r),
+              ),
+            ),
+            child: Text(
+              'Save note',
+              style: AppStyle.interSemi(size: 13, color: AppStyle.blackColor),
+            ),
+          ),
+        ),
+      ],
+    );
   }
 
   Future<void> _exportData() async {
@@ -270,6 +609,13 @@ class _TasksWorkspaceState extends State<TasksWorkspace> {
           final String id = _editingId!;
           final int notifId =
               _todos[index]['notifId'] ?? Random().nextInt(100000);
+          // The task's own start — what its end date is measured from
+          // (section 47m, second pass). Kept as a DateTime rather than
+          // re-parsed twice: the same value is written back and handed to
+          // the rule.
+          final DateTime createdAt =
+              DateTime.tryParse('${_todos[index]['createdAt'] ?? ''}') ??
+              DateTime.now();
 
           LocalNotifications.cancelNotification(notifId);
 
@@ -289,12 +635,20 @@ class _TasksWorkspaceState extends State<TasksWorkspace> {
             'category': category,
             'recurrence': _recurrence,
             'stepsAreSequential': _stepsInOrder,
-            'isLongTerm': _isLongTerm,
+            // SECTION 47m, SECOND PASS — DERIVED, NEVER PICKED. Ray:
+            // "long term task is selected not automatically detected from
+            // end date". The switch that used to sit on this form is gone;
+            // a deadline further out than LongTermRule.horizonDays from
+            // the task's start is what puts it in the band, so moving the
+            // deadline moves the task between the bands on save.
+            'isLongTerm': LongTermRule.isLongTerm(
+              endDate: _selectedDeadline,
+              createdAt: createdAt,
+            ),
             if (_templateKey != null)
               MaintenanceTemplates.templateKey: _templateKey,
             ..._objectiveLinkFields(existing: _todos[index]),
-            'createdAt':
-                _todos[index]['createdAt'] ?? DateTime.now().toIso8601String(),
+            'createdAt': createdAt.toIso8601String(),
             'subtasks': _currentSubtasks
                 .map((s) => Map<String, dynamic>.from(s))
                 .toList(),
@@ -314,6 +668,9 @@ class _TasksWorkspaceState extends State<TasksWorkspace> {
         // Adding new
         final String id = _uuid.v4();
         final int notifId = Random().nextInt(100000);
+        // A new task has no start but the moment it was made, which is
+        // what the long-term rule measures its deadline against.
+        final DateTime createdAt = DateTime.now();
         _todos.add({
           'id': id,
           'notifId': notifId,
@@ -325,11 +682,15 @@ class _TasksWorkspaceState extends State<TasksWorkspace> {
           'category': category,
           'recurrence': _recurrence,
           'stepsAreSequential': _stepsInOrder,
-          'isLongTerm': _isLongTerm,
+          // Same derivation as the edit branch above.
+          'isLongTerm': LongTermRule.isLongTerm(
+            endDate: _selectedDeadline,
+            createdAt: createdAt,
+          ),
           if (_templateKey != null)
             MaintenanceTemplates.templateKey: _templateKey,
           ..._objectiveLinkFields(),
-          'createdAt': DateTime.now().toIso8601String(),
+          'createdAt': createdAt.toIso8601String(),
           'subtasks': _currentSubtasks
               .map((s) => Map<String, dynamic>.from(s))
               .toList(),
@@ -356,7 +717,6 @@ class _TasksWorkspaceState extends State<TasksWorkspace> {
       _selectedPriority = 'Medium';
       _recurrence = 'None';
       _stepsInOrder = false;
-      _isLongTerm = false;
       _templateKey = null;
       _strategicObjective = null;
       _strategicObjectiveTitle = null;
@@ -412,12 +772,15 @@ class _TasksWorkspaceState extends State<TasksWorkspace> {
     setState(() {
       final task = _todos[index];
       _editingId = task['id'];
+      // The card's expansion and the form are two views of one task, and on
+      // the phone fold the form is a push over the list: leaving the card
+      // expanded behind it means popping back onto a card mid-edit.
+      _expandedId = null;
       _controller.text = task['title'];
       _selectedPriority = task['priority'] ?? 'Medium';
       _isReminderSet = task['reminder'] ?? false;
       _recurrence = task['recurrence'] ?? 'None';
       _stepsInOrder = task['stepsAreSequential'] == true;
-      _isLongTerm = task['isLongTerm'] == true;
       _templateKey = _linkText(task[MaintenanceTemplates.templateKey]);
       _strategicObjective = _linkText(task['strategicObjective']);
       _strategicObjectiveTitle = _linkText(task['strategicObjectiveTitle']);
@@ -456,7 +819,6 @@ class _TasksWorkspaceState extends State<TasksWorkspace> {
       _selectedPriority = 'Medium';
       _recurrence = 'None';
       _stepsInOrder = false;
-      _isLongTerm = false;
       _templateKey = null;
       _strategicObjective = null;
       _strategicObjectiveTitle = null;
@@ -493,6 +855,7 @@ class _TasksWorkspaceState extends State<TasksWorkspace> {
     final String newId = _uuid.v4();
     final int notifId = Random().nextInt(100000);
     final bool hasReminder = task['reminder'] ?? false;
+    final DateTime createdAt = DateTime.now();
 
     _todos.add({
       'id': newId,
@@ -504,9 +867,15 @@ class _TasksWorkspaceState extends State<TasksWorkspace> {
       'priority': task['priority'],
       'category': task['category'],
       'recurrence': recurrence,
-      'createdAt': DateTime.now().toIso8601String(),
+      'createdAt': createdAt.toIso8601String(),
       'stepsAreSequential': task['stepsAreSequential'] == true,
-      'isLongTerm': task['isLongTerm'] == true,
+      // The next instance is measured on its OWN dates, not the finished
+      // one's: a weekly task whose next deadline is seven days out is not
+      // long term however the instance before it was banded.
+      'isLongTerm': LongTermRule.isLongTerm(
+        endDate: nextDeadline,
+        createdAt: createdAt,
+      ),
       // Frame 44c: the objective is part of the procedure, not of the
       // progress — the next instance serves the same objective.
       if (task.containsKey('strategicObjective')) ...<String, dynamic>{
@@ -517,7 +886,8 @@ class _TasksWorkspaceState extends State<TasksWorkspace> {
       // The next instance starts with the PROCEDURE (title, instruction,
       // duration) and none of the run's progress: isDone cleared as
       // before, and the step timestamps with it.
-      'subtasks': (task['subtasks'] as List?)
+      'subtasks':
+          (task['subtasks'] as List?)
               ?.map((s) => TaskRunStep.freshCopy(Map<String, dynamic>.from(s)))
               .toList() ??
           [],
@@ -778,38 +1148,72 @@ class _TasksWorkspaceState extends State<TasksWorkspace> {
   String? _expandedId;
 
   TaskStatusFilter get _statusFilter => switch (_filterStatus) {
-        'Pending' => TaskStatusFilter.pending,
-        'Completed' => TaskStatusFilter.completed,
-        _ => TaskStatusFilter.all,
-      };
+    'Pending' => TaskStatusFilter.pending,
+    'Completed' => TaskStatusFilter.completed,
+    _ => TaskStatusFilter.all,
+  };
 
   TaskSort get _sort => switch (_sortBy) {
-        'Deadline' => TaskSort.deadline,
-        'Priority' => TaskSort.priority,
-        _ => TaskSort.created,
-      };
+    'Deadline' => TaskSort.deadline,
+    'Priority' => TaskSort.priority,
+    _ => TaskSort.created,
+  };
 
   /// The tab counts, DERIVED from the same list the tabs filter — there
   /// is no count field to read.
   Map<TaskStatusFilter, int> get _statusCounts => {
-        TaskStatusFilter.all: _todos.length,
-        TaskStatusFilter.pending:
-            _todos.where((t) => t['isDone'] != true).length,
-        TaskStatusFilter.completed:
-            _todos.where((t) => t['isDone'] == true).length,
-      };
+    TaskStatusFilter.all: _todos.length,
+    TaskStatusFilter.pending: _todos.where((t) => t['isDone'] != true).length,
+    TaskStatusFilter.completed: _todos.where((t) => t['isDone'] == true).length,
+  };
+
+  /// Each plane's ground, resolved from the PLANE's own context when the
+  /// plane builds. The planes are built by PlaneHost from the builders
+  /// handed to it, and a builder that closed over the page's `surface`
+  /// kept the mode the pane was OPENED in: after a live dark/light switch
+  /// the new-task pane painted the old dark ground under light-mode ink and
+  /// light field fills (Ray, 2026-10-04 screenshot). Reading the theme here,
+  /// at the plane's build time, keeps ground, ink and fills on one mode.
+  static Color _surfaceOf(BuildContext context) =>
+      AppStyle.surfaceFor(Theme.of(context).brightness);
 
   @override
   Widget build(BuildContext context) {
+    // A BuildContext lookup for the mode, not the app-wide AppStyle.isDark
+    // static (Ray, 2026-09-19: "glance doesnt change test immediately
+    // untill you come back if you switched theme mode" — the same defect,
+    // found in this page by the audit that followed).
+    //
+    // Read HERE, in the State's own build and outside the LayoutBuilder and
+    // the plane builders below, so the dependency lands on this element:
+    // AppStyle's mode-resolving statics carry the right value but are not
+    // an inherited widget, so reading one registers nothing — and this page
+    // is a pushed ModalRoute, which caches the widget it built, so an
+    // ancestor rebuild provably never reaches it either. The workspace and
+    // every pane in it kept the previous mode's ground until the reader
+    // left /tasks and came back. The resolved colour is handed DOWN to the
+    // panes rather than each of them asking a static again, so the whole
+    // page is painted for one mode: the one the theme reports.
+    final Brightness brightness = Theme.of(context).brightness;
+    final Color surface = AppStyle.surfaceFor(brightness);
+
     final String? runningId = _runningId;
-    final String? detailName = runningId != null
+    // A NOTE TAKES THE SAME LAST PLANE, and only ever instead of a task
+    // pane: switching lists closes whatever was open (_showList), so the
+    // two can never both be carrying something.
+    final bool noteOpen = _notePaneOpen;
+    final String? detailName = noteOpen
+        ? 'note-${_editingNoteId ?? 'new'}'
+        : runningId != null
         ? 'run-$runningId'
         : _editingId ?? (_paneOpen ? 'compose' : null);
-    final WidgetBuilder? detailBuilder = runningId != null
-        ? (context) => _runPane(context, runningId)
+    final WidgetBuilder? detailBuilder = noteOpen
+        ? (context) => _noteEditorPane(context, _surfaceOf(context))
+        : runningId != null
+        ? (context) => _runPane(context, runningId, _surfaceOf(context))
         : _paneOpen
-            ? (context) => _composePane(context)
-            : null;
+        ? (context) => _composePane(context, _surfaceOf(context))
+        : null;
     // The section-38 list flow, spelled out as the PlaneHost stack
     // ListPlaneFlow builds — same page names, same corner Back (347) —
     // because FRAME 44c pushes a THIRD step: the objective picker (834)
@@ -824,12 +1228,12 @@ class _TasksWorkspaceState extends State<TasksWorkspace> {
     // unclaimed plane an empty stage, AdaptiveShell adds nothing, and
     // the app theme sets no scaffoldBackgroundColor — so a transparent
     // page showed the platform's raw surface (opaque black on Android)
-    // in BOTH theme modes. [AppStyle.surfaceDark] resolves per mode
-    // (light #ECECEF, dark #101010), the same token task_run_page.dart
-    // and calc's CalculatorView paint.
+    // in BOTH theme modes. [AppStyle.surfaceFor] answers with the same two
+    // values (light #ECECEF, dark #101010) for the mode the inherited
+    // theme reports, the same seam task_run_page.dart paints.
     final Widget host = PlaneHost(
       back: FloatingNavBack(
-        icon: Icons.arrow_back,
+        icon: Remix.arrow_left_line,
         label: AppHelpers.getTranslation(TrKeys.back),
         // The pill pops the NEWEST step: the picker while it is open,
         // else the detail / compose / run pane.
@@ -839,7 +1243,7 @@ class _TasksWorkspaceState extends State<TasksWorkspace> {
         PlanePage(
           name: 'list',
           span: TasksPlaneClaims.list,
-          builder: _listPlane,
+          builder: (context) => _listPlane(context, _surfaceOf(context)),
         ),
         if (detailBuilder != null)
           PlanePage(
@@ -847,16 +1251,20 @@ class _TasksWorkspaceState extends State<TasksWorkspace> {
             span: TasksPlaneClaims.pane,
             builder: detailBuilder,
           ),
-        if (detailBuilder != null && _pickingObjective && runningId == null)
+        if (detailBuilder != null &&
+            _pickingObjective &&
+            runningId == null &&
+            !noteOpen)
           PlanePage(
             name: 'objective-picker',
             span: TasksPlaneClaims.pane,
-            builder: _objectivePickerPane,
+            builder: (context) =>
+                _objectivePickerPane(context, _surfaceOf(context)),
           ),
       ],
     );
     return ColoredBox(
-      color: AppStyle.surfaceDark,
+      color: surface,
       child: LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
           // CANONICAL 347 AT THE ROOT OF A WIDE WINDOW. Frame 44a: "nav
@@ -880,7 +1288,7 @@ class _TasksWorkspaceState extends State<TasksWorkspace> {
                 child: SafeArea(
                   child: FloatingBackPill(
                     back: FloatingNavBack(
-                      icon: Icons.arrow_back,
+                      icon: Remix.arrow_left_line,
                       label: AppHelpers.getTranslation(TrKeys.back),
                       onTap: () => Navigator.of(context).maybePop(),
                     ),
@@ -898,6 +1306,10 @@ class _TasksWorkspaceState extends State<TasksWorkspace> {
   void _popPlane() {
     if (_pickingObjective) {
       setState(() => _pickingObjective = false);
+      return;
+    }
+    if (_notePaneOpen) {
+      _closeNotePane();
       return;
     }
     _closePane();
@@ -1016,17 +1428,17 @@ class _TasksWorkspaceState extends State<TasksWorkspace> {
   /// The task being composed, as chip 833 reads it: only the link fields
   /// matter to the row, and they come off the form state.
   TaskViewModel get _composedTask => TaskViewModel(
-        id: _editingId ?? '',
-        title: _controller.text,
-        strategicObjective: _strategicObjective,
-        strategicObjectiveTitle: _strategicObjectiveTitle,
-        strategicObjectivePillar: _strategicObjectivePillar,
-      );
+    id: _editingId ?? '',
+    title: _controller.text,
+    strategicObjective: _strategicObjective,
+    strategicObjectiveTitle: _strategicObjectiveTitle,
+    strategicObjectivePillar: _strategicObjectivePillar,
+  );
 
   /// PLANE 3 (the LAST plane) — chip 834, the objective picker.
-  Widget _objectivePickerPane(BuildContext context) {
+  Widget _objectivePickerPane(BuildContext context, Color surface) {
     return Scaffold(
-      backgroundColor: AppStyle.surfaceDark,
+      backgroundColor: surface,
       body: SafeArea(
         child: ObjectivePickerPane(
           key: const ValueKey<String>('objective-picker'),
@@ -1109,14 +1521,14 @@ class _TasksWorkspaceState extends State<TasksWorkspace> {
   }
 
   /// PLANE 3 (the LAST plane) — the run, in place of the static detail.
-  Widget _runPane(BuildContext context, String id) {
+  Widget _runPane(BuildContext context, String id, Color surface) {
     final int index = _todos.indexWhere((t) => t['id'] == id);
     if (index == -1) {
       return const SizedBox.shrink();
     }
     final Map<String, dynamic> task = _todos[index];
     return Scaffold(
-      backgroundColor: AppStyle.surfaceDark,
+      backgroundColor: surface,
       body: SafeArea(
         child: TaskRunView(
           key: ValueKey<String>('run-$id'),
@@ -1190,8 +1602,9 @@ class _TasksWorkspaceState extends State<TasksWorkspace> {
   /// rest. Both halves keep the filter and sort the list already has.
   ({
     List<MapEntry<int, Map<String, dynamic>>> longTerm,
-    List<MapEntry<int, Map<String, dynamic>>> rest
-  }) _banded(List<MapEntry<int, Map<String, dynamic>>> displayed) {
+    List<MapEntry<int, Map<String, dynamic>>> rest,
+  })
+  _banded(List<MapEntry<int, Map<String, dynamic>>> displayed) {
     final longTerm = <MapEntry<int, Map<String, dynamic>>>[];
     final rest = <MapEntry<int, Map<String, dynamic>>>[];
     for (final entry in displayed) {
@@ -1203,124 +1616,246 @@ class _TasksWorkspaceState extends State<TasksWorkspace> {
   // -------------------------------------------------------------- list
 
   /// PLANE 1–2 — the task list in the section-33 list language.
-  Widget _listPlane(BuildContext context) {
-    final displayedTodos = _getFilteredAndSortedTodos();
-    final singlePlane = _isSinglePlane(context);
-
+  Widget _listPlane(BuildContext context, Color surface) {
+    final bool notes = _list == WorkspaceList.notes;
     return Scaffold(
-      backgroundColor: AppStyle.surfaceDark,
-      floatingActionButton: FloatingActionButton(
-        key: const ValueKey<String>('tasks-compose'),
-        onPressed: _openCompose,
-        backgroundColor: AppStyle.primary,
-        foregroundColor: AppStyle.blackColor,
-        child: const Icon(Icons.add),
-      ),
+      backgroundColor: surface,
       body: SafeArea(
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16.w),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              12.verticalSpace,
-              // CANONICAL 700 — header and count pill, carrying the two
-              // header utilities: 832 calendar mode and 835 Backup.
-              TaskListHeader(
-                title: 'Tasks',
-                count: displayedTodos.length,
-                actions: [
-                  _headerAction(
-                    icon: _showCalendar ? Icons.list : Icons.calendar_month,
-                    tooltip: 'Calendar mode',
-                    onTap: () => setState(() => _showCalendar = !_showCalendar),
+        child: Stack(
+          children: [
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16.w),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  12.verticalSpace,
+                  // NOTES BESIDE TASKS — Ray 2026-09-18: "i cant do notes its
+                  // only tasks and no seperate notes if need to be". The
+                  // segment chooses which list THIS plane draws; everything
+                  // below it belongs to the chosen list and nothing else on
+                  // the workspace changes. Same control chip 827 uses for the
+                  // sort, for the same reason: two values, both visible, the
+                  // active one lit.
+                  Align(
+                    alignment: AlignmentDirectional.centerStart,
+                    child: WorkspaceListSegment(
+                      active: _list,
+                      counts: <WorkspaceList, int>{
+                        WorkspaceList.tasks: _todos.length,
+                        WorkspaceList.notes: _notes.length,
+                      },
+                      onChanged: _showList,
+                    ),
                   ),
-                  // CHIP 835 — the only way a task leaves the device
-                  // (flag a). Kept in the header on every frame.
-                  _headerAction(
-                    icon: Icons.download,
-                    tooltip: 'Backup',
-                    onTap: _exportData,
-                  ),
+                  10.verticalSpace,
+                  ...notes ? _noteListRows() : _taskListRows(context),
                 ],
               ),
-              10.verticalSpace,
-              _searchField(),
-              10.verticalSpace,
-              // CANONICAL 362 / 363 — the status tabs, re-dressing the
-              // shipped ChoiceChip row.
-              TaskStatusTabs(
-                active: _statusFilter,
-                counts: _statusCounts,
-                onChanged: (filter) => setState(() {
-                  _filterStatus = switch (filter) {
-                    TaskStatusFilter.pending => 'Pending',
-                    TaskStatusFilter.completed => 'Completed',
-                    TaskStatusFilter.all => 'All',
-                  };
-                }),
-              ),
-              10.verticalSpace,
-              Align(
-                alignment: AlignmentDirectional.centerStart,
-                // CHIP 827 — the sort segment. Promoted from the shipped
-                // DropdownButton because there are only three values and
-                // a dropdown hides two of them behind a tap.
-                child: TaskSortSegment(
-                  active: _sort,
-                  onChanged: (sort) => setState(() {
-                    _sortBy = switch (sort) {
-                      TaskSort.deadline => 'Deadline',
-                      TaskSort.priority => 'Priority',
-                      TaskSort.created => 'Created',
-                    };
-                  }),
+            ),
+            // THE PLUS IS ON THE FLOATING NAV (Ray, 2026-09-20: "i think
+            // productivity plus should be in the floating nav when you in
+            // its page. floating nav already accept modes and buttons"). It
+            // was a FloatingActionButton in Scaffold.floatingActionButton,
+            // wrapped in a GestureDetector because a FAB has no long press;
+            // it is now one round control on base_sdk's own bar, in the
+            // leadingActions slot whose doc names this very case ("a tasks
+            // app's 'new task'"). ONE plus per screen, so the FAB is gone
+            // rather than duplicated — see ProductivityPlusNav, which owns
+            // every decision about the bar so this page keeps none.
+            //
+            // STACKED OVER THE BODY, which is the bar's host contract and not
+            // a preference: "Hosts place it in a Stack over the page body and
+            // hand it a FloatingNavMode" (base_sdk floating_bottom_nav.dart),
+            // and adaptive_bar.md §3 names the slot a host owes it — "a
+            // full-size Stack slot (Positioned.fill, or the usual full-size
+            // Align)". Scaffold.bottomNavigationBar is NOT that slot, and the
+            // difference is mechanical, not stylistic: it reserves the pill's
+            // height as a strip of body inset, which docks the bar in a lane
+            // of its own where the housing is specified to float "with a
+            // margin above the bottom edge, never docked flush", leaves the
+            // frosted BlurWrap a flat background colour to blur instead of
+            // the list it exists to sit over, and double-counts the keyboard
+            // — Scaffold lifts the slot above the inset while the bar adds
+            // MediaQuery.viewInsets.bottom itself. Inside the body the bar
+            // reads that inset as zero, because Scaffold removes it from the
+            // body it has already shrunk, so it is counted once.
+            //
+            // AND THE PILL DOES NOT MOVE. It brings its own SafeArea plus
+            // 18.h; nested inside this SafeArea the inner one contributes
+            // nothing, so the pill rests exactly where the bottom slot
+            // rested it - the safe-area inset plus 18.h above the screen
+            // edge. Both lists already clear 88.h below their last row and
+            // the pill is 60.r of housing under that 18.h, so no padding
+            // changes here either.
+            //
+            // A TAP STILL NEVER ASKS A QUESTION: it opens a new item of the
+            // list this plane is drawing — a task on Tasks, a note on
+            // Notes. The LONG PRESS is still Ray's shortcut to the other one
+            // ("plus opens new but i think hlding it should give me option
+            // like tasks notes"), carried across on
+            // FloatingNavAction.onLongPress.
+            Positioned.fill(
+              child: Align(
+                alignment: Alignment.bottomCenter,
+                child: ProductivityPlusNav(
+                  list: _list,
+                  onNew: notes ? _openNoteComposer : _openCompose,
+                  onChooseList: _chooseNewItem,
                 ),
               ),
-              12.verticalSpace,
-              if (_showCalendar) ...[
-                _calendar(),
-                12.verticalSpace,
-              ],
-              Expanded(
-                child: displayedTodos.isEmpty
-                    ? _emptyList()
-                    : Builder(
-                        builder: (context) {
-                          // CHIP 1064 — the long-term band sits above
-                          // the day's work; the rest keep their list.
-                          final banded = _banded(displayedTodos);
-                          final rows = <Widget>[
-                            if (banded.longTerm.isNotEmpty) ...[
-                              LongTermBandHeader(
-                                count: banded.longTerm.length,
-                              ),
-                              for (final entry in banded.longTerm) ...[
-                                _card(entry.key, entry.value, singlePlane),
-                                8.verticalSpace,
-                              ],
-                              if (banded.rest.isNotEmpty) ...[
-                                4.verticalSpace,
-                                _bandLabel('EVERYTHING ELSE'),
-                              ],
-                            ],
-                            for (var i = 0; i < banded.rest.length; i++) ...[
-                              if (i > 0) 8.verticalSpace,
-                              _card(
-                                banded.rest[i].key,
-                                banded.rest[i].value,
-                                singlePlane,
-                              ),
-                            ],
-                          ];
-                          return ListView(
-                            padding: EdgeInsets.only(bottom: 88.h),
-                            children: rows,
-                          );
-                        },
-                      ),
-              ),
-            ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  /// The tasks half of the list plane — every control and the banded list
+  /// the workspace shipped with, unchanged, now rows of the plane's column
+  /// rather than the whole of it.
+  List<Widget> _taskListRows(BuildContext context) {
+    final displayedTodos = _getFilteredAndSortedTodos();
+    final singlePlane = _isSinglePlane(context);
+    return <Widget>[
+      // CANONICAL 700 — header and count pill, carrying the two
+      // header utilities: 832 calendar mode and 835 Backup.
+      TaskListHeader(
+        title: 'Tasks',
+        count: displayedTodos.length,
+        actions: [
+          _headerAction(
+            icon: _showCalendar ? Remix.list_unordered : Remix.calendar_line,
+            tooltip: 'Calendar mode',
+            onTap: () => setState(() => _showCalendar = !_showCalendar),
           ),
+          // CHIP 835 — the only way a task leaves the device
+          // (flag a). Kept in the header on every frame.
+          _headerAction(
+            icon: Remix.download_line,
+            tooltip: 'Backup',
+            onTap: _exportData,
+          ),
+        ],
+      ),
+      10.verticalSpace,
+      _searchField(),
+      10.verticalSpace,
+      // CANONICAL 362 / 363 — the status tabs, re-dressing the
+      // shipped ChoiceChip row.
+      TaskStatusTabs(
+        active: _statusFilter,
+        counts: _statusCounts,
+        onChanged: (filter) => setState(() {
+          // The reader has spoken: the derived opening value above never
+          // runs again this session.
+          _filterTouched = true;
+          _filterStatus = switch (filter) {
+            TaskStatusFilter.pending => 'Pending',
+            TaskStatusFilter.completed => 'Completed',
+            TaskStatusFilter.all => 'All',
+          };
+        }),
+      ),
+      10.verticalSpace,
+      Align(
+        alignment: AlignmentDirectional.centerStart,
+        // CHIP 827 — the sort segment. Promoted from the shipped
+        // DropdownButton because there are only three values and
+        // a dropdown hides two of them behind a tap.
+        child: TaskSortSegment(
+          active: _sort,
+          onChanged: (sort) => setState(() {
+            _sortBy = switch (sort) {
+              TaskSort.deadline => 'Deadline',
+              TaskSort.priority => 'Priority',
+              TaskSort.created => 'Created',
+            };
+          }),
+        ),
+      ),
+      12.verticalSpace,
+      if (_showCalendar) ...[_calendar(), 12.verticalSpace],
+      Expanded(
+        child: displayedTodos.isEmpty
+            ? _emptyList()
+            : Builder(
+                builder: (context) {
+                  // CHIP 1064 — the long-term band sits above
+                  // the day's work; the rest keep their list.
+                  final banded = _banded(displayedTodos);
+                  final rows = <Widget>[
+                    if (banded.longTerm.isNotEmpty) ...[
+                      LongTermBandHeader(count: banded.longTerm.length),
+                      for (final entry in banded.longTerm) ...[
+                        _card(entry.key, entry.value, singlePlane),
+                        8.verticalSpace,
+                      ],
+                      if (banded.rest.isNotEmpty) ...[
+                        4.verticalSpace,
+                        _bandLabel('EVERYTHING ELSE'),
+                      ],
+                    ],
+                    for (var i = 0; i < banded.rest.length; i++) ...[
+                      if (i > 0) 8.verticalSpace,
+                      _card(
+                        banded.rest[i].key,
+                        banded.rest[i].value,
+                        singlePlane,
+                      ),
+                    ],
+                  ];
+                  return ListView(
+                    padding: EdgeInsets.only(bottom: 88.h),
+                    children: rows,
+                  );
+                },
+              ),
+      ),
+    ];
+  }
+
+  /// The notes half — the same list language with none of the task
+  /// furniture: no status tabs (a note is not pending or completed), no
+  /// sort segment (newest change first is the only order a note list
+  /// wants) and no calendar (a note has no date to fall on).
+  List<Widget> _noteListRows() {
+    return <Widget>[
+      TaskListHeader(
+        title: WorkspaceListSegment.labelFor(WorkspaceList.notes),
+        count: _notes.length,
+      ),
+      10.verticalSpace,
+      Expanded(
+        child: _notes.isEmpty
+            ? _emptyNotes()
+            : ListView.separated(
+                padding: EdgeInsets.only(bottom: 88.h),
+                itemCount: _notes.length,
+                separatorBuilder: (context, _) => 8.verticalSpace,
+                itemBuilder: (context, index) {
+                  final NoteViewModel note = NoteViewModel.fromMap(
+                    _notes[index],
+                  );
+                  return NoteCard(
+                    key: ValueKey<String>('note-card-${note.id}'),
+                    note: note,
+                    selected: _editingNoteId == note.id,
+                    onTap: () => _startEditingNote(_notes[index]),
+                    onDelete: () => _deleteNote(note.id),
+                  );
+                },
+              ),
+      ),
+    ];
+  }
+
+  Widget _emptyNotes() {
+    return Center(
+      child: Text(
+        'No notes yet.',
+        style: AppStyle.interNormal(
+          size: 13,
+          color: AppStyle.faintFor(Theme.of(context).brightness),
         ),
       ),
     );
@@ -1353,6 +1888,12 @@ class _TasksWorkspaceState extends State<TasksWorkspace> {
       // FRAME 44d: on one plane the card expands in place instead of
       // pushing a pane.
       expanded: singlePlane && _expandedId == task.id,
+      // THE PHONE FOLD'S WAY INTO THE TASK FORM — Ray: "tasks saved cant be
+      // edited". On a wide window the tap below opens the form in the detail
+      // plane; on one plane that tap expands the card instead (frame 44d),
+      // which left the form with no gesture at all and a saved task
+      // unchangeable on a phone. The expanded card carries the door.
+      onEdit: singlePlane ? () => _startEditing(originalIndex) : null,
       onToggleDone: () => _toggleTodo(originalIndex),
       onTap: () => singlePlane
           ? setState(
@@ -1364,16 +1905,16 @@ class _TasksWorkspaceState extends State<TasksWorkspace> {
   }
 
   Widget _bandLabel(String label) => Padding(
-        padding: EdgeInsets.only(bottom: 6.h),
-        child: Text(
-          label,
-          style: AppStyle.interNormal(
-            size: 11,
-            color: AppStyle.textDarkFaint,
-            letterSpacing: 0.8,
-          ),
-        ),
-      );
+    padding: EdgeInsets.only(bottom: 6.h),
+    child: Text(
+      label,
+      style: AppStyle.interNormal(
+        size: 11,
+        color: AppStyle.faintFor(Theme.of(context).brightness),
+        letterSpacing: 0.8,
+      ),
+    ),
+  );
 
   Widget _headerAction({
     required IconData icon,
@@ -1384,7 +1925,7 @@ class _TasksWorkspaceState extends State<TasksWorkspace> {
       onPressed: onTap,
       tooltip: tooltip,
       iconSize: 20.r,
-      color: AppStyle.textDarkSecondary,
+      color: AppStyle.secondaryInkFor(Theme.of(context).brightness),
       icon: Icon(icon),
     );
   }
@@ -1393,14 +1934,19 @@ class _TasksWorkspaceState extends State<TasksWorkspace> {
     return TextField(
       controller: _searchController,
       onChanged: (_) => setState(() {}),
-      style: AppStyle.interNormal(size: 13, color: AppStyle.textPrimary),
+      style: AppStyle.interNormal(
+        size: 13,
+        color: AppStyle.inkFor(Theme.of(context).brightness),
+      ),
       decoration: InputDecoration(
         hintText: 'Search tasks or categories...',
-        hintStyle:
-            AppStyle.interNormal(size: 13, color: AppStyle.textDarkFaint),
-        prefixIcon: Icon(Icons.search, size: 18.r),
+        hintStyle: AppStyle.interNormal(
+          size: 13,
+          color: AppStyle.faintFor(Theme.of(context).brightness),
+        ),
+        prefixIcon: Icon(Remix.search_line, size: 18.r),
         filled: true,
-        fillColor: AppStyle.cardDarkAlt,
+        fillColor: AppStyle.cardAltFor(Theme.of(context).brightness),
         isDense: true,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8.r),
@@ -1417,8 +1963,10 @@ class _TasksWorkspaceState extends State<TasksWorkspace> {
         children: [
           Text(
             'Nothing here yet.',
-            style:
-                AppStyle.interNormal(size: 13, color: AppStyle.textDarkFaint),
+            style: AppStyle.interNormal(
+              size: 13,
+              color: AppStyle.faintFor(Theme.of(context).brightness),
+            ),
           ),
           // The one line about a failed pull. `_todos`, not the filtered
           // view: a filter that hides every row is not an empty list, and
@@ -1460,38 +2008,50 @@ class _TasksWorkspaceState extends State<TasksWorkspace> {
       headerStyle: HeaderStyle(
         formatButtonVisible: false,
         titleCentered: true,
-        titleTextStyle:
-            AppStyle.interSemi(size: 14, color: AppStyle.textPrimary),
+        titleTextStyle: AppStyle.interSemi(
+          size: 14,
+          color: AppStyle.inkFor(Theme.of(context).brightness),
+        ),
       ),
       daysOfWeekStyle: DaysOfWeekStyle(
         weekdayStyle: AppStyle.interNormal(
           size: 11,
-          color: AppStyle.textDarkFaint,
+          color: AppStyle.faintFor(Theme.of(context).brightness),
         ),
         weekendStyle: AppStyle.interNormal(
           size: 11,
-          color: AppStyle.textDarkFaint,
+          color: AppStyle.faintFor(Theme.of(context).brightness),
         ),
       ),
       calendarStyle: CalendarStyle(
-        defaultTextStyle:
-            AppStyle.interNormal(size: 12, color: AppStyle.textPrimary),
-        weekendTextStyle:
-            AppStyle.interNormal(size: 12, color: AppStyle.textPrimary),
-        outsideTextStyle:
-            AppStyle.interNormal(size: 12, color: AppStyle.textDarkFaint),
+        defaultTextStyle: AppStyle.interNormal(
+          size: 12,
+          color: AppStyle.inkFor(Theme.of(context).brightness),
+        ),
+        weekendTextStyle: AppStyle.interNormal(
+          size: 12,
+          color: AppStyle.inkFor(Theme.of(context).brightness),
+        ),
+        outsideTextStyle: AppStyle.interNormal(
+          size: 12,
+          color: AppStyle.faintFor(Theme.of(context).brightness),
+        ),
         todayDecoration: BoxDecoration(
           shape: BoxShape.circle,
           border: Border.all(color: AppStyle.primary),
         ),
-        todayTextStyle:
-            AppStyle.interSemi(size: 12, color: AppStyle.textPrimary),
+        todayTextStyle: AppStyle.interSemi(
+          size: 12,
+          color: AppStyle.inkFor(Theme.of(context).brightness),
+        ),
         selectedDecoration: BoxDecoration(
           shape: BoxShape.circle,
           color: AppStyle.primary,
         ),
-        selectedTextStyle:
-            AppStyle.interSemi(size: 12, color: AppStyle.blackColor),
+        selectedTextStyle: AppStyle.interSemi(
+          size: 12,
+          color: AppStyle.blackColor,
+        ),
         markerDecoration: BoxDecoration(
           shape: BoxShape.circle,
           color: AppStyle.primary,
@@ -1509,9 +2069,9 @@ class _TasksWorkspaceState extends State<TasksWorkspace> {
   /// GIVING IT THE LAST PLANE IS THE WHOLE CHANGE. The shipped page
   /// built all of this as an inline form wedged ABOVE the list; here the
   /// list keeps its planes and stays legible while you type.
-  Widget _composePane(BuildContext context) {
+  Widget _composePane(BuildContext context, Color surface) {
     return Scaffold(
-      backgroundColor: AppStyle.surfaceDark,
+      backgroundColor: surface,
       body: SafeArea(
         // BACK-PILL CLEARANCE (tour run 34040758271, still 10, phone and
         // tablet): PlaneHost floats the corner pill (347) over THIS
@@ -1535,23 +2095,31 @@ class _TasksWorkspaceState extends State<TasksWorkspace> {
                         _editingId == null ? 'New task' : 'Task',
                         style: AppStyle.interSemi(
                           size: 18,
-                          color: AppStyle.textPrimary,
+                          color: AppStyle.inkFor(Theme.of(context).brightness),
                         ),
                       ),
                     ),
                     // The only state the pane adds.
                     Container(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 8.w, vertical: 2.h),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 8.w,
+                        vertical: 2.h,
+                      ),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20.r),
-                        border: Border.all(color: AppStyle.strokeDark),
+                        border: Border.all(
+                          color: AppStyle.strokeFor(
+                            Theme.of(context).brightness,
+                          ),
+                        ),
                       ),
                       child: Text(
                         'unsaved',
                         style: AppStyle.interNormal(
                           size: 11,
-                          color: AppStyle.textDarkFaint,
+                          color: AppStyle.faintFor(
+                            Theme.of(context).brightness,
+                          ),
                         ),
                       ),
                     ),
@@ -1561,7 +2129,10 @@ class _TasksWorkspaceState extends State<TasksWorkspace> {
                 // SECTION 47 — "From template": the RO plant's service
                 // runs, offered on a new task only. Picking one fills THIS
                 // form; nothing is saved until Save task, as ever.
-                if (_editingId == null) ...[
+                // Only what the BACKEND offers: no local template is
+                // surfaced on its own (MaintenanceTemplates.backendKeys).
+                if (_editingId == null &&
+                    MaintenanceTemplates.surfaced.isNotEmpty) ...[
                   _templateChooser(),
                   14.verticalSpace,
                 ],
@@ -1573,6 +2144,11 @@ class _TasksWorkspaceState extends State<TasksWorkspace> {
                 14.verticalSpace,
                 _fieldLabel('DEADLINE'),
                 _deadlineRow(),
+                6.verticalSpace,
+                // SECTION 47m, SECOND PASS — where the Long term switch
+                // used to be, one derived line reading back what the
+                // deadline just decided.
+                _longTermDerivedLine(),
                 14.verticalSpace,
                 _fieldLabel('CATEGORY'),
                 _textField(_categoryController, 'Plant, admin, errand…'),
@@ -1589,9 +2165,6 @@ class _TasksWorkspaceState extends State<TasksWorkspace> {
                 // two clocks and the snooze control, right under the toggle
                 // that made the reminder.
                 if (_editingId != null) ..._editingReminderRow(),
-                14.verticalSpace,
-                // CHIP 1064 — the long-term band is a property of the task.
-                _longTermToggle(),
                 14.verticalSpace,
                 _fieldLabel('STEPS'),
                 // Section 46: the order rule. Off is today's any-order
@@ -1629,27 +2202,32 @@ class _TasksWorkspaceState extends State<TasksWorkspace> {
   }
 
   Widget _fieldLabel(String label) => Padding(
-        padding: EdgeInsets.only(bottom: 6.h),
-        child: Text(
-          label,
-          style: AppStyle.interNormal(
-            size: 11,
-            color: AppStyle.textDarkFaint,
-            letterSpacing: 0.8,
-          ),
-        ),
-      );
+    padding: EdgeInsets.only(bottom: 6.h),
+    child: Text(
+      label,
+      style: AppStyle.interNormal(
+        size: 11,
+        color: AppStyle.faintFor(Theme.of(context).brightness),
+        letterSpacing: 0.8,
+      ),
+    ),
+  );
 
   Widget _textField(TextEditingController controller, String hint) {
     return TextField(
       controller: controller,
-      style: AppStyle.interNormal(size: 13, color: AppStyle.textPrimary),
+      style: AppStyle.interNormal(
+        size: 13,
+        color: AppStyle.inkFor(Theme.of(context).brightness),
+      ),
       decoration: InputDecoration(
         hintText: hint,
-        hintStyle:
-            AppStyle.interNormal(size: 13, color: AppStyle.textDarkFaint),
+        hintStyle: AppStyle.interNormal(
+          size: 13,
+          color: AppStyle.faintFor(Theme.of(context).brightness),
+        ),
         filled: true,
-        fillColor: AppStyle.cardDarkAlt,
+        fillColor: AppStyle.cardAltFor(Theme.of(context).brightness),
         isDense: true,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8.r),
@@ -1705,18 +2283,23 @@ class _TasksWorkspaceState extends State<TasksWorkspace> {
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
         decoration: BoxDecoration(
-          color:
-              selected ? color.withValues(alpha: 0.16) : AppStyle.transparent,
+          color: selected
+              ? color.withValues(alpha: 0.16)
+              : AppStyle.transparent,
           borderRadius: BorderRadius.circular(20.r),
           border: Border.all(
-            color: selected ? color : AppStyle.strokeDarkSubtle,
+            color: selected
+                ? color
+                : AppStyle.subtleStrokeFor(Theme.of(context).brightness),
           ),
         ),
         child: Text(
           label,
           style: AppStyle.interSemi(
             size: 12,
-            color: selected ? color : AppStyle.textDarkSecondary,
+            color: selected
+                ? color
+                : AppStyle.secondaryInkFor(Theme.of(context).brightness),
           ),
         ),
       ),
@@ -1731,12 +2314,16 @@ class _TasksWorkspaceState extends State<TasksWorkspace> {
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 10.h),
         decoration: BoxDecoration(
-          color: AppStyle.cardDarkAlt,
+          color: AppStyle.cardAltFor(Theme.of(context).brightness),
           borderRadius: BorderRadius.circular(8.r),
         ),
         child: Row(
           children: [
-            Icon(Icons.schedule, size: 16.r, color: AppStyle.textDarkFaint),
+            Icon(
+              Remix.time_line,
+              size: 16.r,
+              color: AppStyle.faintFor(Theme.of(context).brightness),
+            ),
             8.horizontalSpace,
             Expanded(
               child: Text(
@@ -1746,8 +2333,8 @@ class _TasksWorkspaceState extends State<TasksWorkspace> {
                 style: AppStyle.interNormal(
                   size: 13,
                   color: deadline == null
-                      ? AppStyle.textDarkFaint
-                      : AppStyle.textPrimary,
+                      ? AppStyle.faintFor(Theme.of(context).brightness)
+                      : AppStyle.inkFor(Theme.of(context).brightness),
                 ),
               ),
             ),
@@ -1755,9 +2342,9 @@ class _TasksWorkspaceState extends State<TasksWorkspace> {
               GestureDetector(
                 onTap: () => setState(() => _selectedDeadline = null),
                 child: Icon(
-                  Icons.close,
+                  Remix.close_line,
                   size: 15.r,
-                  color: AppStyle.textDarkFaint,
+                  color: AppStyle.faintFor(Theme.of(context).brightness),
                 ),
               ),
           ],
@@ -1779,7 +2366,7 @@ class _TasksWorkspaceState extends State<TasksWorkspace> {
                 'Remind me',
                 style: AppStyle.interSemi(
                   size: 13,
-                  color: AppStyle.textPrimary,
+                  color: AppStyle.inkFor(Theme.of(context).brightness),
                 ),
               ),
               2.verticalSpace,
@@ -1787,7 +2374,7 @@ class _TasksWorkspaceState extends State<TasksWorkspace> {
                 'a local notification at the deadline',
                 style: AppStyle.interNormal(
                   size: 11,
-                  color: AppStyle.textDarkFaint,
+                  color: AppStyle.faintFor(Theme.of(context).brightness),
                 ),
               ),
             ],
@@ -1815,7 +2402,7 @@ class _TasksWorkspaceState extends State<TasksWorkspace> {
                 'Steps in order',
                 style: AppStyle.interSemi(
                   size: 13,
-                  color: AppStyle.textPrimary,
+                  color: AppStyle.inkFor(Theme.of(context).brightness),
                 ),
               ),
               2.verticalSpace,
@@ -1825,7 +2412,7 @@ class _TasksWorkspaceState extends State<TasksWorkspace> {
                     : 'a checklist — tick them in any order',
                 style: AppStyle.interNormal(
                   size: 11,
-                  color: AppStyle.textDarkFaint,
+                  color: AppStyle.faintFor(Theme.of(context).brightness),
                 ),
               ),
             ],
@@ -1855,42 +2442,58 @@ class _TasksWorkspaceState extends State<TasksWorkspace> {
     ];
   }
 
-  /// CHIP 1064 — keep the task in the long-term band above the day's
-  /// work. Set by hand: the surfacing rule frame 47m proposed awaits the
-  /// owner's word and nothing derives it.
-  Widget _longTermToggle() {
+  /// CHIP 1064, SECOND PASS — the band, READ BACK rather than chosen.
+  ///
+  /// Frame 47m shipped this as a switch and said so: "set by hand ...
+  /// nothing derives it". Ray, on the launcher: "long term task is
+  /// selected not automatically detected from end date". So the control
+  /// is gone and this line takes its place — a statement of what the
+  /// deadline above already decided, with no tap of its own. A form that
+  /// kept the switch beside the rule would let the two disagree, and the
+  /// switch would win until the next save overwrote it.
+  Widget _longTermDerivedLine() {
+    final bool derived = LongTermRule.isLongTerm(
+      endDate: _selectedDeadline,
+      createdAt: _composedCreatedAt,
+    );
+    final Color tint = derived
+        ? LongTermBandHeader.tint
+        : AppStyle.faintFor(Theme.of(context).brightness);
     return Row(
       children: [
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                'Long term',
-                style: AppStyle.interSemi(
-                  size: 13,
-                  color: AppStyle.textPrimary,
-                ),
-              ),
-              2.verticalSpace,
-              Text(
-                'kept in a band of its own above the day\'s work',
-                style: AppStyle.interNormal(
-                  size: 11,
-                  color: AppStyle.textDarkFaint,
-                ),
-              ),
-            ],
-          ),
+        Icon(
+          derived ? Remix.calendar_event_line : Remix.calendar_todo_line,
+          size: 14.r,
+          color: tint,
         ),
-        Switch(
-          value: _isLongTerm,
-          activeThumbColor: LongTermBandHeader.tint,
-          onChanged: (value) => setState(() => _isLongTerm = value),
+        6.horizontalSpace,
+        Expanded(
+          child: Text(
+            derived
+                ? 'Long term — the deadline is more than '
+                      '${LongTermRule.horizonDays} days out, so this sits in '
+                      'the band above the day\'s work'
+                : _selectedDeadline == null
+                ? 'No deadline, so not long term — set one more than '
+                      '${LongTermRule.horizonDays} days out for the '
+                      'long-term band'
+                : 'Part of the day\'s work — a deadline more than '
+                      '${LongTermRule.horizonDays} days out moves it to '
+                      'the long-term band',
+            style: AppStyle.interNormal(size: 11, color: tint),
+          ),
         ),
       ],
     );
+  }
+
+  /// The start the long-term rule measures the composed task's deadline
+  /// against: the task's own creation while editing, else now.
+  DateTime get _composedCreatedAt {
+    final int index = _todos.indexWhere((t) => t['id'] == _editingId);
+    if (index == -1) return DateTime.now();
+    return DateTime.tryParse('${_todos[index]['createdAt'] ?? ''}') ??
+        DateTime.now();
   }
 
   // ===================================================================
@@ -1919,6 +2522,7 @@ class _TasksWorkspaceState extends State<TasksWorkspace> {
         MaintenanceTemplate.plantSetup => TrKeys.plantSetup,
         MaintenanceTemplate.softenerMaintenance => TrKeys.softenerMaintenance,
         MaintenanceTemplate.megaCharMaintenance => TrKeys.megacharMaintenance,
+        MaintenanceTemplate.phFixMaintenance => TrKeys.phfixMaintenance,
         MaintenanceTemplate.preFilterReplacement => TrKeys.preFilterReplacement,
         MaintenanceTemplate.roFilterReplacement => TrKeys.roFilterReplacement,
         MaintenanceTemplate.membraneReplacement => TrKeys.roMembraneReplacement,
@@ -1936,7 +2540,8 @@ class _TasksWorkspaceState extends State<TasksWorkspace> {
           spacing: 8.w,
           runSpacing: 8.h,
           children: [
-            for (final MaintenanceTemplate template in MaintenanceTemplates.all)
+            for (final MaintenanceTemplate template
+                in MaintenanceTemplates.surfaced)
               _templateChip(
                 template,
                 offered: MaintenanceTemplates.isOffered(template, plant),
@@ -1949,7 +2554,7 @@ class _TasksWorkspaceState extends State<TasksWorkspace> {
             AppHelpers.getTranslation(TrKeys.describeThePlantFirst),
             style: AppStyle.interNormal(
               size: 11,
-              color: AppStyle.textDarkFaint,
+              color: AppStyle.faintFor(Theme.of(context).brightness),
             ),
           ),
         ],
@@ -1967,9 +2572,13 @@ class _TasksWorkspaceState extends State<TasksWorkspace> {
         padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20.r),
-          color: selected ? AppStyle.primary : AppStyle.cardDarkAlt,
+          color: selected
+              ? AppStyle.primary
+              : AppStyle.cardAltFor(Theme.of(context).brightness),
           border: Border.all(
-            color: selected ? AppStyle.primary : AppStyle.strokeDark,
+            color: selected
+                ? AppStyle.primary
+                : AppStyle.strokeFor(Theme.of(context).brightness),
           ),
         ),
         child: Text(
@@ -1979,8 +2588,8 @@ class _TasksWorkspaceState extends State<TasksWorkspace> {
             color: selected
                 ? AppStyle.blackColor
                 : offered
-                    ? AppStyle.textPrimary
-                    : AppStyle.textDarkFaint,
+                ? AppStyle.inkFor(Theme.of(context).brightness)
+                : AppStyle.faintFor(Theme.of(context).brightness),
           ),
         ),
       ),
@@ -2006,8 +2615,9 @@ class _TasksWorkspaceState extends State<TasksWorkspace> {
           ? null
           : DateTime.tryParse('${task['deadline']}');
       _currentSubtasks = List<Map<String, dynamic>>.from(
-        (task['subtasks'] as List? ?? const [])
-            .map((s) => Map<String, dynamic>.from(s as Map)),
+        (task['subtasks'] as List? ?? const []).map(
+          (s) => Map<String, dynamic>.from(s as Map),
+        ),
       );
     });
   }
@@ -2047,7 +2657,7 @@ class _TasksWorkspaceState extends State<TasksWorkspace> {
                 'blank or 0 = no clock, just a confirmation',
                 style: AppStyle.interNormal(
                   size: 11,
-                  color: AppStyle.textDarkFaint,
+                  color: AppStyle.faintFor(Theme.of(context).brightness),
                 ),
               ),
             ),
@@ -2072,13 +2682,18 @@ class _TasksWorkspaceState extends State<TasksWorkspace> {
       controller: controller,
       onSubmitted: onSubmitted,
       keyboardType: keyboardType,
-      style: AppStyle.interNormal(size: 12, color: AppStyle.textPrimary),
+      style: AppStyle.interNormal(
+        size: 12,
+        color: AppStyle.inkFor(Theme.of(context).brightness),
+      ),
       decoration: InputDecoration(
         hintText: hint,
-        hintStyle:
-            AppStyle.interNormal(size: 12, color: AppStyle.textDarkFaint),
+        hintStyle: AppStyle.interNormal(
+          size: 12,
+          color: AppStyle.faintFor(Theme.of(context).brightness),
+        ),
         filled: true,
-        fillColor: AppStyle.cardDarkAlt,
+        fillColor: AppStyle.cardAltFor(Theme.of(context).brightness),
         isDense: true,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8.r),

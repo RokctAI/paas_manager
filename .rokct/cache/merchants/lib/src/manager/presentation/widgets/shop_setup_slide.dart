@@ -113,14 +113,14 @@ class _ShopSetupSlideState extends State<ShopSetupSlide> {
 
   InputDecoration _decoration(String hint) => InputDecoration(
         filled: true,
-        fillColor: AppStyle.cardDarkAlt,
+        fillColor: AppStyle.cardAltFor(Theme.of(context).brightness),
         hintText: hint,
-        hintStyle: TextStyle(fontSize: 15, color: AppStyle.textDarkSecondary),
+        hintStyle: TextStyle(fontSize: 15, color: AppStyle.secondaryInkFor(Theme.of(context).brightness)),
         contentPadding:
             const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(14),
-          borderSide: BorderSide(color: AppStyle.strokeDark, width: 0.5),
+          borderSide: BorderSide(color: AppStyle.strokeFor(Theme.of(context).brightness), width: 0.5),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(14),
@@ -128,7 +128,7 @@ class _ShopSetupSlideState extends State<ShopSetupSlide> {
         ),
         disabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(14),
-          borderSide: BorderSide(color: AppStyle.strokeDark, width: 0.5),
+          borderSide: BorderSide(color: AppStyle.strokeFor(Theme.of(context).brightness), width: 0.5),
         ),
       );
 
@@ -139,9 +139,9 @@ class _ShopSetupSlideState extends State<ShopSetupSlide> {
     return Container(
       padding: const EdgeInsets.fromLTRB(22, 24, 22, 22),
       decoration: BoxDecoration(
-        color: AppStyle.cardDark,
+        color: AppStyle.cardFor(Theme.of(context).brightness),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: AppStyle.strokeDark, width: 0.5),
+        border: Border.all(color: AppStyle.strokeFor(Theme.of(context).brightness), width: 0.5),
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -150,14 +150,14 @@ class _ShopSetupSlideState extends State<ShopSetupSlide> {
           Text(
             AppHelpers.getTranslation(TrKeys.setUpYourShop),
             textAlign: TextAlign.center,
-            style: AppStyle.interBold(size: 22, color: AppStyle.textPrimary),
+            style: AppStyle.interBold(size: 22, color: AppStyle.inkFor(Theme.of(context).brightness)),
           ),
           const SizedBox(height: 8),
           Text(
             AppHelpers.getTranslation(TrKeys.shopSetupExplainer),
             textAlign: TextAlign.center,
             style: AppStyle.interNormal(
-                size: 13, color: AppStyle.textDarkSecondary),
+                size: 13, color: AppStyle.secondaryInkFor(Theme.of(context).brightness)),
           ),
           const SizedBox(height: 22),
           TextField(
@@ -165,7 +165,7 @@ class _ShopSetupSlideState extends State<ShopSetupSlide> {
             enabled: !_submitting,
             textCapitalization: TextCapitalization.words,
             textInputAction: TextInputAction.next,
-            style: TextStyle(fontSize: 15, color: AppStyle.textPrimary),
+            style: TextStyle(fontSize: 15, color: AppStyle.inkFor(Theme.of(context).brightness)),
             decoration:
                 _decoration(AppHelpers.getTranslation(TrKeys.shopName)),
           ),
@@ -175,7 +175,7 @@ class _ShopSetupSlideState extends State<ShopSetupSlide> {
             enabled: !_submitting,
             keyboardType: TextInputType.phone,
             textInputAction: TextInputAction.next,
-            style: TextStyle(fontSize: 15, color: AppStyle.textPrimary),
+            style: TextStyle(fontSize: 15, color: AppStyle.inkFor(Theme.of(context).brightness)),
             decoration:
                 _decoration(AppHelpers.getTranslation(TrKeys.phoneNumber)),
           ),
@@ -186,7 +186,7 @@ class _ShopSetupSlideState extends State<ShopSetupSlide> {
             textCapitalization: TextCapitalization.sentences,
             textInputAction: TextInputAction.done,
             onSubmitted: (_) => _submit(),
-            style: TextStyle(fontSize: 15, color: AppStyle.textPrimary),
+            style: TextStyle(fontSize: 15, color: AppStyle.inkFor(Theme.of(context).brightness)),
             decoration:
                 _decoration(AppHelpers.getTranslation(TrKeys.address)),
           ),

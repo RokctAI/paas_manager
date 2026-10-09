@@ -82,9 +82,9 @@ class SyncIssueCard extends StatelessWidget {
       margin: const EdgeInsets.fromLTRB(6, 0, 6, 8),
       padding: const EdgeInsets.all(11),
       decoration: BoxDecoration(
-        color: AppStyle.cardDark,
+        color: AppStyle.cardFor(Theme.of(context).brightness),
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: AppStyle.strokeDarkSubtle),
+        border: Border.all(color: AppStyle.subtleStrokeFor(Theme.of(context).brightness)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -116,7 +116,7 @@ class SyncIssueCard extends StatelessWidget {
             issue.summary,
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
-            style: AppStyle.interSemi(size: 13, color: AppStyle.textPrimary),
+            style: AppStyle.interSemi(size: 13, color: AppStyle.inkFor(Theme.of(context).brightness)),
           ),
           if (error != null && error.isNotEmpty) ...[
             const SizedBox(height: 6),
