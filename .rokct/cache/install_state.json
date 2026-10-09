@@ -633,7 +633,7 @@
       ]
     },
     "orders_sdk": {
-      "version": "1.29.2",
+      "version": "1.29.3",
       "files": {
         "lib/presentation/pages/orders/orders_home_page.dart": "54681e9dba8fe5e980580f359838716bb8720c0b0285afe1df51dfc0dec029c0",
         "lib/presentation/pages/orders/details/order_details_modal.dart": "66f5c681515ecf97ef9963274858ffaff00668230cc34a94b5a9b3d9bfd88bfb",
@@ -1942,8 +1942,8 @@
       "source_hash": "708ca9c4673fb0f2"
     },
     "orders": {
-      "version": "1.29.2",
-      "source_hash": "7a6b20c47be17b25"
+      "version": "1.29.3",
+      "source_hash": "b8dd2ef6841654ec"
     },
     "kitchen": {
       "version": "1.5.3",
