@@ -127,7 +127,7 @@ packages:
       path: ".rokct/cache/auth"
       relative: true
     source: path
-    version: "1.16.7"
+    version: "1.17.0"
   auto_route:
     dependency: "direct main"
     description:
@@ -158,7 +158,7 @@ packages:
       path: ".rokct/cache/base"
       relative: true
     source: path
-    version: "1.85.0"
+    version: "1.86.0"
   battery_plus:
     dependency: transitive
     description:
@@ -1732,7 +1732,7 @@ packages:
       path: ".rokct/cache/merchants"
       relative: true
     source: path
-    version: "1.33.3"
+    version: "1.33.4"
   meta:
     dependency: transitive
     description:
@@ -2055,7 +2055,7 @@ packages:
       path: ".rokct/cache/products"
       relative: true
     source: path
-    version: "1.12.5"
+    version: "1.12.6"
   promotions_sdk:
     dependency: "direct main"
     description:

@@ -1,3 +1,13 @@
+## 1.17.0
+
+* fix(auth): Skip on the login page is remembered (Ray, 2026-10-10: "make
+  skip remember that I have skipped before"). Where no onboarding intro is
+  composed, `_skip` calls base_sdk's `SignedOutEntry.rememberGuest()` before
+  landing, so base_sdk's splash sends the next cold start home instead of
+  back to this page. Sign-in stays reachable from the app's own UI. A
+  composed onboarding intro (supacharge) is unchanged. Needs base_sdk
+  >= 1.86.0. New `test/login_skip_is_remembered_test.dart`.
+
 ## 1.16.7
 
 * fix(auth): the restore-credential boot hook waits for the first frame

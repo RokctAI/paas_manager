@@ -1,5 +1,26 @@
 # Changelog
 
+## 1.86.0
+
+* fix(base): a signed-out cold start no longer always lands on the login
+  page (Ray, 2026-10-10: "make launcher not to take me to login screen if
+  I'm not logged in when it launch after the first launch ... it's like
+  it's forcing you to login").
+  * Cause: every signed-out exit from the splash (online, backend down,
+    offline) called `replaceLoginRoute`, and Skip was never stored. A
+    home-screen launcher is cold-started by Android over and over, so each
+    start forwarded the person back to login.
+  * New `SignedOutEntry` (navigation/signed_out_entry.dart, exported). The
+    splash sends every signed-out exit through it. A remembered Skip
+    (`rememberGuest`, `LocalStorage` `keyIsGuest`) lands home in any
+    composition. A composition that sets `SignedOutEntry.homeAfterFirstRun`
+    (launch_sdk 1.23.0 does) offers the login page only on the first
+    signed-out start of an install (`keyLoginOffered`) and lands home after.
+  * Both flags are install-level and `LocalStorage.logout()` leaves them
+    alone: sign-out ends the session only. Being signed out is not reported
+    as an error. Compositions that set nothing and whose users never tap
+    Skip behave as before. New `test/signed_out_entry_test.dart`.
+
 ## 1.85.0
 
 * fix(base): no error toast before the person has done anything (Ray: being
