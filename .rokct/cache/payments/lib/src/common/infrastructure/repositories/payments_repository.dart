@@ -79,7 +79,8 @@ class PaymentsRepository implements PaymentsRepositoryFacade {
   Future<ApiResult<List<SavedCardModel>>> getSavedCards() async {
     try {
       // get_saved_cards returns a bare list of Saved Card rows
-      // (name/gateway/last_four/card_type/expiry_date/card_holder_name).
+      // (name/gateway/last_four/card_type/expiry_date/card_holder_name/
+      // is_default), the default card first.
       final data = _unwrap(await _gateway.tenant('api.payment.get_saved_cards'));
       final rows = data is List ? data : const [];
       return ApiResult.success(
@@ -92,6 +93,7 @@ class PaymentsRepository implements PaymentsRepositoryFacade {
                 cardType: e['card_type']?.toString() ?? 'Card',
                 expiryDate: e['expiry_date']?.toString() ?? '',
                 cardHolderName: e['card_holder_name']?.toString() ?? '',
+                isDefault: e['is_default'] == true || e['is_default'] == 1,
               ),
             )
             .toList(),
@@ -105,7 +107,11 @@ class PaymentsRepository implements PaymentsRepositoryFacade {
     }
   }
 
-  // Implementing Card specific methods first
+  // Saving a card from typed-in details is refused without a request: no
+  // gateway tokenizes raw card details on the backend (its tokenize_card
+  // refuses too), so sending the card number and CVC would only put them
+  // on the wire for nothing. A card is saved by paying through a gateway
+  // checkout.
   @override
   Future<ApiResult<String>> tokenizeCard({
     required String cardNumber,
@@ -113,30 +119,12 @@ class PaymentsRepository implements PaymentsRepositoryFacade {
     required String expiryDate,
     required String cvc,
   }) async {
-    try {
-      final data = _unwrap(
-        await _gateway.tenant('api.payment.tokenize_card', {
-          'card_number': cardNumber,
-          'card_holder': cardName,
-          'expiry_date': expiryDate,
-          'cvc': cvc,
-        }),
-      );
-      // The gateway reuse credential stays on the server. tokenize_card
-      // returns {name, last_four, card_type, expiry_date}; `name` is the
-      // Saved Card docname the charge endpoints take.
-      final name = data is Map ? data['name']?.toString() : null;
-      if (name == null || name.isEmpty) {
-        throw StateError('tokenize_card returned no Saved Card name');
-      }
-      return ApiResult.success(data: name);
-    } catch (e) {
-      debugPrint('==> tokenize card failure: $e');
-      return ApiResult.failure(
-        error: AppHelpers.errorHandler(e),
-        statusCode: NetworkExceptions.getDioStatus(e),
-      );
-    }
+    return const ApiResult.failure(
+      error: 'Saving a card from typed-in details is not available. '
+          'Pay with a gateway checkout to save a card.',
+      // 501 Not Implemented: nothing was sent, nothing was stored.
+      statusCode: 501,
+    );
   }
 
   @override
@@ -149,9 +137,11 @@ class PaymentsRepository implements PaymentsRepositoryFacade {
     String? lastFour,
     String? cardType,
   ]) async {
-    // tokenize_card saves the card and returns its Saved Card docname. The
-    // gateway reuse credential stays on the server and never reaches this
-    // client.
+    // A gateway's reusable credential is saved server-side from the
+    // gateway's own confirmation (save_gateway_card), never from what a
+    // client reports. This path used to hand the details to tokenize_card,
+    // which dropped [token] and saved a random stand-in; it now gets the
+    // same honest refusal as [tokenizeCard].
     return tokenizeCard(
       cardNumber: cardNumber,
       cardName: cardName,
@@ -176,9 +166,24 @@ class PaymentsRepository implements PaymentsRepositoryFacade {
 
   @override
   Future<ApiResult<bool>> setDefaultCard(String cardId) async {
-    // Intentional no-op: the backend has no default-card flag; the picker
-    // keeps the selection locally.
-    return const ApiResult.success(data: true);
+    try {
+      // set_default_card marks this card the user's one default and clears
+      // the flag on their other cards.
+      final data = _unwrap(
+        await _gateway.tenant('api.payment.set_default_card', {
+          'card_name': cardId,
+        }),
+      );
+      return ApiResult.success(
+        data: data is Map && data['status'] == 'success',
+      );
+    } catch (e) {
+      debugPrint('==> set default card failure: $e');
+      return ApiResult.failure(
+        error: AppHelpers.errorHandler(e),
+        statusCode: NetworkExceptions.getDioStatus(e),
+      );
+    }
   }
 
   /// The card endpoints charge an existing Order (they check ownership and

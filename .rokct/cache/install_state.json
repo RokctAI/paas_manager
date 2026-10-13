@@ -198,7 +198,7 @@
       }
     },
     "users_sdk": {
-      "version": "1.5.1",
+      "version": "1.5.2",
       "files": {
         "lib/application/profile/profile_state.dart": "df2ec681941504e54fe30bcf3bece48c914a29b9410552e054cf47a018f7fb62",
         "lib/application/profile/profile_provider.dart": "ae79e4577eb7e7733148596b79c2b8f3145de74d1bdb36bfab55db1d9c3fc0c4",
@@ -1073,7 +1073,7 @@
       "boot_hooks": []
     },
     "payments_sdk": {
-      "version": "1.3.4",
+      "version": "1.3.5",
       "files": {},
       "routes": [],
       "app_routes": [],
@@ -1714,7 +1714,7 @@
       ]
     },
     "auth_sdk": {
-      "version": "1.18.0",
+      "version": "1.20.0",
       "files": {
         "lib/presentation/routes/auth_route_pages.dart": "2ac2b6adab56b09a0eff1aa19478717f2c632e0415c46ac0c06f04549e77602c",
         "lib/presentation/routes/registration_step_pages.dart": "68aed195fc07db746a0919c7ba6d47ffa445ca86e7d9cf6ee50fbcb00e82d3c2",
@@ -1831,6 +1831,15 @@
             "import 'package:auth_sdk/src/translations/auth_en_translations.dart';"
           ],
           "_comment": "Registers this SDK's bundled English map into base_sdk's BundledTranslations registry at boot (lms_sdk's 'af' hook is the precedent). base_sdk bundles no 'en' map because English normally survives through the humanized-key fallback, but that only holds for keys named after their copy: reset_password_text humanized to the literal \"Reset password text\" on every app shell's reset-password sheet, because demo builds take their served map from comms_sdk's MockSettingsRepository (a handful of rows that never carried this key). Backend-served translation rows still win; the map is only the offline/unseeded fallback consulted before the humanized-key fallback. Imports are declared explicitly (src paths, like lms_sdk) because neither symbol is exported by the auth_sdk barrel every composed main.dart already imports. Requires a base_sdk with bundled_translations.dart (the bundled-af wave)."
+        },
+        {
+          "id": "auth_fcm_token_sync",
+          "order": 3,
+          "body": "FcmTokenSync.install();",
+          "imports": [
+            "import 'package:auth_sdk/src/common/services/platform_support.dart';"
+          ],
+          "_comment": "Keeps the backend's FCM token current between sign-ins: once the first frame is up (LocalStorage and DI are ready by then) it re-sends the token if a backend session is already active, and re-sends every token FirebaseMessaging.onTokenRefresh hands out while signed in. No-op on Windows/Linux and when Firebase is not initialized; fail-open."
         }
       ],
       "app_assets": [
@@ -1868,7 +1877,7 @@
       "boot_hooks": []
     },
     "hms_sdk": {
-      "version": "1.0.1",
+      "version": "1.0.2",
       "files": {},
       "routes": [],
       "app_routes": [],
@@ -2023,12 +2032,12 @@
       "source_hash": "ae6d26083780751b"
     },
     "auth": {
-      "version": "1.18.0",
-      "source_hash": "54f98061a8a11a2a"
+      "version": "1.20.0",
+      "source_hash": "27269c39828e77e5"
     },
     "users": {
-      "version": "1.5.1",
-      "source_hash": "001df2d707de4cb3"
+      "version": "1.5.2",
+      "source_hash": "d95b63306d36447c"
     },
     "merchants": {
       "version": "1.34.0",
@@ -2055,8 +2064,8 @@
       "source_hash": "b24211f814c8518d"
     },
     "payments": {
-      "version": "1.3.4",
-      "source_hash": "fd79123b49de6bb5"
+      "version": "1.3.5",
+      "source_hash": "6cb197e44f5f7a4c"
     },
     "subscriptions": {
       "version": "1.6.2",
@@ -2099,8 +2108,8 @@
       "source_hash": "a5f94e74405057ac"
     },
     "hms": {
-      "version": "1.0.1",
-      "source_hash": "e0503305f45df42e"
+      "version": "1.0.2",
+      "source_hash": "fa93206c6fc6db19"
     },
     "telemetry": {
       "version": "1.0.1",

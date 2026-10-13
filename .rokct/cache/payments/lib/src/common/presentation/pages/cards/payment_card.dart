@@ -174,6 +174,27 @@ class _SavedCardsWidgetState extends ConsumerState<SavedCardsWidget> {
     }
   }
 
+  // Makes [card] the user's default (the server keeps one per user and
+  // lists it first, so it is the card preselected next time).
+  Future<void> _setDefaultCard(SavedCardModel card) async {
+    if (card.isDefault) return;
+    final result = await _repository.setDefaultCard(card.id);
+    if (!mounted) return;
+    result.when(
+      success: (ok) {
+        if (!ok) return;
+        setState(() {
+          _savedCards = [
+            for (final c in _savedCards) c.copyWith(isDefault: c.id == card.id),
+          ];
+        });
+      },
+      failure: (error, statusCode) {
+        AppHelpers.showCheckTopSnackBarInfo(context, error);
+      },
+    );
+  }
+
   void _confirmDeleteCard(SavedCardModel card) {
     AppHelpers.showAlertDialog(
       context: context,
@@ -342,6 +363,20 @@ class _SavedCardsWidgetState extends ConsumerState<SavedCardsWidget> {
                         ],
                       ),
                     ),
+
+                    // Default-card toggle (only when management is shown)
+                    if (!widget.hideManagement)
+                      IconButton(
+                        onPressed: () => _setDefaultCard(card),
+                        icon: Icon(
+                          card.isDefault ? Remix.star_fill : Remix.star_line,
+                          color: card.isDefault
+                              ? AppStyle.primary
+                              : AppStyle.textGrey,
+                          size: 20.r,
+                        ),
+                        tooltip: AppHelpers.getTranslation('set_as_default'),
+                      ),
 
                     // Delete button (only show if management is not hidden)
                     if (!widget.hideManagement)

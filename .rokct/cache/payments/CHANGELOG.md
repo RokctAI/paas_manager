@@ -1,3 +1,23 @@
+## 1.3.5
+
+* fix(build): the bundled flutter_braintree plugin now compiles against
+  Android API 34 instead of 28. The Braintree drop-in pulls in a newer
+  androidx.core whose resources use `android:attr/lStar`, which only
+  exists from API 31. So every app with payments_sdk failed its release
+  Android build at `:flutter_braintree:verifyReleaseResources` ("resource
+  android:attr/lStar not found"). Supacharge hit this on 13 Oct.
+* fix(cards): the card payment screen no longer crashes in apps without the
+  orders SDK, such as supacharge. It looked up the orders service as soon
+  as it opened; now it does so only to start a PayFast checkout, and the
+  "pay with a new card" button shows only when there is an order and the
+  orders SDK to pay it through.
+* feat(cards): "set as default" works. A star on each saved card makes it
+  the default (the server keeps one per user), and the default card is
+  listed and preselected first. Before, setting a default did nothing.
+* fix(cards): saving a card from typed-in details is refused on the phone,
+  without sending the card number anywhere. No gateway tokenizes typed-in
+  cards on the backend, so such a card could never be charged.
+
 ## 1.3.4
 
 * fix(customer): the manifest now declares the `payFastWebView`,
