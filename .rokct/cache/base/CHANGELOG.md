@@ -1,5 +1,26 @@
 # Changelog
 
+## 1.88.2
+
+* fix(build): base now asks for dio 5.10 or newer. Its timeout handling
+  uses `DioExceptionType.transformTimeout`, which dio added in 5.10, but
+  the constraint still allowed 5.7. Manager and driver had dio 5.7.0 saved
+  in their lockfiles, so their Android and Windows builds failed to
+  compile on 13 Oct. The new floor makes those apps pick up a newer dio.
+
+## 1.88.1
+
+* fix(navigation): `AppHelpers.goHome` no longer crashes an app without a
+  shop page. With the marketplace off (a single-shop build), it asked for
+  the shop page. Only a marketplace app declares that page, so the
+  launcher, manager, driver or supacharge would have thrown there. It now
+  lands on the main screen when the shop page is missing. The marketplace
+  is on in every app today, so nothing crashed yet; this removes the trap.
+* chore: removed `ActiveOrderGlanceCard`, the order-status glance card. No app
+  has used it since 26 Sep, when the live order notification replaced it on
+  the customer home (marketplace 1.14.5). Its theme test goes with it.
+  `GlanceCard` itself, used by the launcher, lms and productivity, stays.
+
 ## 1.88.0
 
 * feat(sync): `SyncResult.held(reason)`, for an op the backend is

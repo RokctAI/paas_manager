@@ -1187,11 +1187,22 @@ abstract class AppHelpers {
   }
 
   static void goHome(BuildContext context) {
-    if (AppConstants.enableMarketplace) {
-      AppRoutes.I.replaceMainRoute(context);
-    } else {
-      AppRoutes.I.replaceShopRoute(context, shopId: AppConstants.defaultShopId);
+    if (!AppConstants.enableMarketplace) {
+      // A single-shop build lands on its shop. Only a marketplace compose
+      // declares that page; anywhere else (launcher, manager, driver,
+      // supacharge) asking for it would throw, so those land on their main
+      // screen instead.
+      try {
+        AppRoutes.I.replaceShopRoute(
+          context,
+          shopId: AppConstants.defaultShopId,
+        );
+        return;
+      } on StateError catch (e) {
+        debugPrint('==> no shop page in this app, going to main: $e');
+      }
     }
+    AppRoutes.I.replaceMainRoute(context);
   }
 }
 

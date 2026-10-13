@@ -1,3 +1,10 @@
+## 1.4.0
+
+* The story viewer is customer-only. Sellers make stories on the web merchant
+  dashboard and only the customer app shows them; the manager app installed
+  the page but never opened it. Its route shell, `/storyList` and
+  `AppRoutes.pushStoryListRoute` now sit under `app_type.customer`.
+
 ## 1.3.1
 
 * fix(icons): every icon is Remixicon (`package:remixicon`, `Remix.*`), the
