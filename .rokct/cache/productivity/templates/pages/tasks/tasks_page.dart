@@ -43,7 +43,16 @@ class TasksPage extends StatelessWidget {
   const TasksPage({super.key});
 
   @override
-  Widget build(BuildContext context) => const TasksWorkspace();
+  Widget build(BuildContext context) => ReturnToLauncherScope(
+        // launch_sdk opens another fleet app's tasks with
+        // `rokct:/tasks?from=launcher` (Ray, 2026-10-12: productivity is a
+        // window from the launcher, like the calculator). Read from the
+        // route rather than the constructor, which must stay const (above).
+        enabled: ReturnToLauncherScope.requestedBy(
+          context.routeData.queryParams.optString('from'),
+        ),
+        child: const TasksWorkspace(),
+      );
 }
 
 /// The /tasks workspace — the list, its detail / compose / run pane and

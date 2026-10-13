@@ -1,7 +1,7 @@
 {
   "packages": {
     "base_sdk": {
-      "version": "1.86.0",
+      "version": "1.87.1",
       "files": {
         "flutter_native_splash.yaml": "d469a133b5e1631d6ba811b048d290449224075edad2153189cfb2edc3f4d100",
         "android/app/src/main/res/font/montserrat_extrabolditalic.ttf": "d38bac61eda8d8c002b1a852f5368901a085fbe1d844b5e0a149b674e22e2cdd",
@@ -64,7 +64,7 @@
         "lib/presentation/theme/theme.dart": "dccd0527934c068d0b8ef48d7d0677d068d1054e7fcc1e1eea1f6682912bfcd5",
         "lib/presentation/theme/app_style.dart": "a45367fab06abafa465a15d659d631e344f3c1badc06a8880b2298eaf063c535",
         "lib/main.dart": "1d4d437a0ccca722bf9700dcab76079b3dfdbd0db90395bcfddd56955e164bfa",
-        "lib/presentation/app_widget.dart": "fbaf379174bb6d0bb53413ab6b35f833f9a4746d8e75b10910ce14b6ff9bd00e",
+        "lib/presentation/app_widget.dart": "51950f12a39315843df022756b6a72f16227e33c9a99ca9c53524c9de5a082b9",
         "lib/presentation/routes/app_router.dart": "3b99e50c60dab1161ccf14aa381f7481ab1baad0223575df04e4bda89a20464b",
         "lib/presentation/routes/route_pages.dart": "32ab7543d1b94e5b5aedd5a59604a390c373d6e881801c875e37f2ddd001d8c8",
         "android/app/src/main/kotlin/com/app/demo/JuvoApplication.kt": "18870e8ca0b87482d3ad45fecc6211762fde11d19fd46791aba40a49b4d31d07",
@@ -230,7 +230,7 @@
       ]
     },
     "merchants_sdk": {
-      "version": "1.33.4",
+      "version": "1.34.0",
       "files": {
         "assets/audio/notification.wav": "9d62af6f1c8df010941d1daa17162175d87293bd78371c787803b5a11f95cb9d",
         "assets/svgs/menu.svg": "9767d04ac4d157e423f972259a9c2c455a6a629c4098cc9c2fe8f9722451441b",
@@ -328,7 +328,35 @@
           "body": "RegistrationStep(\n  data: const {'id': 'merchants.shop_setup'},\n  content: Builder(\n    builder: (context) => ShopSetupSlide(\n      capture: MerchantsShopSetupAdapter(),\n      initialPhone: RegistrationStepScope.of(context).account?.phone,\n      onContinue: () => RegistrationStepScope.of(context).next(),\n    ),\n  ),\n)"
         }
       ],
-      "embedded_widgets": [],
+      "embedded_widgets": [
+        {
+          "method": "cartOrderItem",
+          "params": "{required VoidCallback add, required VoidCallback remove, required CartDetail? cart, bool? isActive, Detail? cartTwo, bool? isOwn, String? symbol, bool? isAddComment}",
+          "body": "return CartOrderItem(add: add, remove: remove, cart: cart, isActive: isActive ?? true, cartTwo: cartTwo, isOwn: isOwn ?? true, symbol: symbol, isAddComment: isAddComment ?? false);",
+          "imports": [
+            "import 'package:base_sdk/src/models/data/cart_data.dart';",
+            "import 'package:base_sdk/src/models/data/order_active_model.dart';",
+            "import 'package:merchants_sdk/src/common/presentation/pages/shop/cart/widgets/cart_order_item.dart';"
+          ]
+        },
+        {
+          "method": "cartClearDialog",
+          "params": "{required VoidCallback cancel, required VoidCallback clear, bool? isLoading}",
+          "body": "return CartClearDialog(cancel: cancel, clear: clear, isLoading: isLoading ?? false);",
+          "imports": [
+            "import 'package:merchants_sdk/src/common/presentation/pages/shop/cart/widgets/cart_clear_dialog.dart';"
+          ]
+        },
+        {
+          "method": "bonusScreen",
+          "params": "{required BonusModel? bonus}",
+          "body": "return BonusScreen(bonus: bonus);",
+          "imports": [
+            "import 'package:base_sdk/src/models/data/bonus_data.dart';",
+            "import 'package:merchants_sdk/src/common/presentation/pages/shop/widgets/bonus_screen.dart';"
+          ]
+        }
+      ],
       "tr_keys": {
         "scan": "Scan",
         "calculator": "calculator",
@@ -392,6 +420,7 @@
         "shopSetupExplainer": "a_few_details_to_open_your_shop_you_can_change_everything_later",
         "shopName": "shop_name",
         "accessDenied": "access.denied",
+        "applyAsSellerInCustomerApp": "Apply in the customer app (Become a seller)",
         "signedInAs": "Signed in as",
         "syncIssues": "sync_issues",
         "discard": "discard",
@@ -449,8 +478,10 @@
             "landing_route": "/main"
           }
         ],
-        "rejection_message_tr_key": "access.denied",
-        "rejection_route": "/login"
+        "rejection_message_tr_key": "Apply in the customer app (Become a seller)",
+        "rejection_route": "/login",
+        "signup_app_role": "seller",
+        "allow_offline_accounts": true
       },
       "di_hooks": [
         {
@@ -488,7 +519,7 @@
       ]
     },
     "products_sdk": {
-      "version": "1.12.6",
+      "version": "1.12.7",
       "files": {
         "lib/presentation/pages/foods/foods_page.dart": "8c12a9a1087eb70f24eadf4c179b1a52c9eeca3a8a4189137c5f4f7db56269d9",
         "lib/presentation/pages/foods/foods/foods_body.dart": "8a549e92dd438ea9defa61fe97203b9e8c981c2428a448a23a751f59737dab8d",
@@ -569,7 +600,17 @@
       "app_routes": [],
       "onboarding_slides": [],
       "registration_steps": [],
-      "embedded_widgets": [],
+      "embedded_widgets": [
+        {
+          "method": "productScreen",
+          "params": "{String? productId, ProductData? data, String? cartId, required ScrollController controller}",
+          "body": "return ProductScreen(productId: productId, data: data, cartId: cartId, controller: controller);",
+          "imports": [
+            "import 'package:base_sdk/src/models/data/product_data.dart';",
+            "import 'package:products_sdk/src/common/presentation/pages/product/product_page.dart';"
+          ]
+        }
+      ],
       "tr_keys": {
         "addNewCategory": "add_new_category",
         "addVariant": "add_variant",
@@ -633,7 +674,7 @@
       ]
     },
     "orders_sdk": {
-      "version": "1.29.3",
+      "version": "1.30.0",
       "files": {
         "lib/presentation/pages/orders/orders_home_page.dart": "54681e9dba8fe5e980580f359838716bb8720c0b0285afe1df51dfc0dec029c0",
         "lib/presentation/pages/orders/details/order_details_modal.dart": "66f5c681515ecf97ef9963274858ffaff00668230cc34a94b5a9b3d9bfd88bfb",
@@ -767,7 +808,16 @@
       "app_routes": [],
       "onboarding_slides": [],
       "registration_steps": [],
-      "embedded_widgets": [],
+      "embedded_widgets": [
+        {
+          "method": "orderMap",
+          "params": "{required dynamic markers, required dynamic latLng, required dynamic polylineCoordinates, required bool isLoading}",
+          "body": "return OrderMap(markers: markers, latLng: latLng, polylineCoordinates: polylineCoordinates, isLoading: isLoading);",
+          "imports": [
+            "import 'package:orders_sdk/src/common/presentation/pages/order/order_type/widgets/order_map.dart';"
+          ]
+        }
+      ],
       "tr_keys": {
         "ordersToAccept": "orders_to_accept",
         "waitingOnYou": "waiting_on_you",
@@ -1023,13 +1073,40 @@
       "boot_hooks": []
     },
     "payments_sdk": {
-      "version": "1.3.3",
+      "version": "1.3.4",
       "files": {},
       "routes": [],
       "app_routes": [],
       "onboarding_slides": [],
       "registration_steps": [],
-      "embedded_widgets": [],
+      "embedded_widgets": [
+        {
+          "method": "payFastWebView",
+          "params": "{required String url, Function(bool)? onComplete, Function(String, Map<String, String>)? onTokenCaptured, dynamic preloadedController}",
+          "body": "return PayFastWebView(url: url, onComplete: onComplete, onTokenCaptured: onTokenCaptured, preloadedController: preloadedController);",
+          "imports": [
+            "import 'package:payments_sdk/src/common/utils/payfast/payfast_webview.dart';"
+          ]
+        },
+        {
+          "method": "paymentScreen",
+          "params": "{OrderBodyData? orderData, required Function(bool) onPaymentComplete, ScrollController? scrollController, bool? tokenizeOnly}",
+          "body": "return PaymentScreen(orderData: orderData, onPaymentComplete: onPaymentComplete, scrollController: scrollController, tokenizeOnly: tokenizeOnly ?? false);",
+          "imports": [
+            "import 'package:base_sdk/src/models/data/order_body_data.dart';",
+            "import 'package:payments_sdk/src/common/presentation/pages/cards/payment_screen.dart';"
+          ]
+        },
+        {
+          "method": "savedCardsWidget",
+          "params": "{required Function(SavedCardModel?) onCardSelected, SavedCardModel? initialSelectedCard, bool? hideManagement}",
+          "body": "return SavedCardsWidget(onCardSelected: onCardSelected, initialSelectedCard: initialSelectedCard, hideManagement: hideManagement ?? false);",
+          "imports": [
+            "import 'package:base_sdk/src/models/data/saved_card.dart';",
+            "import 'package:payments_sdk/src/common/presentation/pages/cards/payment_card.dart';"
+          ]
+        }
+      ],
       "di_hooks": [],
       "boot_hooks": []
     },
@@ -1074,7 +1151,7 @@
       ]
     },
     "comms_sdk": {
-      "version": "1.22.2",
+      "version": "1.22.3",
       "files": {
         "lib/presentation/pages/notification/notification_list_page.dart": "2ebfa74cb0686cfa0ba1d1aff281bd90e651ae740247a2ddd03e1116e64e9388",
         "lib/application/notification/notification_state.dart": "055c8ab42969bad5e418061cbe38699458bfc8b74ea7d4def4a03a18e261b184",
@@ -1112,6 +1189,14 @@
           "body": "return LanguageScreen(onSave: onSave);",
           "imports": [
             "import 'package:comms_sdk/src/common/presentation/pages/setting/language_page.dart';"
+          ]
+        },
+        {
+          "method": "chatPage",
+          "params": "{required String roleId, required String name}",
+          "body": "return ChatPage(roleId: roleId, name: name);",
+          "imports": [
+            "import 'package:comms_sdk/src/common/presentation/pages/chat/chat/chat_page.dart';"
           ]
         }
       ],
@@ -1186,9 +1271,9 @@
       "boot_hooks": []
     },
     "productivity_sdk": {
-      "version": "1.7.7",
+      "version": "1.8.0",
       "files": {
-        "lib/presentation/pages/tasks/tasks_page.dart": "5daf8e3661cc4ae0cf05f1494e905363201a989bae04c5e438a9fb93166584f9",
+        "lib/presentation/pages/tasks/tasks_page.dart": "4d9f44c5a911cff3359a004b3501746b6fb54d5b15d1edf892ddbb6797ea8f24",
         "lib/presentation/pages/tasks/task_run_page.dart": "85738562f5313dc77b4af26f5ad908c39932d859b016cd135f410c0294daf3ae",
         "lib/presentation/pages/vision/plan_on_a_page.dart": "5ef9c9903723e9dadbe69df8973ab3b324c6e857c6764f473c42ce656b32e204",
         "lib/presentation/pages/vision/personal_mastery_page.dart": "aa70c79d6ce0ed067cf2a6d0b492f59de2d43fb20b53b9a1b758c867285fac20"
@@ -1306,12 +1391,17 @@
         "describeThePlantFirst": "describe_the_plant_before_it_can_be_serviced",
         "newTask": "new_task",
         "newNote": "new_note"
+      },
+      "host_integration": {
+        "android_application_xml": [
+          "<activity-alias android:name=\".RokctProductivityEntry\" android:targetActivity=\".MainActivity\" android:exported=\"true\"><meta-data android:name=\"io.flutter.embedding.android.NormalTheme\" android:resource=\"@style/NormalTheme\" /><intent-filter><action android:name=\"rokct.intent.action.PRODUCTIVITY\" /><category android:name=\"android.intent.category.DEFAULT\" /><data android:scheme=\"rokct\" /></intent-filter></activity-alias>"
+        ]
       }
     },
     "calc_sdk": {
-      "version": "1.3.0",
+      "version": "1.4.0",
       "files": {
-        "lib/presentation/pages/calc/calculator_page.dart": "374b46fd02df732775eb2e4319b47eda2958304a51540964e719e9bba75db124"
+        "lib/presentation/pages/calc/calculator_page.dart": "55eb940c5ff99fa2e8d3cf0b2118d3a3459d6e38b2e81e7e09dd33bd95f49f76"
       },
       "routes": [
         {
@@ -1641,10 +1731,10 @@
       ]
     },
     "auth_sdk": {
-      "version": "1.17.0",
+      "version": "1.18.0",
       "files": {
         "lib/presentation/routes/auth_route_pages.dart": "2ac2b6adab56b09a0eff1aa19478717f2c632e0415c46ac0c06f04549e77602c",
-        "lib/presentation/routes/registration_step_pages.dart": "d18f7e35878721c688c4f0964db42c97148e1f2e9d225cd1a6bb7490e2628347",
+        "lib/presentation/routes/registration_step_pages.dart": "68aed195fc07db746a0919c7ba6d47ffa445ca86e7d9cf6ee50fbcb00e82d3c2",
         "lib/presentation/routes/auth_session_policy.dart": "9524d696f956a99c2964ce0866cbab0cb282e868247d5f08b050e94bb9f5df5a",
         "assets/demo/auth/api.user.forgot_password_confirm.json": "8b231a14101c8c1587e6ea6e958a3de207f54ec27ee71149fba3c8ece4d1049e",
         "assets/demo/auth/api.user.update_password.json": "ecd6d852c7fc618f171e6b20bcbdef6d4b848e68028fb78cb02fc29f12a86de4",
@@ -1707,7 +1797,24 @@
       ],
       "onboarding_slides": [],
       "registration_steps": [],
-      "embedded_widgets": [],
+      "embedded_widgets": [
+        {
+          "method": "phoneVerify",
+          "params": "",
+          "body": "return const PhoneVerify();",
+          "imports": [
+            "import 'package:auth_sdk/src/common/presentation/pages/auth/phone_verify.dart';"
+          ]
+        },
+        {
+          "method": "resetPasswordPage",
+          "params": "",
+          "body": "return const ResetPasswordPage();",
+          "imports": [
+            "import 'package:auth_sdk/src/common/presentation/pages/auth/reset/reset_password_page.dart';"
+          ]
+        }
+      ],
       "database": {
         "tables": [
           {
@@ -1925,32 +2032,32 @@
   },
   "sdk_cache": {
     "base": {
-      "version": "1.86.0",
-      "source_hash": "ce0b6c086c7620a3"
+      "version": "1.87.1",
+      "source_hash": "ee696e57d9e31d98"
     },
     "comms": {
-      "version": "1.22.2",
-      "source_hash": "091954d447371396"
+      "version": "1.22.3",
+      "source_hash": "ae6d26083780751b"
     },
     "auth": {
-      "version": "1.17.0",
-      "source_hash": "152f978f592de75a"
+      "version": "1.18.0",
+      "source_hash": "54f98061a8a11a2a"
     },
     "users": {
       "version": "1.5.1",
       "source_hash": "001df2d707de4cb3"
     },
     "merchants": {
-      "version": "1.33.4",
-      "source_hash": "eb5635284518c67f"
+      "version": "1.34.0",
+      "source_hash": "0bc3e324c25051ec"
     },
     "products": {
-      "version": "1.12.6",
-      "source_hash": "dadb55b7df1843f4"
+      "version": "1.12.7",
+      "source_hash": "3733d00e7086af8e"
     },
     "orders": {
-      "version": "1.29.3",
-      "source_hash": "b8dd2ef6841654ec"
+      "version": "1.30.0",
+      "source_hash": "b86989d0cbceda02"
     },
     "kitchen": {
       "version": "1.5.3",
@@ -1965,8 +2072,8 @@
       "source_hash": "b24211f814c8518d"
     },
     "payments": {
-      "version": "1.3.3",
-      "source_hash": "8fdb7cd27aa16cc0"
+      "version": "1.3.4",
+      "source_hash": "fd79123b49de6bb5"
     },
     "subscriptions": {
       "version": "1.6.2",
@@ -1977,12 +2084,12 @@
       "source_hash": "0f71149fa89119ec"
     },
     "productivity": {
-      "version": "1.7.7",
-      "source_hash": "8c135388fd16efdb"
+      "version": "1.8.0",
+      "source_hash": "5e852f193575643c"
     },
     "calc": {
-      "version": "1.3.0",
-      "source_hash": "d7f0030904e8956b"
+      "version": "1.4.0",
+      "source_hash": "bfe4e9e9137f7b0d"
     },
     "corporate": {
       "version": "1.2.0",

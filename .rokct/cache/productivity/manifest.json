@@ -1,6 +1,7 @@
 {
   "name": "productivity_sdk",
-  "version": "1.7.7",
+  "version": "1.8.0",
+  "_comment_version_1_8_0": "1.7.7 -> 1.8.0: the fleet productivity ENTRY (Ray, 2026-10-12: the launcher's Productivity button should work like the calculator - open one of our apps that has productivity_sdk, and not show when none is installed). Every app that composes productivity_sdk gets an exported activity-alias of its own MainActivity answering rokct.intent.action.PRODUCTIVITY with the data scheme rokct, the same shape as calc_sdk's rokct.intent.action.CALCULATOR entry. launch_sdk (>= 1.25.0) finds such apps through the package manager and opens one by explicit component with rokct:/tasks?from=launcher; TasksPage reads ?from= and wraps the workspace in base_sdk's ReturnToLauncherScope (base_sdk >= 1.87.0), so back returns to the launcher. The /tasks route is unchanged.",
   "home_page": "templates/pages/tasks/tasks_page.dart",
   "installs": [
     {
@@ -127,5 +128,11 @@
       "placeholder": "        // @productivity-tasks-row",
       "replacement": "        PausedRunLine(\n          onOpen: (taskId) => context.router.pushNamed('/tasks/run?task=$taskId'),\n        ),"
     }
-  ]
+  ],
+  "host_integration": {
+    "_comment": "The fleet productivity ENTRY, launch_sdk's Productivity window (see _comment_version_1_8_0). Same mechanics as calc_sdk's calculator entry: an exported activity-alias of MainActivity with a custom action (not a public category, so these apps never show up in somebody else's chooser), the data scheme rokct, and the NormalTheme meta-data MainActivity carries, because FlutterActivity reads its meta-data from the component it was started as. Applied by the protocol installer's update_host_integration() into the marker-owned <application> block after MainActivity, and gone again when productivity_sdk leaves the compose.",
+    "android_application_xml": [
+      "<activity-alias android:name=\".RokctProductivityEntry\" android:targetActivity=\".MainActivity\" android:exported=\"true\"><meta-data android:name=\"io.flutter.embedding.android.NormalTheme\" android:resource=\"@style/NormalTheme\" /><intent-filter><action android:name=\"rokct.intent.action.PRODUCTIVITY\" /><category android:name=\"android.intent.category.DEFAULT\" /><data android:scheme=\"rokct\" /></intent-filter></activity-alias>"
+    ]
+  }
 }

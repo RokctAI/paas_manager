@@ -1,3 +1,14 @@
+## 1.3.4
+
+* fix(customer): the manifest now declares the `payFastWebView`,
+  `paymentScreen` and `savedCardsWidget` embedded widgets, so the host app
+  can hand these payment screens to other SDKs. Nothing declared them, so
+  in the customer app "Pay with card or PayFast" at checkout and Profile
+  "Cards" threw a StateError, and wallet top-up with a new PayFast card
+  showed "not available". `preloadPayFastWebView` is still not declared:
+  the app composer only generates methods that return a widget, and this
+  one returns nothing.
+
 ## 1.3.3
 
 * fix(android): flutter_braintree resolves to a vendored copy of 4.0.0

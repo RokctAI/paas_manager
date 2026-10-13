@@ -1,3 +1,18 @@
+## 1.8.0
+
+* feat(android): the fleet productivity entry, so the launcher's Productivity
+  button can open this app's tasks the way its Calculator opens a fleet
+  calculator (Ray, 2026-10-12: productivity should work like calc, and the
+  button just does not show when no app that has it is installed).
+  * Every app composing productivity_sdk gets an exported activity-alias of
+    MainActivity answering `rokct.intent.action.PRODUCTIVITY` with the data
+    scheme `rokct` (`host_integration.android_application_xml`), the same
+    shape as calc_sdk's calculator entry.
+  * launch_sdk (>= 1.25.0) opens it with `rokct:/tasks?from=launcher`.
+    `TasksPage` reads `?from=` and wraps the workspace in base_sdk's
+    `ReturnToLauncherScope` (base_sdk >= 1.87.0), so back returns to the
+    launcher. `TasksPage`'s constructor stays const.
+
 ## 1.7.7
 
 * feat(notes): notes export. Ray: "only tasks seem to be able to export and notes doesnt". The notes list backs up the way tasks always have: a bare JSON array of the list's items written to `notes_backup.json` in the app documents directory and handed to the share sheet. The tasks Backup's body moved into `ProductivityBackup` (productivity_backup.dart) unchanged - same `todos_backup.json`, same "My Todo Backup" text, same bytes - and `NoteRepositoryFacade.exportNotes` takes the same road.
