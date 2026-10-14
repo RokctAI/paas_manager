@@ -106,21 +106,16 @@ class SubscriptionNotifier extends StateNotifier<SubscriptionState> {
         ref: state.list[state.selectSubscribe].ref,
         paymentId: state.payments?[state.selectPayment].id ?? 0,
       );
+      // The server charges the wallet and activates the plan in this one
+      // call (nothing is activated unless the charge succeeds), so a
+      // success here IS the paid purchase. The old follow-up call to the
+      // legacy /api/v1/payments/subscription/{id}/transactions path is
+      // gone: no composed backend serves it, so every wallet purchase
+      // ended in a silent failure after the plan was already active.
       res.when(
-        success: (success) async {
-          final response = await _subscriptionRepository.createTransaction(
-            id: success,
-            paymentId: state.payments?[state.selectPayment].id ?? 0,
-          );
-          response.when(
-            success: (success) {
-              onSuccess.call();
-              state = state.copyWith(isPaymentLoading: false);
-            },
-            failure: (failure, status) {
-              state = state.copyWith(isPaymentLoading: false);
-            },
-          );
+        success: (_) {
+          state = state.copyWith(isPaymentLoading: false);
+          onSuccess.call();
         },
         failure: (failure, status) {
           state = state.copyWith(isPaymentLoading: false);

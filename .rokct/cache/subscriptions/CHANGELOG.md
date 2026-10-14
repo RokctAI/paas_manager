@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.7.0
+
+* fix(subscriptions): the plan catalog is no longer cached as the user's subscription (`active` there means "published"). The user's own row is cached, merged, from the purchase result.
+* fix(subscriptions): a wallet purchase is one call: the server now charges the wallet before activating the plan, and the dead legacy `/api/v1/payments/subscription/{id}/transactions` follow-up is gone (`createTransaction` is deprecated).
+* fix(subscriptions): page 1 of `getSubscriptions` pages through the whole catalog (`list_subscriptions` start/limit).
+* fix(subscriptions): plan cards name a plan with no title "<Type> Plan" (`PlanCardLogic.displayTitle`) instead of the bare type name.
+
 ## 1.6.2
 
 * fix(theme): widgets read their surface, card, stroke and ink colours from Theme.of(context) at build time (AppStyle.surfaceFor/cardFor/cardAltFor/strokeFor/subtleStrokeFor/inkFor/secondaryInkFor/faintFor) instead of the AppStyle.isDark-resolved statics, so a live dark/light switch restyles open pages instead of leaving the old mode's colours (Ray, 2026-10-04).

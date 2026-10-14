@@ -1,3 +1,16 @@
+## 1.9.0
+
+* fix(sync): the task pull no longer stops at 200 tasks. A full page now hands back the last row's time and `has_more`, and `TaskPullService.pull` keeps asking until a page comes back short. Needs the projects module's matching `list_personal_tasks` (same release). The pull cursor is also kept per account, so a second account on the device does not start from the first one's place.
+* fix(sync): deleting a task reaches your other devices. The pull carries `deleted` tombstones (read from Frappe's Deleted Document log) and the device removes its copy and its reminder. A task with an unsent edit on this device is kept, because that edit is the newer word.
+* fix(tasks): ticking a repeating task, unticking it and ticking it again makes one next occurrence, not one per tick. The spawned id is kept on the task (`spawnedNextId`); the repeat rule now lives in `TaskRecurrence`.
+* fix(tasks): changing an overdue task's deadline no longer crashes the date picker; the calendar starts at the old deadline.
+* fix(run): "Mark done" on the run page works when the page was opened from anywhere but the tasks list: the page ticks the task, cancels its reminder and makes the next occurrence itself. The tasks list opens the run with `caller=list` and still ticks it the way it always did.
+* fix(tasks): after a sign-out the tasks page empties its lists (nothing on the device is deleted), and it reads them again for whichever account signs in next (`ProductivitySessionEnd.sessionEnds`).
+* fix(seed): the RO plant's maintenance tasks are no longer seeded into demo sessions; only the plant owners' accounts get them. `MaintenanceSeed.seedDemo` is removed.
+* fix(recovery): an attended lesson (`attended-session`) is no longer counted as an urge to skip. The weekly summary counts it under the new `checkIns` key instead of `urgeEvents`.
+* fix(recovery): the streak grows at most once per calendar day, and a signed-in account's streak is written to its own profile (created when missing), never to the shared unowned one.
+* fix(glance): the launcher glance shows tasks due from the tasks page. `TaskService` reads the page's rows (`deadline`, `isDone`) as well as its own (`dueDate`, `status`).
+
 ## 1.8.0
 
 * feat(android): the fleet productivity entry, so the launcher's Productivity

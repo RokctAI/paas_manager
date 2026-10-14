@@ -18,6 +18,7 @@ import 'package:remixicon/remixicon.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:base_sdk/base_sdk.dart';
 import 'package:subscriptions_sdk/src/common/infrastructure/services/shop_subscription_store.dart';
+import 'package:subscriptions_sdk/subscriptions_sdk.dart' show PlanCardLogic;
 import 'package:base_sdk/src/services/date_service.dart';
 import 'package:${package}/presentation/theme/theme.dart';
 
@@ -41,12 +42,12 @@ class HaveSubscription extends StatelessWidget {
     final held = ShopSubscriptionStore.shopSubscription();
     if (held == null) return const SizedBox.shrink();
     final plan = held.subscription;
-    final name = plan?.title ??
-        plan?.content ??
-        held.title ??
-        held.content ??
-        held.subscriptionRef ??
-        (held.type == null ? '' : AppHelpers.getTranslation(held.type!));
+    // The held row usually names no plan (the doctype has no title): fall
+    // back through the nested plan, then the "<Type> plan" wording, never
+    // the plan's hash docname.
+    final named = plan != null && (plan.title ?? plan.content) != null;
+    final name = PlanCardLogic.displayTitle(named ? plan : held,
+        translate: AppHelpers.getTranslation);
     final num? price = held.price ?? plan?.price;
     final renews = held.expiredAt == null
         ? null

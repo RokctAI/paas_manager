@@ -143,6 +143,27 @@ abstract final class PlanCardLogic {
     return list.where((plan) => plan.type == category).toList();
   }
 
+  /// The plan's display name. The tenant `Subscription` doctype has no
+  /// title field (only type / price / month), so a composed-backend row
+  /// usually carries none: the card then reads "<Type> plan" (e.g. "Orders
+  /// Plan") rather than the bare type name, which read like a category,
+  /// not a plan. A row that does carry a title or content keeps it; a row
+  /// with nothing at all reads just "Plan". Nothing is invented beyond
+  /// what the row says.
+  static String displayTitle(
+    SubscriptionData plan, {
+    required String Function(String key) translate,
+  }) {
+    final title = plan.title?.trim();
+    if (title != null && title.isNotEmpty) return title;
+    final content = plan.content?.trim();
+    if (content != null && content.isNotEmpty) return content;
+    final planWord = translate(TrKeys.plan);
+    final type = plan.type?.trim();
+    if (type == null || type.isEmpty) return planWord;
+    return '${translate(type)} $planWord';
+  }
+
   /// The billing-cycle wording next to a price ("per month" / "per year" /
   /// "per N months"), derived from the tenant catalog's real `month` field.
   /// Null when the row does not say — the card then shows the price alone

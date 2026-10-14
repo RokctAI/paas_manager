@@ -124,7 +124,9 @@ void main() {
           t,
     ];
     int version = 1;
-    Future<bool> run() => MaintenanceSeed.seedDemo(
+    Future<bool> run() => MaintenanceSeed.seedAccount(
+      email: () => 'sinyage@gmail.com',
+      owner: () => 'owner-1',
       load: () async => [for (final t in stored) Map.of(t)],
       save: (l) async => stored = l,
       store: memoryStore(box),
@@ -158,11 +160,13 @@ void main() {
     ]);
   });
 
-  test('demo seed writes once and is idempotent', () async {
+  test('the owner seed writes once and is idempotent', () async {
     final Map<String, Map<String, dynamic>?> box = {};
     List<Map<String, dynamic>> stored = [];
     bool flag = false;
-    Future<bool> run() => MaintenanceSeed.seedDemo(
+    Future<bool> run() => MaintenanceSeed.seedAccount(
+      email: () => 'sinyage@gmail.com',
+      owner: () => 'owner-1',
       load: () async => [for (final t in stored) Map.of(t)],
       save: (l) async => stored = l,
       store: memoryStore(box),

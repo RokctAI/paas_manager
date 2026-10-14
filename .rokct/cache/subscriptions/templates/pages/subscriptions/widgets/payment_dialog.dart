@@ -74,9 +74,10 @@ class SubscriptionPaymentBody extends ConsumerWidget {
     final payments = state.payments ?? [];
     final brightness = Theme.of(context).brightness;
 
-    final title = plan?.title ??
-        plan?.content ??
-        (plan?.type == null ? '' : AppHelpers.getTranslation(plan!.type!));
+    final title = plan == null
+        ? ''
+        : PlanCardLogic.displayTitle(plan,
+            translate: AppHelpers.getTranslation);
     final cycle = plan == null
         ? null
         : PlanCardLogic.cycleLabel(plan, translate: AppHelpers.getTranslation);

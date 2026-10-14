@@ -12,6 +12,8 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
+import 'package:flutter/foundation.dart';
+
 import '../../infrastructure/services/task_pull_service.dart';
 import '../tasks/tasks_notifier.dart';
 
@@ -81,7 +83,16 @@ class ProductivitySessionEnd {
 
   /// Drop this SDK's in-memory session state. Writes nothing and deletes
   /// nothing.
+  /// Ticks once per session end. A surface that keeps its OWN in-memory
+  /// copy of the list (the tasks page's `_todos` and `_notes` never read
+  /// `tasksStateProvider`) listens to this and drops its copy, then reads
+  /// the store again for whichever account is current when it next draws.
+  /// Like the rest of this hook it hides; nothing on disk is touched.
+  static final ValueNotifier<int> sessionEnds = ValueNotifier<int>(0);
+
   static Future<void> clearLiveView() async {
+    sessionEnds.value++;
+
     // The stale "sync failed" notice belonged to the session that just ended,
     // and the tasks page would otherwise draw it over the next user's list.
     TaskPullService.lastFailure.value = null;

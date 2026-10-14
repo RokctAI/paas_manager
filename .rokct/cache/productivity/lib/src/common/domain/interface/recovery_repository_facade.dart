@@ -22,7 +22,9 @@ abstract class RecoveryRepositoryFacade {
   /// [weekStart] (added for the accountability-partner weekly report — the
   /// log tables already hold everything; see
   /// agent/lms/docs/adr-recovery-reuse-for-accountability.md). Keys:
-  /// `urgeEvents`, `procrastinations`, `ritualsCompleted`, `currentStreak`.
+  /// `urgeEvents`, `checkIns`, `procrastinations`, `ritualsCompleted`,
+  /// `currentStreak`. `checkIns` are resisted logs of a check-in trigger
+  /// (an attended lesson), counted apart from `urgeEvents`.
   /// This module stays domain-neutral — the recovery vocabulary is
   /// translated by the consumer's host adapter, never surfaced raw.
   Future<Map<String, int>> getWeeklySummary(DateTime weekStart);

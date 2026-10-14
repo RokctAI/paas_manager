@@ -1,7 +1,7 @@
 {
   "packages": {
     "base_sdk": {
-      "version": "1.87.1",
+      "version": "1.88.4",
       "files": {
         "flutter_native_splash.yaml": "d469a133b5e1631d6ba811b048d290449224075edad2153189cfb2edc3f4d100",
         "android/app/src/main/res/font/montserrat_extrabolditalic.ttf": "d38bac61eda8d8c002b1a852f5368901a085fbe1d844b5e0a149b674e22e2cdd",
@@ -1111,12 +1111,12 @@
       "boot_hooks": []
     },
     "subscriptions_sdk": {
-      "version": "1.6.2",
+      "version": "1.7.0",
       "files": {
         "lib/presentation/pages/subscriptions/subscriptions_page.dart": "41d1f02707fda00542adb84edae39024b3d36e93338d97778574256870c9f319",
-        "lib/presentation/pages/subscriptions/widgets/have_subscription.dart": "53dd129a903012365bd0475fb34375ac6fe1816e66086a4b64ba6a8edbb678cb",
-        "lib/presentation/pages/subscriptions/widgets/subscriptions_item.dart": "fa04dcdb9dda4aa9d8766ed994f37969efefdd38cb0e059694a200857e0f9cc5",
-        "lib/presentation/pages/subscriptions/widgets/payment_dialog.dart": "4f27750426bbce2b570ce82648212ccb1044ca5661a9852f1274fa66c350c809",
+        "lib/presentation/pages/subscriptions/widgets/have_subscription.dart": "f68ad9267204aed05b15d95f5051fe614209166c0bbd0e2751fa684a9a556af3",
+        "lib/presentation/pages/subscriptions/widgets/subscriptions_item.dart": "ad96feacc1a8ec815810f5d69f70dfdae5d69cdae475362a8490da8789e3b732",
+        "lib/presentation/pages/subscriptions/widgets/payment_dialog.dart": "4c359e1a37b85a2c2ec0a5a436ae711b07ccec02ba4b33a30ca589371c55c1f3",
         "assets/demo/subscriptions/api.subscription.subscribe_my_shop.json": "d71093be9ab160f560b055aee85903ec266bc1fd5527f4cb2d423cabd4030b1e",
         "assets/demo/subscriptions/api.subscription.list_subscriptions.json": "7c10bcf80966ed3620e75465194d1c57d6e9b9a8e42865454452d7743c39ca3f"
       },
@@ -1151,7 +1151,7 @@
       ]
     },
     "comms_sdk": {
-      "version": "1.22.3",
+      "version": "1.22.4",
       "files": {
         "lib/presentation/pages/notification/notification_list_page.dart": "2ebfa74cb0686cfa0ba1d1aff281bd90e651ae740247a2ddd03e1116e64e9388",
         "lib/application/notification/notification_state.dart": "055c8ab42969bad5e418061cbe38699458bfc8b74ea7d4def4a03a18e261b184",
@@ -1271,10 +1271,10 @@
       "boot_hooks": []
     },
     "productivity_sdk": {
-      "version": "1.8.0",
+      "version": "1.9.0",
       "files": {
-        "lib/presentation/pages/tasks/tasks_page.dart": "4d9f44c5a911cff3359a004b3501746b6fb54d5b15d1edf892ddbb6797ea8f24",
-        "lib/presentation/pages/tasks/task_run_page.dart": "85738562f5313dc77b4af26f5ad908c39932d859b016cd135f410c0294daf3ae",
+        "lib/presentation/pages/tasks/tasks_page.dart": "d7665ce2ea1b3b2ac07858acd1862c2d29be799417b2f50ea858b25b7b35c082",
+        "lib/presentation/pages/tasks/task_run_page.dart": "c0384784dd5923c80eb05172a54a5d96227375f721eb553226600335733d4f08",
         "lib/presentation/pages/vision/plan_on_a_page.dart": "5ef9c9903723e9dadbe69df8973ab3b324c6e857c6764f473c42ce656b32e204",
         "lib/presentation/pages/vision/personal_mastery_page.dart": "aa70c79d6ce0ed067cf2a6d0b492f59de2d43fb20b53b9a1b758c867285fac20"
       },
@@ -2024,12 +2024,12 @@
   },
   "sdk_cache": {
     "base": {
-      "version": "1.87.1",
-      "source_hash": "4b1e83c421991976"
+      "version": "1.88.4",
+      "source_hash": "2505709dc2abdc06"
     },
     "comms": {
-      "version": "1.22.3",
-      "source_hash": "ae6d26083780751b"
+      "version": "1.22.4",
+      "source_hash": "1afb460c6c305982"
     },
     "auth": {
       "version": "1.20.0",
@@ -2068,16 +2068,16 @@
       "source_hash": "6cb197e44f5f7a4c"
     },
     "subscriptions": {
-      "version": "1.6.2",
-      "source_hash": "e204dfe2f3520818"
+      "version": "1.7.0",
+      "source_hash": "5ea612a746049968"
     },
     "processing": {
       "version": "1.0.2",
       "source_hash": "0f71149fa89119ec"
     },
     "productivity": {
-      "version": "1.8.0",
-      "source_hash": "5e852f193575643c"
+      "version": "1.9.0",
+      "source_hash": "a4bf3ef516fc1b63"
     },
     "calc": {
       "version": "1.4.0",

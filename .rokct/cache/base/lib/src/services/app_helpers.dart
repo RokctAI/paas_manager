@@ -132,11 +132,11 @@ abstract class AppHelpers {
       behavior: SnackBarBehavior.floating,
       duration: const Duration(seconds: 3),
       content: Text(
-        'No internet connection',
+        getTranslation(TrKeys.noInternetConnection),
         style: AppStyle.interNoSemi(size: 14, color: AppStyle.white),
       ),
       action: SnackBarAction(
-        label: 'Close',
+        label: getTranslation(TrKeys.close),
         disabledTextColor: AppStyle.black,
         textColor: AppStyle.black,
         onPressed: () {

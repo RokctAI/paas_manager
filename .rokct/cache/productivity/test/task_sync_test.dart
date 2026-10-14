@@ -75,7 +75,10 @@ class _StubBackend implements HttpClientAdapter {
         <String, dynamic>{};
     calls.add(_Call(cmd, payload));
 
-    final Object? reply = replies[cmd];
+    Object? reply = replies[cmd];
+    // A function reply answers from the request, for a server whose answer
+    // depends on what was asked (the paged pull).
+    if (reply is Object Function(Map<String, dynamic>)) reply = reply(payload);
     if (reply is int) {
       return ResponseBody.fromString(
         jsonEncode(<String, dynamic>{'exc_type': 'ValidationError'}),
@@ -562,6 +565,98 @@ void main() {
         ]);
       },
     );
+
+    test('a full page is followed until the server says there is no more',
+        () async {
+      final _StubBackend backend = useBackend();
+      Map<String, dynamic> row(String cid, String modified) => <String, dynamic>{
+        'name': 'TASK-$cid',
+        'client_id': cid,
+        'subject': 'Task $cid',
+        'status': 'Open',
+        'modified': modified,
+      };
+      backend.replies['api.projects.list_personal_tasks'] =
+          (Map<String, dynamic> payload) => switch (payload['modified_after']) {
+            null => <String, dynamic>{
+              'tasks': <Map<String, dynamic>>[row('p1', '2026-09-01 10:00:00')],
+              'server_time': '2026-09-01 10:00:00',
+              'has_more': true,
+            },
+            '2026-09-01 10:00:00' => <String, dynamic>{
+              'tasks': <Map<String, dynamic>>[row('p2', '2026-09-01 10:05:00')],
+              'server_time': '2026-09-01 12:00:00',
+              'has_more': false,
+            },
+            _ => <String, dynamic>{
+              'tasks': <Map<String, dynamic>>[],
+              'server_time': '2026-09-01 12:00:00',
+            },
+          };
+
+      expect(await TaskPullService.pull(), 2);
+
+      final Set<String> titles = <String>{
+        for (final Map<String, dynamic> t in await repository.loadTodos())
+          '${t['title']}',
+      };
+      expect(titles, <String>{'Task p1', 'Task p2'});
+      // Two pages, the second one asked from the first one's cursor.
+      final List<_Call> pulls = backend.calls
+          .where((c) => c.cmd == 'api.projects.list_personal_tasks')
+          .toList();
+      expect(pulls, hasLength(2));
+      expect(pulls.last.payload['modified_after'], '2026-09-01 10:00:00');
+      // The cursor lands on the last page's clock.
+      expect(await TaskSyncStore.readCursor(), '2026-09-01 12:00:00');
+    });
+
+    test('a task deleted on another device leaves this one too', () async {
+      final _StubBackend backend = useBackend();
+      backend.replies['api.projects.list_personal_tasks'] = <String, dynamic>{
+        'tasks': <Map<String, dynamic>>[
+          <String, dynamic>{
+            'name': 'TASK-GONE',
+            'client_id': 'gone-elsewhere',
+            'subject': 'Deleted on the other handset',
+            'status': 'Open',
+            'modified': '2026-09-01 10:00:00',
+          },
+        ],
+        'server_time': '2026-09-01 10:00:01',
+      };
+      await TaskPullService.pull();
+      expect(await repository.loadTodos(), hasLength(1));
+
+      backend.replies['api.projects.list_personal_tasks'] = <String, dynamic>{
+        'tasks': <Map<String, dynamic>>[],
+        'deleted': <Map<String, dynamic>>[
+          <String, dynamic>{'name': 'TASK-GONE', 'client_id': 'gone-elsewhere'},
+        ],
+        'server_time': '2026-09-01 11:00:00',
+      };
+      expect(await TaskPullService.pull(), 1);
+      expect(await repository.loadTodos(), isEmpty);
+    });
+
+    test('a tombstone never removes a task with an unsent local edit',
+        () async {
+      final _StubBackend backend = useBackend();
+      // The push is refused, so the local edit stays queued.
+      backend.replies['api.projects.sync_personal_task'] = 503;
+      await repository.saveTodos(<Map<String, dynamic>>[aTask()]);
+      await settle();
+
+      backend.replies['api.projects.list_personal_tasks'] = <String, dynamic>{
+        'tasks': <Map<String, dynamic>>[],
+        'deleted': <Map<String, dynamic>>[
+          <String, dynamic>{'name': 'TASK-X', 'client_id': cid},
+        ],
+        'server_time': '2026-09-01 11:00:00',
+      };
+      expect(await TaskPullService.pull(), 0);
+      expect(await repository.loadTodos(), hasLength(1));
+    });
 
     test('the next pull resumes from the server clock, verbatim', () async {
       final _StubBackend backend = useBackend();

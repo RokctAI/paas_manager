@@ -29,22 +29,29 @@
 //
 ///   context.router.pushNamed('/tasks/run?task=$taskId');
 //
-// At one plane it pops `true` when the user marks the task done from the
-// finished card, so a caller that owns the list can tick it; a caller that
-// ignores the result is left with every step done and the task itself
-// still open, which is the honest state. On a wide window the workspace
-// owns the list, ticks the task itself and pops nothing.
+// At one plane, "Mark done" on the finished card marks the task done. When
+// the tasks list pushed the run (`caller=list`), the page pops `true` and
+// the list ticks the task with its own recurrence and reminders. Opened
+// any other way (another SDK's route push, a deep link), nobody is waiting
+// on that result, so the page marks the task done itself through the same
+// repository: it cancels the task's reminder, makes the next occurrence of
+// a repeating task (TaskRecurrence, the same rule the list uses) and saves
+// both, then pops `true`. On a wide window the workspace owns the list,
+// ticks the task itself and pops nothing.
 //
 // The page persists exactly as the workspace does: the local store first,
 // through the same repository, and the outbox push follows unawaited.
 
 import 'dart:async';
+import 'dart:math';
 
 import 'package:auto_route/auto_route.dart';
+import 'package:comms_sdk/comms_sdk.dart';
 import 'package:base_sdk/base_sdk.dart';
 import 'package:base_sdk/src/presentation/theme/app_style.dart';
 import 'package:flutter/material.dart';
 import 'package:productivity_sdk/productivity_sdk.dart';
+import 'package:uuid/uuid.dart';
 
 // The workspace this route yields a wide window to. Installed beside this
 // file (manifest.json installs templates/pages/tasks as one directory), so
@@ -53,10 +60,18 @@ import 'tasks_page.dart';
 
 @RoutePage(name: 'TaskRunRoute')
 class TaskRunPage extends StatefulWidget {
-  const TaskRunPage({super.key, @QueryParam('task') this.taskId});
+  const TaskRunPage({
+    super.key,
+    @QueryParam('task') this.taskId,
+    @QueryParam('caller') this.caller,
+  });
 
   /// The local id of the task to run.
   final String? taskId;
+
+  /// `list` when the tasks list pushed this page and will tick the task
+  /// itself on a `true` result; anything else and this page does it.
+  final String? caller;
 
   @override
   State<TaskRunPage> createState() => _TaskRunPageState();
@@ -99,6 +114,43 @@ class _TaskRunPageState extends State<TaskRunPage> {
     setState(() => _task = task);
     _repository.saveTodos(<Map<String, dynamic>>[task]);
     unawaited(MaintenancePlantStore.local.captureFromRun(task));
+  }
+
+  /// "Mark done" on the finished card. See the file comment: the tasks
+  /// list ticks the task itself, anyone else gets it ticked here.
+  Future<void> _markDone() async {
+    final Map<String, dynamic>? task = _task;
+    if (widget.caller == 'list' || task == null || task['isDone'] == true) {
+      if (mounted) await context.router.maybePop(true);
+      return;
+    }
+    final Map<String, dynamic> done = <String, dynamic>{
+      ...task,
+      'isDone': true,
+    };
+    final Object? notifId = done['notifId'];
+    if (notifId is int) LocalNotifications.cancelNotification(notifId);
+    final int nextNotifId = Random().nextInt(100000);
+    final Map<String, dynamic>? next = TaskRecurrence.spawnNext(
+      done,
+      newId: const Uuid().v4(),
+      notifId: nextNotifId,
+    );
+    await _repository.saveTodos(<Map<String, dynamic>>[
+      done,
+      if (next != null) next,
+    ]);
+    if (next != null && next['reminder'] == true) {
+      LocalNotifications.scheduleNotification(
+        id: nextNotifId,
+        title: 'Task Reminder',
+        body: done['title'],
+        scheduledDate: DateTime.parse(next['deadline'] as String),
+      );
+    }
+    if (!mounted) return;
+    setState(() => _task = done);
+    await context.router.maybePop(true);
   }
 
   @override
@@ -170,7 +222,7 @@ class _TaskRunPageState extends State<TaskRunPage> {
                       task: task,
                       onChanged: _onChanged,
                       onLeave: () => context.router.maybePop(false),
-                      onMarkDone: () => context.router.maybePop(true),
+                      onMarkDone: _markDone,
                     ),
                   ),
                 ],

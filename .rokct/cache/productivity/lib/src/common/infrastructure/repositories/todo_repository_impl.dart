@@ -107,7 +107,9 @@ class TodoRepositoryImpl implements TodoRepositoryFacade {
   /// to keep loading: a throw here would take down the whole list and turn a
   /// silent loss of the extras into a dead tasks page. Every one of those
   /// degrades to no extras, and [rowToTodo] still fills the columns in.
-  @visibleForTesting
+  ///
+  /// Package-internal codec like [rowToTodo]: `TaskService` reads the same
+  /// blob for the launcher glance.
   static Map<String, dynamic> decodeTodoData(String? data) {
     if (data == null || data.trim().isEmpty) return <String, dynamic>{};
     try {

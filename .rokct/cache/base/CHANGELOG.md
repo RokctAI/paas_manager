@@ -1,5 +1,40 @@
 # Changelog
 
+## 1.88.4
+
+* fix(base): floating nav polish. The active tab's rectangle fills the full height of the pill housing so it sits flush against the pill edges, and the label sits 2px below the icon instead of against the pill. The pill's translucent fill drops from 70% to 50% alpha so the frosted blur shows through; white labels on light pages are now below WCAG AA contrast.
+
+## 1.88.3
+
+* fix(profile): edit profile saves again. It sent the old key names
+  (`firstname`, `birthday`, `images`), which the backend ignores, so names
+  and birthdays never saved. It now sends `first_name`, `last_name`,
+  `birth_date`, `gender` and `phone`, and leaves the phone out when there
+  is none instead of blanking it. The same fix covers registration's
+  profile step, which uses the same request.
+* fix(profile): saving no longer blanks the signed-in user. The backend
+  answers a save with a message, not a profile, and that empty answer was
+  stored as the user. The app now reads the profile back, or keeps the
+  edits on the current user if that read fails.
+* fix(profile): a new profile photo is attached to the account after it
+  uploads (`update_profile_image`). Before, it was uploaded and then never
+  used.
+* fix(profile): the date of birth starts empty for someone who has none,
+  so an untouched Save no longer stores today's date as their birthday.
+* fix(profile): the footer's Online / Offline label and the "No internet
+  connection" snackbar are translated.
+* fix(profile): Terms and Privacy show "Check your network connection"
+  when offline and "This page is not available yet" when the tenant has
+  not published the page, instead of the raw error.
+* fix(profile): deleting the account, or a signed-out profile refresh, no
+  longer routes through a page that has already closed.
+* fix(language): saving a language changes the running app at once
+  (locale and text direction). Before, it only took effect after a restart.
+* fix(splash): a later start routes straight away on the stored settings
+  and refreshes them in the background. Only the first start, which has
+  none stored, waits for them. It was the other way round, so every start
+  after the first waited on the network.
+
 ## 1.88.2
 
 * fix(build): base now asks for dio 5.10 or newer. Its timeout handling

@@ -1,6 +1,6 @@
 {
   "name": "productivity_sdk",
-  "version": "1.8.0",
+  "version": "1.9.0",
   "_comment_version_1_8_0": "1.7.7 -> 1.8.0: the fleet productivity ENTRY (Ray, 2026-10-12: the launcher's Productivity button should work like the calculator - open one of our apps that has productivity_sdk, and not show when none is installed). Every app that composes productivity_sdk gets an exported activity-alias of its own MainActivity answering rokct.intent.action.PRODUCTIVITY with the data scheme rokct, the same shape as calc_sdk's rokct.intent.action.CALCULATOR entry. launch_sdk (>= 1.25.0) finds such apps through the package manager and opens one by explicit component with rokct:/tasks?from=launcher; TasksPage reads ?from= and wraps the workspace in base_sdk's ReturnToLauncherScope (base_sdk >= 1.87.0), so back returns to the launcher. The /tasks route is unchanged.",
   "home_page": "templates/pages/tasks/tasks_page.dart",
   "installs": [

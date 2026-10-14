@@ -41,9 +41,14 @@ abstract class SubscriptionsFacade {
     String? beneficiaryUserId,
   });
 
+  /// Legacy marketplace payment record. Not used by the purchase flow any
+  /// more: the composed backend's purchase charges the wallet and
+  /// activates in one call.
+  ///
   /// [id] is whatever identifier [purchaseSubscription] returned — the
   /// legacy backend used an int, the composed backend a Frappe document
   /// name (String) — so it is deliberately untyped.
+  @Deprecated('The purchase charges and activates in one call.')
   Future<ApiResult<SubscriptionTransactionsResponse>> createTransaction({
     required Object id,
     required int paymentId,

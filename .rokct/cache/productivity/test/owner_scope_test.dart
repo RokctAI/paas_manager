@@ -164,6 +164,102 @@ Future<void> main() async {
       expect((await recovery.getStreakStats())['currentStreak'], 1);
     });
 
+    test('the launcher glance reads tasks the tasks page wrote', () async {
+      signedInAs('user-a');
+      final DateTime yesterday = DateTime.now().subtract(
+        const Duration(days: 1),
+      );
+      await tasks.saveTodos(<Map<String, dynamic>>[
+        <String, dynamic>{
+          ...task('due', 'Pay the water bill'),
+          'deadline': yesterday.toIso8601String(),
+        },
+        <String, dynamic>{
+          ...task('done', 'Already paid'),
+          'isDone': true,
+          'deadline': yesterday.toIso8601String(),
+        },
+      ]);
+      final List<TaskModel> read = await TaskService(database).getTasks();
+      expect(read.map((t) => t.id).toSet(), <String>{'due', 'done'});
+      final List<ProductivityAttentionLine> lines =
+          ProductivityAttention.tasksNeedingAttention(read, now: DateTime.now());
+      expect(lines, hasLength(1));
+      expect(lines.single.text, 'Overdue - Pay the water bill');
+    });
+
+    test('the streak grows once per day, however many logs', () async {
+      signedInAs('user-a');
+      for (int i = 0; i < 3; i++) {
+        await recovery.logUrge(
+          intensity: 0,
+          triggerType: 'attended-session',
+          outcome: 'Resisted',
+        );
+      }
+      expect((await recovery.getStreakStats())['currentStreak'], 1);
+
+      // A relapse resets it; a resisted log after it counts again.
+      await recovery.logUrge(
+        intensity: 0,
+        triggerType: 'skipped-session',
+        outcome: 'Relapsed',
+      );
+      expect((await recovery.getStreakStats())['currentStreak'], 0);
+      await recovery.logUrge(
+        intensity: 0,
+        triggerType: 'attended-session',
+        outcome: 'Resisted',
+      );
+      expect((await recovery.getStreakStats())['currentStreak'], 1);
+    });
+
+    test('attended lessons are check-ins, not urges', () async {
+      signedInAs('user-a');
+      await recovery.logUrge(
+        intensity: 0,
+        triggerType: 'attended-session',
+        outcome: 'Resisted',
+      );
+      await recovery.logUrge(
+        intensity: 6,
+        triggerType: 'Bored',
+        outcome: 'Resisted',
+      );
+      final Map<String, int> week = await recovery.getWeeklySummary(
+        DateTime.now().subtract(const Duration(days: 1)),
+      );
+      expect(week['urgeEvents'], 1);
+      expect(week['checkIns'], 1);
+    });
+
+    test('a signed-in streak never writes the unowned profile', () async {
+      // A profile from before anyone signed in.
+      signedInAs(null);
+      await recovery.logUrge(
+        intensity: 1,
+        triggerType: 'Bored',
+        outcome: 'Resisted',
+      );
+      final List<RecoveryProfileEntity> before =
+          await database.select(database.recoveryProfilesTable).get();
+      expect(before.single.owner, '');
+
+      signedInAs('user-a');
+      await recovery.logUrge(
+        intensity: 0,
+        triggerType: 'skipped-session',
+        outcome: 'Relapsed',
+      );
+      final List<RecoveryProfileEntity> after =
+          await database.select(database.recoveryProfilesTable).get();
+      final RecoveryProfileEntity unowned =
+          after.singleWhere((p) => p.owner == '');
+      expect(unowned.currentStreak, 1, reason: 'the shared profile is untouched');
+      expect(after.singleWhere((p) => p.owner == 'user-a').currentStreak, 0);
+      expect((await recovery.getStreakStats())['currentStreak'], 0);
+    });
+
     test('a delete reaches only the deleting account\'s row', () async {
       signedInAs('user-a');
       await tasks.saveTodos(<Map<String, dynamic>>[task('shared', 'A version')]);

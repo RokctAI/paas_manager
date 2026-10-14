@@ -268,9 +268,22 @@ class TaskSubtaskResponse {
 /// clock on purpose: resuming from a device clock would silently skip
 /// everything written in the gap between the two.
 class TaskListResponse {
-  const TaskListResponse({required this.tasks, this.rawServerTime});
+  const TaskListResponse({
+    required this.tasks,
+    this.rawServerTime,
+    this.hasMore = false,
+    this.deletedClientIds = const <String>[],
+  });
 
   final List<TaskResponse> tasks;
+
+  /// The page was full and the server holds more after [rawServerTime].
+  /// The device pulls again from that cursor until this comes back false.
+  final bool hasMore;
+
+  /// The `client_id`s of the caller's tasks deleted on the server in this
+  /// page's window (the endpoint's `deleted` tombstones).
+  final List<String> deletedClientIds;
 
   /// The server clock, kept as the exact string the server sent.
   ///
@@ -288,6 +301,13 @@ class TaskListResponse {
             if (row is Map) TaskResponse.fromMap(row.cast<String, dynamic>()),
       ],
       rawServerTime: serverTime.isEmpty ? null : serverTime,
+      hasMore: _asBool(map['has_more']),
+      deletedClientIds: <String>[
+        if (map['deleted'] is List)
+          for (final Object? row in map['deleted'] as List)
+            if (row is Map && '${row['client_id'] ?? ''}'.trim().isNotEmpty)
+              '${row['client_id']}'.trim(),
+      ],
     );
   }
 }

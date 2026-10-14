@@ -107,6 +107,13 @@ class _TasksWorkspaceState extends State<TasksWorkspace> {
   final TextEditingController _noteBodyController = TextEditingController();
 
   List<Map<String, dynamic>> _todos = [];
+
+  /// The account [_todos] and [_notes] were read for. The lists are this
+  /// page's own copies, so a sign-out or an account switch has to be
+  /// noticed here: see [_onSessionEnded] and [_reloadIfOwnerChanged].
+  String? _loadedOwner;
+  bool _sessionEnded = false;
+  bool _ownerReloadQueued = false;
   final TextEditingController _controller = TextEditingController();
   final TextEditingController _categoryController = TextEditingController();
   final TextEditingController _subtaskController = TextEditingController();
@@ -211,6 +218,7 @@ class _TasksWorkspaceState extends State<TasksWorkspace> {
     _loadTodos();
     _loadNotes();
     TaskPullService.lastFailure.addListener(_onPullStatusChanged);
+    ProductivitySessionEnd.sessionEnds.addListener(_onSessionEnded);
     // Sync runs BESIDE the page, never in front of it. The list above is
     // already being read from the local store; this asks the backend for
     // anything it knows that this device does not, and redraws only if the
@@ -225,9 +233,51 @@ class _TasksWorkspaceState extends State<TasksWorkspace> {
   @override
   void dispose() {
     TaskPullService.lastFailure.removeListener(_onPullStatusChanged);
+    ProductivitySessionEnd.sessionEnds.removeListener(_onSessionEnded);
     _noteTitleController.dispose();
     _noteBodyController.dispose();
     super.dispose();
+  }
+
+  /// A sign-out ended the session. HIDE, NEVER WIPE: the lists this page
+  /// holds in memory are dropped, and nothing in the store is touched, so
+  /// the departing account's tasks and notes (and any unsent edits) are
+  /// still on the device for when it signs back in. The next draw reads the
+  /// store again for whichever account is current then.
+  void _onSessionEnded() {
+    if (!mounted) return;
+    _closePane();
+    _closeNotePane();
+    setState(() {
+      _todos = <Map<String, dynamic>>[];
+      _notes = <Map<String, dynamic>>[];
+      _runningId = null;
+      _loadedOwner = null;
+      _sessionEnded = true;
+    });
+  }
+
+  /// Reads the lists again when the signed-in account is not the one they
+  /// were read for: a sign-in after [_onSessionEnded], or an account switch
+  /// while this page stayed alive. The store is owner-scoped, so the reload
+  /// shows exactly that account's rows. Asks base_sdk's [OwnerScope]
+  /// resolver rather than its `current`, because `current` keeps naming the
+  /// departing account after a sign-out on purpose. Called from build;
+  /// the reload itself runs after the frame.
+  void _reloadIfOwnerChanged() {
+    if (_ownerReloadQueued) return;
+    final String? signedIn = OwnerScope.instance.resolver();
+    if (signedIn == null || signedIn.isEmpty) return;
+    if (_loadedOwner != null && signedIn == _loadedOwner) return;
+    if (_loadedOwner == null && !_sessionEnded) return; // first load pending
+    _ownerReloadQueued = true;
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      if (mounted) {
+        await _loadTodos();
+        await _loadNotes();
+      }
+      _ownerReloadQueued = false;
+    });
   }
 
   /// A pull completed or failed; redraw only if the answer changed.
@@ -246,6 +296,11 @@ class _TasksWorkspaceState extends State<TasksWorkspace> {
   /// state's one line when nothing came down because the pull failed.
   Future<void> _syncInBackground() async {
     final bool changed = await _repository.syncNow();
+    // Tasks deleted on another device are gone from the store now; their
+    // reminders on this device go with them.
+    for (final int notifId in TaskPullService.takeRemovedNotifIds()) {
+      LocalNotifications.cancelNotification(notifId);
+    }
     if (!mounted) return;
     if (changed) {
       await _loadTodos();
@@ -261,18 +316,13 @@ class _TasksWorkspaceState extends State<TasksWorkspace> {
   }
 
   Future<void> _loadTodos() async {
-    // The RO plant, SEEDED (maintenance_seed.dart). A demo session starts
-    // with the plant described and its service tasks on the list, written
-    // once; a plant owner's account is seeded the same way, once per
-    // owner, and the save pushes the tasks to the server. Tasks pulled on
-    // another device are made whole here (template key, step kinds, the
+    // The RO plant, SEEDED (maintenance_seed.dart), for the plant owners'
+    // accounts only, once per owner; the save pushes the tasks to the
+    // server. A demo session gets no plant (Ray: the demo is public, and
+    // these are one owner's real plant tasks). Tasks pulled on another
+    // device are made whole here (template key, step kinds, the
     // device-local plant record).
-    if (DemoSession.demoActive) {
-      await MaintenanceSeed.seedDemo(
-        load: _repository.loadTodos,
-        save: _repository.saveTodos,
-      );
-    } else {
+    if (!DemoSession.demoActive) {
       await MaintenanceSeed.seedAccount(
         load: _repository.loadTodos,
         save: _repository.saveTodos,
@@ -283,13 +333,20 @@ class _TasksWorkspaceState extends State<TasksWorkspace> {
         save: _repository.saveTodos,
       );
     }
+    final String owner = ProductivityOwnerScope.currentOwner;
+    final int session = ProductivitySessionEnd.sessionEnds.value;
     final todos = await _repository.loadTodos();
     final List<Map<String, dynamic>> adopted =
         await MaintenanceSeed.adoptPulled(todos);
     if (adopted.isNotEmpty) await _repository.saveTodos(todos);
+    // A sign-out that landed while this read was in flight wins: the rows
+    // read belong to the session that just ended.
+    if (session != ProductivitySessionEnd.sessionEnds.value) return;
     if (mounted) {
       setState(() {
         _todos = todos;
+        _loadedOwner = owner;
+        _sessionEnded = false;
         // THE TABS' OPENING VALUE, DERIVED FROM THE LIST THAT JUST LANDED —
         // Ray: "when thereis completed task switch from all to pending".
         // Only while the reader has not picked one themselves, and only
@@ -345,7 +402,9 @@ class _TasksWorkspaceState extends State<TasksWorkspace> {
   // =================================================================
 
   Future<void> _loadNotes() async {
+    final int session = ProductivitySessionEnd.sessionEnds.value;
     final List<Map<String, dynamic>> notes = await _noteRepository.loadNotes();
+    if (session != ProductivitySessionEnd.sessionEnds.value) return;
     if (mounted) setState(() => _notes = notes);
   }
 
@@ -892,81 +951,34 @@ class _TasksWorkspaceState extends State<TasksWorkspace> {
   }
 
   void _handleRecurrence(Map<String, dynamic> task) {
-    final String recurrence = task['recurrence'] ?? 'None';
-    if (recurrence == 'None' || task['deadline'] == null) return;
-
-    final DateTime currentDeadline = DateTime.parse(task['deadline']);
-    DateTime nextDeadline;
-
-    if (recurrence == 'Daily') {
-      nextDeadline = currentDeadline.add(const Duration(days: 1));
-    } else if (recurrence == 'Weekly') {
-      nextDeadline = currentDeadline.add(const Duration(days: 7));
-    } else if (recurrence == 'Monthly') {
-      nextDeadline = DateTime(
-        currentDeadline.year,
-        currentDeadline.month + 1,
-        currentDeadline.day,
-        currentDeadline.hour,
-        currentDeadline.minute,
-      );
-    } else {
-      return;
-    }
-
-    final String newId = _uuid.v4();
+    // ONE next occurrence per task: TaskRecurrence keeps the spawned id on
+    // the task and builds nothing the second time, so unticking and
+    // ticking again no longer adds (and schedules a reminder for) another
+    // copy. Unticking leaves the spawned instance where it is.
     final int notifId = Random().nextInt(100000);
-    final bool hasReminder = task['reminder'] ?? false;
-    final DateTime createdAt = DateTime.now();
+    final Map<String, dynamic>? next = TaskRecurrence.spawnNext(
+      task,
+      newId: _uuid.v4(),
+      notifId: notifId,
+    );
+    if (next == null) return;
+    _todos.add(next);
 
-    _todos.add({
-      'id': newId,
-      'notifId': notifId,
-      'title': task['title'],
-      'isDone': false,
-      'deadline': nextDeadline.toIso8601String(),
-      'reminder': hasReminder,
-      'priority': task['priority'],
-      'category': task['category'],
-      'recurrence': recurrence,
-      'createdAt': createdAt.toIso8601String(),
-      'stepsAreSequential': task['stepsAreSequential'] == true,
-      // The next instance is measured on its OWN dates, not the finished
-      // one's: a weekly task whose next deadline is seven days out is not
-      // long term however the instance before it was banded.
-      'isLongTerm': LongTermRule.isLongTerm(
-        endDate: nextDeadline,
-        createdAt: createdAt,
-      ),
-      // Frame 44c: the objective is part of the procedure, not of the
-      // progress — the next instance serves the same objective.
-      if (task.containsKey('strategicObjective')) ...<String, dynamic>{
-        'strategicObjective': task['strategicObjective'],
-        'strategicObjectiveTitle': task['strategicObjectiveTitle'],
-        'strategicObjectivePillar': task['strategicObjectivePillar'],
-      },
-      // The next instance starts with the PROCEDURE (title, instruction,
-      // duration) and none of the run's progress: isDone cleared as
-      // before, and the step timestamps with it.
-      'subtasks':
-          (task['subtasks'] as List?)
-              ?.map((s) => TaskRunStep.freshCopy(Map<String, dynamic>.from(s)))
-              .toList() ??
-          [],
-    });
-
-    if (hasReminder) {
+    if (next['reminder'] == true) {
       LocalNotifications.scheduleNotification(
         id: notifId,
         title: 'Task Reminder',
         body: task['title'],
-        scheduledDate: nextDeadline,
+        scheduledDate: DateTime.parse(next['deadline'] as String),
       );
     }
   }
 
   void _toggleTodo(int index) {
-    final int notifId = _todos[index]['notifId'] ?? Random().nextInt(100000);
+    // Kept on the task when it had none, so the reminder an untick
+    // schedules below is one a later tick or delete can cancel.
+    final int notifId =
+        _todos[index]['notifId'] ??= Random().nextInt(100000);
 
     setState(() {
       _todos[index]['isDone'] = !_todos[index]['isDone'];
@@ -1015,10 +1027,21 @@ class _TasksWorkspaceState extends State<TasksWorkspace> {
   }
 
   Future<void> _pickDeadline() async {
+    // An overdue task's deadline is before today, and showDatePicker
+    // asserts when initialDate is before firstDate. The calendar opens on
+    // that deadline and starts there; any other task starts at today.
+    final DateTime now = DateTime.now();
+    final DateTime initial = _selectedDeadline ?? now;
+    final DateTime today = DateTime(now.year, now.month, now.day);
+    final DateTime initialDay = DateTime(
+      initial.year,
+      initial.month,
+      initial.day,
+    );
     final DateTime? pickedDate = await showDatePicker(
       context: context,
-      initialDate: _selectedDeadline ?? DateTime.now(),
-      firstDate: DateTime.now(),
+      initialDate: initialDay,
+      firstDate: initialDay.isBefore(today) ? initialDay : today,
       lastDate: DateTime(2100),
     );
 
@@ -1241,6 +1264,7 @@ class _TasksWorkspaceState extends State<TasksWorkspace> {
 
   @override
   Widget build(BuildContext context) {
+    _reloadIfOwnerChanged();
     // A BuildContext lookup for the mode, not the app-wide AppStyle.isDark
     // static (Ray, 2026-09-19: "glance doesnt change test immediately
     // untill you come back if you switched theme mode" — the same defect,
@@ -1558,8 +1582,11 @@ class _TasksWorkspaceState extends State<TasksWorkspace> {
     // The pushed page persists through the same repository; reload on
     // return so the badge on the card reads the run's new position, and
     // tick the task when the finished card asked for it.
+    // `caller=list`: this page ticks the task itself when the run pops
+    // `true` (with its recurrence and reminders), so the run page leaves
+    // that to it.
     final Object? result = await context.router.pushNamed(
-      '/tasks/run?task=$id',
+      '/tasks/run?task=$id&caller=list',
     );
     if (!mounted) return;
     await _loadTodos();

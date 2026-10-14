@@ -93,6 +93,7 @@ export 'src/common/presentation/tasks/task_sync_notice.dart';
 // from end date"). Exported because the installed tasks page applies the
 // rule when it builds a task map, and the store applies it again on save.
 export 'src/common/application/tasks/long_term_rule.dart';
+export 'src/common/application/tasks/task_recurrence.dart';
 
 // Notes — a second list on the /tasks workspace (Ray: "i cant do notes its
 // only tasks and no seperate notes if need to be"). LOCAL ONLY: no backend

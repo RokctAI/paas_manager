@@ -49,44 +49,53 @@ class SubscriptionsRepository implements SubscriptionsFacade {
   SubscriptionsRepository(this._client, this._database, {String? Function()? localeCallback})
     : _localeCallback = localeCallback;
 
+  /// Page size asked of `list_subscriptions` (its server-side maximum).
+  static const int catalogPageSize = 100;
+
+  /// Safety stop for the paging loop: never more than this many pages.
+  static const int _maxCatalogPages = 50;
+
   @override
   Future<ApiResult<SubscriptionResponse>> getSubscriptions({
     required int page,
     String? locale,
   }) async {
     final activeLocale = locale ?? _localeCallback?.call();
-    // list_subscriptions returns the complete plan catalog in one response —
-    // the composed backend has no server-side pagination. Later pages are
-    // reported empty so load-more footers terminate instead of re-appending
-    // the same rows.
+    // Page 1 returns the WHOLE plan catalog: list_subscriptions is paged
+    // server-side (start/limit), and this walks every page until a short
+    // one, so a catalog bigger than one page is never cut off. Later pages
+    // are reported empty so load-more footers terminate instead of
+    // re-appending the same rows.
     if (page > 1) {
       return ApiResult.success(data: SubscriptionResponse(data: const []));
     }
-    final data = {'lang': activeLocale};
     try {
-      final response = await _client.post(
-        _gatewayPath,
-        // Frappe drops kwargs the whitelisted method does not declare, so
-        // `lang` is inert today; it stays on the wire to keep the facade's
-        // locale contract when the composed backend grows translations.
-        data: {'cmd': '$_cmd.list_subscriptions', 'payload': data},
-      );
-      final subResponse = _parseSubscriptionList(response.data);
-
-      // Cache the active subscription (status + title + allowed subjects)
-      // locally so offline consumers like BackgroundAssetOrchestrator can
-      // read it.
-      if (subResponse.data != null && subResponse.data!.isNotEmpty) {
-        final activeSub = subResponse.data!.firstWhere(
-          (element) => element.active == true,
-          orElse: () => subResponse.data!.first,
+      final all = <SubscriptionData>[];
+      for (var i = 0; i < _maxCatalogPages; i++) {
+        final response = await _client.post(
+          _gatewayPath,
+          // Frappe drops kwargs the whitelisted method does not declare, so
+          // `lang` is inert today; it stays on the wire to keep the
+          // facade's locale contract when the composed backend grows
+          // translations.
+          data: {
+            'cmd': '$_cmd.list_subscriptions',
+            'payload': {
+              'lang': activeLocale,
+              'start': all.length,
+              'limit': catalogPageSize,
+            },
+          },
         );
-        await _cacheActiveSubscription(activeSub);
+        final rows = _parseSubscriptionList(response.data).data ?? const [];
+        all.addAll(rows);
+        if (rows.length < catalogPageSize) break;
       }
-
-      return ApiResult.success(
-        data: subResponse,
-      );
+      // NOT cached as the user's subscription: these are the plan CATALOG
+      // (`active` there means "published"), not anything the user holds.
+      // The user's own subscription is cached from the purchase result
+      // (see purchaseSubscription).
+      return ApiResult.success(data: SubscriptionResponse(data: all));
     } catch (e, s) {
       debugPrint('==> get subscription failure: $e,$s');
       return ApiResult.failure(
@@ -117,14 +126,16 @@ class SubscriptionsRepository implements SubscriptionsFacade {
     return SubscriptionResponse(data: const []);
   }
 
-  /// Writes the active subscription into the shared database's generic
-  /// 'user_subscriptions' box, keyed by
-  /// the authenticated user. The user is persisted at login by auth_sdk and
-  /// exposed through [LocalStorage.getUser]. If the API response omitted the
-  /// subjects field, the last-known-good cached value is preserved instead of
-  /// being overwritten. Failures are logged loudly but never break the
-  /// network result the caller is waiting on.
-  Future<void> _cacheActiveSubscription(SubscriptionData activeSub) async {
+  /// Writes the user's OWN subscription — the Shop Subscription row
+  /// `subscribe_my_shop` returns after a paid purchase — into the shared
+  /// database's generic 'user_subscriptions' box, keyed by the
+  /// authenticated user (persisted at login by auth_sdk, read through
+  /// [LocalStorage.getUser]). The row is MERGED, so keys other SDKs keep
+  /// there survive. Only fields the purchase row actually carries are
+  /// written: no title is made up (the row names its plan by docname, not
+  /// a display title), and missing subjects keep the last-known-good
+  /// value. Failures are logged but never break the purchase result.
+  Future<void> _cacheOwnSubscription(Map<String, dynamic> row) async {
     final userId = LocalStorage.getUser()?.id?.toString();
     if (userId == null || userId.isEmpty) {
       debugPrint(
@@ -132,30 +143,18 @@ class SubscriptionsRepository implements SubscriptionsFacade {
       );
       return;
     }
-
     try {
-      final apiSubjects =
-          activeSub.allowedSubjects ?? activeSub.subscription?.allowedSubjects;
-
-      String subjectsJson;
-      if (apiSubjects != null) {
-        subjectsJson = jsonEncode(apiSubjects);
-      } else {
-        // Field missing from the response: keep the last-known-good value.
-        final existing =
-            await _database.getItem('user_subscriptions', userId);
-        subjectsJson = existing?['allowedSubjects'] as String? ?? '[]';
-      }
-
+      final held = SubscriptionData.fromJson(row);
+      final existing =
+          await _database.getItem('user_subscriptions', userId) ?? {};
       await _database.putItem('user_subscriptions', userId, {
+        ...existing,
         'userId': userId,
-        'status': activeSub.type ?? 'inactive',
-        'active': activeSub.active ?? false,
-        // The plan's display title, so offline consumers (the lms profile
-        // header's plan row) can NAME the plan, not just flag it active.
-        'title': activeSub.title ?? activeSub.subscription?.title,
-        'expiryDate': activeSub.expiredAt?.toIso8601String(),
-        'allowedSubjects': subjectsJson,
+        'status': held.type ?? existing['status'] ?? 'inactive',
+        'active': held.active ?? false,
+        'expiryDate': held.expiredAt?.toIso8601String(),
+        if (held.allowedSubjects != null)
+          'allowedSubjects': jsonEncode(held.allowedSubjects),
       });
     } catch (dbErr, st) {
       debugPrint('==> subscription local cache write failure: $dbErr\n$st');
@@ -174,10 +173,10 @@ class SubscriptionsRepository implements SubscriptionsFacade {
       // ([ref]) when the row carries one, falling back to the legacy
       // numeric id for stored rows that predate the composed backend.
       'subscription_id': ref ?? id,
-      // Not consumed by subscribe_my_shop today (Frappe drops undeclared
-      // kwargs); kept on the wire per decision log #23/#30 so the payment
-      // integration that lands later can start reading it without a
-      // client release.
+      // Not consumed by subscribe_my_shop (Frappe drops undeclared kwargs;
+      // the server charges the caller's wallet itself); kept on the wire
+      // per decision log #23/#30 until the owner decides the card-payment
+      // path.
       'payment_sys_id': paymentId,
       // Delegated billing (see the facade doc): only sent when purchasing
       // for another account, so the self-purchase wire shape is unchanged.
@@ -188,9 +187,12 @@ class SubscriptionsRepository implements SubscriptionsFacade {
         _gatewayPath,
         data: {'cmd': '$_cmd.subscribe_my_shop', 'payload': data},
       );
-      // subscribe_my_shop returns the new Shop Subscription document — its
-      // Frappe `name` identifies the purchase. The legacy `{data: {id}}`
-      // envelope is still tolerated for overridden clients.
+      // subscribe_my_shop charges the caller's wallet and only then
+      // returns the new, active Shop Subscription document (plus
+      // `charged` / `wallet_balance`); an unpaid request is refused with
+      // an error and activates nothing. Its Frappe `name` identifies the
+      // purchase. The legacy `{data: {id}}` envelope is still tolerated
+      // for overridden clients.
       final body = response.data;
       final message =
           body is Map && body.containsKey('message') ? body['message'] : body;
@@ -198,6 +200,11 @@ class SubscriptionsRepository implements SubscriptionsFacade {
           ? (message['name'] ??
               (message['data'] is Map ? message['data']['id'] : null))
           : null;
+      // A paid purchase IS the user's own subscription: cache it for
+      // offline readers (never the catalog rows).
+      if (message is Map && message['name'] != null) {
+        await _cacheOwnSubscription(Map<String, dynamic>.from(message));
+      }
       return ApiResult.success(data: identifier);
     } catch (e) {
       debugPrint('==> purchase ads failure: $e');
@@ -208,7 +215,12 @@ class SubscriptionsRepository implements SubscriptionsFacade {
     }
   }
 
-  /// KNOWN LEGACY SEAM — deliberately NOT migrated to `paas.api.*`. The
+  /// DEAD LEGACY SEAM — no longer part of the purchase flow:
+  /// `subscribe_my_shop` now charges the wallet itself and activates only
+  /// once paid, so the notifier no longer calls this. Kept only so existing
+  /// facade implementers still compile.
+  ///
+  /// Deliberately NOT migrated to `paas.api.*`. The
   /// composed Frappe backend exposes no payment-transaction alias (see
   /// `agent/subscriptions/frappe/manifest.json`): `subscribe_my_shop` is the
   /// entire purchase, and decision log #30 records this transactions path as
@@ -216,6 +228,7 @@ class SubscriptionsRepository implements SubscriptionsFacade {
   /// invented `paas.api.subscription.*` path would fabricate a payment
   /// record, so it stays on the legacy path (and fails honestly) until the
   /// real payment integration (decision #33/#34 direction) lands.
+  @Deprecated('subscribe_my_shop charges and activates in one call.')
   @override
   Future<ApiResult<SubscriptionTransactionsResponse>> createTransaction({
     required Object id,

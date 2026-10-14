@@ -82,9 +82,6 @@ void main() {
         'payment_sys_id': 3,
       });
 
-      await repo.createTransaction(
-          id: 7, paymentId: 3, beneficiaryUserId: 'student@example.com');
-      expect(adapter.lastBody?['beneficiary_user_id'], 'student@example.com');
     });
   });
 }

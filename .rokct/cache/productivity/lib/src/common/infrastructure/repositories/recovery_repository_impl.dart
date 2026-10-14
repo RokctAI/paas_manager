@@ -23,6 +23,12 @@ class RecoveryRepositoryImpl implements RecoveryRepositoryFacade {
 
   RecoveryRepositoryImpl(this._database);
 
+  /// Trigger types a consumer logs as CHECK-INS rather than urges: a
+  /// resisted log that extends the streak (lms's attended lesson is
+  /// `attended-session`), not a moment the user wanted to give in. The
+  /// weekly summary counts them as `checkIns`, never as `urgeEvents`.
+  static const Set<String> checkInTriggerTypes = <String>{'attended-session'};
+
   @override
   Future<Map<String, int>> getStreakStats() async {
     try {
@@ -48,6 +54,7 @@ class RecoveryRepositoryImpl implements RecoveryRepositoryFacade {
     final weekEnd = weekStart.add(const Duration(days: 7));
     bool inWindow(DateTime t) => !t.isBefore(weekStart) && t.isBefore(weekEnd);
     var urgeEvents = 0;
+    var checkIns = 0;
     var procrastinations = 0;
     var ritualsCompleted = 0;
     var currentStreak = 0;
@@ -57,7 +64,13 @@ class RecoveryRepositoryImpl implements RecoveryRepositoryFacade {
       final urges = await (_database.select(_database.urgeLogsTable)
             ..where((t) => ownerVisible(t.owner, owner)))
           .get();
-      urgeEvents = urges.where((u) => inWindow(u.timestamp)).length;
+      for (final u in urges.where((u) => inWindow(u.timestamp))) {
+        if (checkInTriggerTypes.contains(u.triggerType)) {
+          checkIns++;
+        } else {
+          urgeEvents++;
+        }
+      }
 
       final procs =
           await (_database.select(_database.procrastinationLogsTable)
@@ -78,6 +91,7 @@ class RecoveryRepositoryImpl implements RecoveryRepositoryFacade {
     }
     return {
       'urgeEvents': urgeEvents,
+      'checkIns': checkIns,
       'procrastinations': procrastinations,
       'ritualsCompleted': ritualsCompleted,
       'currentStreak': currentStreak,
@@ -94,6 +108,9 @@ class RecoveryRepositoryImpl implements RecoveryRepositoryFacade {
   }) async {
     try {
       await ProductivityOwnerScope.ready(_database);
+      // Read BEFORE this log is written: whether today already extended
+      // the streak.
+      final bool countedToday = await _streakCountedToday();
       final uuid = const Uuid().v4();
       await _database.into(_database.urgeLogsTable).insert(
         UrgeLogsTableCompanion.insert(
@@ -108,10 +125,12 @@ class RecoveryRepositoryImpl implements RecoveryRepositoryFacade {
         ),
       );
 
-      // If relapse occurs, reset current streak to 0. Otherwise, evaluate streak increment.
+      // If relapse occurs, reset current streak to 0. Otherwise the streak
+      // grows by one DAY: a second resisted log on the same calendar day
+      // (two lessons attended, say) does not count twice.
       if (outcome == 'Relapsed') {
         await _updateStreak(0);
-      } else {
+      } else if (!countedToday) {
         await _incrementStreak();
       }
     } catch (e) {
@@ -179,8 +198,43 @@ class RecoveryRepositoryImpl implements RecoveryRepositoryFacade {
         .get();
   }
 
+  /// Whether a resisted log already extended the streak today: the latest
+  /// of today's logs before this one is a resisted one. A relapse later in
+  /// the day reset the streak, so a resisted log after it counts again.
+  Future<bool> _streakCountedToday() async {
+    final String owner = ProductivityOwnerScope.currentOwner;
+    final DateTime now = DateTime.now();
+    final DateTime dayStart = DateTime(now.year, now.month, now.day);
+    final today = await (_database.select(_database.urgeLogsTable)
+          ..where((t) =>
+              t.owner.equals(owner) &
+              t.timestamp.isBiggerOrEqualValue(dayStart))
+          // Timestamps are stored to the second, so two logs in the same
+          // second tie; the rowid breaks the tie in write order.
+          ..orderBy([
+            (t) => OrderingTerm.desc(t.timestamp),
+            (t) => OrderingTerm.desc(t.rowId),
+          ])
+          ..limit(1))
+        .get();
+    return today.isNotEmpty && today.first.outcome != 'Relapsed';
+  }
+
+  /// The profiles a streak WRITE may touch: only the signed-in account's
+  /// own. Reads still see the unowned profile (legacy rows stay visible),
+  /// but writing to it would carry one account's streak into the next
+  /// account's view, so an account without a profile of its own gets one.
+  /// With nobody signed in the unowned profile is the account's own.
+  Future<List<RecoveryProfileEntity>> _ownProfiles() async {
+    await ProductivityOwnerScope.ready(_database);
+    final String owner = ProductivityOwnerScope.currentOwner;
+    return (_database.select(_database.recoveryProfilesTable)
+          ..where((t) => t.owner.equals(owner)))
+        .get();
+  }
+
   Future<void> _updateStreak(int newStreak) async {
-    final profiles = await _visibleProfiles();
+    final profiles = await _ownProfiles();
     if (profiles.isEmpty) {
       await _database.into(_database.recoveryProfilesTable).insert(
         RecoveryProfilesTableCompanion.insert(
@@ -210,7 +264,7 @@ class RecoveryRepositoryImpl implements RecoveryRepositoryFacade {
   }
 
   Future<void> _incrementStreak() async {
-    final profiles = await _visibleProfiles();
+    final profiles = await _ownProfiles();
     if (profiles.isEmpty) {
       await _updateStreak(1);
     } else {

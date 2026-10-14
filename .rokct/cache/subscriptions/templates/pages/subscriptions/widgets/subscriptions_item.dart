@@ -72,11 +72,10 @@ class SubscriptionsItem extends StatelessWidget {
       subscription,
       translate: AppHelpers.getTranslation,
     );
-    final title = subscription.title ??
-        subscription.content ??
-        (subscription.type == null
-            ? ''
-            : AppHelpers.getTranslation(subscription.type!));
+    final title = PlanCardLogic.displayTitle(
+      subscription,
+      translate: AppHelpers.getTranslation,
+    );
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(

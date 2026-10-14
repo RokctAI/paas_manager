@@ -204,12 +204,29 @@ class TaskSyncStore {
         );
   }
 
+  /// Removes this account's local copy of a task the server says was
+  /// deleted (a pulled tombstone). Returns the removed task's map, or null
+  /// when this device never held it.
+  ///
+  /// Only the current account's own row, or the unowned one, is touched:
+  /// the same visibility every other read here uses, so a tombstone pulled
+  /// for one account never reaches another account's row.
+  static Future<Map<String, dynamic>?> applyDeletion(String clientId) async {
+    if (clientId.isEmpty) return null;
+    final TaskEntity? row = await rowByClientId(clientId);
+    if (row == null) return null;
+    await (_db.delete(_db.tasksTable)
+          ..where((t) => t.id.equals(row.id) & t.owner.equals(row.owner)))
+        .go();
+    return TodoRepositoryImpl.rowToTodo(row);
+  }
+
   /// The `modified_after` a pull should resume from, or null for a first
   /// full pull.
   static Future<String?> readCursor() async {
     final Map<String, dynamic>? record = await _db.getItem(
       cursorBox,
-      cursorKey,
+      await _cursorKeyForOwner(),
     );
     final Object? value = record?['modified_after'];
     final String text = (value ?? '').toString();
@@ -223,9 +240,19 @@ class TaskSyncStore {
   /// re-formatting it would reinterpret a server-timezone stamp against the
   /// device's own clock, and a cursor that moves even a second the wrong way
   /// either replays or silently skips rows.
-  static Future<void> writeCursor(String rawServerTime) => _db.putItem(
+  static Future<void> writeCursor(String rawServerTime) async => _db.putItem(
     cursorBox,
-    cursorKey,
+    await _cursorKeyForOwner(),
     <String, dynamic>{'modified_after': rawServerTime},
   );
+
+  /// One cursor per account. The pull is scoped to the signed-in user, so
+  /// a cursor one account moved forward would make the next account on
+  /// this device skip every task of its own older than that point. The
+  /// unowned session keeps the original key.
+  static Future<String> _cursorKeyForOwner() async {
+    await ProductivityOwnerScope.ready(_db);
+    final String owner = ProductivityOwnerScope.currentOwner;
+    return owner == kUnownedOwner ? cursorKey : '$cursorKey:$owner';
+  }
 }

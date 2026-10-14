@@ -17,6 +17,7 @@ import 'package:drift/drift.dart';
 
 import '../../models/data/task_data.dart';
 import '../database/productivity_owner_scope.dart';
+import '../repositories/todo_repository_impl.dart';
 
 class TaskService {
   final AppDatabase _database;
@@ -29,10 +30,52 @@ class TaskService {
     final tasks = await (_database.select(_database.tasksTable)
           ..where((t) => ownerVisible(t.owner, owner)))
         .get();
-    return tasks.map((task) {
-      if (task.data == null) return TaskModel.fromMap({});
-      return TaskModel.fromJson(task.data!);
-    }).toList();
+    return tasks.map(modelOfRow).toList();
+  }
+
+  /// One stored row as a [TaskModel], whichever writer wrote it.
+  ///
+  /// The table has two writers with two blob shapes: this service writes
+  /// [TaskModel.toMap] (`status`, `dueDate`), the tasks page writes its own
+  /// map (`isDone`, `deadline`; `TodoRepositoryImpl.encodeTodoData`). The
+  /// typed columns are written by both, so they are what this reads first;
+  /// the blob fills in what only it carries. Reading the page's rows as
+  /// TaskModel blobs used to give every one of them no due date and the
+  /// draft status, so the launcher glance never saw a task due.
+  static TaskModel modelOfRow(TaskEntity row) {
+    final Map<String, dynamic> map = TodoRepositoryImpl.decodeTodoData(
+      row.data,
+    );
+    final ProcessingState status = map['status'] is String
+        ? ProcessingState.values.firstWhere(
+            (ProcessingState e) => e.name == map['status'],
+            orElse: () => ProcessingState.draft,
+          )
+        : (row.isCompleted || map['isDone'] == true)
+        ? ProcessingState.completed
+        : ProcessingState.draft;
+    final List<TaskChecklistItem> checklist = <TaskChecklistItem>[
+      if (map['checklist'] is List)
+        for (final Object? item in map['checklist'] as List)
+          if (item is Map)
+            TaskChecklistItem.fromMap(item.cast<String, dynamic>()),
+    ];
+    return TaskModel(
+      id: row.id,
+      title: row.title,
+      description: row.description,
+      status: status,
+      dueDate: row.dueDate ??
+          DateTime.tryParse('${map['dueDate'] ?? map['deadline'] ?? ''}'),
+      tags: <String>[
+        if (map['tags'] is List)
+          for (final Object? tag in map['tags'] as List) '$tag',
+      ],
+      assignedTo: map['assignedTo']?.toString(),
+      checklistId: map['checklistId']?.toString(),
+      checklist: checklist,
+      lastUpdated: row.updatedAt,
+    );
   }
 
   Future<void> addTask(TaskModel task) async {

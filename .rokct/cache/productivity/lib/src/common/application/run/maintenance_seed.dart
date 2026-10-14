@@ -19,11 +19,10 @@
 // described and its service runs and replacement reminders already on
 // their list as real tasks, due and recurring, never picked by hand.
 //
-// Two paths reach the same state:
+// Only the plant owners' accounts are seeded. A demo session is NOT: the
+// demo is public, and these are one owner's real plant tasks (Ray,
+// 2026-10-13). The demo path (`seedDemo`) is gone.
 //
-// * DEMO (DemoSession.demoActive): no server is consulted, so
-//   [MaintenanceSeed.seedDemo] writes the plant record, a finished setup
-//   run and the five service tasks straight into the local stores, once.
 // * A REAL ACCOUNT (the signed-in email is in [plantOwnerEmails]):
 //   [MaintenanceSeed.seedAccount] writes the same records once per owner,
 //   with ids stable per account, through the ordinary tasks save, so the
@@ -83,9 +82,6 @@ class MaintenanceSeed {
     2: <String>{'phfix_maintenance'},
   };
 
-  /// LocalStorage key marking the demo seed as done, so a seeded task the
-  /// demo user deletes stays deleted.
-  static const String demoSeededKey = 'productivity.plant.demo_seeded';
 
   static DateTime _day(DateTime v) => DateTime(v.year, v.month, v.day);
 
@@ -195,29 +191,6 @@ class MaintenanceSeed {
         withIds(MaintenanceTemplates.build(t, now: now, plant: record), t.key),
     ];
   }
-
-  /// DEMO: seed the plant and its tasks once. [load]/[save] are the tasks
-  /// repository's; the flag and plant store are injectable for tests.
-  /// Returns whether anything was written.
-  static Future<bool> seedDemo({
-    required Future<List<Map<String, dynamic>>> Function() load,
-    required Future<void> Function(List<Map<String, dynamic>>) save,
-    MaintenancePlantStore? store,
-    bool Function()? isSeeded,
-    int Function()? seededVersion,
-    Future<void> Function()? markSeeded,
-    DateTime? now,
-  }) => _seed(
-    load: load,
-    save: save,
-    store: store,
-    idSuffix: 'demo',
-    flagKey: demoSeededKey,
-    isSeeded: isSeeded,
-    seededVersion: seededVersion,
-    markSeeded: markSeeded,
-    now: now,
-  );
 
   /// The accounts that run the plant. Matched case-insensitively against
   /// the signed-in user's email.

@@ -24,10 +24,12 @@ import 'task_sync_store.dart';
 /// The pull half of task sync: `list_personal_tasks`, applied to the local
 /// store.
 ///
-/// This is what makes a task typed on one device show up on another. The
-/// pull is incremental — it resumes from the server clock the previous pull
-/// returned — so a device that already holds everything asks only for what
-/// changed since.
+/// This is what makes a task typed on one device show up on another, and a
+/// task deleted on one device disappear from another (the page's `deleted`
+/// tombstones). The pull is incremental — it resumes from the cursor the
+/// previous page returned — so a device that already holds everything asks
+/// only for what changed since. A full page says `has_more`, and [pull]
+/// keeps asking from the new cursor until a page comes back short.
 ///
 /// NOTHING on a user-facing path waits for this. [pull] is called
 /// unawaited; when it fails, because the device is on a train or has never
@@ -72,9 +74,26 @@ class TaskPullService {
   /// Whether the last pull failed. Read by the tasks page's empty state.
   static bool get syncFailed => lastFailure.value != null;
 
-  /// The server's own cap. Asking for more is silently clamped, so this
-  /// mirrors it rather than pretending otherwise.
+  /// The page size asked for. The server clamps to its own cap.
   static const int pageLimit = 200;
+
+  /// How many pages one [pull] follows `has_more` through before it stops
+  /// and leaves the rest to the next pull. A guard against a server that
+  /// keeps saying "more", not a limit any real list reaches.
+  static const int maxPages = 50;
+
+  /// Reminder ids (`notifId`) of local tasks a pull removed because they
+  /// were deleted on another device. Device notifications belong to the
+  /// host (comms_sdk), so the tasks page drains this with
+  /// [takeRemovedNotifIds] and cancels them.
+  static final List<int> _removedNotifIds = <int>[];
+
+  /// Returns and clears the reminder ids of tasks the pull removed.
+  static List<int> takeRemovedNotifIds() {
+    final List<int> ids = List<int>.of(_removedNotifIds);
+    _removedNotifIds.clear();
+    return ids;
+  }
 
   /// Stands in for [DemoSession.demoActive], so a test can flip the gate
   /// without standing up [LocalStorage]. Null means "ask the switch".
@@ -100,37 +119,56 @@ class TaskPullService {
       return 0;
     }
     try {
-      final String? cursor = await TaskSyncStore.readCursor();
-      final Object? response = await const PlatformGateway().call(
-        _cmd,
-        payload: <String, dynamic>{
-          if (cursor != null) 'modified_after': cursor,
-          'limit': pageLimit,
-        },
-      );
-      final TaskListResponse page = TaskListResponse.fromMap(
-        response is Map
-            ? response.cast<String, dynamic>()
-            : <String, dynamic>{},
-      );
-
       int applied = 0;
-      for (final TaskResponse task in page.tasks) {
-        if (task.clientId.isEmpty) continue;
-        // A task with an unsent local change is skipped, not overwritten.
-        // The device's edit has not reached the server yet, so the server's
-        // copy is the stale one; applying it would silently undo what the
-        // user just did. The queued op carries the newer state and will
-        // settle it.
-        if (await TaskSyncQueue.hasPendingFor(task.clientId)) continue;
-        await TaskSyncStore.applyPulled(task);
-        applied++;
-      }
+      for (int pageNo = 0; pageNo < maxPages; pageNo++) {
+        final String? cursor = await TaskSyncStore.readCursor();
+        final Object? response = await const PlatformGateway().call(
+          _cmd,
+          payload: <String, dynamic>{
+            if (cursor != null) 'modified_after': cursor,
+            'limit': pageLimit,
+          },
+        );
+        final TaskListResponse page = TaskListResponse.fromMap(
+          response is Map
+              ? response.cast<String, dynamic>()
+              : <String, dynamic>{},
+        );
 
-      // The cursor moves only after the page has been applied. Moving it
-      // first would lose every row in a page that failed halfway.
-      if (page.rawServerTime != null) {
-        await TaskSyncStore.writeCursor(page.rawServerTime!);
+        for (final TaskResponse task in page.tasks) {
+          if (task.clientId.isEmpty) continue;
+          // A task with an unsent local change is skipped, not overwritten.
+          // The device's edit has not reached the server yet, so the
+          // server's copy is the stale one; applying it would silently undo
+          // what the user just did. The queued op carries the newer state
+          // and will settle it.
+          if (await TaskSyncQueue.hasPendingFor(task.clientId)) continue;
+          await TaskSyncStore.applyPulled(task);
+          applied++;
+        }
+
+        // Tombstones: tasks deleted on another device. Same rule as above:
+        // a task with an unsent local change keeps it, and that queued op
+        // is this device's later word on it.
+        for (final String clientId in page.deletedClientIds) {
+          if (await TaskSyncQueue.hasPendingFor(clientId)) continue;
+          final Map<String, dynamic>? removed =
+              await TaskSyncStore.applyDeletion(clientId);
+          if (removed == null) continue;
+          final Object? notifId = removed['notifId'];
+          if (notifId is int) _removedNotifIds.add(notifId);
+          applied++;
+        }
+
+        // The cursor moves only after the page has been applied. Moving it
+        // first would lose every row in a page that failed halfway.
+        if (page.rawServerTime != null) {
+          await TaskSyncStore.writeCursor(page.rawServerTime!);
+        }
+        // A full page hands back the last row's time and `has_more`, so
+        // the next page starts where this one stopped. A server that sent
+        // no cursor cannot be followed, so the loop ends there too.
+        if (!page.hasMore || page.rawServerTime == null) break;
       }
       lastFailure.value = null;
       return applied;
