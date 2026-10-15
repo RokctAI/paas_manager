@@ -230,7 +230,7 @@
       ]
     },
     "merchants_sdk": {
-      "version": "1.34.0",
+      "version": "1.35.0",
       "files": {
         "assets/audio/notification.wav": "9d62af6f1c8df010941d1daa17162175d87293bd78371c787803b5a11f95cb9d",
         "assets/svgs/menu.svg": "9767d04ac4d157e423f972259a9c2c455a6a629c4098cc9c2fe8f9722451441b",
@@ -248,8 +248,8 @@
         "lib/presentation/routes/merchants_adapters.dart": "213d5b9b38f3fe77afed0a7b92f3e90e6fddc1cbd3adc8e529f190b2f9a5fc13",
         "lib/presentation/component/helper/horizontal_image_picker.dart": "3d3899881badec29e56a192b721aa6761568cf988cbefe42f4035d76175e9f21",
         "lib/presentation/pages/sync_issues/sync_issues_page.dart": "46702327eb60705aa902a84334aeb8f50fdfe1de41c27ca00853f7ba5a4fec81",
-        "lib/presentation/pages/billing/billing_page.dart": "da12d00eeb25c65ebbbcf1efac19233fa440bc9a431ce86f88a254607b28d4f9",
-        "lib/presentation/pages/billing/checkout_page.dart": "31373e4d6d67bdba28f588688f501688ead4c700ae0ca1705b8472a256736663",
+        "lib/presentation/pages/billing/billing_page.dart": "912a4592aaec1da9210d338a655521762272fc8cb4559254db5a89054aa72afc",
+        "lib/presentation/pages/billing/checkout_page.dart": "d3bc2f5aaf3ebe7ef69ee74e4f6053d58952bad47360c6ec1cd4ef7cce10436b",
         "lib/presentation/adapters/pos_orders_adapter.dart": "adaaaa7d29143a078bc0f7d49468aa254316b6fabf3ba32f486f8643187b7f82",
         "lib/presentation/pages/quick_flow/quick_flow_page.dart": "ea99239cd7e073d3aefebdc32d040a679da387a8627e0d857a08ebebb2fed9a2",
         "assets/demo/merchants/api.shop.search_shops.json": "8e81243b0073e7187a7475ef75d85f25bd4fe51a313d2cbc2a3c03c72a30ed7d",
@@ -1714,7 +1714,7 @@
       ]
     },
     "auth_sdk": {
-      "version": "1.20.0",
+      "version": "1.21.0",
       "files": {
         "lib/presentation/routes/auth_route_pages.dart": "2ac2b6adab56b09a0eff1aa19478717f2c632e0415c46ac0c06f04549e77602c",
         "lib/presentation/routes/registration_step_pages.dart": "68aed195fc07db746a0919c7ba6d47ffa445ca86e7d9cf6ee50fbcb00e82d3c2",
@@ -2032,16 +2032,16 @@
       "source_hash": "1afb460c6c305982"
     },
     "auth": {
-      "version": "1.20.0",
-      "source_hash": "27269c39828e77e5"
+      "version": "1.21.0",
+      "source_hash": "b38c71204be9386f"
     },
     "users": {
       "version": "1.5.2",
       "source_hash": "d95b63306d36447c"
     },
     "merchants": {
-      "version": "1.34.0",
-      "source_hash": "0bc3e324c25051ec"
+      "version": "1.35.0",
+      "source_hash": "8cfc0d1d6e6ffe55"
     },
     "products": {
       "version": "1.12.7",
