@@ -1,3 +1,8 @@
+## 1.9.1
+
+* fix(vision): the personal mastery card shows progress. `get_personal_mastery_goals` now sends each goal's to-dos (`name`, `description`, `status`, `date`) along with `todos_done`, `todos_total` and `progress`. Before, it sent only name, title and description, so `MasteryGoal.todos` was always null and neither the card nor the glance could count anything. A goal's to-dos are its `todos` table rows plus any ToDo whose reference points at the goal. A goal with no to-dos still shows no progress, never "0 of 0".
+* feat(demo): demo sessions get mastery goals with to-dos and progress. The new fixture `templates/assets/demo/productivity/tenant.api.get_personal_mastery_goals.json` is installed to `assets/demo/productivity`, and `ProductivitySdkDependencies` registers it with `DemoFixtures`, so the real `VisionRepositoryImpl` runs in demo. Needs base_sdk >= 1.73.0. Covered by `test/mastery_goals_demo_fixture_test.dart`.
+
 ## 1.9.0
 
 * fix(sync): the task pull no longer stops at 200 tasks. A full page now hands back the last row's time and `has_more`, and `TaskPullService.pull` keeps asking until a page comes back short. Needs the projects module's matching `list_personal_tasks` (same release). The pull cursor is also kept per account, so a second account on the device does not start from the first one's place.

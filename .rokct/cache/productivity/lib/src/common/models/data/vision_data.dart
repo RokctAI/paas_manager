@@ -24,7 +24,8 @@ import 'package:productivity_sdk/src/common/models/data/objective_data.dart';
 ///     get_pillars                 -> [{name, title, description, vision}]
 ///     get_strategic_objectives    -> [{name, title, description, pillar}]
 ///     get_kpis                    -> [{name, title, description, strategic_objective}]
-///     get_personal_mastery_goals  -> [{name, title, description}]
+///     get_personal_mastery_goals  -> [{name, title, description, todos,
+///                                     todos_done, todos_total, progress}]
 ///
 /// Title, description and the parent link are the ONLY fields that exist
 /// (flag (b) of the section: the doctypes are skeletal — no KPI
@@ -216,9 +217,12 @@ class MasteryGoal {
   final String? description;
 
   /// The child rows, or NULL when the read did not carry them.
-  /// `get_personal_mastery_goals` is a `frappe.get_all`, which returns
-  /// the parent's own columns only; a goal whose rows were not sent draws
-  /// no progress at all — not "0 of 0", which would claim a count.
+  /// `get_personal_mastery_goals` sends them (productivity 1.9.1: each
+  /// goal's `todos` as `{name, description, status, date}`; its
+  /// `todos_done`/`todos_total`/`progress` are the same sums as the
+  /// getters below, so they are not read). A row without `todos` (an
+  /// older backend) draws no progress at all — not "0 of 0", which would
+  /// claim a count.
   final List<MasteryTodo>? todos;
 
   bool get hasTodos => todos != null && todos!.isNotEmpty;

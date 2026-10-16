@@ -22,8 +22,18 @@ import '../infrastructure/repositories/recovery_repository_impl.dart';
 import '../infrastructure/repositories/vision_repository_impl.dart';
 import '../infrastructure/services/task_sync_handlers.dart';
 
+/// Host asset directory holding productivity_sdk's demo fixtures
+/// (`<cmd>.json`), installed from `templates/assets/demo/productivity`.
+/// base_sdk's DemoGatewayInterceptor answers a demo session's gateway cmds
+/// from it, so the REAL [VisionRepositoryImpl] runs in demo too (the
+/// mastery goals, with their to-dos and progress, come from
+/// `tenant.api.get_personal_mastery_goals.json`).
+const String productivityDemoFixtureDirectory = 'assets/demo/productivity';
+
 class ProductivitySdkDependencies {
   static void register(GetIt getIt) {
+    // Idempotent: registering the same directory twice is a no-op.
+    DemoFixtures.registerAssetDirectory(productivityDemoFixtureDirectory);
     // Register Recovery Repository. Guarded, like every other SDK's hook
     // (auth's AuthSdkDependencies, orders' ManagerOrdersDependencies): the
     // installer convention is that a host may call this more than once, and

@@ -36,7 +36,7 @@
 //     count are dress and a failure there costs only the dress;
 //   * `get_kpis` failing draws NO count, which is not zero;
 //   * `todos` are read when the row carries them and NULL when it does
-//     not — the endpoint is a get_all and sends no child rows today.
+//     not (a backend older than productivity 1.9.1 sends no rows).
 
 import 'dart:convert';
 

@@ -162,6 +162,7 @@ flutter:
     - assets/demo/comms/
     - assets/demo/map/
     - assets/demo/merchants/
+    - assets/demo/productivity/
     - assets/demo/products/
     - assets/demo/promotions/
     - assets/demo/revenue/

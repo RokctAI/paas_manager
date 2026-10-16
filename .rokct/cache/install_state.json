@@ -1,7 +1,7 @@
 {
   "packages": {
     "base_sdk": {
-      "version": "1.88.5",
+      "version": "1.89.0",
       "files": {
         "flutter_native_splash.yaml": "d469a133b5e1631d6ba811b048d290449224075edad2153189cfb2edc3f4d100",
         "android/app/src/main/res/font/montserrat_extrabolditalic.ttf": "d38bac61eda8d8c002b1a852f5368901a085fbe1d844b5e0a149b674e22e2cdd",
@@ -1111,7 +1111,7 @@
       "boot_hooks": []
     },
     "subscriptions_sdk": {
-      "version": "1.7.0",
+      "version": "1.7.1",
       "files": {
         "lib/presentation/pages/subscriptions/subscriptions_page.dart": "41d1f02707fda00542adb84edae39024b3d36e93338d97778574256870c9f319",
         "lib/presentation/pages/subscriptions/widgets/have_subscription.dart": "f68ad9267204aed05b15d95f5051fe614209166c0bbd0e2751fa684a9a556af3",
@@ -1271,12 +1271,13 @@
       "boot_hooks": []
     },
     "productivity_sdk": {
-      "version": "1.9.0",
+      "version": "1.9.1",
       "files": {
         "lib/presentation/pages/tasks/tasks_page.dart": "d7665ce2ea1b3b2ac07858acd1862c2d29be799417b2f50ea858b25b7b35c082",
         "lib/presentation/pages/tasks/task_run_page.dart": "c0384784dd5923c80eb05172a54a5d96227375f721eb553226600335733d4f08",
         "lib/presentation/pages/vision/plan_on_a_page.dart": "5ef9c9903723e9dadbe69df8973ab3b324c6e857c6764f473c42ce656b32e204",
-        "lib/presentation/pages/vision/personal_mastery_page.dart": "aa70c79d6ce0ed067cf2a6d0b492f59de2d43fb20b53b9a1b758c867285fac20"
+        "lib/presentation/pages/vision/personal_mastery_page.dart": "aa70c79d6ce0ed067cf2a6d0b492f59de2d43fb20b53b9a1b758c867285fac20",
+        "assets/demo/productivity/tenant.api.get_personal_mastery_goals.json": "7618eeec34f59fc8eb41ff0c9e20cc484e7cd74e96dd7c9af00737d32c892f3f"
       },
       "routes": [
         {
@@ -1396,7 +1397,10 @@
         "android_application_xml": [
           "<activity-alias android:name=\".RokctProductivityEntry\" android:targetActivity=\".MainActivity\" android:exported=\"true\"><meta-data android:name=\"io.flutter.embedding.android.NormalTheme\" android:resource=\"@style/NormalTheme\" /><intent-filter><action android:name=\"rokct.intent.action.PRODUCTIVITY\" /><category android:name=\"android.intent.category.DEFAULT\" /><data android:scheme=\"rokct\" /></intent-filter></activity-alias>"
         ]
-      }
+      },
+      "app_assets": [
+        "assets/demo/productivity/"
+      ]
     },
     "calc_sdk": {
       "version": "1.4.0",
@@ -1877,7 +1881,7 @@
       "boot_hooks": []
     },
     "hms_sdk": {
-      "version": "1.0.2",
+      "version": "1.1.0",
       "files": {},
       "routes": [],
       "app_routes": [],
@@ -1899,7 +1903,7 @@
       ]
     },
     "telemetry_sdk": {
-      "version": "1.0.1",
+      "version": "1.1.0",
       "files": {},
       "routes": [],
       "app_routes": [],
@@ -2024,8 +2028,8 @@
   },
   "sdk_cache": {
     "base": {
-      "version": "1.88.5",
-      "source_hash": "3d8c8b07df6abfee"
+      "version": "1.89.0",
+      "source_hash": "d67ec98b17d50edd"
     },
     "comms": {
       "version": "1.22.4",
@@ -2068,16 +2072,16 @@
       "source_hash": "6cb197e44f5f7a4c"
     },
     "subscriptions": {
-      "version": "1.7.0",
-      "source_hash": "5ea612a746049968"
+      "version": "1.7.1",
+      "source_hash": "1da1af65db0b0106"
     },
     "processing": {
       "version": "1.0.2",
       "source_hash": "0f71149fa89119ec"
     },
     "productivity": {
-      "version": "1.9.0",
-      "source_hash": "a4bf3ef516fc1b63"
+      "version": "1.9.1",
+      "source_hash": "b87aba457ca3a368"
     },
     "calc": {
       "version": "1.4.0",
@@ -2108,12 +2112,12 @@
       "source_hash": "a5f94e74405057ac"
     },
     "hms": {
-      "version": "1.0.2",
-      "source_hash": "fa93206c6fc6db19"
+      "version": "1.1.0",
+      "source_hash": "7f1c497916478f4e"
     },
     "telemetry": {
-      "version": "1.0.1",
-      "source_hash": "fd7bfe64e9bc8d42"
+      "version": "1.1.0",
+      "source_hash": "fc4dc71b7401b7bd"
     },
     "booking": {
       "version": "1.2.1",
