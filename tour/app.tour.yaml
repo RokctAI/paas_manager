@@ -60,6 +60,14 @@ video:
 store:
   # Play feature graphic hero: the checkout with QR pay-link and one-tap receipt - the seller's money moment.
   feature_step: pos_checkout
+  feature_style:
+    bg: "#FFF4E5"
+    ink: "#2B1600"
+    accent: "#FF6600"
+    shape: "band"
+    layout: "right"
+    tilt: 5
+    headline: "Orders, stock and checkout."
 setup:
   # Account auth_sdk's shared tour fragment signs in as ({demo_email} in
   # that fragment). Manager admits only the seller role - see header note.
