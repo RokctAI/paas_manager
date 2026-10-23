@@ -1,6 +1,6 @@
 name: kitchen_sdk
 description: "Kitchen (prep station) domain models, picker providers, and the manager Kitchen screen."
-version: 1.5.3
+version: 1.5.4
 publish_to: 'none'
 environment:
   sdk: '>=3.10.0 <4.0.0'

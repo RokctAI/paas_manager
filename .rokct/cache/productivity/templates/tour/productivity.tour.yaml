@@ -312,3 +312,17 @@ steps:
       await SystemChannels.textInput.invokeMethod<void>('TextInput.hide');
       await tester.pump();
       await Future<void>.delayed(const Duration(milliseconds: 750));
+  - key: productivity_plan
+    title: "The whole plan on one page"
+    caption: "Vision, pillars, objectives and the KPIs that measure them - *the plan on a page*, so everyone pulls the same way."
+    action: route
+    route: /vision
+    screenshot: true
+    settle: 8
+  - key: productivity_mastery
+    title: "Grow yourself, goal by goal"
+    caption: "Personal mastery goals with their to-dos - *progress counted* from what you have actually done."
+    action: route
+    route: /vision/mastery
+    screenshot: true
+    settle: 6

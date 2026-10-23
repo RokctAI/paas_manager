@@ -22,11 +22,26 @@ import 'package:base_sdk/base_sdk.dart';
 // is drawn in them explicitly ("dark base tokens transcribed from
 // app_style.dart") rather than in Theme.of(context).colorScheme.
 import 'package:base_sdk/src/presentation/theme/app_style.dart';
+import 'package:base_sdk/src/guide/guide_anchor.dart';
+import 'package:base_sdk/src/guide/guide_definition.dart';
+import 'package:base_sdk/src/guide/guide_host.dart';
 import 'package:productivity_sdk/productivity_sdk.dart';
 import 'package:auto_route/auto_route.dart';
 import 'dart:async';
 import 'dart:math';
 import 'package:remixicon/remixicon.dart';
+
+const GuideDefinition tasksGuide = GuideDefinition(
+  id: 'productivity.tasks',
+  steps: [
+    GuideStep(
+      id: 'productivity.tasks.new',
+      anchor: 'productivity.tasks.new',
+      title: 'Add a task',
+      body: 'Tap + to add a new task or note.',
+    ),
+  ],
+);
 
 /// The installed /tasks route page: frame 44a's workspace, hosted by
 /// [TasksWorkspace].
@@ -42,8 +57,15 @@ import 'package:remixicon/remixicon.dart';
 class TasksPage extends StatelessWidget {
   const TasksPage({super.key});
 
+  /// The page sits under its own GuideHost, so its coach-mark shows here only
+  /// and never in the app's MaterialApp builder.
   @override
-  Widget build(BuildContext context) => ReturnToLauncherScope(
+  Widget build(BuildContext context) => GuideHost(
+        definition: tasksGuide,
+        child: _buildPage(context),
+      );
+
+  Widget _buildPage(BuildContext context) => ReturnToLauncherScope(
         // launch_sdk opens another fleet app's tasks with
         // `rokct:/tasks?from=launcher` (Ray, 2026-10-12: productivity is a
         // window from the launcher, like the calculator). Read from the
@@ -1818,10 +1840,13 @@ class _TasksWorkspaceState extends State<TasksWorkspace> {
             Positioned.fill(
               child: Align(
                 alignment: Alignment.bottomCenter,
-                child: ProductivityPlusNav(
-                  list: _list,
-                  onNew: notes ? _openNoteComposer : _openCompose,
-                  onChooseList: _chooseNewItem,
+                child: GuideAnchor(
+                  id: 'productivity.tasks.new',
+                  child: ProductivityPlusNav(
+                    list: _list,
+                    onNew: notes ? _openNoteComposer : _openCompose,
+                    onChooseList: _chooseNewItem,
+                  ),
                 ),
               ),
             ),

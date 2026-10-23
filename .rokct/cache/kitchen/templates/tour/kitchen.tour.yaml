@@ -26,6 +26,7 @@ sdk: kitchen
 imports:
   - "import 'package:flutter_riverpod/flutter_riverpod.dart';"
   - "import 'package:merchants_sdk/src/manager/application/main/main_provider.dart';"
+  - "import 'package:kitchen_sdk/src/manager/presentation/kitchen/kitchen_order_card.dart';"
 steps:
   - key: kitchen_queue
     title: "The kitchen sees every order"
@@ -43,3 +44,30 @@ steps:
       final ProviderContainer container =
           ProviderScope.containerOf(element, listen: false);
       container.read(mainProvider.notifier).selectIndex(2);
+  - key: kitchen_detail
+    title: "Every dish on one ticket"
+    caption: "Tap an order for its *full ticket* - each dish, its status and the clock - and move it along the line."
+    action: dart
+    settle: 6
+    dart: |
+      // The queue from the step above is still on screen. A card tap opens
+      // the ticket the way a cook does: a pushed page on a phone, the detail
+      // plane where the queue has more than one.
+      final Finder card = find.byType(KitchenOrderCard);
+      if (card.evaluate().isNotEmpty) {
+        await tester.tap(card.first, warnIfMissed: false);
+      }
+  - key: kitchen_detail_close
+    title: "Back to the queue"
+    action: dart
+    screenshot: false
+    settle: 3
+    dart: |
+      // Tolerant: the phone's ticket is a pushed page above /main; on the
+      // planes spread nothing was pushed and the detail is a plane.
+      final NavigatorState navigator =
+          tester.state(find.byType(Navigator).first);
+      if (find.byType(KitchenOrderCard).evaluate().isEmpty &&
+          navigator.canPop()) {
+        navigator.pop();
+      }

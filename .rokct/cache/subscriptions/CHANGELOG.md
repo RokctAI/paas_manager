@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.7.2
+
+* chore(guide): version for the coach-mark guide mounted on this SDK's primary page (base_sdk GuideHost and GuideAnchor). The mount landed without a version change. Needs base_sdk >= 1.92.0.
+
 ## 1.7.1
 
 * fix(subscriptions): a shop purchase is cached in its own `shop_subscriptions` KV row (`SubscriptionsRepository.shopSubscriptionBox`), never in the student's shared `user_subscriptions` row, so buying a shop plan can no longer flip a student's `active` flag.

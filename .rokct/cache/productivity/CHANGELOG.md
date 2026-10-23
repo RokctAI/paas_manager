@@ -1,3 +1,9 @@
+## 1.9.2
+
+* feat(tour): the productivity tour fragment gains the plan-on-a-page (`/vision`) and personal mastery (`/vision/mastery`) steps, so every routed screen of this SDK is toured. Demo sessions get the plan board: new fixtures `tenant.api.get_visions`, `get_plan_on_a_page`, `get_pillars`, `get_strategic_objectives` and `get_kpis` in `templates/assets/demo/productivity` (installed by the existing directory install), covered by `test/plan_board_demo_fixture_test.dart`. No version bump (tour and fixtures only, as in the receipt-preview tour step).
+
+* chore(guide): version for the coach-mark guide mounted on this SDK's primary page (base_sdk GuideHost and GuideAnchor). The mount landed without a version change. Needs base_sdk >= 1.92.0.
+
 ## 1.9.1
 
 * fix(vision): the personal mastery card shows progress. `get_personal_mastery_goals` now sends each goal's to-dos (`name`, `description`, `status`, `date`) along with `todos_done`, `todos_total` and `progress`. Before, it sent only name, title and description, so `MasteryGoal.todos` was always null and neither the card nor the glance could count anything. A goal's to-dos are its `todos` table rows plus any ToDo whose reference points at the goal. A goal with no to-dos still shows no progress, never "0 of 0".

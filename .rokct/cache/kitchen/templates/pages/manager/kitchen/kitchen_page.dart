@@ -17,6 +17,11 @@ import 'package:flutter/material.dart';
 import 'package:base_sdk/src/presentation/theme/app_style.dart';
 import 'package:base_sdk/src/services/local_storage.dart';
 import 'package:kitchen_sdk/src/manager/presentation/kitchen/kitchen_workspace.dart';
+import 'package:base_sdk/src/guide/guide_anchor.dart';
+import 'package:base_sdk/src/guide/guide_definition.dart';
+import 'package:base_sdk/src/guide/guide_host.dart';
+
+const GuideDefinition kitchenQueueGuide = GuideDefinition(id: 'kitchen.queue', steps: [GuideStep(id: 'kitchen.queue.order', anchor: 'kitchen.queue.orders', title: 'Your orders', body: 'Tap an order to open it.')]);
 
 /// The manager KITCHEN tab (approved design, Ray 2026-08-29: 13:06Z
 /// "approved: … 34b,34c,34d", 13:53Z "approved: 34a …"). Installed to
@@ -32,14 +37,18 @@ import 'package:kitchen_sdk/src/manager/presentation/kitchen/kitchen_workspace.d
 class KitchenHomePage extends StatelessWidget {
   const KitchenHomePage({super.key});
 
+  /// The page sits under its own GuideHost, so its coach-mark shows here only
+  /// and never in the app's MaterialApp builder.
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) => GuideHost(definition: kitchenQueueGuide, child: _buildPage(context));
+
+  Widget _buildPage(BuildContext context) {
     final bool isLtr = LocalStorage.getLangLtr();
     return Directionality(
       textDirection: isLtr ? TextDirection.ltr : TextDirection.rtl,
       child: Scaffold(
         backgroundColor: AppStyle.surfaceFor(Theme.of(context).brightness),
-        body: const SafeArea(child: KitchenWorkspace()),
+        body: const SafeArea(child: GuideAnchor(id: 'kitchen.queue.orders', child: KitchenWorkspace())),
       ),
     );
   }
