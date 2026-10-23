@@ -177,6 +177,18 @@ tour:
   # in-shop chapters and the money chapters where the sheet's "every screen
   # follows" promise reads naturally.
   - fragment: comms
+  # The notification list (comms_sdk's /list-notification, the manager
+  # route the restaurant tab's bell pushes). The step sits here, not in the
+  # shared comms fragment, because that route exists only in the manager and
+  # driver composes. Fully demo-grounded: comms_sdk's demo fixtures answer
+  # the list and the unread count.
+  - step:
+      key: comms_notifications
+      title: "Everything that needs you, in one list"
+      caption: "Stock alerts, ready orders and payouts - *unread first*, one tap to read it and clear the dot."
+      action: route
+      route: /list-notification
+      settle: 6
   # Chapter 6 - the money: revenue_sdk's /income dashboard
   # (app_type.manager ManagerIncomeRoute). In demo sessions revenue_sdk's
   # fixtures serve a fictional week of store revenue
