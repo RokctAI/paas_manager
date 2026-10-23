@@ -28,6 +28,19 @@ import 'package:${package}/presentation/theme/theme.dart';
 import 'widgets/payment_dialog.dart';
 import 'widgets/subscriptions_item.dart';
 
+/// The coach-mark for the subscriptions overview: points at the plan list.
+const GuideDefinition subscriptionsGuide = GuideDefinition(
+  id: 'subscriptions.overview',
+  steps: [
+    GuideStep(
+      id: 'subscriptions.overview.plans',
+      anchor: 'subscriptions.overview',
+      title: 'Choose a plan',
+      body: 'Pick a plan here and tap Purchase to subscribe.',
+    ),
+  ],
+);
+
 /// The manager /subscriptions screen in the settled plane language
 /// (approved section 40, frames 40a/40b/40c, Ray 2026-08-30 13:08Z):
 /// shops subscribing to THEIR TENANT's plan catalog
@@ -54,19 +67,6 @@ import 'widgets/subscriptions_item.dart';
 ///    sheet fork's phone half) — the plane mechanism disappears by
 ///    construction.
 @RoutePage(name: 'ManagerSubscriptionsRoute')
-/// The coach-mark for the subscriptions overview: points at the plan list.
-const GuideDefinition subscriptionsGuide = GuideDefinition(
-  id: 'subscriptions.overview',
-  steps: [
-    GuideStep(
-      id: 'subscriptions.overview.plans',
-      anchor: 'subscriptions.overview',
-      title: 'Choose a plan',
-      body: 'Pick a plan here and tap Purchase to subscribe.',
-    ),
-  ],
-);
-
 class ManagerSubscriptionsPage extends ConsumerStatefulWidget {
   /// Optional category slice of the tenant catalog (Ray 13:26Z/13:33Z:
   /// "each home sdk might need to ask for category it needs"), matched

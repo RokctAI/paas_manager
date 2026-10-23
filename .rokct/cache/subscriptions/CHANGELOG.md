@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.7.3
+
+* fix(subscriptions): move `subscriptionsGuide` above the page class doc comment in `templates/pages/subscriptions/subscriptions_page.dart`. It sat between `@RoutePage` and the class, so build_runner failed ("subscriptionsGuide is not a class element") in any app composing this SDK (paas_manager guided tour, run 39960305311).
+
 ## 1.7.2
 
 * chore(guide): version for the coach-mark guide mounted on this SDK's primary page (base_sdk GuideHost and GuideAnchor). The mount landed without a version change. Needs base_sdk >= 1.92.0.

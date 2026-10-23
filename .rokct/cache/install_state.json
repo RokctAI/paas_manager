@@ -1134,9 +1134,9 @@
       "boot_hooks": []
     },
     "subscriptions_sdk": {
-      "version": "1.7.2",
+      "version": "1.7.3",
       "files": {
-        "lib/presentation/pages/subscriptions/subscriptions_page.dart": "8bd276b5db70fdca0f94a49d370de0b49cfff44e18d369d7b77dd23bf2ccb9e6",
+        "lib/presentation/pages/subscriptions/subscriptions_page.dart": "62ad148751054677a58355f81412f3e1870ba4866ded0e8fd00e294a131f07d7",
         "lib/presentation/pages/subscriptions/widgets/have_subscription.dart": "f68ad9267204aed05b15d95f5051fe614209166c0bbd0e2751fa684a9a556af3",
         "lib/presentation/pages/subscriptions/widgets/subscriptions_item.dart": "ad96feacc1a8ec815810f5d69f70dfdae5d69cdae475362a8490da8789e3b732",
         "lib/presentation/pages/subscriptions/widgets/payment_dialog.dart": "4c359e1a37b85a2c2ec0a5a436ae711b07ccec02ba4b33a30ca589371c55c1f3",
@@ -2106,8 +2106,8 @@
       "source_hash": "a0096d225fd159ab"
     },
     "subscriptions": {
-      "version": "1.7.2",
-      "source_hash": "9cfcd56147a144fa"
+      "version": "1.7.3",
+      "source_hash": "94b475b459cb2a3f"
     },
     "processing": {
       "version": "1.0.2",
