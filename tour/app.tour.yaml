@@ -194,6 +194,9 @@ tour:
   # fixtures serve a fictional week of store revenue
   # so the tiles, chart and order rows render stocked.
   - fragment: revenue
+  # The product profit detail steps live in their own manager-only fragment
+  # (corporate revenue_sdk 1.14.4) so a driver tour never merges them.
+  - fragment: revenue_manager
   # Chapter 7 - the plan: subscriptions_sdk's /subscriptions list
   # (ManagerSubscriptionsRoute). In demo sessions subscriptions_sdk's
   # fixtures answer its repository, so the grid shows two plans
