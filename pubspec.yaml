@@ -159,9 +159,12 @@ flutter:
     - assets/audio/tap.wav
     - assets/audio/wrong.wav
     - assets/demo/auth/
+    - assets/demo/booking/
     - assets/demo/comms/
+    - assets/demo/kitchen/
     - assets/demo/map/
     - assets/demo/merchants/
+    - assets/demo/orders/
     - assets/demo/productivity/
     - assets/demo/products/
     - assets/demo/promotions/
