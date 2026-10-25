@@ -16,10 +16,12 @@ tour run, so new screens appear here automatically.
 | ![Pos Scan][s05] | ![Pos Cart][s06] | ![Pos Checkout][s07] |
 | **Pos Receipt Preview** | **Restaurant Hub** | **Sync Issues** |
 | ![Pos Receipt Preview][s08] | ![Restaurant Hub][s09] | ![Sync Issues][s10] |
-| **Menu** | **Add Product** | **Order Queue** |
-| ![Menu][s11] | ![Add Product][s12] | ![Order Queue][s13] |
-| **Order History** | **Kitchen Queue** | **Comms Language** |
-| ![Order History][s14] | ![Kitchen Queue][s15] | ![Comms Language][s16] |
+| **Quick Flow** | **Menu** | **Add Product** |
+| ![Quick Flow][s11] | ![Menu][s12] | ![Add Product][s13] |
+| **Product Detail** | **Quick Stock** | **Order Queue** |
+| ![Product Detail][s14] | ![Quick Stock][s15] | ![Order Queue][s16] |
+| **Order History** | | |
+| ![Order History][s17] | | |
 
 The full tour lives in the [feature guide](marketing/tour/feature-guide.md),
 with walkthrough videos alongside it in [`marketing/tour/`](marketing/tour).
@@ -30,12 +32,13 @@ with walkthrough videos alongside it in [`marketing/tour/`](marketing/tour).
 [s08]: marketing/tour/store/08-pos_receipt_preview.png
 [s09]: marketing/tour/store/09-restaurant_hub.png
 [s10]: marketing/tour/store/10-sync_issues.png
-[s11]: marketing/tour/store/11-menu.png
-[s12]: marketing/tour/store/12-add_product.png
-[s13]: marketing/tour/store/13-order_queue.png
-[s14]: marketing/tour/store/14-order_history.png
-[s15]: marketing/tour/store/15-kitchen_queue.png
-[s16]: marketing/tour/store/16-comms_language.png
+[s11]: marketing/tour/store/11-quick_flow.png
+[s12]: marketing/tour/store/12-menu.png
+[s13]: marketing/tour/store/13-add_product.png
+[s14]: marketing/tour/store/14-product_detail.png
+[s15]: marketing/tour/store/15-quick_stock.png
+[s16]: marketing/tour/store/16-order_queue.png
+[s17]: marketing/tour/store/17-order_history.png
 <!-- @generated-tour-gallery-end -->
 
 <!-- @generated-render-strip-start -->
