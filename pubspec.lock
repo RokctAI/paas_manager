@@ -158,7 +158,7 @@ packages:
       path: ".rokct/cache/base"
       relative: true
     source: path
-    version: "1.93.0"
+    version: "1.94.0"
   battery_plus:
     dependency: transitive
     description:
@@ -181,7 +181,7 @@ packages:
       path: ".rokct/cache/booking"
       relative: true
     source: path
-    version: "1.2.2"
+    version: "1.2.3"
   boolean_selector:
     dependency: transitive
     description:
@@ -1606,7 +1606,7 @@ packages:
       path: ".rokct/cache/kitchen"
       relative: true
     source: path
-    version: "1.5.4"
+    version: "1.5.5"
   leak_tracker:
     dependency: transitive
     description:
@@ -1795,7 +1795,7 @@ packages:
       path: ".rokct/cache/orders"
       relative: true
     source: path
-    version: "1.31.1"
+    version: "1.31.2"
   osm_nominatim:
     dependency: "direct main"
     description:
@@ -2055,7 +2055,7 @@ packages:
       path: ".rokct/cache/products"
       relative: true
     source: path
-    version: "1.12.8"
+    version: "1.12.9"
   promotions_sdk:
     dependency: "direct main"
     description:
@@ -2117,7 +2117,7 @@ packages:
       path: ".rokct/cache/revenue"
       relative: true
     source: path
-    version: "1.14.2"
+    version: "1.14.5"
   riverpod:
     dependency: transitive
     description:

@@ -1,3 +1,15 @@
+## 1.14.5
+
+* fix(tour): `revenue_product_profit` could tap a product row that was built inside the lazy phone list but still off screen, so the tap was lost and the still repeated `revenue_income` byte for byte. The step now scrolls the vertical scrollable explicitly, pins the row with `ensureVisible` and then taps. Tour template only.
+
+## 1.14.4
+
+* fix(tour): the `revenue_product_profit` and close steps move to a new `revenue_manager` tour fragment, listed only by the manager shell. 1.14.3's type-name match made them no-ops on the driver, so the driver tour captured the dashboard twice and the duplicate-screenshot gate failed. Manager tours are unchanged (the import returns, in the manager-only fragment).
+
+## 1.14.3
+
+* fix(tour): the revenue tour fragment no longer imports `profit_product_list.dart` (manager-only). A driver compose does not ship manager sources, so the generated tour_steps.g.dart failed to compile in paas_driver's debug tour build. The product row is now found by type name, so driver shells find no row and the tolerant steps skip.
+
 ## 1.14.2
 
 * feat(tour): the revenue tour fragment gains `revenue_product_profit` (a product row tap opens the profit detail: a pushed `RevenueDetailPage` on a phone, the detail plane on wide) and a tolerant close step. The profit report fixture already carries products. No version bump (tour only).

@@ -1,3 +1,7 @@
+## 1.12.9
+
+* fix(codegen): `json_serializable` dev dependency raised from `^6.8.0` to `^6.13.0`. A standalone build_runner of this SDK resolved json_serializable 6.11.4 against source_helper 1.4.0 and analyzer 10.2.0, which both define `toStringNonNullable` on `TypeParameterType`, so the build script did not compile (exit 78) and `product_state.freezed.dart` was never written. A host app that re-extracted this SDK (paas_customer, after the 1.12.8 bump) then failed to compile every `ProductState` getter. Checked locally: `flutter pub get` now resolves json_serializable 6.15.2 and `dart run build_runner build` writes `product_state.freezed.dart`.
+
 ## 1.12.8
 
 * feat(tour): the products tour fragment gains `product_detail` (card tap; fills the detail plane on wide screens, a no-op on a phone), `quick_stock` (the Stock button's quick-adjust) and a close step. `ProductPage` is the customer marketplace's page, not a manager screen. No version bump (tour only).
@@ -70,6 +74,10 @@
   mode instead of hardcoded light colours or static theme reads.
 
 # Changelog
+
+## Unreleased
+
+* fix(tour): `product_detail` only tapped `ProductCatalogCard` (the wide grid card). A phone draws `ProductCatalogTile`, so the tap never fired and the still repeated `menu` byte for byte. The step taps whichever is on screen and a new `product_detail_close` step pops the edit page a phone tap pushes. No version bump (tour only).
 
 ## 1.11.0
 

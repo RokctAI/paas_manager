@@ -1,7 +1,7 @@
 {
   "packages": {
     "base_sdk": {
-      "version": "1.93.0",
+      "version": "1.94.0",
       "files": {
         "flutter_native_splash.yaml": "d469a133b5e1631d6ba811b048d290449224075edad2153189cfb2edc3f4d100",
         "android/app/src/main/res/font/montserrat_extrabolditalic.ttf": "d38bac61eda8d8c002b1a852f5368901a085fbe1d844b5e0a149b674e22e2cdd",
@@ -537,7 +537,7 @@
       }
     },
     "products_sdk": {
-      "version": "1.12.8",
+      "version": "1.12.9",
       "files": {
         "lib/presentation/pages/foods/foods_page.dart": "8c12a9a1087eb70f24eadf4c179b1a52c9eeca3a8a4189137c5f4f7db56269d9",
         "lib/presentation/pages/foods/foods/foods_body.dart": "8a549e92dd438ea9defa61fe97203b9e8c981c2428a448a23a751f59737dab8d",
@@ -692,7 +692,7 @@
       ]
     },
     "orders_sdk": {
-      "version": "1.31.1",
+      "version": "1.31.2",
       "files": {
         "lib/presentation/pages/orders/orders_home_page.dart": "54681e9dba8fe5e980580f359838716bb8720c0b0285afe1df51dfc0dec029c0",
         "lib/presentation/pages/orders/details/order_details_modal.dart": "66f5c681515ecf97ef9963274858ffaff00668230cc34a94b5a9b3d9bfd88bfb",
@@ -1034,7 +1034,7 @@
       }
     },
     "kitchen_sdk": {
-      "version": "1.5.4",
+      "version": "1.5.5",
       "files": {
         "lib/presentation/pages/kitchen/kitchen_page.dart": "511489f9c979438b68b008ea5ba9b43b924614a369a7c6c354aa580274abe9b7"
       },
@@ -1585,7 +1585,7 @@
       }
     },
     "revenue_sdk": {
-      "version": "1.14.2",
+      "version": "1.14.5",
       "files": {
         "lib/presentation/pages/income/income_page.dart": "314f8ee330eee9f69dfc47ee5be1b960fdf68c4b5474c0673db2ede962617b64",
         "lib/presentation/pages/income/app_bar_screen.dart": "da70222a0db114f137b0a48e9c8c5086cc369e151d48406913263e4f73c5628a",
@@ -1948,7 +1948,7 @@
       "boot_hooks": []
     },
     "booking_sdk": {
-      "version": "1.2.2",
+      "version": "1.2.3",
       "files": {
         "lib/presentation/pages/reservations/shop_reservations_page.dart": "e81667095f2399cad563a7e1b20042d69d250bb9f62b81e789068c3490fbebb6",
         "lib/presentation/pages/reservations/reservation_tables_page.dart": "32de44d0a192f06cd08a14f4e7afcfea0d25513ecbe5391ce2b8f3a4ac92dc48",
@@ -2062,8 +2062,8 @@
   },
   "sdk_cache": {
     "base": {
-      "version": "1.93.0",
-      "source_hash": "013cdcb03783bf2f"
+      "version": "1.94.0",
+      "source_hash": "e931299725bf5dfb"
     },
     "comms": {
       "version": "1.23.2",
@@ -2082,16 +2082,16 @@
       "source_hash": "99e89cc791e21c18"
     },
     "products": {
-      "version": "1.12.8",
-      "source_hash": "e571ff287bc25fa3"
+      "version": "1.12.9",
+      "source_hash": "32ece21e3e323b18"
     },
     "orders": {
-      "version": "1.31.1",
-      "source_hash": "6f77f8cb36f0088c"
+      "version": "1.31.2",
+      "source_hash": "71a5aade4e4244bb"
     },
     "kitchen": {
-      "version": "1.5.4",
-      "source_hash": "b93c61a22801a3a4"
+      "version": "1.5.5",
+      "source_hash": "46f3dcd0d8ea2a61"
     },
     "promotions": {
       "version": "1.4.1",
@@ -2126,8 +2126,8 @@
       "source_hash": "5aea0c4f3228da60"
     },
     "revenue": {
-      "version": "1.14.2",
-      "source_hash": "61a01d746bbdbf34"
+      "version": "1.14.5",
+      "source_hash": "1e79b4886463362e"
     },
     "map": {
       "version": "1.5.1",
@@ -2154,8 +2154,8 @@
       "source_hash": "fc4dc71b7401b7bd"
     },
     "booking": {
-      "version": "1.2.2",
-      "source_hash": "951d4f3a23f4e375"
+      "version": "1.2.3",
+      "source_hash": "354ecf7c747f01a0"
     }
   }
 }
