@@ -113,7 +113,22 @@ steps:
           await tester.ensureVisible(card.first);
         } catch (_) {}
         await tester.pump(const Duration(milliseconds: 300));
-        await tester.tap(card.first, warnIfMissed: false);
+        // On wide screens the catalog auto-selects the FIRST product when
+        // it loads, so the detail plane already shows it: tapping that
+        // card again changes nothing and the still repeated the menu byte
+        // for byte (the tablet leg). Tap the second card so the selection,
+        // the card highlight and the detail plane all move. A phone has no
+        // selection (the tap pushes the edit page), so its first tile is
+        // fine.
+        final bool wideGrid =
+            find.byType(ProductCatalogCard).evaluate().isNotEmpty;
+        final Finder target =
+            wideGrid && card.evaluate().length > 1 ? card.at(1) : card.first;
+        try {
+          await tester.ensureVisible(target);
+        } catch (_) {}
+        await tester.pump(const Duration(milliseconds: 300));
+        await tester.tap(target, warnIfMissed: false);
       }
   # Action-only step: on a phone the product tap pushed the edit page over
   # the catalog (the Stock button below lives on the catalog, not on that

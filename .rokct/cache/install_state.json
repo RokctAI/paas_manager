@@ -1,7 +1,7 @@
 {
   "packages": {
     "base_sdk": {
-      "version": "1.94.0",
+      "version": "1.94.3",
       "files": {
         "flutter_native_splash.yaml": "d469a133b5e1631d6ba811b048d290449224075edad2153189cfb2edc3f4d100",
         "android/app/src/main/res/font/montserrat_extrabolditalic.ttf": "d38bac61eda8d8c002b1a852f5368901a085fbe1d844b5e0a149b674e22e2cdd",
@@ -2062,8 +2062,8 @@
   },
   "sdk_cache": {
     "base": {
-      "version": "1.94.0",
-      "source_hash": "e931299725bf5dfb"
+      "version": "1.94.3",
+      "source_hash": "a2c5ce1210cd1a71"
     },
     "comms": {
       "version": "1.23.2",
@@ -2083,11 +2083,11 @@
     },
     "products": {
       "version": "1.12.9",
-      "source_hash": "32ece21e3e323b18"
+      "source_hash": "f1a608c168860402"
     },
     "orders": {
       "version": "1.31.2",
-      "source_hash": "71a5aade4e4244bb"
+      "source_hash": "0945911e920b4265"
     },
     "kitchen": {
       "version": "1.5.5",
