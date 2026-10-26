@@ -1,7 +1,7 @@
 {
   "packages": {
     "base_sdk": {
-      "version": "1.94.3",
+      "version": "1.96.0",
       "files": {
         "flutter_native_splash.yaml": "d469a133b5e1631d6ba811b048d290449224075edad2153189cfb2edc3f4d100",
         "android/app/src/main/res/font/montserrat_extrabolditalic.ttf": "d38bac61eda8d8c002b1a852f5368901a085fbe1d844b5e0a149b674e22e2cdd",
@@ -1585,7 +1585,7 @@
       }
     },
     "revenue_sdk": {
-      "version": "1.14.5",
+      "version": "1.14.7",
       "files": {
         "lib/presentation/pages/income/income_page.dart": "314f8ee330eee9f69dfc47ee5be1b960fdf68c4b5474c0673db2ede962617b64",
         "lib/presentation/pages/income/app_bar_screen.dart": "da70222a0db114f137b0a48e9c8c5086cc369e151d48406913263e4f73c5628a",
@@ -2062,8 +2062,8 @@
   },
   "sdk_cache": {
     "base": {
-      "version": "1.94.3",
-      "source_hash": "a2c5ce1210cd1a71"
+      "version": "1.96.0",
+      "source_hash": "72be639c501155c4"
     },
     "comms": {
       "version": "1.23.2",
@@ -2126,8 +2126,8 @@
       "source_hash": "5aea0c4f3228da60"
     },
     "revenue": {
-      "version": "1.14.5",
-      "source_hash": "1e79b4886463362e"
+      "version": "1.14.7",
+      "source_hash": "5a59901faf840fb3"
     },
     "map": {
       "version": "1.5.1",
