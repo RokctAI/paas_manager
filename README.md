@@ -20,8 +20,12 @@ tour run, so new screens appear here automatically.
 | ![Quick Flow][s11] | ![Menu][s12] | ![Add Product][s13] |
 | **Product Detail** | **Quick Stock** | **Order Queue** |
 | ![Product Detail][s14] | ![Quick Stock][s15] | ![Order Queue][s16] |
-| **Order History** | | |
-| ![Order History][s17] | | |
+| **Order History** | **Order Pos Products** | **Order Pos Cart** |
+| ![Order History][s17] | ![Order Pos Products][s18] | ![Order Pos Cart][s19] |
+| **Order Pos Shipping** | **Order Pos Customer** | **Order Pos Section** |
+| ![Pos Shipping][s20] | ![Pos Customer][s21] | ![Order Pos Section][s22] |
+| **Order Pos Delivery Time** | **Order Loads** | |
+| ![Order Pos Delivery Time][s23] | ![Order Loads][s24] | |
 
 The full tour lives in the [feature guide](marketing/tour/feature-guide.md),
 with walkthrough videos alongside it in [`marketing/tour/`](marketing/tour).
@@ -39,6 +43,13 @@ with walkthrough videos alongside it in [`marketing/tour/`](marketing/tour).
 [s15]: marketing/tour/store/15-quick_stock.png
 [s16]: marketing/tour/store/16-order_queue.png
 [s17]: marketing/tour/store/17-order_history.png
+[s18]: marketing/tour/store/18-order_pos_products.png
+[s19]: marketing/tour/store/19-order_pos_cart.png
+[s20]: marketing/tour/store/20-order_pos_shipping.png
+[s21]: marketing/tour/store/21-order_pos_customer.png
+[s22]: marketing/tour/store/22-order_pos_section.png
+[s23]: marketing/tour/store/23-order_pos_delivery_time.png
+[s24]: marketing/tour/store/24-order_loads.png
 <!-- @generated-tour-gallery-end -->
 
 <!-- @generated-render-strip-start -->

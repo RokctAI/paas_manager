@@ -126,7 +126,7 @@ time.
 
 ![Start a walk-in order](screenshots/18-order_pos_products.png)
 
-Ring up a customer at the counter - pick from your own menu, by category, with
+Ring up a customer at the counter - pick from your menu, by category, with
 search.
 
 ## 19. Review the order

@@ -1,5 +1,7 @@
 ## 1.31.2
 
+* fix(tour): shorten the `order_pos_products` caption's highlight phrase to "pick from your menu". The longer phrase did not fit one 64px row on the phone canvas (24px past the wrap width), and a highlight never splits across rows. No version bump (tour only).
+
 * fix(manifest): remove the duplicate empty top-level `installs` key that overrode the demo fixture install. Manifest only.
 
 ## 1.31.1
