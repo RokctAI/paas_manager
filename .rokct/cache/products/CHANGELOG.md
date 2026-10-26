@@ -75,6 +75,10 @@
 
 # Changelog
 
+## Unreleased
+
+* fix(tour): `product_detail` only tapped `ProductCatalogCard` (the wide grid card). A phone draws `ProductCatalogTile`, so the tap never fired and the still repeated `menu` byte for byte. The step taps whichever is on screen and a new `product_detail_close` step pops the edit page a phone tap pushes. No version bump (tour only).
+
 ## 1.11.0
 
 * feat(demo): demo repositories follow the runtime demo session. base_sdk

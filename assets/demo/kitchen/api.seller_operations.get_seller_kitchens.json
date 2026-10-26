@@ -1,0 +1,22 @@
+{
+  "data": [
+    {
+      "id": "1",
+      "active": 1,
+      "shop_id": "1",
+      "translation": {
+        "title": "Grill",
+        "locale": "en"
+      }
+    },
+    {
+      "id": "2",
+      "active": 1,
+      "shop_id": "1",
+      "translation": {
+        "title": "Fryer",
+        "locale": "en"
+      }
+    }
+  ]
+}

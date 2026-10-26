@@ -1,6 +1,7 @@
 {
   "name": "kitchen_sdk",
-  "version": "1.5.4",
+  "version": "1.5.5",
+  "_comment_version_1_5_5": "1.5.4 -> 1.5.5: the manifest had two top-level installs keys; the later empty one (installs: []) won when the JSON was parsed, so the assets/demo/kitchen fixture install from 1.x never ran in any compose. Apps got the app_assets pubspec entry (or none) with no directory behind it: flutter build windows failed with unable to find directory entry in pubspec.yaml, and the demo showed an empty kitchen. The empty key is removed, so the fixture install applies to every app_type. Manifest only; see CHANGELOG.",
   "_comment_version_1_5_4": "1.5.3 -> 1.5.4: version for the coach-mark guide mounted on this SDK's primary page (GuideHost and GuideAnchor from base_sdk 1.92.0, off in demo sessions). The mount landed without a version change; see CHANGELOG.",
   "_comment_version_1_5_1": "1.5.0 -> 1.5.1: the demo fixture install moves from the app_type.manager block to the top-level installs, next to the top-level app_assets entry that registers it. The common DI registers assets/demo/kitchen in every role, but only manager composes copied the fixtures, so any other compose (supacharge's Windows build) got an assets/demo/kitchen/ pubspec entry with nothing behind it and flutter failed with 'unable to find directory entry in pubspec.yaml'. Manifest-only change; no code changes.",
   "_comment_version_1_5_0": "1.4.1 -> 1.5.0: demo runs the REAL repositories (Ray, 2026-09-25: \"touch all sdk demos ... remove unused files\"). The DI hooks register the real repositories only and call DemoFixtures.registerAssetDirectory('assets/demo/kitchen'); base_sdk 1.73.0's DemoGatewayInterceptor answers each platform cmd from templates/assets/demo/kitchen/<cmd>.json (installed to assets/demo/kitchen) while DemoSession.demoActive, and an unknown cmd fails with DemoFixtureMissing. The kitchen fixtures carry (the five-ticket service across accepted/cooking/ready, filterable by status, plus two kitchen stations for KitchensRepository). Deleted: DemoKitchenOrdersRepository and the demo-session swap code that chose them. Needs base_sdk >= 1.73.0 (DemoFixtures / DemoGatewayInterceptor).",
@@ -26,7 +27,6 @@
       "to": "assets/demo/kitchen"
     }
   ],
-  "installs": [],
   "routes": [],
   "integrations": [],
   "app_type": {

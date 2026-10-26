@@ -1,5 +1,13 @@
 # Changelog
 
+## Unreleased
+
+* fix(tour): `kitchen_detail` tapped a `KitchenOrderCard` that did not exist yet (empty queue after a slow or failed first fetch), a silent no-op that left the still identical to `kitchen_queue`. The step now waits for a card, re-fetches once, pins it on screen and logs when the queue is still empty. No version bump (tour only).
+
+## 1.5.5
+
+* fix(manifest): remove the duplicate empty top-level `installs` key that overrode the `assets/demo/kitchen` fixture install, so the demo fixtures install in every compose (empty demo screens and the missing-asset-directory Windows build failure). Manifest only.
+
 ## 1.5.4
 
 * feat(tour): the kitchen tour fragment gains `kitchen_detail` (a card tap opens the full ticket) and a tolerant close step. No version bump (tour only).
