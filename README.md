@@ -24,8 +24,8 @@ tour run, so new screens appear here automatically.
 | ![Order History][s17] | ![Order Pos Products][s18] | ![Order Pos Cart][s19] |
 | **Order Pos Shipping** | **Order Pos Customer** | **Order Pos Section** |
 | ![Pos Shipping][s20] | ![Pos Customer][s21] | ![Order Pos Section][s22] |
-| **Order Pos Delivery Time** | **Order Loads** | |
-| ![Order Pos Delivery Time][s23] | ![Order Loads][s24] | |
+| **Order Pos Delivery Time** | **Order Loads** | **Order Issue Load** |
+| ![Pos Delivery Time][s23] | ![Order Loads][s24] | ![Order Issue Load][s25] |
 
 The full tour lives in the [feature guide](marketing/tour/feature-guide.md),
 with walkthrough videos alongside it in [`marketing/tour/`](marketing/tour).
@@ -50,6 +50,7 @@ with walkthrough videos alongside it in [`marketing/tour/`](marketing/tour).
 [s22]: marketing/tour/store/22-order_pos_section.png
 [s23]: marketing/tour/store/23-order_pos_delivery_time.png
 [s24]: marketing/tour/store/24-order_loads.png
+[s25]: marketing/tour/store/25-order_issue_load.png
 <!-- @generated-tour-gallery-end -->
 
 <!-- @generated-render-strip-start -->
