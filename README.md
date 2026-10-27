@@ -26,6 +26,16 @@ tour run, so new screens appear here automatically.
 | ![Pos Shipping][s20] | ![Pos Customer][s21] | ![Order Pos Section][s22] |
 | **Order Pos Delivery Time** | **Order Loads** | **Order Issue Load** |
 | ![Pos Delivery Time][s23] | ![Order Loads][s24] | ![Order Issue Load][s25] |
+| **Order Shop Drivers** | **Kitchen Queue** | **Kitchen Detail** |
+| ![Order Shop Drivers][s26] | ![Kitchen Queue][s27] | ![Kitchen Detail][s28] |
+| **Comms Language** | **Comms Notifications** | **Revenue Income** |
+| ![Comms Language][s29] | ![Notifications][s30] | ![Revenue Income][s31] |
+| **Product Profit** | **Subscriptions Plans** | **Productivity Tasks** |
+| ![Product Profit][s32] | ![Plans][s33] | ![Productivity Tasks][s34] |
+| **Task Compose** | **Maintenance Readings** | **Maintenance Photo** |
+| ![Task Compose][s35] | ![Readings][s36] | ![Maintenance Photo][s37] |
+| **Productivity Plan** | **Productivity Mastery** | **Calc Keypad** |
+| ![Productivity Plan][s38] | ![Mastery][s39] | ![Calc Keypad][s40] |
 
 The full tour lives in the [feature guide](marketing/tour/feature-guide.md),
 with walkthrough videos alongside it in [`marketing/tour/`](marketing/tour).
@@ -51,6 +61,21 @@ with walkthrough videos alongside it in [`marketing/tour/`](marketing/tour).
 [s23]: marketing/tour/store/23-order_pos_delivery_time.png
 [s24]: marketing/tour/store/24-order_loads.png
 [s25]: marketing/tour/store/25-order_issue_load.png
+[s26]: marketing/tour/store/26-order_shop_drivers.png
+[s27]: marketing/tour/store/27-kitchen_queue.png
+[s28]: marketing/tour/store/28-kitchen_detail.png
+[s29]: marketing/tour/store/29-comms_language.png
+[s30]: marketing/tour/store/30-comms_notifications.png
+[s31]: marketing/tour/store/31-revenue_income.png
+[s32]: marketing/tour/store/32-revenue_product_profit.png
+[s33]: marketing/tour/store/33-subscriptions_plans.png
+[s34]: marketing/tour/store/34-productivity_tasks.png
+[s35]: marketing/tour/store/35-productivity_task_compose.png
+[s36]: marketing/tour/store/36-productivity_maintenance_readings.png
+[s37]: marketing/tour/store/37-productivity_maintenance_photo.png
+[s38]: marketing/tour/store/38-productivity_plan.png
+[s39]: marketing/tour/store/39-productivity_mastery.png
+[s40]: marketing/tour/store/40-calc_keypad.png
 <!-- @generated-tour-gallery-end -->
 
 <!-- @generated-render-strip-start -->
