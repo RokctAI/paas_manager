@@ -1,7 +1,7 @@
 {
   "packages": {
     "base_sdk": {
-      "version": "1.96.0",
+      "version": "1.97.0",
       "files": {
         "flutter_native_splash.yaml": "d469a133b5e1631d6ba811b048d290449224075edad2153189cfb2edc3f4d100",
         "android/app/src/main/res/font/montserrat_extrabolditalic.ttf": "d38bac61eda8d8c002b1a852f5368901a085fbe1d844b5e0a149b674e22e2cdd",
@@ -243,7 +243,7 @@
       ]
     },
     "merchants_sdk": {
-      "version": "1.36.1",
+      "version": "1.37.0",
       "files": {
         "assets/audio/notification.wav": "9d62af6f1c8df010941d1daa17162175d87293bd78371c787803b5a11f95cb9d",
         "assets/svgs/menu.svg": "9767d04ac4d157e423f972259a9c2c455a6a629c4098cc9c2fe8f9722451441b",
@@ -692,7 +692,7 @@
       ]
     },
     "orders_sdk": {
-      "version": "1.31.2",
+      "version": "1.31.4",
       "files": {
         "lib/presentation/pages/orders/orders_home_page.dart": "54681e9dba8fe5e980580f359838716bb8720c0b0285afe1df51dfc0dec029c0",
         "lib/presentation/pages/orders/details/order_details_modal.dart": "66f5c681515ecf97ef9963274858ffaff00668230cc34a94b5a9b3d9bfd88bfb",
@@ -1134,7 +1134,7 @@
       "boot_hooks": []
     },
     "subscriptions_sdk": {
-      "version": "1.7.3",
+      "version": "1.8.0",
       "files": {
         "lib/presentation/pages/subscriptions/subscriptions_page.dart": "62ad148751054677a58355f81412f3e1870ba4866ded0e8fd00e294a131f07d7",
         "lib/presentation/pages/subscriptions/widgets/have_subscription.dart": "f68ad9267204aed05b15d95f5051fe614209166c0bbd0e2751fa684a9a556af3",
@@ -1167,7 +1167,15 @@
           "step": "if (from < 15) { await m.createTable(userSubscriptionsTable); }"
         }
       },
-      "di_hooks": [],
+      "di_hooks": [
+        {
+          "id": "plan-gated-sections",
+          "order": 20,
+          "body": "PlanAccess.gateProfileSections(const ['merchants.productivity']);",
+          "imports": [],
+          "_comment": "Profile section ids the free tier must not see. merchants.productivity is the manager's Productivity group (Tasks, Calculator). base_sdk's barrel is already imported by every composed main.dart, so no import is declared (a second one is a duplicate_import lint). Add an id here to gate another SDK's entry; ProfileSectionRegistry drops listed sections while PlanAccess.planGatedVisible is false (base_sdk 1.97.0)."
+        }
+      ],
       "boot_hooks": [],
       "app_assets": [
         "assets/demo/subscriptions/"
@@ -2062,8 +2070,8 @@
   },
   "sdk_cache": {
     "base": {
-      "version": "1.96.0",
-      "source_hash": "72be639c501155c4"
+      "version": "1.97.0",
+      "source_hash": "6c35afdaff06252e"
     },
     "comms": {
       "version": "1.23.2",
@@ -2078,16 +2086,16 @@
       "source_hash": "d95b63306d36447c"
     },
     "merchants": {
-      "version": "1.36.1",
-      "source_hash": "99e89cc791e21c18"
+      "version": "1.37.0",
+      "source_hash": "5b3780305a0a6f84"
     },
     "products": {
       "version": "1.12.9",
       "source_hash": "f1a608c168860402"
     },
     "orders": {
-      "version": "1.31.2",
-      "source_hash": "0945911e920b4265"
+      "version": "1.31.4",
+      "source_hash": "cb30d4ae8c6b9832"
     },
     "kitchen": {
       "version": "1.5.5",
@@ -2106,8 +2114,8 @@
       "source_hash": "a0096d225fd159ab"
     },
     "subscriptions": {
-      "version": "1.7.3",
-      "source_hash": "94b475b459cb2a3f"
+      "version": "1.8.0",
+      "source_hash": "9beca649bf2111fa"
     },
     "processing": {
       "version": "1.0.2",
