@@ -63,6 +63,15 @@ store:
   # so the hero is order_queue - the /main home shell on its default
   # order-queue tab, the screen sellers land on after sign-in.
   feature_step: order_queue
+  feature_style:
+    bg: "#FFF3E3"
+    bg2: "#FFD9B0"
+    ink: "#2A1608"
+    accent: "#FF6600"
+    shape: "band"
+    layout: "right"
+    tilt: 5
+    headline: "Orders, stock and checkout."
 setup:
   # Account auth_sdk's shared tour fragment signs in as ({demo_email} in
   # that fragment). Manager admits only the seller role - see header note.
