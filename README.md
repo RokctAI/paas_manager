@@ -24,32 +24,58 @@ tour run, so new screens appear here automatically.
 | ![Order History][s17] | ![Order Pos Products][s18] | ![Order Pos Cart][s19] |
 | **Order Pos Shipping** | **Order Pos Customer** | **Order Pos Section** |
 | ![Pos Shipping][s20] | ![Pos Customer][s21] | ![Order Pos Section][s22] |
-| **Order Pos Delivery Time** | **Order Loads** | |
-| ![Order Pos Delivery Time][s23] | ![Order Loads][s24] | |
+| **Order Pos Delivery Time** | **Order Loads** | **Order Issue Load** |
+| ![Pos Delivery Time][s23] | ![Order Loads][s24] | ![Order Issue Load][s25] |
+| **Order Shop Drivers** | **Kitchen Queue** | **Kitchen Detail** |
+| ![Order Shop Drivers][s26] | ![Kitchen Queue][s27] | ![Kitchen Detail][s28] |
+| **Comms Language** | **Comms Notifications** | **Revenue Income** |
+| ![Comms Language][s29] | ![Notifications][s30] | ![Revenue Income][s31] |
+| **Product Profit** | **Subscriptions Plans** | **Productivity Tasks** |
+| ![Product Profit][s32] | ![Plans][s33] | ![Productivity Tasks][s34] |
+| **Task Compose** | **Maintenance Readings** | **Maintenance Photo** |
+| ![Task Compose][s35] | ![Readings][s36] | ![Maintenance Photo][s37] |
+| **Productivity Plan** | **Productivity Mastery** | **Calc Keypad** |
+| ![Productivity Plan][s38] | ![Mastery][s39] | ![Calc Keypad][s40] |
 
 The full tour lives in the [feature guide](marketing/tour/feature-guide.md),
 with walkthrough videos alongside it in [`marketing/tour/`](marketing/tour).
 
-[s05]: marketing/tour/store/05-pos_scan.png
-[s06]: marketing/tour/store/06-pos_cart.png
-[s07]: marketing/tour/store/07-pos_checkout.png
-[s08]: marketing/tour/store/08-pos_receipt_preview.png
-[s09]: marketing/tour/store/09-restaurant_hub.png
-[s10]: marketing/tour/store/10-sync_issues.png
-[s11]: marketing/tour/store/11-quick_flow.png
-[s12]: marketing/tour/store/12-menu.png
-[s13]: marketing/tour/store/13-add_product.png
-[s14]: marketing/tour/store/14-product_detail.png
-[s15]: marketing/tour/store/15-quick_stock.png
-[s16]: marketing/tour/store/16-order_queue.png
-[s17]: marketing/tour/store/17-order_history.png
-[s18]: marketing/tour/store/18-order_pos_products.png
-[s19]: marketing/tour/store/19-order_pos_cart.png
-[s20]: marketing/tour/store/20-order_pos_shipping.png
-[s21]: marketing/tour/store/21-order_pos_customer.png
-[s22]: marketing/tour/store/22-order_pos_section.png
-[s23]: marketing/tour/store/23-order_pos_delivery_time.png
-[s24]: marketing/tour/store/24-order_loads.png
+[s05]: marketing/tour/screenshots/05-pos_scan.png
+[s06]: marketing/tour/screenshots/06-pos_cart.png
+[s07]: marketing/tour/screenshots/07-pos_checkout.png
+[s08]: marketing/tour/screenshots/08-pos_receipt_preview.png
+[s09]: marketing/tour/screenshots/09-restaurant_hub.png
+[s10]: marketing/tour/screenshots/10-sync_issues.png
+[s11]: marketing/tour/screenshots/11-quick_flow.png
+[s12]: marketing/tour/screenshots/12-menu.png
+[s13]: marketing/tour/screenshots/13-add_product.png
+[s14]: marketing/tour/screenshots/14-product_detail.png
+[s15]: marketing/tour/screenshots/15-quick_stock.png
+[s16]: marketing/tour/screenshots/16-order_queue.png
+[s17]: marketing/tour/screenshots/17-order_history.png
+[s18]: marketing/tour/screenshots/18-order_pos_products.png
+[s19]: marketing/tour/screenshots/19-order_pos_cart.png
+[s20]: marketing/tour/screenshots/20-order_pos_shipping.png
+[s21]: marketing/tour/screenshots/21-order_pos_customer.png
+[s22]: marketing/tour/screenshots/22-order_pos_section.png
+[s23]: marketing/tour/screenshots/23-order_pos_delivery_time.png
+[s24]: marketing/tour/screenshots/24-order_loads.png
+[s25]: marketing/tour/screenshots/25-order_issue_load.png
+[s26]: marketing/tour/screenshots/26-order_shop_drivers.png
+[s27]: marketing/tour/screenshots/27-kitchen_queue.png
+[s28]: marketing/tour/screenshots/28-kitchen_detail.png
+[s29]: marketing/tour/screenshots/29-comms_language.png
+[s30]: marketing/tour/screenshots/30-comms_notifications.png
+[s31]: marketing/tour/screenshots/31-revenue_income.png
+[s32]: marketing/tour/screenshots/32-revenue_product_profit.png
+[s33]: marketing/tour/screenshots/33-subscriptions_plans.png
+[s34]: marketing/tour/screenshots/34-productivity_tasks.png
+[s35]: marketing/tour/screenshots/35-productivity_task_compose.png
+[s36]: marketing/tour/screenshots/36-productivity_maintenance_readings.png
+[s37]: marketing/tour/screenshots/37-productivity_maintenance_photo.png
+[s38]: marketing/tour/screenshots/38-productivity_plan.png
+[s39]: marketing/tour/screenshots/39-productivity_mastery.png
+[s40]: marketing/tour/screenshots/40-calc_keypad.png
 <!-- @generated-tour-gallery-end -->
 
 <!-- @generated-render-strip-start -->
