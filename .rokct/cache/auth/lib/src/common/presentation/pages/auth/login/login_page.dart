@@ -159,7 +159,6 @@ class _LoginPageState extends ConsumerState<LoginPage> {
       isDrag: false,
       context: context,
       modal: languageScreen,
-      isDarkMode: Theme.of(context).brightness == Brightness.dark,
     );
   }
 
@@ -410,7 +409,6 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                                   AppHelpers.showCustomModalBottomSheet(
                                     context: context,
                                     modal: const LoginScreen(),
-                                    isDarkMode: isDarkMode,
                                   );
                                 },
                               ),
@@ -422,7 +420,6 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                                 AppHelpers.showCustomModalBottomSheet(
                                   context: context,
                                   modal: RegisterPage(isOnlyEmail: true),
-                                  isDarkMode: isDarkMode,
                                   paddingTop: MediaQuery.paddingOf(context).top,
                                 );
                               },

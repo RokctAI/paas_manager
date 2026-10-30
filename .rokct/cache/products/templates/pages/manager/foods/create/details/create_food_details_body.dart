@@ -41,8 +41,8 @@ class CreateFoodDetailsBody extends StatefulWidget {
 
   /// True when this body sits on the dark pushed page (the 35b add moment,
   /// ProductEditPage): the picker chevrons and toggle labels take the
-  /// mode-resolving ink. False (the default) keeps the shipped bottom-sheet
-  /// look untouched.
+  /// mode-resolving ink. False (the default) resolves the ink from the sheet's
+  /// brightness instead (light value is #1B1B20, not pure black).
   final bool dark;
 
   const CreateFoodDetailsBody({
@@ -58,7 +58,9 @@ class CreateFoodDetailsBody extends StatefulWidget {
 class _CreateFoodDetailsBodyState extends State<CreateFoodDetailsBody> {
   final _formKey = GlobalKey<FormState>();
 
-  Color get _ink => widget.dark ? AppStyle.textPrimary : AppStyle.blackColor;
+  Color get _ink => widget.dark
+      ? AppStyle.textPrimary
+      : AppStyle.inkFor(Theme.of(context).brightness);
 
   @override
   Widget build(BuildContext context) {
@@ -126,7 +128,7 @@ class _CreateFoodDetailsBodyState extends State<CreateFoodDetailsBody> {
                                 MediaQuery.paddingOf(context).top + 100.h,
                             context: context,
                             modal: const FoodCategoriesModal(),
-                            isDarkMode: false,
+                            themedSurface: true,
                           ),
                         );
                       },
@@ -149,7 +151,7 @@ class _CreateFoodDetailsBodyState extends State<CreateFoodDetailsBody> {
                                 MediaQuery.paddingOf(context).top + 300.h,
                             context: context,
                             modal: const CreateFoodUnitsModal(),
-                            isDarkMode: false,
+                            themedSurface: true,
                           ),
                         );
                       },
@@ -171,7 +173,7 @@ class _CreateFoodDetailsBodyState extends State<CreateFoodDetailsBody> {
                                 MediaQuery.paddingOf(context).top + 300.h,
                             context: context,
                             modal: const FoodKitchensModal(),
-                            isDarkMode: false,
+                            themedSurface: true,
                           ),
                         );
                       },

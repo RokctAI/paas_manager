@@ -400,7 +400,7 @@ class _FoodsPageState extends ConsumerState<FoodsPage>
       paddingTop: MediaQuery.paddingOf(context).top + 64,
       context: context,
       modal: modal,
-      isDarkMode: false,
+      themedSurface: true,
     );
   }
 }

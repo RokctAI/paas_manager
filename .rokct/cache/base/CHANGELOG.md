@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.99.0
+
+* feat(modal): `ModalWrap` takes `themed` (default false). When true, its frosted fill follows the theme (`AppStyle.surfaceFor` for the current brightness, at the same 0.9 opacity) instead of white. Default off: every existing caller is unchanged. Callers opt in only after their body text and icons are theme-aware.
+
+## 1.98.0
+
+* feat(sheet): `AppHelpers.showCustomModalBottomSheet` takes `themedSurface` (default false). When true, the modal is painted on the theme-aware surface (`AppStyle.surfaceFor` for the current brightness, rounded by `radius`), so a sheet follows dark and light mode without its own surface. Default off: existing sheets are unchanged.
+* fix(sheet): `isDarkMode` is now optional and unused. The helper never read it; brightness comes from the theme. Existing callers that pass it still compile.
+
 ## 1.97.0
 
 * feat(sync): `PlanAccess.planGatedVisible` (ValueNotifier, true by default). `PlanSyncGate` sets it from the sync answer (cached answer on start), so with no plan or the free plan screens that need a plan are hidden. `PlanAccess.gateProfileSections(ids)` declares plan-gated profile section ids (one call, no per-SDK code); `ProfileSectionRegistry.sections` leaves them out while the flag is false. Apps that never install the gate are unchanged.

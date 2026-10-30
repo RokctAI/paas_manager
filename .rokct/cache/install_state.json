@@ -247,21 +247,21 @@
       "files": {
         "assets/audio/notification.wav": "9d62af6f1c8df010941d1daa17162175d87293bd78371c787803b5a11f95cb9d",
         "assets/svgs/menu.svg": "9767d04ac4d157e423f972259a9c2c455a6a629c4098cc9c2fe8f9722451441b",
-        "lib/presentation/pages/main/main_page.dart": "a1ac7c298329cd0b6b0e20d306864d1b1e7d379d1c34d711447bd12ff4cbe130",
+        "lib/presentation/pages/main/main_page.dart": "d68d01962a52e5dab58fd98717bf2438598c768747dd5a474c9bb726afb641db",
         "lib/presentation/pages/main/widgets/bottom_navigator_item.dart": "9086f84d83295ec9eedec3eff18595ef23af14346c339fb1d46b6aa36da23387",
         "lib/presentation/pages/main/widgets/buttons_bouncing_effect.dart": "861cc919c2b45ddfe407ea86abbea7cc9cced4052f2bab06850770111c26fa94",
-        "lib/presentation/pages/restaurant/restaurant_page.dart": "5a630b0b215c17e5d7e35d2e9419b2a884a4f62ebd5e6f8e0bd02f12e18c03ef",
-        "lib/presentation/pages/restaurant/widgets/edit_restaurant_modal.dart": "cf13f6efb610bf2e541d549d198060ed4082e1f3894ed1b8af9a4392c66c7e14",
-        "lib/presentation/pages/restaurant/widgets/logout_button.dart": "0df8924813e55822c8dd914833c96a4e16e4a8bc7c6b673e3e1856442ed17d7d",
-        "lib/presentation/pages/restaurant/widgets/working_time_modal.dart": "e027c9f314b5dd2414daeea290d499c6003971b1458d59524c1b6811eb83c137",
+        "lib/presentation/pages/restaurant/restaurant_page.dart": "73dc83d6c02550a8e171c11ea931dbfe9abf6c60936b509d4159ca22a672fe87",
+        "lib/presentation/pages/restaurant/widgets/edit_restaurant_modal.dart": "3dc5081e2c0cb3138ed515c8b76df459222bddcc28b7052c7e7ad98bc5479bc0",
+        "lib/presentation/pages/restaurant/widgets/logout_button.dart": "94955c0cfcf7a763201d7f3542f8d44917a235f028a7e8a444f1f769aaa97e76",
+        "lib/presentation/pages/restaurant/widgets/working_time_modal.dart": "07dfccb6c3b987e6e310b099c996ca8735d97b9de43473d3dc495c4dd1accf34",
         "lib/presentation/pages/restaurant/widgets/sections_item.dart": "4d0aa83c7a3f4de8629af1f0b991f9e1a14bf3f48a007e14be7436fda6a88d29",
-        "lib/presentation/pages/restaurant/widgets/logout_modal.dart": "324d02df6345922eb938a1aadd780fd39a240dcc6b17958c852d8e405c48a815",
+        "lib/presentation/pages/restaurant/widgets/logout_modal.dart": "dce2ffdc0f38366543dbc32704bdcc20edb24ffceb8256a2c1b1f4583159a2e2",
         "lib/presentation/pages/restaurant/widgets/shop_page_banner.dart": "8609969ff2f7c9100e880d9c22e181e003a8098e59b2f03f78badf901df46abe",
         "lib/presentation/components/restaurant/small_weekday_item.dart": "3e43135189e9cec0ee25a7b5f38600a0049e1ae04f1c192f0bab32ab22514ebf",
         "lib/presentation/routes/merchants_adapters.dart": "213d5b9b38f3fe77afed0a7b92f3e90e6fddc1cbd3adc8e529f190b2f9a5fc13",
         "lib/presentation/component/helper/horizontal_image_picker.dart": "3d3899881badec29e56a192b721aa6761568cf988cbefe42f4035d76175e9f21",
         "lib/presentation/pages/sync_issues/sync_issues_page.dart": "46702327eb60705aa902a84334aeb8f50fdfe1de41c27ca00853f7ba5a4fec81",
-        "lib/presentation/pages/billing/billing_page.dart": "912a4592aaec1da9210d338a655521762272fc8cb4559254db5a89054aa72afc",
+        "lib/presentation/pages/billing/billing_page.dart": "f7870d54a61a021bdddaf63e9ab7fe647133d2b20b17c14922a7d7a2635ed099",
         "lib/presentation/pages/billing/checkout_page.dart": "d3bc2f5aaf3ebe7ef69ee74e4f6053d58952bad47360c6ec1cd4ef7cce10436b",
         "lib/presentation/adapters/pos_orders_adapter.dart": "adaaaa7d29143a078bc0f7d49468aa254316b6fabf3ba32f486f8643187b7f82",
         "lib/presentation/pages/quick_flow/quick_flow_page.dart": "ea99239cd7e073d3aefebdc32d040a679da387a8627e0d857a08ebebb2fed9a2",
@@ -539,18 +539,18 @@
     "products_sdk": {
       "version": "1.12.9",
       "files": {
-        "lib/presentation/pages/foods/foods_page.dart": "8c12a9a1087eb70f24eadf4c179b1a52c9eeca3a8a4189137c5f4f7db56269d9",
+        "lib/presentation/pages/foods/foods_page.dart": "9d7806831186a87ba6f00cdeeab93b9bfa7510727f54f523efd2c6e5cb0dfee1",
         "lib/presentation/pages/foods/foods/foods_body.dart": "8a549e92dd438ea9defa61fe97203b9e8c981c2428a448a23a751f59737dab8d",
-        "lib/presentation/pages/foods/addons/addons_body.dart": "d1149be3d15e489f33bde50dc4974ca6976b385671c48a5df3e17a891c3d2033",
+        "lib/presentation/pages/foods/addons/addons_body.dart": "01fe02aea7a4cf80cc6db3b099f93d388d547c2e97eea9280f77e487b95cb467",
         "lib/presentation/pages/foods/addons/create/create_addon_units_modal.dart": "b3d0fc39aad11dd4abd98c4d18f5bc0aa2ab2e0b86f628ad880063b28a545031",
-        "lib/presentation/pages/foods/addons/create/create_addon_modal.dart": "42c8b252a514a3e1f4bf1fc3d6fc638c897ba2a5cd2894305adb90c937b7d505",
+        "lib/presentation/pages/foods/addons/create/create_addon_modal.dart": "5531fb8a8925169aaa79032af712549d44f31a772e00ab070ad80d1969597666",
         "lib/presentation/pages/foods/addons/edit/edit_addon_units_modal.dart": "afc2a983c949f8609e2d77abaf6e70b2b278cbf64f4aaceefef5828819b3902d",
-        "lib/presentation/pages/foods/addons/edit/edit_addon_modal.dart": "4d60834b90ecf269f4d3781ed6da09fea9f5b29d2f43c0e1be697ab848dac414",
+        "lib/presentation/pages/foods/addons/edit/edit_addon_modal.dart": "d453217171d9909b1efebf1a7f65e8fa9b2d9ba41e2ab551312d1b35f1eac5bf",
         "lib/presentation/pages/foods/addons/widgets/addon_item.dart": "797501d67cd0c187ec15261be232b67495f324c02900dd41a3116a84f5871f35",
-        "lib/presentation/pages/foods/extras/extras_body.dart": "761bd63b9f08f4c7a4a7f5faab55fb10f5f5a64d4f9cc030e1b2a7527d9ec0c2",
+        "lib/presentation/pages/foods/extras/extras_body.dart": "c19bd1bde5adb31081674eb3411068164ea837b77a0c7c8b9119f8df37e4425b",
         "lib/presentation/pages/foods/extras/update/update_extras_group_modal.dart": "03d27d50315156872552bb757457515ea76f31e41e4744b475fb4f012759ca09",
         "lib/presentation/pages/foods/extras/delete/delete_extras_group_modal.dart": "32adb0487dbcfafd27d496986899be2de184803eaa26830ffa08a7814ee5212a",
-        "lib/presentation/pages/foods/extras/details/extras_group_details_modal.dart": "5a3a2b05d16fe166291993dd26fb7b6025025a71889f6dba7713c261696164b5",
+        "lib/presentation/pages/foods/extras/details/extras_group_details_modal.dart": "e984e5ce23598b22fe1cea9d3d94b2ee9e3095cabc9c03d40f8b2a265d6a7006",
         "lib/presentation/pages/foods/extras/details/widgets/delete_extras_item_modal.dart": "f83a2077af876e422b7d707e4c3c6637c79f9811e3d9b82106c53759beab8a6a",
         "lib/presentation/pages/foods/extras/details/widgets/edit_extras_item_modal.dart": "0f1df0a3e16dd51cf4fe541db78496683dcbc8ee712ccec9a4a572493f412640",
         "lib/presentation/pages/foods/extras/details/widgets/create_new_group_item_modal.dart": "846587f26c2300c3f4d4d4f7275540e08dd070ff603b054f1f08ea7a3f7e63f6",
@@ -559,19 +559,19 @@
         "lib/presentation/pages/foods/extras/widgets/main_group_item.dart": "cccc4a4465a7ed675442a00912fd33f8dc0248edf7cabf94f60051d694293056",
         "lib/presentation/pages/foods/create/create_product_modal.dart": "b109d11f337530d4d3d4175cebbd7b811782b5254a0f2f62d847f4c82fd83650",
         "lib/presentation/pages/foods/create/details/create_food_units_modal.dart": "859a141484ab99e46df405a9aeb5ec839632ee7f640252a63af660df55a7e30a",
-        "lib/presentation/pages/foods/create/details/create_food_details_body.dart": "403707409b4a2085b020a1a19a6275d0162a0d37ba44c217943e892933d5a30c",
-        "lib/presentation/pages/foods/create/details/add_category_modal.dart": "605d80d2f7255a01eda6d5dc02e27e9068292d09da7fb17ad6c0e121f16a9d79",
-        "lib/presentation/pages/foods/create/details/food_categories_modal.dart": "39a022cd6148698aa08efb616ef61c992c26540a302638e6bdf3cd250e85056e",
+        "lib/presentation/pages/foods/create/details/create_food_details_body.dart": "d631f828a7837b8758ceca1ca722534989f4bde440dfef8e7533da83d9a692ce",
+        "lib/presentation/pages/foods/create/details/add_category_modal.dart": "5ee55d1b4ae7288f2c5880758a84964fce0f556ceab771797db2f806fa336da9",
+        "lib/presentation/pages/foods/create/details/food_categories_modal.dart": "d68c08c10846d855fee2aa0aaccefc102c68283287f502dcec331c8169f1ecf0",
         "lib/presentation/pages/foods/create/stocks/create_food_edit_extras_modal.dart": "bcedd44bf4673780ecec76b16cc0a5febeeea3735e682f2be63d8e2f4d93cc9e",
         "lib/presentation/pages/foods/create/stocks/create_food_addons_modal.dart": "d6bf4ff2612a6243a99b18f8ea11d4387368c4d54e13125bae403e0520239799",
-        "lib/presentation/pages/foods/create/stocks/create_food_stocks_body.dart": "e1d19391a84be4ec50ce3435048849d020092483ecde92fd582965f513d27f62",
+        "lib/presentation/pages/foods/create/stocks/create_food_stocks_body.dart": "86cbb40bd4971848ba1ab80a972e7b943e9fc5685ef2703693c6a05e555feae7",
         "lib/presentation/pages/foods/edit/edit_product_modal.dart": "645c5c01188067acd2677a6e0ccbabcae86eb1271f82d4dfe374bd24db2a2b68",
         "lib/presentation/pages/foods/edit/details/edit_food_categories_modal.dart": "0973a987b03f969e30a0a9dd4e638639f429afae1ead96f7e5acd8d23611fb40",
-        "lib/presentation/pages/foods/edit/details/edit_food_details_body.dart": "6dc78deaee57b991817db12e0194e489a79dc462ff6b85178401ba12543667cb",
+        "lib/presentation/pages/foods/edit/details/edit_food_details_body.dart": "d86c48a9a8020cc1ffcd6689c035abcb32c954c77d18bb7c9bf4c5b01319022a",
         "lib/presentation/pages/foods/edit/details/edit_food_units_modal.dart": "da9750fca5f17af02c041861151bd319ba023fec5a0b35e00b05c6e7866dc579",
         "lib/presentation/pages/foods/edit/stocks/edit_group_extras_modal.dart": "844a8caec51e8878f27fbfb55dfca39964e678502f2c38071465012521bd1f07",
         "lib/presentation/pages/foods/edit/stocks/edit_food_addons_modal.dart": "8a9ad21fd64ecf98999140b40283450d53f7ca65afec1a8772790c3f4f5c5614",
-        "lib/presentation/pages/foods/edit/stocks/edit_food_stocks_body.dart": "b02d36627cf4d89ffd2e31481cf831b766fd90cdd69b22643cfce27091507a71",
+        "lib/presentation/pages/foods/edit/stocks/edit_food_stocks_body.dart": "617d8dbd0c47d60f22db8109fa742a3bd6a9bbc2126ddb1183700f15fc80efac",
         "lib/presentation/pages/foods/widgets/food_kitchens_modal.dart": "df65f189f321e75a953abb7f50f0f6138cc6b31d0d2343d0150578d354c2edd2",
         "lib/presentation/components/foods/food_item.dart": "4e113ee2cd5dca24ad6c7f937bd17d263813397f2c21dc01d0a05acd24b4ec2d",
         "lib/presentation/components/foods/products_body.dart": "f038beafadc4e79fa80a4c6df78186f925c3ab81921558f5b88842871fb8c9f6",
@@ -692,17 +692,17 @@
       ]
     },
     "orders_sdk": {
-      "version": "1.31.4",
+      "version": "1.31.5",
       "files": {
-        "lib/presentation/pages/orders/orders_home_page.dart": "54681e9dba8fe5e980580f359838716bb8720c0b0285afe1df51dfc0dec029c0",
+        "lib/presentation/pages/orders/orders_home_page.dart": "a10b65eacf865064b211eab1fdfe079197f723a04d880242df0529df35b5bc6b",
         "lib/presentation/pages/orders/details/order_details_modal.dart": "66f5c681515ecf97ef9963274858ffaff00668230cc34a94b5a9b3d9bfd88bfb",
         "lib/presentation/pages/orders/details/price_information.dart": "3a431b5b160442db6f6a62b5db6e82e0af38f974c3ea66d0de3230ae795256d7",
         "lib/presentation/pages/orders/details/image_dialog.dart": "2e07b31689ad02db9bd55e7f06d30377572000265201dbb41e7e03f60caf2548",
-        "lib/presentation/pages/orders/widgets/new_orders_body.dart": "1fa31e16db61c3d5abe0f9373985664900de050ad07de17d2999d91893a9b8e2",
-        "lib/presentation/pages/orders/widgets/ready_orders_body.dart": "c710e9a25dc651d6da42603679d8222c89e271526cfac491d1c8f1061f30ce2f",
-        "lib/presentation/pages/orders/widgets/accepted_orders_body.dart": "04546f84ec06d2ad741797b0f8f19495c72bb5758029167bd84106a9ce0fb1b9",
+        "lib/presentation/pages/orders/widgets/new_orders_body.dart": "3f6f8548ec376e224702acf7f764c2bf84588491be31ed851a55550dfd39b778",
+        "lib/presentation/pages/orders/widgets/ready_orders_body.dart": "875f5c70db75865a6da044f27ee936b78a9b0f1d43ce63612665711fb8e63e00",
+        "lib/presentation/pages/orders/widgets/accepted_orders_body.dart": "0c25e46a3b3edb4ec114279280872d48ecde8fb06a1b10595fc0ed95a4a4ad50",
         "lib/presentation/pages/orders/widgets/no_orders.dart": "96adbd622a9d195aec944390f71c8322b5e7aeffba1b483f16c948f7af5cd70f",
-        "lib/presentation/pages/orders/widgets/on_a_way_orders_body.dart": "ca79de407fd36324a453d1850691d38f4c92a3daecbbc68b9082dcce4b7ffa3c",
+        "lib/presentation/pages/orders/widgets/on_a_way_orders_body.dart": "684240be241ad50fc5896f1139d58a909a713f92d5265358a7ac827da74129f4",
         "lib/presentation/pages/create_order/create_order_page.dart": "20c08d86b3847278662c9a15d524ae2a28de65039cd65efdc39563cc2e1c32fd",
         "lib/presentation/pages/create_order/details/food_details_modal.dart": "5a908e20c75e439637c84717f70d5a5de6e6f8380f9f5be652db7f6a2afb9dd7",
         "lib/presentation/pages/create_order/details/widgets/food_price_widget.dart": "b7ef593dd08147b04ac10dae2adb7eaeef7fb5b921e82c5c7212b4084d65d6c5",
@@ -720,12 +720,12 @@
         "lib/presentation/pages/create_order/shipping/select_table/widgets/table_item.dart": "5880837491e4cb1577fba62af71e1829e241a7df121d9902e3299f3b58ea5ee5",
         "lib/presentation/pages/create_order/shipping/widgets/delivery_type_item.dart": "5acee1933f17ccb807c107441efd14bac2b3033e2838d8a4fc1cd130f199676b",
         "lib/presentation/pages/create_order/shipping/widgets/searched_user_item.dart": "21b40035f61bb41196d87716fe2cdd098b7aa032196b686d6a8b8cf8c1baaf0d",
-        "lib/presentation/pages/create_order/shipping/select_user/select_user_page.dart": "77c257713ece92e77d9c6ecd0a699d1be864952d6bd6bc2a3777bf2f8a0efede",
+        "lib/presentation/pages/create_order/shipping/select_user/select_user_page.dart": "12f329e1272157c5596567861617669a94fcc0e92a2af60c418a12a4df6a4ce7",
         "lib/presentation/pages/create_order/shipping/select_user/widgets/create_user_modal.dart": "9385355e9691469350ecb010ac2ef4314f9c4caac1f666be4508e9a99dd0ac65",
         "lib/presentation/pages/create_order/shipping/select_user/widgets/user_item.dart": "71289007495f34ae9a4441a826be4ce99b9d6f5347d96cb0f10a775df5174aa6",
         "lib/presentation/pages/create_order/order/order_page.dart": "740757e2f6215c55026b662e72c3ff289940343945a01f5aafd750d1f44e6674",
         "lib/presentation/pages/create_order/order/widgets/title_price.dart": "b9c4dc096f3f03e2e8470659669d4fad0edd024199adec81b5d4c1c02a315293",
-        "lib/presentation/pages/order_history/order_history.dart": "fb4797e09d5319c808e75c1cd090cb79d63d4ad96ddef9e61686e850b6b81a2c",
+        "lib/presentation/pages/order_history/order_history.dart": "8aec3e1e582732b52cdb96d55d93e71c05f8cddb20737d784d7102c58b78fb00",
         "lib/presentation/components/orders/orders_item.dart": "69781a9e66291af2380c42cf796137ce97c3daa6df18a33b728681d0c76cf18d",
         "lib/presentation/components/orders/order_item.dart": "3e057f705708acb5d3fa1769e92fca4f67c253b9680d670e9c48b42d95534247",
         "lib/presentation/components/orders/order_food_item.dart": "956a5372e9d58eab3ee86201a7c8b30d38fa630bce49cd13cf33670f366b86fa",
@@ -739,10 +739,10 @@
         "lib/presentation/component/buttons/custom_icon_button.dart": "97f6c0c345022aac2b1bb459ebb71807c3391b5e362520789aab2d1df0a38f3c",
         "lib/presentation/component/loading/text_loading.dart": "35d7fb69050309542792ccd08d662e1a1ca54617950f540e895d3a742c2e8975",
         "lib/presentation/component/select_date_modal.dart": "f15a6c130767d8e2800fcc068af5dede9ee653331c752a704af38dd15b1b8b1b",
-        "lib/presentation/pages/orders/widgets/board/orders_board_view.dart": "bd66684cd5691b896fbc8bfbc9c692775705b7f14206e3856b914826a26511ad",
+        "lib/presentation/pages/orders/widgets/board/orders_board_view.dart": "c548079e88098e8bcc4fb4d4d94262aa140afa6eebbe8cf2fd384f167044674a",
         "lib/presentation/pages/orders/widgets/board/board_order_column.dart": "96a4362463465c34c8c05cba54d5204b0ce4d3a5d6680cd5033724a034d0516d",
         "lib/presentation/pages/create_order/order/widgets/order_pane.dart": "192b5ee2ccb132bf56f65bc5be15fa4a5d09e0422d2f7cf850e195027ce6dbef",
-        "lib/presentation/pages/loads/loads_page.dart": "068cc9f770f69bb238c8d63a23ed2561fb67f2a9af61f889ecd251bf0542937e",
+        "lib/presentation/pages/loads/loads_page.dart": "50d1c1f857271084eec2d22bf216d9403fe5a043795ce8924a53909552125075",
         "lib/presentation/pages/loads/issue_load_page.dart": "00dd5283e0cc93d579f4b2c89734dc9d8a6a2c45b32c2ef834da96c7e6c71028",
         "lib/presentation/pages/drivers/shop_drivers_page.dart": "18f0f37f84ef54178bc4619d8f92097590a219c83d06e993cea74b06cf6499bf"
       },
@@ -1184,7 +1184,7 @@
     "comms_sdk": {
       "version": "1.23.2",
       "files": {
-        "lib/presentation/pages/notification/notification_list_page.dart": "2ebfa74cb0686cfa0ba1d1aff281bd90e651ae740247a2ddd03e1116e64e9388",
+        "lib/presentation/pages/notification/notification_list_page.dart": "b9d761a1e7e38f4eaa0e0e8a250274dd3c2f3aeafe96a992d945ceccefda1546",
         "lib/application/notification/notification_state.dart": "055c8ab42969bad5e418061cbe38699458bfc8b74ea7d4def4a03a18e261b184",
         "lib/application/notification/notification_notifier.dart": "c5c691d1c0f1d476eea96d5a60bac5316fabe8ea0f77412db1d4d409f1e6b748",
         "lib/application/notification/notification_provider.dart": "f18a9bb1e82f0b765471e1c0824f4d2cc34806b9b4458dbf1f137f352809b671",
@@ -2071,15 +2071,15 @@
   "sdk_cache": {
     "base": {
       "version": "1.97.0",
-      "source_hash": "6c35afdaff06252e"
+      "source_hash": "9ac7dd32cbec74d2"
     },
     "comms": {
       "version": "1.23.2",
-      "source_hash": "ec6cea3cec50c85c"
+      "source_hash": "bb6f13df2117ae0c"
     },
     "auth": {
       "version": "1.22.1",
-      "source_hash": "093774677c9ab083"
+      "source_hash": "bc6b982959413f53"
     },
     "users": {
       "version": "1.5.2",
@@ -2087,15 +2087,15 @@
     },
     "merchants": {
       "version": "1.37.0",
-      "source_hash": "5b3780305a0a6f84"
+      "source_hash": "bc6fbccc7ca14503"
     },
     "products": {
       "version": "1.12.9",
-      "source_hash": "f1a608c168860402"
+      "source_hash": "ef438320dee341a2"
     },
     "orders": {
-      "version": "1.31.4",
-      "source_hash": "cb30d4ae8c6b9832"
+      "version": "1.31.5",
+      "source_hash": "2e16833a21e207f5"
     },
     "kitchen": {
       "version": "1.5.5",
@@ -2135,7 +2135,7 @@
     },
     "revenue": {
       "version": "1.14.7",
-      "source_hash": "5a59901faf840fb3"
+      "source_hash": "84185e5a4b0c4853"
     },
     "map": {
       "version": "1.5.1",
