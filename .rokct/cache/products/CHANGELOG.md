@@ -1,3 +1,7 @@
+## 1.13.0
+
+* feat(manager): the add-product form can open with a barcode prefilled, for merchants_sdk 1.38.0's till prompt on an unknown scan. `CreateProductModal.open(context, {barcode})` opens the form at any width: the bottom sheet on a phone, `ProductEditPage.openCreate` at plane widths. The foods tab's "+ New product" now calls it too (same behaviour as before). With a barcode the details form shows a Barcode field holding it (new tr_key `barcode`); it is saved the way the form already sent its code (`sku` on create).
+
 ## 1.12.9
 
 * fix(tour): `product_detail` taps the second product card on wide screens. The catalog auto-selects the first product on load, so tapping that card again changed nothing and the tablet still repeated the menu byte for byte. No version bump (tour only).

@@ -45,10 +45,16 @@ class CreateFoodDetailsBody extends StatefulWidget {
   /// brightness instead (light value is #1B1B20, not pure black).
   final bool dark;
 
+  /// The scanned code this product is being added for (the till's "Add
+  /// this product"). Non-empty shows the barcode field, prefilled with it;
+  /// the form's own reset seeds the same value into the notifier.
+  final String initialBarcode;
+
   const CreateFoodDetailsBody({
     super.key,
     required this.onSave,
     this.dark = false,
+    this.initialBarcode = '',
   });
 
   @override
@@ -99,6 +105,17 @@ class _CreateFoodDetailsBodyState extends State<CreateFoodDetailsBody> {
                       onChanged: event.setTitle,
                       validator: SellerFormValidators.emptyCheck,
                     ),
+                    if (widget.initialBarcode.isNotEmpty) ...[
+                      24.verticalSpace,
+                      UnderlinedTextField(
+                        key: const Key('createProductBarcodeField'),
+                        label: AppHelpers.getTranslation(TrKeys.barcode),
+                        initialText: widget.initialBarcode,
+                        inputType: TextInputType.text,
+                        textInputAction: TextInputAction.next,
+                        onChanged: event.setQrcode,
+                      ),
+                    ],
                     24.verticalSpace,
                     UnderlinedTextField(
                       label:

@@ -113,6 +113,11 @@ class TrKeys {
   static const String invalidCode = 'That code doesn\'t match. Check it with the customer and try again.';
   static const String printFailed = 'Printing failed — the sale was NOT recorded. Fix the printer or finish without a receipt.';
   static const String saleCompleted = 'Sale completed';
+  static const String barcodeNotRecognised = 'We don\'t recognise this barcode';
+  static const String barcodeNotInProductsYet = 'It isn\'t in your products yet';
+  static const String wouldYouLikeToAddThisProduct = 'Would you like to add this product?';
+  static const String addThisProduct = 'Add this product';
+  static const String scanAgain = 'Scan again';
   static const String inStore = 'In-store';
   static const String sendForDelivery = 'Send for delivery';
   static const String billingTo = 'Billing to';
@@ -371,6 +376,7 @@ class TrKeys {
   static const String addons = 'addons';
   static const String adultsOnly = 'adults_only_18_plus';
   static const String areYouSureToDelete = 'are_you_sure_to_delete';
+  static const String barcode = 'barcode';
   static const String categoryName = 'category_name';
   static const String costPrice = 'cost_price';
   static const String edit = 'edit';
@@ -1094,6 +1100,14 @@ class TrKeys {
       'less.than.a.day.in.app.this.year';
   static const String lessThanADayInAppThisWeek =
       'less.than.a.day.in.app.this.week';
+  // DataUsageBadge (profile footer): "4.2 MB used today · 61 MB this
+  // month", and its Wi-Fi / mobile split.
+  static const String dataUsed = 'data.used';
+  static const String dataUsedToday = 'used.today';
+  static const String dataThisMonth = 'this.month';
+  static const String wifi = 'wi-fi';
+  static const String mobileData = 'mobile.data';
+  static const String dataUsedNote = 'data.used.note';
   static const String goodMorning = 'good.Morning';
   static const String goodAfternoon = 'goodAfternoon';
   static const String goodEvening = 'good.Evening';
