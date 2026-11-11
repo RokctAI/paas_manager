@@ -1,7 +1,7 @@
 {
   "packages": {
     "base_sdk": {
-      "version": "1.107.0",
+      "version": "1.108.0",
       "files": {
         "flutter_native_splash.yaml": "d469a133b5e1631d6ba811b048d290449224075edad2153189cfb2edc3f4d100",
         "android/app/src/main/res/font/montserrat_extrabolditalic.ttf": "d38bac61eda8d8c002b1a852f5368901a085fbe1d844b5e0a149b674e22e2cdd",
@@ -2078,8 +2078,8 @@
   },
   "sdk_cache": {
     "base": {
-      "version": "1.107.0",
-      "source_hash": "fe5de52544a2aa80"
+      "version": "1.108.0",
+      "source_hash": "b78414bf2891bf89"
     },
     "comms": {
       "version": "1.23.4",
