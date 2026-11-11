@@ -46,8 +46,9 @@
 app:
   name: Manager
   tagline: Run your store from your pocket
-  # Committed app logo (transparent background), shown on the video end card.
-  logo: assets/images/logo.png
+  # The app's real launcher icon, straight from the Android resources: the
+  # feature graphic, store/icon-512.png and the video end card use it.
+  logo: android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png
 video:
   hook: "Orders in. Menu up. Store running."
   offer: "Take charge of your store today."
