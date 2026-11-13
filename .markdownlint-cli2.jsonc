@@ -27,6 +27,7 @@
     "build",
     "dist",
     "out-bash",
-    "out-ps"
+    "out-ps",
+    ".rokct/cache"
   ]
 }
