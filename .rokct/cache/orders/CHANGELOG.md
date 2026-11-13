@@ -1,3 +1,7 @@
+## 1.31.8
+
+- fix(loading): page-level spinners replaced by the base_sdk shimmer `Loading()` (Ray, 2026-11-13: "Remove spinners where you can and use shimmers in the apps").
+
 ## 1.31.7
 
 - fix(manager/pos): `ProductData.unitId` is a `String?` (docname). The `int?` field threw on the demo and live `unit_id` strings, failing the whole `get_seller_products` parse, so the walk-in grid, its cart and `/load/issue` showed no products.

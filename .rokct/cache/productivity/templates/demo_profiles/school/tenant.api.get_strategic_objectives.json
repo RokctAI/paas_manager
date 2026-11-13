@@ -1,0 +1,26 @@
+[
+  {
+    "name": "OBJ-DEMO-0001",
+    "title": "Get 70% or more in maths",
+    "description": "<p>Fractions, decimals and word problems.</p>",
+    "pillar": "PIL-DEMO-0001"
+  },
+  {
+    "name": "OBJ-DEMO-0002",
+    "title": "Read one book a month",
+    "description": "<p>The class reader first, then one I pick.</p>",
+    "pillar": "PIL-DEMO-0001"
+  },
+  {
+    "name": "OBJ-DEMO-0003",
+    "title": "Homework done before 7 pm",
+    "description": "<p>Every school day.</p>",
+    "pillar": "PIL-DEMO-0002"
+  },
+  {
+    "name": "OBJ-DEMO-0004",
+    "title": "One live session a week",
+    "description": "<p>Booked before the week starts.</p>",
+    "pillar": "PIL-DEMO-0003"
+  }
+]

@@ -21,6 +21,7 @@ import 'package:remixicon/remixicon.dart';
 import 'camera_capture_service.dart';
 import 'camera_permission.dart';
 
+import 'package:base_sdk/src/presentation/components/loading.dart';
 /// A live camera preview with a shutter button, mirroring the thin-wrapper
 /// style of `MobileScannerWidget`. Emits the raw captured bytes through
 /// [onCaptured]; stamping is left to the caller / `CameraStampService`.
@@ -123,7 +124,7 @@ class _CameraCaptureWidgetState extends State<CameraCaptureWidget> {
       future: _initFuture,
       builder: (context, snapshot) {
         if (snapshot.connectionState != ConnectionState.done) {
-          return const Center(child: CircularProgressIndicator());
+          return const Loading();
         }
         final error = snapshot.error;
         if (error is CameraPermissionDeniedException) {

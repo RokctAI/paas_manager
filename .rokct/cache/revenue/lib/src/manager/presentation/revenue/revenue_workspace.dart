@@ -34,6 +34,7 @@ import 'package:revenue_sdk/src/manager/presentation/revenue/revenue_plane_flow.
 import 'package:revenue_sdk/src/manager/presentation/revenue/status_split_bar.dart';
 import 'package:revenue_sdk/src/manager/presentation/revenue/trend_chart.dart';
 
+import 'package:base_sdk/src/presentation/components/loading.dart';
 /// The whole approved revenue dashboard body (frames 36a/36b/36c, Ray
 /// 2026-08-30 10:38Z) — everything below the shell: fetch-on-mount, the
 /// period windows, and the plane behaviour ([RevenuePlaneFlow]). The
@@ -649,7 +650,7 @@ class _Dashboard extends ConsumerWidget {
         return const [
           Padding(
             padding: EdgeInsets.symmetric(vertical: 40),
-            child: Center(child: CircularProgressIndicator()),
+            child: const Loading(),
           ),
         ];
       }

@@ -51,6 +51,7 @@
 # Format: RokctAI/shared-workflows scripts/tour/README.md
 sdk: productivity
 imports:
+  - "import 'dart:convert';"
   - "import 'package:base_sdk/src/database/app_database.dart';"
   - "import 'package:flutter/services.dart';"
   - "import 'package:productivity_sdk/src/common/application/run/maintenance_plant.dart';"
@@ -71,85 +72,48 @@ steps:
     screenshot: true
     settle: 7
     dart: |
+      // The rows come from assets/demo/productivity/demo_profile.json, which
+      // the manifest installs per app (school, shop, assistant, personal, or
+      // the default business set), so each app tours tasks that fit it.
       final DateTime today = DateTime.now();
-      DateTime at(int days, int hour) =>
-          DateTime(today.year, today.month, today.day + days, hour);
-      String ago(int hours) =>
-          today.subtract(Duration(hours: hours)).toIso8601String();
+      final Map<String, dynamic> profile = jsonDecode(
+        await rootBundle.loadString('assets/demo/productivity/demo_profile.json'),
+      ) as Map<String, dynamic>;
+      final List<dynamic> rows = profile['tour_tasks'] as List<dynamic>;
       await TodoRepositoryImpl(AppDatabase()).saveTodos(
         <Map<String, dynamic>>[
-          <String, dynamic>{
-            'id': 'tour-task-depot-01',
-            'notifId': 47101,
-            'title': 'Deliver 40 × 20 L to the Mokopane depot',
-            'isDone': false,
-            'deadline': at(1, 9).toIso8601String(),
-            'reminder': true,
-            'priority': 'High',
-            'category': 'Deliveries',
-            'recurrence': 'Weekly',
-            'createdAt': ago(2),
-            'subtasks': <Map<String, dynamic>>[
-              <String, dynamic>{'title': 'Load the bakkie', 'isDone': true},
-              <String, dynamic>{
-                'title': 'Collect the signed delivery note',
+          for (int i = 0; i < rows.length; i++)
+            () {
+              final Map<String, dynamic> r = rows[i] as Map<String, dynamic>;
+              return <String, dynamic>{
+                'id': 'tour-task-0${i + 1}',
+                'notifId': 47101 + i,
+                'title': r['title'],
                 'isDone': false,
-              },
-              <String, dynamic>{'title': 'Bring back the empties', 'isDone': false},
-            ],
-          },
-          <String, dynamic>{
-            'id': 'tour-task-brine-02',
-            'notifId': 47102,
-            'title': 'Order brine salt · 25 kg bags',
-            'isDone': false,
-            'deadline': at(2, 10).toIso8601String(),
-            'reminder': false,
-            'priority': 'Medium',
-            'category': 'Plant',
-            'recurrence': 'Monthly',
-            'createdAt': ago(5),
-            'subtasks': <Map<String, dynamic>>[
-              <String, dynamic>{'title': 'Count the bags left', 'isDone': true},
-              <String, dynamic>{'title': 'Send the order to the co-op', 'isDone': false},
-            ],
-          },
-          <String, dynamic>{
-            'id': 'tour-task-invoice-03',
-            'notifId': 47103,
-            'title': 'Chase the Polokwane Spar invoice',
-            'isDone': false,
-            'deadline': at(5, 12).toIso8601String(),
-            'reminder': true,
-            'priority': 'Low',
-            'category': 'Admin',
-            'recurrence': 'None',
-            'createdAt': ago(9),
-            'subtasks': <Map<String, dynamic>>[],
-          },
-          <String, dynamic>{
-            'id': 'tour-task-borehole-04',
-            'notifId': 47104,
-            'title': 'Second borehole · quotes and water-use licence',
-            'isDone': false,
-            'reminder': false,
-            'priority': 'Medium',
-            'category': 'Plant',
-            'recurrence': 'None',
-            'isLongTerm': true,
-            'createdAt': ago(30),
-            'subtasks': <Map<String, dynamic>>[
-              <String, dynamic>{'title': 'Three drilling quotes', 'isDone': true},
-              <String, dynamic>{'title': 'Water-use licence application', 'isDone': false},
-              <String, dynamic>{'title': 'Pump and tank sizing', 'isDone': false},
-            ],
-          },
+                if (r['due_days'] != null)
+                  'deadline': DateTime(today.year, today.month,
+                          today.day + (r['due_days'] as int), r['due_hour'] as int)
+                      .toIso8601String(),
+                'reminder': r['reminder'] ?? false,
+                'priority': r['priority'],
+                'category': r['category'],
+                'recurrence': r['recurrence'],
+                if (r['isLongTerm'] == true) 'isLongTerm': true,
+                'createdAt': today
+                    .subtract(Duration(hours: r['created_hours_ago'] as int))
+                    .toIso8601String(),
+                'subtasks': <Map<String, dynamic>>[
+                  for (final dynamic t in r['subtasks'] as List<dynamic>)
+                    Map<String, dynamic>.from(t as Map),
+                ],
+              };
+            }(),
         ],
       );
       router.replaceNamed('/tasks');
       await Future<void>.delayed(const Duration(seconds: 3));
       final Finder card = find.byKey(
-        const ValueKey<String>('task-card-tour-task-depot-01'),
+        const ValueKey<String>('task-card-tour-task-01'),
       );
       if (card.evaluate().isNotEmpty) {
         await tester.tap(card.first, warnIfMissed: false);

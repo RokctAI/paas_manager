@@ -268,12 +268,7 @@ class _DeliveryTimePageState extends ConsumerState<DeliveryTimePage> {
                                       height: 30.r,
                                       margin:
                                           REdgeInsets.symmetric(vertical: 20),
-                                      child: Center(
-                                        child: CircularProgressIndicator(
-                                          strokeWidth: 3.r,
-                                          color: AppStyle.primary,
-                                        ),
-                                      ),
+                                      child: const Loading(),
                                     )
                                   : ListView.builder(
                                       itemCount: paymentState.payments.length,

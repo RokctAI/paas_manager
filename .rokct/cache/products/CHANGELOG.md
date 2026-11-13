@@ -1,3 +1,7 @@
+## 1.13.3
+
+- fix(loading): page-level spinners replaced by the base_sdk shimmer `Loading()` (Ray, 2026-11-13: "Remove spinners where you can and use shimmers in the apps").
+
 ## 1.13.2
 
 - fix(manager): the phone add-product sheet follows the app theme (`ModalWrap(themed: true)`, picture card on `cardFor`/`inkFor`, tab bar on theme ink). The white sheet in the dark app left the field labels nearly invisible.

@@ -1,0 +1,26 @@
+[
+  {
+    "name": "KPI-DEMO-0001",
+    "title": "Maths test average",
+    "description": "<p>Target 70%.</p>",
+    "strategic_objective": "OBJ-DEMO-0001"
+  },
+  {
+    "name": "KPI-DEMO-0002",
+    "title": "Books finished this term",
+    "description": "<p>Target 3.</p>",
+    "strategic_objective": "OBJ-DEMO-0002"
+  },
+  {
+    "name": "KPI-DEMO-0003",
+    "title": "Homework on time",
+    "description": "<p>Target 9 days out of 10.</p>",
+    "strategic_objective": "OBJ-DEMO-0003"
+  },
+  {
+    "name": "KPI-DEMO-0004",
+    "title": "Live sessions this month",
+    "description": "<p>Target 4.</p>",
+    "strategic_objective": "OBJ-DEMO-0004"
+  }
+]

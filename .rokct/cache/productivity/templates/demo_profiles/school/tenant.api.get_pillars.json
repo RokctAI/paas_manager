@@ -1,0 +1,20 @@
+[
+  {
+    "name": "PIL-DEMO-0001",
+    "title": "Strong basics",
+    "description": "<p>Maths and reading at grade level, proven by tests.</p>",
+    "vision": "VIS-DEMO-0001"
+  },
+  {
+    "name": "PIL-DEMO-0002",
+    "title": "Steady habits",
+    "description": "<p>Homework done on the day it is given.</p>",
+    "vision": "VIS-DEMO-0001"
+  },
+  {
+    "name": "PIL-DEMO-0003",
+    "title": "Ask for help early",
+    "description": "<p>A tutor before the test, not after.</p>",
+    "vision": "VIS-DEMO-0001"
+  }
+]
