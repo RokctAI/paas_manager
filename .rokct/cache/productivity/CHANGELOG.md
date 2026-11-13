@@ -1,3 +1,11 @@
+## 1.9.4
+
+- fix(plan): pillar and strategic-objective descriptions are stripped of HTML (`planText`), as vision and KPI descriptions already were. Plan on a page showed raw `<p>...</p>`.
+
+## 1.9.3
+
+- chore(compliance): compliance-ignore comments with reasons for the sdk_validator --compliance findings; no behaviour change.
+
 ## 1.9.2
 
 * feat(tour): the productivity tour fragment gains the plan-on-a-page (`/vision`) and personal mastery (`/vision/mastery`) steps, so every routed screen of this SDK is toured. Demo sessions get the plan board: new fixtures `tenant.api.get_visions`, `get_plan_on_a_page`, `get_pillars`, `get_strategic_objectives` and `get_kpis` in `templates/assets/demo/productivity` (installed by the existing directory install), covered by `test/plan_board_demo_fixture_test.dart`. No version bump (tour and fixtures only, as in the receipt-preview tour step).

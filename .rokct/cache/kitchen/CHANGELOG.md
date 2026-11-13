@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.5.6
+
+- chore(compliance): compliance-ignore comments with reasons for the sdk_validator --compliance findings; no behaviour change.
+
 ## Unreleased
 
 * fix(tour): `kitchen_detail` tapped a `KitchenOrderCard` that did not exist yet (empty queue after a slow or failed first fetch), a silent no-op that left the still identical to `kitchen_queue`. The step now waits for a card, re-fetches once, pins it on screen and logs when the queue is still empty. No version bump (tour only).

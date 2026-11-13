@@ -12,6 +12,9 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
+import 'package:productivity_sdk/src/common/models/data/vision_data.dart'
+    show planText;
+
 /// The plan objects the M2 bridge (design strip frame 44c) reads.
 ///
 /// Shaped against the productivity module's own read endpoints, which are
@@ -39,7 +42,9 @@ class Pillar {
   factory Pillar.fromMap(Map<String, dynamic> map) => Pillar(
     name: (map['name'] ?? '').toString(),
     title: (map['title'] ?? map['name'] ?? '').toString(),
-    description: _text(map['description']),
+    // Text Editor fields arrive as HTML (<p>...</p>); draw them as
+    // the one plain line the vision and KPI rows already use.
+    description: planText(map['description']),
     vision: _text(map['vision']),
   );
 }
@@ -64,7 +69,9 @@ class StrategicObjective {
       StrategicObjective(
         name: (map['name'] ?? '').toString(),
         title: (map['title'] ?? map['name'] ?? '').toString(),
-        description: _text(map['description']),
+        // Text Editor fields arrive as HTML (<p>...</p>); draw them as
+    // the one plain line the vision and KPI rows already use.
+    description: planText(map['description']),
         pillar: _text(map['pillar']),
       );
 }
