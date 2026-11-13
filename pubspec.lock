@@ -127,7 +127,7 @@ packages:
       path: ".rokct/cache/auth"
       relative: true
     source: path
-    version: "1.22.5"
+    version: "1.22.6"
   auto_route:
     dependency: "direct main"
     description:
@@ -2133,7 +2133,7 @@ packages:
       path: ".rokct/cache/revenue"
       relative: true
     source: path
-    version: "1.14.8"
+    version: "1.14.9"
   riverpod:
     dependency: transitive
     description:

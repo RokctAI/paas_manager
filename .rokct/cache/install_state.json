@@ -1613,7 +1613,7 @@
       }
     },
     "revenue_sdk": {
-      "version": "1.14.8",
+      "version": "1.14.9",
       "files": {
         "lib/presentation/pages/income/income_page.dart": "314f8ee330eee9f69dfc47ee5be1b960fdf68c4b5474c0673db2ede962617b64",
         "lib/presentation/pages/income/app_bar_screen.dart": "da70222a0db114f137b0a48e9c8c5086cc369e151d48406913263e4f73c5628a",
@@ -1774,7 +1774,7 @@
       ]
     },
     "auth_sdk": {
-      "version": "1.22.5",
+      "version": "1.22.6",
       "files": {
         "lib/presentation/routes/auth_route_pages.dart": "2ac2b6adab56b09a0eff1aa19478717f2c632e0415c46ac0c06f04549e77602c",
         "lib/presentation/routes/registration_step_pages.dart": "68aed195fc07db746a0919c7ba6d47ffa445ca86e7d9cf6ee50fbcb00e82d3c2",
@@ -2098,8 +2098,8 @@
       "source_hash": "ba44faa679dd37d6"
     },
     "auth": {
-      "version": "1.22.5",
-      "source_hash": "704f6c9d67e4a6cd"
+      "version": "1.22.6",
+      "source_hash": "2d1342094a4b1772"
     },
     "users": {
       "version": "1.5.3",
@@ -2154,8 +2154,8 @@
       "source_hash": "42eb71115dcd4610"
     },
     "revenue": {
-      "version": "1.14.8",
-      "source_hash": "7a9eff067a8d605b"
+      "version": "1.14.9",
+      "source_hash": "09d56d9355fc1527"
     },
     "map": {
       "version": "1.5.2",
