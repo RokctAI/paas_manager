@@ -1,20 +1,20 @@
 [
   {
     "name": "PIL-DEMO-0001",
-    "title": "Reliable delivery",
-    "description": "<p>Every order on the bakkie and at the door on the promised day.</p>",
+    "title": "Always in stock",
+    "description": "<p>Best sellers never run out.</p>",
     "vision": "VIS-DEMO-0001"
   },
   {
     "name": "PIL-DEMO-0002",
-    "title": "Plant quality",
-    "description": "<p>Water that stays inside spec, proven by readings.</p>",
+    "title": "Fast orders",
+    "description": "<p>Online orders packed and out the door quickly.</p>",
     "vision": "VIS-DEMO-0001"
   },
   {
     "name": "PIL-DEMO-0003",
-    "title": "Healthy cash",
-    "description": "<p>Invoices chased, stock bought on time, no surprises.</p>",
+    "title": "Healthy margins",
+    "description": "<p>Prices and costs checked every month.</p>",
     "vision": "VIS-DEMO-0001"
   }
 ]

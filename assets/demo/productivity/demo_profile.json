@@ -1,0 +1,83 @@
+{
+  "profile": "shop",
+  "tour_tasks": [
+    {
+      "title": "Restock the top 10 sellers",
+      "priority": "High",
+      "category": "Stock",
+      "recurrence": "Weekly",
+      "reminder": true,
+      "created_hours_ago": 2,
+      "subtasks": [
+        {
+          "title": "Check stock levels",
+          "isDone": true
+        },
+        {
+          "title": "Send the supplier order",
+          "isDone": false
+        },
+        {
+          "title": "Shelve the delivery",
+          "isDone": false
+        }
+      ],
+      "due_days": 1,
+      "due_hour": 8
+    },
+    {
+      "title": "Confirm today's delivery orders",
+      "priority": "High",
+      "category": "Orders",
+      "recurrence": "None",
+      "reminder": true,
+      "created_hours_ago": 3,
+      "subtasks": [
+        {
+          "title": "Accept new orders",
+          "isDone": true
+        },
+        {
+          "title": "Assign a driver",
+          "isDone": false
+        }
+      ],
+      "due_days": 1,
+      "due_hour": 10
+    },
+    {
+      "title": "Update prices for the month-end special",
+      "priority": "Medium",
+      "category": "Products",
+      "recurrence": "Monthly",
+      "reminder": false,
+      "created_hours_ago": 9,
+      "subtasks": [],
+      "due_days": 3,
+      "due_hour": 12
+    },
+    {
+      "title": "Open a second branch · lease and fit-out",
+      "priority": "Medium",
+      "category": "Growth",
+      "recurrence": "None",
+      "reminder": false,
+      "created_hours_ago": 30,
+      "subtasks": [
+        {
+          "title": "Three lease quotes",
+          "isDone": true
+        },
+        {
+          "title": "Shop fitting quote",
+          "isDone": false
+        },
+        {
+          "title": "Hire two cashiers",
+          "isDone": false
+        }
+      ],
+      "isLongTerm": true
+    }
+  ]
+}
