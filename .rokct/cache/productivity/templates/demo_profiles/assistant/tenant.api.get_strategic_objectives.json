@@ -1,0 +1,26 @@
+[
+  {
+    "name": "OBJ-DEMO-0001",
+    "title": "Hand five routine jobs to Sticks",
+    "description": "<p>One new job each week.</p>",
+    "pillar": "PIL-DEMO-0001"
+  },
+  {
+    "name": "OBJ-DEMO-0002",
+    "title": "Answer every Stick question within a day",
+    "description": "<p>No Stick waits on me.</p>",
+    "pillar": "PIL-DEMO-0002"
+  },
+  {
+    "name": "OBJ-DEMO-0003",
+    "title": "Review drafts before they go out",
+    "description": "<p>Nothing sent without a look.</p>",
+    "pillar": "PIL-DEMO-0002"
+  },
+  {
+    "name": "OBJ-DEMO-0004",
+    "title": "Keep monthly spend inside budget",
+    "description": "<p>Checked every week.</p>",
+    "pillar": "PIL-DEMO-0003"
+  }
+]

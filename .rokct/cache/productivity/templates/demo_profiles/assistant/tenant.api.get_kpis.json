@@ -1,0 +1,26 @@
+[
+  {
+    "name": "KPI-DEMO-0001",
+    "title": "Jobs run by Sticks",
+    "description": "<p>Target 5.</p>",
+    "strategic_objective": "OBJ-DEMO-0001"
+  },
+  {
+    "name": "KPI-DEMO-0002",
+    "title": "Open Stick questions",
+    "description": "<p>Target 0 at day end.</p>",
+    "strategic_objective": "OBJ-DEMO-0002"
+  },
+  {
+    "name": "KPI-DEMO-0003",
+    "title": "Drafts reviewed",
+    "description": "<p>Target 100%.</p>",
+    "strategic_objective": "OBJ-DEMO-0003"
+  },
+  {
+    "name": "KPI-DEMO-0004",
+    "title": "Monthly spend vs budget",
+    "description": "<p>Target under 100%.</p>",
+    "strategic_objective": "OBJ-DEMO-0004"
+  }
+]

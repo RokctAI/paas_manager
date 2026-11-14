@@ -31,6 +31,8 @@
 //     while a handshake, which never carries the column, must not clear
 //     it.
 
+// compliance-ignore-file: flutter-http-timeout (test or caller of base_sdk's shared HttpService (timeouts set there); no Dio client is built here without timeouts)
+
 import 'dart:convert';
 
 import 'package:base_sdk/base_sdk.dart';

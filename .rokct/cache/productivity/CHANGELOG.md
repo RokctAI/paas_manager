@@ -1,3 +1,15 @@
+## 1.10.0
+
+- feat(demo): demo data fits the app. `templates/demo_profiles/` adds school (Supacharge), shop (Manager), assistant (Sticks) and personal (Launcher) sets of the plan, KPI and mastery fixtures plus `demo_profile.json`, each installed only in its app (`app_types`) over the default set. Rokct and any other app keep the default water-business data. The tour's day-of-tasks step now reads its rows from `assets/demo/productivity/demo_profile.json`. Covered by `test/demo_profiles_test.dart`. No code or cmd changes.
+
+## 1.9.4
+
+- fix(plan): pillar and strategic-objective descriptions are stripped of HTML (`planText`), as vision and KPI descriptions already were. Plan on a page showed raw `<p>...</p>`.
+
+## 1.9.3
+
+- chore(compliance): compliance-ignore comments with reasons for the sdk_validator --compliance findings; no behaviour change.
+
 ## 1.9.2
 
 * feat(tour): the productivity tour fragment gains the plan-on-a-page (`/vision`) and personal mastery (`/vision/mastery`) steps, so every routed screen of this SDK is toured. Demo sessions get the plan board: new fixtures `tenant.api.get_visions`, `get_plan_on_a_page`, `get_pillars`, `get_strategic_objectives` and `get_kpis` in `templates/assets/demo/productivity` (installed by the existing directory install), covered by `test/plan_board_demo_fixture_test.dart`. No version bump (tour and fixtures only, as in the receipt-preview tour step).

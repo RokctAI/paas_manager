@@ -1,0 +1,26 @@
+[
+  {
+    "name": "KPI-DEMO-0001",
+    "title": "Out-of-stock items",
+    "description": "<p>Target fewer than 3 a week.</p>",
+    "strategic_objective": "OBJ-DEMO-0001"
+  },
+  {
+    "name": "KPI-DEMO-0002",
+    "title": "Average pack time (minutes)",
+    "description": "<p>Target 30.</p>",
+    "strategic_objective": "OBJ-DEMO-0002"
+  },
+  {
+    "name": "KPI-DEMO-0003",
+    "title": "On-time delivery rate",
+    "description": "<p>Target 95%.</p>",
+    "strategic_objective": "OBJ-DEMO-0003"
+  },
+  {
+    "name": "KPI-DEMO-0004",
+    "title": "Gross margin",
+    "description": "<p>Target 25%.</p>",
+    "strategic_objective": "OBJ-DEMO-0004"
+  }
+]

@@ -32,6 +32,8 @@
 // are the actual wire shapes the endpoints define. Several tests register no
 // backend at all, which is the strongest form of "there is no server".
 
+// compliance-ignore-file: flutter-http-timeout (test or caller of base_sdk's shared HttpService (timeouts set there); no Dio client is built here without timeouts)
+
 import 'dart:convert';
 import 'dart:io';
 

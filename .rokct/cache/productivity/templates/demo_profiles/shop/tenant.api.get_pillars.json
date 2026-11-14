@@ -1,0 +1,20 @@
+[
+  {
+    "name": "PIL-DEMO-0001",
+    "title": "Always in stock",
+    "description": "<p>Best sellers never run out.</p>",
+    "vision": "VIS-DEMO-0001"
+  },
+  {
+    "name": "PIL-DEMO-0002",
+    "title": "Fast orders",
+    "description": "<p>Online orders packed and out the door quickly.</p>",
+    "vision": "VIS-DEMO-0001"
+  },
+  {
+    "name": "PIL-DEMO-0003",
+    "title": "Healthy margins",
+    "description": "<p>Prices and costs checked every month.</p>",
+    "vision": "VIS-DEMO-0001"
+  }
+]

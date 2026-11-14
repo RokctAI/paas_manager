@@ -78,6 +78,7 @@ class PosCartState {
     this.query = '',
     this.categories = const [],
     this.categoryId,
+    this.unknownBarcode,
   });
 
   final List<PosCartLine> lines;
@@ -107,6 +108,13 @@ class PosCartState {
   final List<CategoryData> categories;
   final String? categoryId;
 
+  /// The last scanned code the catalog answered with NO product. While it
+  /// is set the till pauses the scanner and asks the attendant whether to
+  /// add the product (a sheet on a phone and at the two-plane fold, the
+  /// Add Items pane's place at three planes) - an unknown scan is never
+  /// silently dropped. Cleared by [PosCartNotifier.dismissUnknownBarcode].
+  final String? unknownBarcode;
+
   /// Sum of quantities (decimal — weighed lines count fractionally), for
   /// the cart chip ("2.75").
   double get itemCount =>
@@ -129,6 +137,8 @@ class PosCartState {
     List<CategoryData>? categories,
     String? categoryId,
     bool clearCategory = false,
+    String? unknownBarcode,
+    bool clearUnknownBarcode = false,
   }) =>
       PosCartState(
         lines: lines ?? this.lines,
@@ -139,6 +149,9 @@ class PosCartState {
         query: query ?? this.query,
         categories: categories ?? this.categories,
         categoryId: clearCategory ? null : (categoryId ?? this.categoryId),
+        unknownBarcode: clearUnknownBarcode
+            ? null
+            : (unknownBarcode ?? this.unknownBarcode),
       );
 
   /// The empty cart that keeps the catalog browsing state (see

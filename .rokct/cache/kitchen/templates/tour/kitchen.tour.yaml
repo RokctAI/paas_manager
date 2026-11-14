@@ -26,6 +26,7 @@ sdk: kitchen
 imports:
   - "import 'package:flutter_riverpod/flutter_riverpod.dart';"
   - "import 'package:merchants_sdk/src/manager/application/main/main_provider.dart';"
+  - "import 'package:kitchen_sdk/src/manager/application/kitchen/kitchen_provider.dart';"
   - "import 'package:kitchen_sdk/src/manager/presentation/kitchen/kitchen_order_card.dart';"
 steps:
   - key: kitchen_queue
@@ -52,9 +53,32 @@ steps:
     dart: |
       // The queue from the step above is still on screen. A card tap opens
       // the ticket the way a cook does: a pushed page on a phone, the detail
-      // plane where the queue has more than one.
+      // plane where the queue has more than one. The cards only exist once
+      // the queue's fetch has answered, and a tap with no card is a silent
+      // no-op that leaves this still byte-identical to kitchen_queue - so
+      // wait for a card, re-fetching once if the first answer was empty,
+      // and say in the log which case happened.
       final Finder card = find.byType(KitchenOrderCard);
-      if (card.evaluate().isNotEmpty) {
+      final Element element = tester.element(find.byType(Navigator).first);
+      final ProviderContainer container =
+          ProviderScope.containerOf(element, listen: false);
+      for (int i = 0; i < 12 && card.evaluate().isEmpty; i++) {
+        if (i == 4) {
+          await container
+              .read(kitchenProvider.notifier)
+              .fetchOrders(isRefresh: true);
+        }
+        await Future<void>.delayed(const Duration(milliseconds: 500));
+        await tester.pump();
+      }
+      if (card.evaluate().isEmpty) {
+        // ignore: avoid_print
+        print('[tour] kitchen_detail: no KitchenOrderCard after 6s - the queue is empty (demo fixture missing?)');
+      } else {
+        try {
+          await tester.ensureVisible(card.first);
+        } catch (_) {}
+        await tester.pump(const Duration(milliseconds: 300));
         await tester.tap(card.first, warnIfMissed: false);
       }
   - key: kitchen_detail_close

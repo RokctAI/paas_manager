@@ -1,0 +1,83 @@
+{
+  "profile": "personal",
+  "tour_tasks": [
+    {
+      "title": "Pay the electricity and phone bills",
+      "priority": "High",
+      "category": "Home",
+      "recurrence": "Monthly",
+      "reminder": true,
+      "created_hours_ago": 2,
+      "subtasks": [
+        {
+          "title": "Buy prepaid electricity",
+          "isDone": true
+        },
+        {
+          "title": "Pay the phone account",
+          "isDone": false
+        },
+        {
+          "title": "Save the receipts",
+          "isDone": false
+        }
+      ],
+      "due_days": 1,
+      "due_hour": 9
+    },
+    {
+      "title": "Doctor's appointment · Thursday",
+      "priority": "Medium",
+      "category": "Health",
+      "recurrence": "None",
+      "reminder": true,
+      "created_hours_ago": 5,
+      "subtasks": [
+        {
+          "title": "Take the clinic card",
+          "isDone": true
+        },
+        {
+          "title": "List the questions",
+          "isDone": false
+        }
+      ],
+      "due_days": 3,
+      "due_hour": 10
+    },
+    {
+      "title": "Call Mom on Sunday",
+      "priority": "Low",
+      "category": "Family",
+      "recurrence": "Weekly",
+      "reminder": true,
+      "created_hours_ago": 9,
+      "subtasks": [],
+      "due_days": 4,
+      "due_hour": 17
+    },
+    {
+      "title": "Save for a new fridge",
+      "priority": "Medium",
+      "category": "Money",
+      "recurrence": "None",
+      "reminder": false,
+      "created_hours_ago": 30,
+      "subtasks": [
+        {
+          "title": "Compare three prices",
+          "isDone": true
+        },
+        {
+          "title": "Put R500 away each month",
+          "isDone": false
+        },
+        {
+          "title": "Buy it in the sale",
+          "isDone": false
+        }
+      ],
+      "isLongTerm": true
+    }
+  ]
+}

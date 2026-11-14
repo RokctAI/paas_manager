@@ -38,6 +38,8 @@
 //   * `todos` are read when the row carries them and NULL when it does
 //     not (a backend older than productivity 1.9.1 sends no rows).
 
+// compliance-ignore-file: flutter-http-timeout (test or caller of base_sdk's shared HttpService (timeouts set there); no Dio client is built here without timeouts)
+
 import 'dart:convert';
 
 import 'package:base_sdk/base_sdk.dart';

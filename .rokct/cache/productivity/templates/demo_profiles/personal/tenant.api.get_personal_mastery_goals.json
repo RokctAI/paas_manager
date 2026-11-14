@@ -1,0 +1,61 @@
+[
+  {
+    "name": "PMG-DEMO-0001",
+    "title": "Build a savings habit",
+    "description": "<p>Pay myself first every month.</p>",
+    "todos": [
+      {
+        "name": "TODO-DEMO-0001",
+        "description": "Open a savings pocket",
+        "status": "Closed",
+        "date": "$today-14d"
+      },
+      {
+        "name": "TODO-DEMO-0002",
+        "description": "Set a payday debit order",
+        "status": "Closed",
+        "date": "$today-7d"
+      },
+      {
+        "name": "TODO-DEMO-0003",
+        "description": "Track spending for a week",
+        "status": "Open",
+        "date": "$today+5d"
+      }
+    ],
+    "todos_done": 2,
+    "todos_total": 3,
+    "progress": 0.6666666666666666
+  },
+  {
+    "name": "PMG-DEMO-0002",
+    "title": "Plan my week on Sunday",
+    "description": "<p>Ten minutes to set the week's three priorities.</p>",
+    "todos": [
+      {
+        "name": "TODO-DEMO-0004",
+        "description": "Set a Sunday reminder",
+        "status": "Closed",
+        "date": "$today-21d"
+      },
+      {
+        "name": "TODO-DEMO-0005",
+        "description": "Write this week's list",
+        "status": "Closed",
+        "date": "$today-1d"
+      }
+    ],
+    "todos_done": 2,
+    "todos_total": 2,
+    "progress": 1.0
+  },
+  {
+    "name": "PMG-DEMO-0003",
+    "title": "Learn something new",
+    "description": "<p>One short course this year.</p>",
+    "todos": [],
+    "todos_done": 0,
+    "todos_total": 0,
+    "progress": null
+  }
+]

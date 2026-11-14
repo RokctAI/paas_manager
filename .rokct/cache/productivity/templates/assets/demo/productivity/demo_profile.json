@@ -1,0 +1,83 @@
+{
+  "profile": "business",
+  "tour_tasks": [
+    {
+      "title": "Deliver 40 × 20 L to the Mokopane depot",
+      "priority": "High",
+      "category": "Deliveries",
+      "recurrence": "Weekly",
+      "reminder": true,
+      "created_hours_ago": 2,
+      "subtasks": [
+        {
+          "title": "Load the bakkie",
+          "isDone": true
+        },
+        {
+          "title": "Collect the signed delivery note",
+          "isDone": false
+        },
+        {
+          "title": "Bring back the empties",
+          "isDone": false
+        }
+      ],
+      "due_days": 1,
+      "due_hour": 9
+    },
+    {
+      "title": "Order brine salt · 25 kg bags",
+      "priority": "Medium",
+      "category": "Plant",
+      "recurrence": "Monthly",
+      "reminder": false,
+      "created_hours_ago": 5,
+      "subtasks": [
+        {
+          "title": "Count the bags left",
+          "isDone": true
+        },
+        {
+          "title": "Send the order to the co-op",
+          "isDone": false
+        }
+      ],
+      "due_days": 2,
+      "due_hour": 10
+    },
+    {
+      "title": "Chase the Polokwane Spar invoice",
+      "priority": "Low",
+      "category": "Admin",
+      "recurrence": "None",
+      "reminder": true,
+      "created_hours_ago": 9,
+      "subtasks": [],
+      "due_days": 5,
+      "due_hour": 12
+    },
+    {
+      "title": "Second borehole · quotes and water-use licence",
+      "priority": "Medium",
+      "category": "Plant",
+      "recurrence": "None",
+      "reminder": false,
+      "created_hours_ago": 30,
+      "subtasks": [
+        {
+          "title": "Three drilling quotes",
+          "isDone": true
+        },
+        {
+          "title": "Water-use licence application",
+          "isDone": false
+        },
+        {
+          "title": "Pump and tank sizing",
+          "isDone": false
+        }
+      ],
+      "isLongTerm": true
+    }
+  ]
+}

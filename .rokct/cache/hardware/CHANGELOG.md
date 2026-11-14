@@ -1,3 +1,7 @@
+## 1.1.3
+
+- fix(loading): page-level spinners replaced by the base_sdk shimmer `Loading()` (Ray, 2026-11-13: "Remove spinners where you can and use shimmers in the apps").
+
 ## 1.1.2
 
 * fix(deps): swap `flutter_pos_printer_platform_image_3` for

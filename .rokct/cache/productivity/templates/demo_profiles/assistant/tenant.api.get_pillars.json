@@ -1,0 +1,20 @@
+[
+  {
+    "name": "PIL-DEMO-0001",
+    "title": "Delegate the routine",
+    "description": "<p>Every repeat job has a Stick.</p>",
+    "vision": "VIS-DEMO-0001"
+  },
+  {
+    "name": "PIL-DEMO-0002",
+    "title": "Stay in control",
+    "description": "<p>Clear reviews and approvals.</p>",
+    "vision": "VIS-DEMO-0001"
+  },
+  {
+    "name": "PIL-DEMO-0003",
+    "title": "Spend wisely",
+    "description": "<p>Runs and spend kept inside budget.</p>",
+    "vision": "VIS-DEMO-0001"
+  }
+]

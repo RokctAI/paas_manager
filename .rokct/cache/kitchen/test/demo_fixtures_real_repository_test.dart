@@ -16,6 +16,8 @@
 // base_sdk's DemoGatewayInterceptor answers their cmds from
 // templates/assets/demo/kitchen.
 
+// compliance-ignore-file: obs-flutter-trace (no outgoing HTTP to our backend here (flagged by file name or an external download); backend calls go through base_sdk's HttpService, which registers TraceIdInterceptor)
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:kitchen_sdk/src/manager/infrastructure/repositories/kitchen_orders_repository.dart';
 import 'package:kitchen_sdk/src/manager/infrastructure/repositories/kitchens_repository.dart';

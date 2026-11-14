@@ -1,0 +1,26 @@
+[
+  {
+    "name": "OBJ-DEMO-0001",
+    "title": "Pay every bill before the due date",
+    "description": "<p>Reminders the day before.</p>",
+    "pillar": "PIL-DEMO-0001"
+  },
+  {
+    "name": "OBJ-DEMO-0002",
+    "title": "Save R500 a month",
+    "description": "<p>Straight after payday.</p>",
+    "pillar": "PIL-DEMO-0001"
+  },
+  {
+    "name": "OBJ-DEMO-0003",
+    "title": "Walk 30 minutes a day",
+    "description": "<p>Five days a week.</p>",
+    "pillar": "PIL-DEMO-0002"
+  },
+  {
+    "name": "OBJ-DEMO-0004",
+    "title": "A family call every Sunday",
+    "description": "<p>No skipping.</p>",
+    "pillar": "PIL-DEMO-0003"
+  }
+]

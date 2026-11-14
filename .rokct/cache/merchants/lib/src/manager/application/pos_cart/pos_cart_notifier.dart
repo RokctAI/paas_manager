@@ -51,7 +51,9 @@ class PosCartNotifier extends StateNotifier<PosCartState> {
 
   /// Barcode lane. Returns true when the scan was accepted and landed a
   /// product in the cart (the page haptics on true), false when it was
-  /// deduped or nothing matched.
+  /// deduped or nothing matched. A code the catalog answers with no
+  /// product is kept as [PosCartState.unknownBarcode] so the page can ask
+  /// about it; a failed lookup is not an answer and asks nothing.
   Future<bool> addByBarcode(String barcode) async {
     if (barcode.isEmpty) return false;
     final now = DateTime.now();
@@ -75,12 +77,25 @@ class PosCartNotifier extends StateNotifier<PosCartState> {
         if (products.isNotEmpty) {
           addProduct(products.first);
           added = true;
+        } else {
+          state = state.copyWith(unknownBarcode: barcode);
         }
       },
       failure: (error, statusCode) {},
     );
     if (mounted) state = state.copyWith(isLoading: false);
     return added;
+  }
+
+  /// The attendant answered the unknown-barcode prompt (Scan again, Add
+  /// this product, or swiped the sheet away). Also forgets the dedupe
+  /// memory, so presenting the SAME code again at once is a new scan.
+  void dismissUnknownBarcode() {
+    _lastBarcode = null;
+    _lastScanAt = null;
+    if (state.unknownBarcode != null) {
+      state = state.copyWith(clearUnknownBarcode: true);
+    }
   }
 
   /// Manual "Add Items" lane search (by name or barcode), under the
