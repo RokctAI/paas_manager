@@ -1,6 +1,6 @@
 {
   "name": "productivity_sdk",
-  "version": "1.10.0",
+  "version": "1.10.1",
   "_comment_version_1_10_0": "1.9.4 -> 1.10.0: demo data fits the app (Ray, 2026-11-13: \"Can productivity sdk have or show relevant data by app?\"). templates/demo_profiles/<profile>/ holds a school (supacharge), shop (manager), assistant (sticks) and personal (launcher) set of the plan, KPI and mastery fixtures plus demo_profile.json (the tour's day-of-tasks seed). Each is an installs entry scoped with app_types to that app and listed AFTER the default fixture install, so in that app it overwrites the same file names in assets/demo/productivity; every other app (rokct and any new one) keeps the default water-business set unchanged. No code or cmd changes; the tour fragment reads assets/demo/productivity/demo_profile.json for its task rows.",
   "_comment_version_1_9_4": "1.9.3 -> 1.9.4: Pillar and StrategicObjective descriptions go through planText (tags stripped, entities decoded) like Vision and KPI already did; Plan on a page showed the raw <p>...</p> of the Text Editor field.",
   "_comment_version_1_9_2": "1.9.1 -> 1.9.2: version for the coach-mark guide mounted on this SDK's primary page (GuideHost and GuideAnchor from base_sdk 1.92.0, off in demo sessions). The mount landed without a version change; see CHANGELOG.",

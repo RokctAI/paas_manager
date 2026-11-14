@@ -17,6 +17,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:uuid/uuid.dart';
 import 'package:comms_sdk/comms_sdk.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'package:base_sdk/src/presentation/components/floating_nav/floating_nav_fold.dart';
 import 'package:base_sdk/base_sdk.dart';
 // The base barrel does not re-export the theme tokens, and section 44
 // is drawn in them explicitly ("dark base tokens transcribed from
@@ -1934,9 +1935,16 @@ class _TasksWorkspaceState extends State<TasksWorkspace> {
                       ),
                     ],
                   ];
-                  return ListView(
-                    padding: EdgeInsets.only(bottom: 88.h),
-                    children: rows,
+                  // The list fades out above the + nav pill and keeps
+                  // room under its last card, so a card's Resume button is
+                  // never left under the + (tour 1114b manager
+                  // 34-productivity_tasks).
+                  return FloatingNavFold(
+                    foot: 64.h,
+                    child: ListView(
+                      padding: EdgeInsets.only(bottom: 136.h),
+                      children: rows,
+                    ),
                   );
                 },
               ),
@@ -1959,7 +1967,7 @@ class _TasksWorkspaceState extends State<TasksWorkspace> {
         child: _notes.isEmpty
             ? _emptyNotes()
             : ListView.separated(
-                padding: EdgeInsets.only(bottom: 88.h),
+                padding: EdgeInsets.only(bottom: 136.h),
                 itemCount: _notes.length,
                 separatorBuilder: (context, _) => 8.verticalSpace,
                 itemBuilder: (context, index) {

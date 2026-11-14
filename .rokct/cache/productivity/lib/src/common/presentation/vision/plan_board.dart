@@ -156,7 +156,9 @@ class VisionMasthead extends StatelessWidget {
                     Flexible(
                       child: Text(
                         vision.title,
-                        maxLines: 1,
+                        // Two lines: one cut "The neighbourhood's favo..."
+                        // (tour 1114b manager 38-productivity_plan).
+                        maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                         style: AppStyle.interSemi(
                           size: compact ? 15 : 17,

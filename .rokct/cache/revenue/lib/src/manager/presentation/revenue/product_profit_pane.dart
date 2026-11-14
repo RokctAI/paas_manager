@@ -135,6 +135,10 @@ class ProductProfitPane extends StatelessWidget {
                 ),
               ),
             ),
+            // Room for the floating Back pill, which otherwise covers the
+            // button on a tablet pane (tour 1114b manager tablet
+            // 32-revenue_product_profit).
+            const SizedBox(height: 72),
           ],
         ],
       ),

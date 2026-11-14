@@ -123,9 +123,12 @@ class RevenueKpiTile extends StatelessWidget {
           ),
           if (sub != null) ...[
             const SizedBox(height: 4),
+            // Wraps to a second line: "As sold · 317 of 361 orders
+            // costed" was cut on a half-width tile (tour 1114b manager
+            // 31-revenue_income).
             Text(
               sub!,
-              maxLines: 1,
+              maxLines: 2,
               overflow: TextOverflow.ellipsis,
               style: AppStyle.interNormal(
                 size: 11,

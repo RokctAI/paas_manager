@@ -216,15 +216,20 @@ class ProfitMarginStrip extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 2),
-          Text(
+          // Scales down rather than cutting: the large margin cell read
+          // "R69.44 · %" (tour 1114b manager 32-revenue_product_profit).
+          FittedBox(
+            fit: BoxFit.scaleDown,
+            alignment: AlignmentDirectional.centerStart,
+            child: Text(
             value,
             maxLines: 1,
-            overflow: TextOverflow.ellipsis,
             style: AppStyle.interSemi(
               size: large ? 15 : 12,
               color: valueColor,
             ),
           ),
+          )
         ],
       ),
     );

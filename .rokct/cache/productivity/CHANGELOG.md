@@ -1,3 +1,8 @@
+## 1.10.1
+
+- fix(tasks): the task list fades out above the + nav pill (base_sdk `FloatingNavFold`) and keeps 136 of bottom room, so a card's "Resume · Step N of M" button is no longer under the + (tour 1114b manager 34-productivity_tasks). The notes list gets the same bottom room.
+- fix(plan): the vision card title wraps to 2 lines instead of "The neighbourhood's favo..." (tour 1114b manager 38-productivity_plan).
+
 ## 1.10.0
 
 - feat(demo): demo data fits the app. `templates/demo_profiles/` adds school (Supacharge), shop (Manager), assistant (Sticks) and personal (Launcher) sets of the plan, KPI and mastery fixtures plus `demo_profile.json`, each installed only in its app (`app_types`) over the default set. Rokct and any other app keep the default water-business data. The tour's day-of-tasks step now reads its rows from `assets/demo/productivity/demo_profile.json`. Covered by `test/demo_profiles_test.dart`. No code or cmd changes.
