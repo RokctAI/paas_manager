@@ -15,6 +15,7 @@
 import 'dart:convert';
 
 import 'package:base_sdk/src/database/app_database.dart';
+import 'package:base_sdk/src/services/demo_session.dart';
 import 'package:base_sdk/src/sync/sync_engine.dart';
 
 /// One parked local-first record: its queued push was terminally rejected by
@@ -126,8 +127,49 @@ class SyncIssuesService {
         );
       }
     }
+    // DEMO FIXTURES. A demo device has never pushed anything, so its boxes
+    // hold no parked record and the screen read "No data" (tour 1113b).
+    // A demo session with nothing real parked shows two sample rejections
+    // instead; discarding one hides it for the rest of the session.
+    if (issues.isEmpty && DemoSession.demoActive) {
+      return demoIssues
+          .where((issue) => !_discardedDemo.contains(issue.localId))
+          .toList();
+    }
     return issues;
   }
+
+  /// Ids of demo issues discarded this session.
+  static final Set<String> _discardedDemo = {};
+
+  /// The sample parked records a demo session shows.
+  static const List<SyncIssue> demoIssues = [
+    SyncIssue(
+      box: 'manager_products',
+      localId: 'demo:product-1',
+      record: {
+        'local_id': 'demo:product-1',
+        'needs_attention': true,
+        'product': {
+          'title': {'en': 'Peri-peri chicken wrap (large)'},
+        },
+      },
+      error: 'A product with this title already exists in this shop.',
+    ),
+    SyncIssue(
+      box: 'manager_orders',
+      localId: 'demo:order-1',
+      record: {
+        'local_id': 'demo:order-1',
+        'needs_attention': true,
+        'order': {
+          'delivery_type': 'delivery',
+          'phone': '+27 82 456 7890',
+        },
+      },
+      error: 'The delivery address is outside the shop\'s delivery zone.',
+    ),
+  ];
 
   /// Re-attempt the parked push as-is (the "retry" arm): requeue the outbox
   /// op (attempts and backoff cleared, engine kicked) and put the record
@@ -155,6 +197,10 @@ class SyncIssuesService {
   /// otherwise sit in the outbox forever, blocking any ops that depend on
   /// it.
   Future<void> discard(SyncIssue issue) async {
+    if (issue.localId.startsWith('demo:')) {
+      _discardedDemo.add(issue.localId);
+      return;
+    }
     final opId = issue.opId;
     if (opId != null) await SyncEngine().deleteOp(opId);
     await _db.deleteItem(issue.box, issue.localId);
