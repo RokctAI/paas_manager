@@ -3,6 +3,19 @@
 A new Flutter project for the ROKCT Manager application.
 
 <!-- @generated-store-description-start -->
+Manager runs your whole store from one screen. Sell from the till: point the camera at any barcode and every scan lands in the cart, with totals that update as you go. Take cash or a pay-link QR, and keep selling offline, where a six-digit code confirms the sale and it syncs itself later. Check the receipt on screen before it prints.
+
+Run the shop: accept incoming orders automatically, move them through accepted, cooking, ready and on the way, and see every order in one queue. Take walk-in, pickup, delivery and dine-in orders, and send them to the kitchen display, where every dish has a live clock.
+
+Keep your menu in order: products, add-ons and extras, priced and stocked, with quick stock adjustments saved in one pass.
+
+Manage your delivery stock on the road: issue consignment loads to your drivers, follow what each load sells, and settle what comes back when it closes.
+
+See where the money is: today, this week or this month, with every rand earned charted day by day, and the profit each product really makes.
+
+Pick your language once in the language sheet and every screen follows.
+
+Manager is the store app of a white-label delivery platform, for the shops that sell on it.
 <!-- @generated-store-description-end -->
 
 <!-- @generated-tour-gallery-start -->
