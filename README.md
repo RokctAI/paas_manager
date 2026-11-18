@@ -5,7 +5,7 @@ A new Flutter project for the ROKCT Manager application.
 <!-- @generated-store-description-start -->
 Manager runs your whole store from one screen, and it works offline first. Sell through any outage: offline work syncs back by itself, and anything that snags waits for you to retry or discard it. Sell from the till: point the camera at any barcode and every scan lands in the cart, with totals that update as you go. Take cash, or a pay-link QR the customer scans on their own phone. No network? The sale still goes through offline: a six-digit code confirms it, and it syncs itself when you are back online. Check the receipt on screen before it prints.
 
-Run the shop: accept incoming orders automatically, move them through accepted, cooking, ready and on the way, and see every order in one queue. Take walk-in, pickup, delivery and dine-in orders, and send them to the kitchen display, where every dish has a live clock.
+Manager is both your POS and your back office, so you do not need a second app to take orders: ring up walk-in sales at the till, and take pickup, delivery and dine-in orders in the same app. Run the shop: accept incoming orders automatically, move them through accepted, cooking, ready and on the way, and see every order in one queue. Take walk-in, pickup, delivery and dine-in orders, and send them to the kitchen display, where every dish has a live clock.
 
 Keep your menu in order: products, add-ons and extras, priced and stocked, with quick stock adjustments saved in one pass.
 
