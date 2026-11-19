@@ -5,18 +5,26 @@ A new Flutter project for the ROKCT Manager application.
 <!-- @generated-store-description-start -->
 Manager runs your whole store from one screen, on a phone or a tablet: install the same app and it adapts to the screen size. It works offline first. Sell through any outage: offline work syncs back by itself, and anything that snags waits for you to retry or discard it. Sell from the till: point the camera at any barcode and every scan lands in the cart, with totals that update as you go. Take cash, or a pay-link QR the customer scans on their own phone. No network? The sale still goes through offline: a six-digit code confirms it, and it syncs itself when you are back online. Check the receipt on screen before it prints.
 
-Manager is both your POS and your back office, so you do not need a second app to take orders: ring up walk-in sales at the till, and take pickup, delivery and dine-in orders in the same app. Run the shop: accept incoming orders automatically, move them through accepted, cooking, ready and on the way, and see every order in one queue. Take walk-in, pickup, delivery and dine-in orders, and send them to the kitchen display, where every dish has a live clock.
+Manager is both your POS and your back office, so you do not need a second app
+to take orders: ring up walk-in sales at the till, and take pickup, delivery and
+dine-in orders in the same app. Run the shop: accept incoming orders
+automatically, move them through accepted, cooking, ready and on the way, and
+see every order in one queue. Take walk-in, pickup, delivery and dine-in orders,
+and send them to the kitchen display, where every dish has a live clock.
 
-Keep your menu in order: products, add-ons and extras, priced and stocked, with quick stock adjustments saved in one pass.
+Keep your menu in order: products, add-ons and extras, priced and stocked, with
+quick stock adjustments saved in one pass.
 
-Manage your delivery stock on the road: issue consignment loads to your drivers, follow what each load sells, and settle what comes back when it closes.
+Manage your delivery stock on the road: issue consignment loads to your drivers,
+follow what each load sells, and settle what comes back when it closes.
 
-See where the money is: today, this week or this month, with every rand earned charted day by day, and the profit each product really makes.
+See where the money is: today, this week or this month, with every rand earned
+charted day by day, and the profit each product really makes.
 
 Pick your language once in the language sheet and every screen follows.
 
-Manager is the store app of a white-label delivery platform, for the shops that sell on it.
-<!-- @generated-store-description-end -->
+Manager is the store app of a white-label delivery platform, for the shops that
+sell on it. <!-- @generated-store-description-end -->
 
 <!-- @generated-tour-gallery-start -->
 ## App tour
@@ -106,7 +114,9 @@ local checkout (or download the raw file) to read the page.
 
 ## Building & Release (CI/CD)
 
-The project uses GitHub Actions for automated builds and releases. To enable signed builds, you must configure the following **Secrets** in your repository settings (`Settings > Secrets and variables > Actions`).
+The project uses GitHub Actions for automated builds and releases. To enable
+signed builds, you must configure the following **Secrets** in your repository
+settings (`Settings > Secrets and variables > Actions`).
 
 ### 🔑 Required Secrets
 
@@ -162,7 +172,9 @@ The workflow will automatically look for client-specific secrets:
 *   `IOS_GOOGLE_SERVICE_INFO_PLIST_<CLIENT>`
 *   `PRODUCTION_ENV_<CLIENT>`
 
-If found, these will take precedence over the default secrets. The release candidate will also be tagged with the client suffix (e.g., `v1.0.0-clientname`).
+If found, these will take precedence over the default secrets. The release
+candidate will also be tagged with the client suffix (e.g.,
+`v1.0.0-clientname`).
 
 ### 📦 Change App Package
 Firstly, find out the existing package name. You can find it out from top of `/app/src/main/AndroidManifest.xml` file. Then right click on project folder from android studio and click on **Replace in Path**. You will see a popup window with two input boxes. In first box you have to put existing package name that you saw in `AndroidManifest.xml` file previously and then write down your preferred package name in second box and then click on **Replace All** button.
