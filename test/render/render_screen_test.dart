@@ -829,7 +829,35 @@ List<ElementSpec> _textChip(String key, String label, String text) =>
 
 final Map<String, List<ElementSpec> Function()> kTourScreenChips =
     <String, List<ElementSpec> Function()>{
-  // CHIPS
+  'order_history': () => <ElementSpec>[
+        ..._textChip('manager.history.tabs', 'Delivered and cancelled orders', 'Delivered'),
+      ],
+  'order_pos_products': () => <ElementSpec>[
+        ..._textChip('manager.walkin.search', 'Search products for a walk-in order', 'Search products'),
+        ..._textChip('manager.walkin.categories', 'Categories - popular, mains and more', 'Popular'),
+        ..._textChip('manager.walkin.product', 'Tap a product to add it to the order', 'Peri-peri chicken wrap'),
+      ],
+  'order_loads': () => <ElementSpec>[
+        ..._textChip('manager.loads.tabs', 'Open and closed loads', 'Open loads'),
+        ..._textChip('manager.loads.card', 'A load - driver, stock left of what was issued', 'Sipho Dlamini'),
+      ],
+  'order_issue_load': () => <ElementSpec>[
+        ..._textChip('manager.issue.driver', 'Choose the driver who takes the load', 'Choose a deliveryman'),
+        ..._textChip('manager.issue.product', 'Tap products to put them on the load', 'Peri-peri chicken wrap'),
+        ..._textChip('manager.issue.submit', 'Issue the load to the driver', 'Issue to driver'),
+      ],
+  'order_shop_drivers': () => <ElementSpec>[
+        ..._textChip('manager.drivers.card', 'Your shop drivers - remove one with the icon', 'Sipho Dlamini'),
+      ],
+  'quick_flow': () => <ElementSpec>[
+        ..._textChip('manager.quick.shop', 'The shop these switches apply to', 'Blue Tap'),
+        ..._textChip('manager.quick.accept', 'Auto-accept incoming orders', 'Auto-accept'),
+        ..._textChip('manager.quick.complete', 'Auto-complete at Ready', 'Auto-complete'),
+        ..._textChip('manager.quick.autodial', 'Keypad autodial presets', 'Keypad autodial'),
+      ],
+  'sync_issues': () => <ElementSpec>[
+        ..._textChip('manager.sync.filters', 'Filter parked changes by shop, product or order', 'Product'),
+      ],
 };
 
 void main() {
