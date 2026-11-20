@@ -85,6 +85,13 @@ import 'package:auth_sdk/src/common/presentation/pages/auth/login/login_screen.d
 import 'package:auth_sdk/src/common/presentation/pages/auth/login/login_page.dart';
 import 'package:comms_sdk/src/common/di/comms_di.dart';
 import 'package:users_sdk/src/common/di/users_di.dart';
+import 'package:booking_sdk/src/common/di/booking_di.dart';
+import 'package:booking_sdk/src/manager/di/manager_booking_di.dart';
+import 'package:merchants_sdk/src/common/di/merchants_di.dart';
+import 'package:merchants_sdk/src/manager/di/manager_merchants_di.dart';
+import 'package:orders_sdk/src/common/di/orders_di.dart';
+import 'package:orders_sdk/src/manager/di/manager_orders_di.dart';
+import 'package:products_sdk/src/common/di/products_di.dart';
 
 // Tour screens: one entry per guided-tour step that an SDK's render fragment
 // (templates/render/*.render.yaml) binds by name. Written by shared-workflows'
@@ -159,6 +166,21 @@ Future<void> registerDemoDependencies() async {
   AuthSdkDependencies.register(GetIt.I);
   UsersSdkDependencies.register(GetIt.I);
   CommsSdkDependencies.register(GetIt.I);
+}
+
+/// The SDKs the guided tour's manager screens resolve (order history, POS
+/// products, loads, drivers, reservations), mirroring main.dart's generated
+/// DI hooks. Registered only for generated tour screens, so the login
+/// sheet's own frames are unchanged. Without them each screen throws a GetIt
+/// "not registered" StateError and is skipped (paas_manager run 44811013166).
+void registerTourDependencies() {
+  MerchantsSdkDependencies.register(GetIt.I);
+  ProductsSdkDependencies.register(GetIt.I);
+  OrdersSdkDependencies.register(GetIt.I);
+  BookingSdkDependencies.register(GetIt.I);
+  ManagerOrdersDependencies.register(GetIt.I);
+  ManagerMerchantsDependencies.register(GetIt.I);
+  ManagerBookingDependencies.register(GetIt.I);
 }
 
 /// EXCEPTION: device history the demo mode cannot supply.
@@ -666,6 +688,7 @@ Future<void> renderVariant(
   // implementations; then any device history the demo mode cannot supply.
   registerExceptionStubs();
   await tester.runAsync(registerDemoDependencies);
+  if (screen != null) await tester.runAsync(() async => registerTourDependencies());
   await seedDeviceHistory(tester);
   registerScreen();
 
