@@ -1,6 +1,7 @@
 {
   "name": "productivity_sdk",
-  "version": "1.10.1",
+  "version": "1.11.1",
+  "_comment_version_1_11_0": "1.10.1 -> 1.11.0: feat(i18n). Hardcoded UI copy goes through trkeys (Ray, 2026-11-20): new productivity_* tr_keys with bundled English and Afrikaans copy. Existing keys unchanged.",
   "_comment_version_1_10_0": "1.9.4 -> 1.10.0: demo data fits the app (Ray, 2026-11-13: \"Can productivity sdk have or show relevant data by app?\"). templates/demo_profiles/<profile>/ holds a school (supacharge), shop (manager), assistant (sticks) and personal (launcher) set of the plan, KPI and mastery fixtures plus demo_profile.json (the tour's day-of-tasks seed). Each is an installs entry scoped with app_types to that app and listed AFTER the default fixture install, so in that app it overwrites the same file names in assets/demo/productivity; every other app (rokct and any new one) keeps the default water-business set unchanged. No code or cmd changes; the tour fragment reads assets/demo/productivity/demo_profile.json for its task rows.",
   "_comment_version_1_9_4": "1.9.3 -> 1.9.4: Pillar and StrategicObjective descriptions go through planText (tags stripped, entities decoded) like Vision and KPI already did; Plan on a page showed the raw <p>...</p> of the Text Editor field.",
   "_comment_version_1_9_2": "1.9.1 -> 1.9.2: version for the coach-mark guide mounted on this SDK's primary page (GuideHost and GuideAnchor from base_sdk 1.92.0, off in demo sessions). The mount landed without a version change; see CHANGELOG.",
@@ -19,27 +20,34 @@
     {
       "from": "templates/assets/demo/productivity",
       "to": "assets/demo/productivity"
-    }
-,
+    },
     {
       "from": "templates/demo_profiles/school",
       "to": "assets/demo/productivity",
-      "app_types": ["supacharge"]
+      "app_types": [
+        "supacharge"
+      ]
     },
     {
       "from": "templates/demo_profiles/shop",
       "to": "assets/demo/productivity",
-      "app_types": ["manager"]
+      "app_types": [
+        "manager"
+      ]
     },
     {
       "from": "templates/demo_profiles/assistant",
       "to": "assets/demo/productivity",
-      "app_types": ["sticks"]
+      "app_types": [
+        "sticks"
+      ]
     },
     {
       "from": "templates/demo_profiles/personal",
       "to": "assets/demo/productivity",
-      "app_types": ["launcher"]
+      "app_types": [
+        "launcher"
+      ]
     }
   ],
   "app_assets": [
@@ -91,6 +99,26 @@
       "id": "productivity_session_end",
       "order": 0,
       "body": "SessionEndHooks.register(ProductivitySessionEnd.hookId, ProductivitySessionEnd.clearLiveView);"
+    },
+    {
+      "id": "productivity-af-bundled-translations",
+      "order": 61,
+      "body": "BundledTranslations.register('af', kProductivityAfTranslations);",
+      "imports": [
+        "import 'package:base_sdk/src/services/bundled_translations.dart';",
+        "import 'package:productivity_sdk/src/translations/productivity_af_translations.dart';"
+      ],
+      "_comment": "Registers this SDK's bundled copy for its manifest tr_keys at boot (lms_sdk precedent). Backend-served rows still win."
+    },
+    {
+      "id": "productivity-en-bundled-translations",
+      "order": 62,
+      "body": "BundledTranslations.register('en', kProductivityEnTranslations);",
+      "imports": [
+        "import 'package:base_sdk/src/services/bundled_translations.dart';",
+        "import 'package:productivity_sdk/src/translations/productivity_en_translations.dart';"
+      ],
+      "_comment": "Registers this SDK's bundled copy for its manifest tr_keys at boot (lms_sdk precedent). Backend-served rows still win."
     }
   ],
   "_comment_boot_hooks": "This SDK's half of a sign-out, and it deletes NOTHING. Ray, 2026-09-19: \"if on temp local user you logout all your tasks still show\" - the symptom was that the rows were still PAINTED, not that they were still on disk. tasksStateProvider is a plain StateNotifierProvider, root-scoped and not autoDispose, so the notifier and the tasks it holds outlive the replaceMainRoute a sign-out ends with: the page is rebuilt and re-reads the same surviving notifier. ProductivitySessionEnd.clearLiveView empties every live notifier (TasksNotifier.clearLive) and drops the transient TaskPullService.lastFailure notice that belonged to the session that just ended. Two in-memory writes; no store write, no network call. Registration is idempotent by id, so a hot restart or a host calling the hook twice cannot stack duplicates, and the hook is inert until a sign-out actually happens.\n\nWHAT IT DELIBERATELY DOES NOT DELETE: anything. Not the tasks rows, not the notes rows, not this SDK's pending outbox rows, not the pull cursor, not the recovery tables. Ray's ruling on the first cut of this hook, which did delete all of those: a local temp account that does real work and signs out must not come back to an empty list, and the same holds for a seller. The pending outbox rows are the sharpest case - they are work the user did that has not reached the server yet, so deleting them destroys it outright. Emptying the screen is reversible; emptying the tables is not.\n\nWHAT IS THEREFORE STILL OPEN, named rather than left unsaid: this clears the session, not the ownership. One device shared by two accounts still shows each the other's rows once the tables are read again, because TasksTable.createdBy is written and never filtered on and NotesTable has no user column at all. The fix for that is owner scoping - a WHERE at the repository layer and a migration for notes - not a wipe at sign-out.\n\nNo 'imports' entry, for the same reason auth_sdk's restore-credential hook declares none: every composed main.dart already imports package:productivity_sdk/productivity_sdk.dart (this barrel exports ProductivitySessionEnd) and package:users_sdk/users_sdk.dart (which exports SessionEndHooks) in its @generated-sdk-imports block, and a wiring-block duplicate would trip duplicate_import in every app.\n\nNaming users_sdk from a productivity_sdk hook does NOT create a package dependency: the body is HOST code, and this package's pubspec still depends on nothing but base_sdk. It does mean the hook only composes alongside users_sdk - which is every app that can sign a user out, since users_sdk is what owns logout. A future compose that mounts this SDK with no users_sdk would need the hook moved behind an app_type gate; there is no such compose today.",
@@ -131,9 +159,23 @@
     "roMembraneReplacement": "ro_membrane_replacement",
     "describeThePlantFirst": "describe_the_plant_before_it_can_be_serviced",
     "newTask": "new_task",
-    "newNote": "new_note"
+    "newNote": "new_note",
+    "productivityTaskReminder": "productivity_task_reminder",
+    "productivityWriteItDown": "productivity_write_it_down",
+    "productivityCalendarMode": "productivity_calendar_mode",
+    "productivityTasks": "productivity_tasks",
+    "productivitySearchTasksOrCategories": "productivity_search_tasks_or_categories",
+    "productivityPersonalMastery": "productivity_personal_mastery",
+    "productivityPlanOnAPage": "productivity_plan_on_a_page",
+    "productivityAllPillars": "productivity_all_pillars",
+    "productivityLongTerm": "productivity_long_term",
+    "productivityInAnHour": "productivity_in_an_hour",
+    "productivityTomorrowMorning": "productivity_tomorrow_morning",
+    "productivityNextWeek": "productivity_next_week",
+    "productivityPickATime": "productivity_pick_a_time",
+    "productivityDeleteNote": "productivity_delete_note"
   },
-  "_comment_tr_keys": "Design strip section 47 (47a-47d, 47h, 47i): the compose lane's 'From template' row and its six chips, plus the one line frame 47d's gate says under them while the plant is not yet described. The composer injects these into base_sdk's TrKeys, so the installed tasks page reads them as TrKeys.<name>; this SDK's own lib never references them (its tests run on a bare checkout). Checked against base_sdk's hand-written keys and every other SDK manifest in the fleet: no collision. The step names and instructions inside the templates are DATA on the task map (paas_pos's own strings, verbatim), not copy, and  carry no key. The last two are the /tasks plus's own label on the floating nav - the string base_sdk reads out as `Semantics(label:)` and shows as the long-press `Tooltip(message:)`, which is exactly what adaptive_bar.md \u00a78 reaches: no hardcoded user-facing strings, INCLUDING accessibility labels. `ProductivityPlusNav` asks for these two BY VALUE rather than as `TrKeys.<name>`, because this SDK's lib runs on a bare checkout where nothing has been injected - the same shape launch_sdk's `LauncherAppItem` uses for `use_as_phone`. Unserved, `AppHelpers.humanizeTrKey` renders them New task and New note, the words the new-item sheet already uses, so English is unchanged and only other locales gain.",
+  "_comment_tr_keys": "Design strip section 47 (47a-47d, 47h, 47i): the compose lane's 'From template' row and its six chips, plus the one line frame 47d's gate says under them while the plant is not yet described. The composer injects these into base_sdk's TrKeys, so the installed tasks page reads them as TrKeys.<name>; this SDK's own lib never references them (its tests run on a bare checkout). Checked against base_sdk's hand-written keys and every other SDK manifest in the fleet: no collision. The step names and instructions inside the templates are DATA on the task map (paas_pos's own strings, verbatim), not copy, and  carry no key. The last two are the /tasks plus's own label on the floating nav - the string base_sdk reads out as `Semantics(label:)` and shows as the long-press `Tooltip(message:)`, which is exactly what adaptive_bar.md §8 reaches: no hardcoded user-facing strings, INCLUDING accessibility labels. `ProductivityPlusNav` asks for these two BY VALUE rather than as `TrKeys.<name>`, because this SDK's lib runs on a bare checkout where nothing has been injected - the same shape launch_sdk's `LauncherAppItem` uses for `use_as_phone`. Unserved, `AppHelpers.humanizeTrKey` renders them New task and New note, the words the new-item sheet already uses, so English is unchanged and only other locales gain.",
   "_comment_routes_vision": "Design strip section 41 (the M2 vision cluster, approved 2026-08-30): /vision hosts the plan on a page (41a) with the objective drill in its last plane (41b) and the stacked phone fold (41d); /vision/mastery hosts personal mastery (41c). Both are pushed pages from the productivity gate (approved 7e) and draw the corner back pill themselves. View-first: they read the productivity module's six get_* methods through the platform gateway and write nothing - the legacy add/edit dialogs are write endpoints to add at build time. Other SDKs open them by route path and never import productivity_sdk (ADR-005).",
   "_comment_routes": "Design strip section 46: /tasks/run?task=<id> hosts a task's guided run as a page of its own. On a wide window /tasks hosts the same TaskRunView in its detail plane (frame 46a, no new push; frame 47a, no new plane), and the route itself hands a wide window to that workspace with the run open rather than claiming planes of its own; at one plane the workspace pushes this route (46f). Other SDKs open a run by route path and never import productivity_sdk (ADR-005). At one plane it pops true when the user marks the task done from the finished card; on a wide window the workspace ticks the task itself.",
   "_comment_integrations_vision": "Design strip section 41: the two vision pages ride the same launcher glance entry as /tasks. As of 1.6.2 they ride it as ATTENTION, not as doors: ProductivityAttention reads only fields these doctypes already carry - and they carry no dates at all (flag (b): no objective status or dates, no goal status), so the plan asks for an objective no KPI measures and mastery asks for an open ToDo row whose date has arrived. Same route-path navigation, same missing-marker skip. The hub-side door - rows under the productivity group of the manager hub (approved 7e) - is the COMMERCE side of the section, like the tasks-row markers below, and is not in this release.",

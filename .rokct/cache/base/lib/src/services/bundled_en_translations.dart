@@ -57,4 +57,19 @@ const Map<String, String> kBaseEnTranslations = {
   // Humanizing this misspelt legacy key read "Restauran home" on the
   // driver's active-job sheet (tour 1114b, driver 05-driver_home).
   'restauran_home': 'Shop to customer',
+  // Hardcoded UI copy moved to trkeys (Ray, 2026-11-20).
+  'check_connection_and_try_again': 'Please check your internet connection and try again.',
+  'continue_offline': 'Continue offline',
+  'skip_guide': 'Skip guide',
+
+  // Filled by scripts/trkeys-gaps (every key the SDK uses now has copy).
+  'how_are_you_finding_the_app': 'How are you finding the app?',
+  'offline': 'Offline',
+  'online': 'Online',
+  'rate_this_app': 'Rate this app',
+  'rate_us_in_the_store': 'Rate us in the store',
+  'send_feedback': 'Send feedback',
+  'tell_us_what_we_can_do_better': 'Tell us what we can do better',
+  'thanks_for_your_rating': 'Thanks for your rating',
+  'this_page_is_not_available_yet': 'This page is not available yet',
 };

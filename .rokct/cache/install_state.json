@@ -1,7 +1,7 @@
 {
   "packages": {
     "base_sdk": {
-      "version": "1.111.1",
+      "version": "1.113.1",
       "files": {
         "flutter_native_splash.yaml": "d469a133b5e1631d6ba811b048d290449224075edad2153189cfb2edc3f4d100",
         "android/app/src/main/res/font/montserrat_extrabolditalic.ttf": "d38bac61eda8d8c002b1a852f5368901a085fbe1d844b5e0a149b674e22e2cdd",
@@ -245,7 +245,7 @@
       ]
     },
     "merchants_sdk": {
-      "version": "1.38.5",
+      "version": "1.38.7",
       "files": {
         "assets/audio/notification.wav": "9d62af6f1c8df010941d1daa17162175d87293bd78371c787803b5a11f95cb9d",
         "assets/svgs/menu.svg": "9767d04ac4d157e423f972259a9c2c455a6a629c4098cc9c2fe8f9722451441b",
@@ -515,6 +515,26 @@
       ],
       "boot_hooks": [
         {
+          "id": "merchants-en-bundled-translations",
+          "order": 65,
+          "body": "BundledTranslations.register('en', kMerchantsEnTranslations);",
+          "imports": [
+            "import 'package:base_sdk/src/services/bundled_translations.dart';",
+            "import 'package:merchants_sdk/src/translations/merchants_en_translations.dart';"
+          ],
+          "_comment": "Registers this SDK's bundled English (en) map into base_sdk's BundledTranslations at boot. Backend-served rows still win."
+        },
+        {
+          "id": "merchants-af-bundled-translations",
+          "order": 64,
+          "body": "BundledTranslations.register('af', kMerchantsAfTranslations);",
+          "imports": [
+            "import 'package:base_sdk/src/services/bundled_translations.dart';",
+            "import 'package:merchants_sdk/src/translations/merchants_af_translations.dart';"
+          ],
+          "_comment": "Registers this SDK's bundled Afrikaans (af) map into base_sdk's BundledTranslations at boot. Backend-served rows still win."
+        },
+        {
           "id": "merchants-manager-splash-preserve",
           "order": 1,
           "body": "FlutterNativeSplash.preserve(widgetsBinding: WidgetsFlutterBinding.ensureInitialized());",
@@ -544,7 +564,7 @@
       }
     },
     "products_sdk": {
-      "version": "1.13.4",
+      "version": "1.13.5",
       "files": {
         "lib/presentation/pages/foods/foods_page.dart": "1c92735c8ae8a071b002bf7f8b2051fde063895f5968a744d7954d83cacc2b28",
         "lib/presentation/pages/foods/foods/foods_body.dart": "29f440e213a4b760a3c0af59df8f235161e4925f21b4d01cec798befa566e8ab",
@@ -694,13 +714,34 @@
         "updateFailed": "update_failed"
       },
       "di_hooks": [],
-      "boot_hooks": [],
+      "boot_hooks": [
+        {
+          "id": "products-en-bundled-translations",
+          "order": 65,
+          "body": "BundledTranslations.register('en', kProductsEnTranslations);",
+          "imports": [
+            "import 'package:base_sdk/src/services/bundled_translations.dart';",
+            "import 'package:products_sdk/src/translations/products_en_translations.dart';"
+          ],
+          "_comment": "Registers this SDK's bundled English (en) map into base_sdk's BundledTranslations at boot. Backend-served rows still win."
+        },
+        {
+          "id": "products-af-bundled-translations",
+          "order": 64,
+          "body": "BundledTranslations.register('af', kProductsAfTranslations);",
+          "imports": [
+            "import 'package:base_sdk/src/services/bundled_translations.dart';",
+            "import 'package:products_sdk/src/translations/products_af_translations.dart';"
+          ],
+          "_comment": "Registers this SDK's bundled Afrikaans (af) map into base_sdk's BundledTranslations at boot. Backend-served rows still win."
+        }
+      ],
       "app_assets": [
         "assets/demo/products/"
       ]
     },
     "orders_sdk": {
-      "version": "1.31.11",
+      "version": "1.32.3",
       "files": {
         "lib/presentation/pages/orders/orders_home_page.dart": "a10b65eacf865064b211eab1fdfe079197f723a04d880242df0529df35b5bc6b",
         "lib/presentation/pages/orders/details/order_details_modal.dart": "66f5c681515ecf97ef9963274858ffaff00668230cc34a94b5a9b3d9bfd88bfb",
@@ -850,6 +891,17 @@
         "openOrders": "open_orders",
         "manager": "manager",
         "paymentCancelled": "payment_cancelled",
+        "ordersInsufficientWalletBalance": "orders_insufficient_wallet_balance",
+        "ordersTopUpCreate": "orders_top_up_create",
+        "ordersTrackOrder": "orders_track_order",
+        "ordersCallDriver": "orders_call_driver",
+        "ordersOrderPlaced": "orders_order_placed",
+        "ordersPreparingYourOrder": "orders_preparing_your_order",
+        "ordersArrivingNow": "orders_arriving_now",
+        "ordersOnTheWay": "orders_on_the_way",
+        "ordersRateOrder": "orders_rate_order",
+        "ordersOrderCancelled": "orders_order_cancelled",
+        "ordersGetHelp": "orders_get_help",
         "loads": "loads",
         "openLoads": "open_loads",
         "closedLoads": "closed_loads",
@@ -1029,6 +1081,16 @@
             "import 'package:orders_sdk/src/translations/orders_en_translations.dart';"
           ],
           "_comment": "Registers English fallbacks for tr_keys whose legacy wire key humanizes badly (spproximate_preparation_time). Backend-served rows still win; the map is consulted only before the humanized-key fallback."
+        },
+        {
+          "id": "orders-af-bundled-translations",
+          "order": 65,
+          "body": "BundledTranslations.register('af', kOrdersAfTranslations);",
+          "imports": [
+            "import 'package:base_sdk/src/services/bundled_translations.dart';",
+            "import 'package:orders_sdk/src/translations/orders_af_translations.dart';"
+          ],
+          "_comment": "Registers this SDK's bundled copy for its manifest tr_keys at boot (lms_sdk precedent). Backend-served rows still win."
         }
       ],
       "integrations": [
@@ -1053,7 +1115,7 @@
       }
     },
     "kitchen_sdk": {
-      "version": "1.5.6",
+      "version": "1.5.7",
       "files": {
         "lib/presentation/pages/kitchen/kitchen_page.dart": "511489f9c979438b68b008ea5ba9b43b924614a369a7c6c354aa580274abe9b7"
       },
@@ -1089,6 +1151,16 @@
       ],
       "boot_hooks": [
         {
+          "id": "kitchen-en-bundled-translations",
+          "order": 65,
+          "body": "BundledTranslations.register('en', kKitchenEnTranslations);",
+          "imports": [
+            "import 'package:base_sdk/src/services/bundled_translations.dart';",
+            "import 'package:kitchen_sdk/src/translations/kitchen_en_translations.dart';"
+          ],
+          "_comment": "Registers this SDK's bundled English (en) map into base_sdk's BundledTranslations at boot. Backend-served rows still win."
+        },
+        {
           "id": "kitchen-af-bundled-translations",
           "order": 63,
           "body": "BundledTranslations.register('af', kKitchenAfTranslations);",
@@ -1104,7 +1176,7 @@
       ]
     },
     "hardware_sdk": {
-      "version": "1.1.3",
+      "version": "1.1.4",
       "files": {},
       "routes": [],
       "app_routes": [],
@@ -1115,7 +1187,7 @@
       "boot_hooks": []
     },
     "payments_sdk": {
-      "version": "1.3.7",
+      "version": "1.4.1",
       "files": {},
       "routes": [],
       "app_routes": [],
@@ -1150,10 +1222,35 @@
         }
       ],
       "di_hooks": [],
-      "boot_hooks": []
+      "boot_hooks": [
+        {
+          "id": "payments-af-bundled-translations",
+          "order": 61,
+          "body": "BundledTranslations.register('af', kPaymentsAfTranslations);",
+          "imports": [
+            "import 'package:base_sdk/src/services/bundled_translations.dart';",
+            "import 'package:payments_sdk/src/translations/payments_af_translations.dart';"
+          ],
+          "_comment": "Registers this SDK's bundled copy for its manifest tr_keys at boot (lms_sdk precedent). Backend-served rows still win."
+        },
+        {
+          "id": "payments-en-bundled-translations",
+          "order": 62,
+          "body": "BundledTranslations.register('en', kPaymentsEnTranslations);",
+          "imports": [
+            "import 'package:base_sdk/src/services/bundled_translations.dart';",
+            "import 'package:payments_sdk/src/translations/payments_en_translations.dart';"
+          ],
+          "_comment": "Registers this SDK's bundled copy for its manifest tr_keys at boot (lms_sdk precedent). Backend-served rows still win."
+        }
+      ],
+      "tr_keys": {
+        "paymentsInstallWebview2Runtime": "payments_install_webview2_runtime",
+        "paymentsRetry": "payments_retry"
+      }
     },
     "subscriptions_sdk": {
-      "version": "1.8.0",
+      "version": "1.8.1",
       "files": {
         "lib/presentation/pages/subscriptions/subscriptions_page.dart": "62ad148751054677a58355f81412f3e1870ba4866ded0e8fd00e294a131f07d7",
         "lib/presentation/pages/subscriptions/widgets/have_subscription.dart": "f68ad9267204aed05b15d95f5051fe614209166c0bbd0e2751fa684a9a556af3",
@@ -1195,13 +1292,34 @@
           "_comment": "Profile section ids the free tier must not see. merchants.productivity is the manager's Productivity group (Tasks, Calculator). base_sdk's barrel is already imported by every composed main.dart, so no import is declared (a second one is a duplicate_import lint). Add an id here to gate another SDK's entry; ProfileSectionRegistry drops listed sections while PlanAccess.planGatedVisible is false (base_sdk 1.97.0)."
         }
       ],
-      "boot_hooks": [],
+      "boot_hooks": [
+        {
+          "id": "subscriptions-en-bundled-translations",
+          "order": 65,
+          "body": "BundledTranslations.register('en', kSubscriptionsEnTranslations);",
+          "imports": [
+            "import 'package:base_sdk/src/services/bundled_translations.dart';",
+            "import 'package:subscriptions_sdk/src/translations/subscriptions_en_translations.dart';"
+          ],
+          "_comment": "Registers this SDK's bundled English (en) map into base_sdk's BundledTranslations at boot. Backend-served rows still win."
+        },
+        {
+          "id": "subscriptions-af-bundled-translations",
+          "order": 64,
+          "body": "BundledTranslations.register('af', kSubscriptionsAfTranslations);",
+          "imports": [
+            "import 'package:base_sdk/src/services/bundled_translations.dart';",
+            "import 'package:subscriptions_sdk/src/translations/subscriptions_af_translations.dart';"
+          ],
+          "_comment": "Registers this SDK's bundled Afrikaans (af) map into base_sdk's BundledTranslations at boot. Backend-served rows still win."
+        }
+      ],
       "app_assets": [
         "assets/demo/subscriptions/"
       ]
     },
     "comms_sdk": {
-      "version": "1.23.4",
+      "version": "1.23.5",
       "files": {
         "lib/presentation/pages/notification/notification_list_page.dart": "b9d761a1e7e38f4eaa0e0e8a250274dd3c2f3aeafe96a992d945ceccefda1546",
         "lib/application/notification/notification_state.dart": "055c8ab42969bad5e418061cbe38699458bfc8b74ea7d4def4a03a18e261b184",
@@ -1252,6 +1370,26 @@
       ],
       "di_hooks": [],
       "boot_hooks": [
+        {
+          "id": "comms-en-bundled-translations",
+          "order": 65,
+          "body": "BundledTranslations.register('en', kCommsEnTranslations);",
+          "imports": [
+            "import 'package:base_sdk/src/services/bundled_translations.dart';",
+            "import 'package:comms_sdk/src/translations/comms_en_translations.dart';"
+          ],
+          "_comment": "Registers this SDK's bundled English (en) map into base_sdk's BundledTranslations at boot. Backend-served rows still win."
+        },
+        {
+          "id": "comms-af-bundled-translations",
+          "order": 64,
+          "body": "BundledTranslations.register('af', kCommsAfTranslations);",
+          "imports": [
+            "import 'package:base_sdk/src/services/bundled_translations.dart';",
+            "import 'package:comms_sdk/src/translations/comms_af_translations.dart';"
+          ],
+          "_comment": "Registers this SDK's bundled Afrikaans (af) map into base_sdk's BundledTranslations at boot. Backend-served rows still win."
+        },
         {
           "id": "comms-live-activity-sink",
           "order": 40,
@@ -1321,12 +1459,12 @@
       "boot_hooks": []
     },
     "productivity_sdk": {
-      "version": "1.10.1",
+      "version": "1.11.1",
       "files": {
-        "lib/presentation/pages/tasks/tasks_page.dart": "14953b77eb356b8b9ebae4b740b7a7bcb2422545c91f4bec3882d1424143c9d7",
-        "lib/presentation/pages/tasks/task_run_page.dart": "c0384784dd5923c80eb05172a54a5d96227375f721eb553226600335733d4f08",
-        "lib/presentation/pages/vision/plan_on_a_page.dart": "5ef9c9903723e9dadbe69df8973ab3b324c6e857c6764f473c42ce656b32e204",
-        "lib/presentation/pages/vision/personal_mastery_page.dart": "aa70c79d6ce0ed067cf2a6d0b492f59de2d43fb20b53b9a1b758c867285fac20",
+        "lib/presentation/pages/tasks/tasks_page.dart": "7aa8633e04fc677788fbf1674c2d3e109706b97561a138ddfe92c6d056b1777c",
+        "lib/presentation/pages/tasks/task_run_page.dart": "13290b7e876dbfbc401cce8b151f8c4cc58f952f2831d52877b3c4260800db29",
+        "lib/presentation/pages/vision/plan_on_a_page.dart": "b5258fafdb803dee96adefc029a931edd69a1e2da3f38645dd82740e94888307",
+        "lib/presentation/pages/vision/personal_mastery_page.dart": "9c3733c131861795cd328397701e0bc98305247f272bd3ad6a5bbbf158ece570",
         "assets/demo/productivity/tenant.api.get_personal_mastery_goals.json": "c74f299574e27d87d2875010f3097f56037c7be30f52577876b1654661bf19ec",
         "assets/demo/productivity/tenant.api.get_visions.json": "43341c4527c589ae39f551c07342d5554c792e796d0fb577be2b66f0062a2ace",
         "assets/demo/productivity/tenant.api.get_plan_on_a_page.json": "a7b77dc38ee2fef88418d03ebbf1d47abd9c2cd5bd84c2a60686a006c829cbd3",
@@ -1434,6 +1572,26 @@
           "id": "productivity_session_end",
           "order": 0,
           "body": "SessionEndHooks.register(ProductivitySessionEnd.hookId, ProductivitySessionEnd.clearLiveView);"
+        },
+        {
+          "id": "productivity-af-bundled-translations",
+          "order": 61,
+          "body": "BundledTranslations.register('af', kProductivityAfTranslations);",
+          "imports": [
+            "import 'package:base_sdk/src/services/bundled_translations.dart';",
+            "import 'package:productivity_sdk/src/translations/productivity_af_translations.dart';"
+          ],
+          "_comment": "Registers this SDK's bundled copy for its manifest tr_keys at boot (lms_sdk precedent). Backend-served rows still win."
+        },
+        {
+          "id": "productivity-en-bundled-translations",
+          "order": 62,
+          "body": "BundledTranslations.register('en', kProductivityEnTranslations);",
+          "imports": [
+            "import 'package:base_sdk/src/services/bundled_translations.dart';",
+            "import 'package:productivity_sdk/src/translations/productivity_en_translations.dart';"
+          ],
+          "_comment": "Registers this SDK's bundled copy for its manifest tr_keys at boot (lms_sdk precedent). Backend-served rows still win."
         }
       ],
       "tr_keys": {
@@ -1447,7 +1605,21 @@
         "roMembraneReplacement": "ro_membrane_replacement",
         "describeThePlantFirst": "describe_the_plant_before_it_can_be_serviced",
         "newTask": "new_task",
-        "newNote": "new_note"
+        "newNote": "new_note",
+        "productivityTaskReminder": "productivity_task_reminder",
+        "productivityWriteItDown": "productivity_write_it_down",
+        "productivityCalendarMode": "productivity_calendar_mode",
+        "productivityTasks": "productivity_tasks",
+        "productivitySearchTasksOrCategories": "productivity_search_tasks_or_categories",
+        "productivityPersonalMastery": "productivity_personal_mastery",
+        "productivityPlanOnAPage": "productivity_plan_on_a_page",
+        "productivityAllPillars": "productivity_all_pillars",
+        "productivityLongTerm": "productivity_long_term",
+        "productivityInAnHour": "productivity_in_an_hour",
+        "productivityTomorrowMorning": "productivity_tomorrow_morning",
+        "productivityNextWeek": "productivity_next_week",
+        "productivityPickATime": "productivity_pick_a_time",
+        "productivityDeleteNote": "productivity_delete_note"
       },
       "host_integration": {
         "android_application_xml": [
@@ -1459,7 +1631,7 @@
       ]
     },
     "calc_sdk": {
-      "version": "1.4.2",
+      "version": "1.4.3",
       "files": {
         "lib/presentation/pages/calc/calculator_page.dart": "55eb940c5ff99fa2e8d3cf0b2118d3a3459d6e38b2e81e7e09dd33bd95f49f76"
       },
@@ -1476,7 +1648,28 @@
       "registration_steps": [],
       "embedded_widgets": [],
       "di_hooks": [],
-      "boot_hooks": [],
+      "boot_hooks": [
+        {
+          "id": "calc-en-bundled-translations",
+          "order": 65,
+          "body": "BundledTranslations.register('en', kCalcEnTranslations);",
+          "imports": [
+            "import 'package:base_sdk/src/services/bundled_translations.dart';",
+            "import 'package:calc_sdk/src/translations/calc_en_translations.dart';"
+          ],
+          "_comment": "Registers this SDK's bundled English (en) map into base_sdk's BundledTranslations at boot. Backend-served rows still win."
+        },
+        {
+          "id": "calc-af-bundled-translations",
+          "order": 64,
+          "body": "BundledTranslations.register('af', kCalcAfTranslations);",
+          "imports": [
+            "import 'package:base_sdk/src/services/bundled_translations.dart';",
+            "import 'package:calc_sdk/src/translations/calc_af_translations.dart';"
+          ],
+          "_comment": "Registers this SDK's bundled Afrikaans (af) map into base_sdk's BundledTranslations at boot. Backend-served rows still win."
+        }
+      ],
       "tr_keys": {
         "calculator": "calculator",
         "tape": "tape",
@@ -1569,7 +1762,7 @@
       "boot_hooks": []
     },
     "weather_sdk": {
-      "version": "1.6.3",
+      "version": "1.7.0",
       "files": {
         "lib/presentation/components/weather/weather_widget.dart": "6aae054f49933e8074156f5cf5ce581e64d8be3e903b56e4d53e70722e6ecf61"
       },
@@ -1606,14 +1799,27 @@
             "import 'package:weather_sdk/src/translations/weather_af_translations.dart';"
           ],
           "_comment": "Registers this SDK's bundled Afrikaans map for its manifest tr_keys into base_sdk's BundledTranslations registry at boot. Top-level (not app_type-gated) because translations are role-agnostic. Backend-served translation rows still win; the map is only the offline/unseeded fallback consulted before the humanized-key fallback. Requires a base_sdk with bundled_translations.dart."
+        },
+        {
+          "id": "weather-en-bundled-translations",
+          "order": 65,
+          "body": "BundledTranslations.register('en', kWeatherEnTranslations);",
+          "imports": [
+            "import 'package:base_sdk/src/services/bundled_translations.dart';",
+            "import 'package:weather_sdk/src/translations/weather_en_translations.dart';"
+          ],
+          "_comment": "Registers this SDK's bundled copy for its manifest tr_keys at boot (lms_sdk precedent). Backend-served rows still win."
         }
       ],
       "tr_keys": {
-        "asOf": "as.of"
+        "asOf": "as.of",
+        "weatherUpdateRainFeedback": "weather_update_rain_feedback",
+        "weatherDidItRainAfterYourPreviousNo": "weather_did_it_rain_after_your_previous_no",
+        "weatherNo": "weather_no"
       }
     },
     "revenue_sdk": {
-      "version": "1.14.12",
+      "version": "1.14.14",
       "files": {
         "lib/presentation/pages/income/income_page.dart": "a959edeb6ba316cac52004486b2c3a2ca85f9775f05b3a55ec18d4e8f2a28f3c",
         "lib/presentation/pages/income/app_bar_screen.dart": "da70222a0db114f137b0a48e9c8c5086cc369e151d48406913263e4f73c5628a",
@@ -1691,7 +1897,28 @@
           ]
         }
       ],
-      "boot_hooks": [],
+      "boot_hooks": [
+        {
+          "id": "revenue-en-bundled-translations",
+          "order": 65,
+          "body": "BundledTranslations.register('en', kRevenueEnTranslations);",
+          "imports": [
+            "import 'package:base_sdk/src/services/bundled_translations.dart';",
+            "import 'package:revenue_sdk/src/translations/revenue_en_translations.dart';"
+          ],
+          "_comment": "Registers this SDK's bundled English (en) map into base_sdk's BundledTranslations at boot. Backend-served rows still win."
+        },
+        {
+          "id": "revenue-af-bundled-translations",
+          "order": 64,
+          "body": "BundledTranslations.register('af', kRevenueAfTranslations);",
+          "imports": [
+            "import 'package:base_sdk/src/services/bundled_translations.dart';",
+            "import 'package:revenue_sdk/src/translations/revenue_af_translations.dart';"
+          ],
+          "_comment": "Registers this SDK's bundled Afrikaans (af) map into base_sdk's BundledTranslations at boot. Backend-served rows still win."
+        }
+      ],
       "integrations": [
         {
           "target": "lib/presentation/pages/manager/restaurant/restaurant_page.dart",
@@ -1711,7 +1938,7 @@
       ]
     },
     "zones_sdk": {
-      "version": "1.7.3",
+      "version": "1.7.4",
       "files": {
         "lib/presentation/pages/merchant/delivery_zone/delivery_zone_page.dart": "765310edd51f3e359f2f4a7cceeaea0cb43b46bef312db2fdb108b71fb218d21",
         "lib/presentation/routes/zones_adapters.dart": "928782e42f6861eebb76272dec3d22144c95adb8357d0719c666469b3028d4c9",
@@ -1742,6 +1969,16 @@
         }
       ],
       "boot_hooks": [
+        {
+          "id": "zones-af-bundled-translations",
+          "order": 64,
+          "body": "BundledTranslations.register('af', kZonesAfTranslations);",
+          "imports": [
+            "import 'package:base_sdk/src/services/bundled_translations.dart';",
+            "import 'package:zones_sdk/src/translations/zones_af_translations.dart';"
+          ],
+          "_comment": "Registers this SDK's bundled Afrikaans (af) map into base_sdk's BundledTranslations at boot. Backend-served rows still win."
+        },
         {
           "id": "zones-en-bundled-translations",
           "order": 64,
@@ -1774,7 +2011,7 @@
       ]
     },
     "auth_sdk": {
-      "version": "1.22.7",
+      "version": "1.22.8",
       "files": {
         "lib/presentation/routes/auth_route_pages.dart": "2ac2b6adab56b09a0eff1aa19478717f2c632e0415c46ac0c06f04549e77602c",
         "lib/presentation/routes/registration_step_pages.dart": "68aed195fc07db746a0919c7ba6d47ffa445ca86e7d9cf6ee50fbcb00e82d3c2",
@@ -1872,6 +2109,16 @@
       },
       "di_hooks": [],
       "boot_hooks": [
+        {
+          "id": "auth-af-bundled-translations",
+          "order": 64,
+          "body": "BundledTranslations.register('af', kAuthAfTranslations);",
+          "imports": [
+            "import 'package:base_sdk/src/services/bundled_translations.dart';",
+            "import 'package:auth_sdk/src/translations/auth_af_translations.dart';"
+          ],
+          "_comment": "Registers this SDK's bundled Afrikaans (af) map into base_sdk's BundledTranslations at boot. Backend-served rows still win."
+        },
         {
           "id": "auth_pending_otp_gate",
           "order": 0,
@@ -1976,7 +2223,7 @@
       "boot_hooks": []
     },
     "booking_sdk": {
-      "version": "1.2.4",
+      "version": "1.2.6",
       "files": {
         "lib/presentation/pages/reservations/shop_reservations_page.dart": "e81667095f2399cad563a7e1b20042d69d250bb9f62b81e789068c3490fbebb6",
         "lib/presentation/pages/reservations/reservation_tables_page.dart": "32de44d0a192f06cd08a14f4e7afcfea0d25513ecbe5391ce2b8f3a4ac92dc48",
@@ -2090,84 +2337,84 @@
   },
   "sdk_cache": {
     "base": {
-      "version": "1.111.1",
-      "source_hash": "ecf7c2b76e281e83"
+      "version": "1.113.1",
+      "source_hash": "058bd9219a11f4bb"
     },
     "comms": {
-      "version": "1.23.4",
-      "source_hash": "ba44faa679dd37d6"
+      "version": "1.23.5",
+      "source_hash": "70455c821e3ec891"
     },
     "auth": {
-      "version": "1.22.7",
-      "source_hash": "6ccb3cd4a34b45d0"
+      "version": "1.22.8",
+      "source_hash": "a7949a7114b023c6"
     },
     "users": {
       "version": "1.5.3",
       "source_hash": "cb3062dc3a29f9fd"
     },
     "merchants": {
-      "version": "1.38.5",
-      "source_hash": "158be560541359df"
+      "version": "1.38.7",
+      "source_hash": "c00d5c8439904b93"
     },
     "products": {
-      "version": "1.13.4",
-      "source_hash": "f11b51c19fabbd2d"
+      "version": "1.13.5",
+      "source_hash": "043ae91783ebb5ae"
     },
     "orders": {
-      "version": "1.31.11",
-      "source_hash": "6be730f213b8143d"
+      "version": "1.32.3",
+      "source_hash": "a9cda1696b19878d"
     },
     "kitchen": {
-      "version": "1.5.6",
-      "source_hash": "7f5f8b56f2f26b68"
+      "version": "1.5.7",
+      "source_hash": "45e0d214341f5a95"
     },
     "promotions": {
       "version": "1.4.2",
       "source_hash": "2c818e5384b18aab"
     },
     "hardware": {
-      "version": "1.1.3",
-      "source_hash": "97e35e161e6bd765"
+      "version": "1.1.4",
+      "source_hash": "2b7b9e3f7af352bf"
     },
     "payments": {
-      "version": "1.3.7",
-      "source_hash": "440914658a7ded69"
+      "version": "1.4.1",
+      "source_hash": "fdc68979fa6b1350"
     },
     "subscriptions": {
-      "version": "1.8.0",
-      "source_hash": "9beca649bf2111fa"
+      "version": "1.8.1",
+      "source_hash": "9d46ccd5b9785295"
     },
     "processing": {
       "version": "1.0.2",
       "source_hash": "0f71149fa89119ec"
     },
     "productivity": {
-      "version": "1.10.1",
-      "source_hash": "309b6152ebf32e79"
+      "version": "1.11.1",
+      "source_hash": "39d00997a6a3f4b8"
     },
     "calc": {
-      "version": "1.4.2",
-      "source_hash": "c377439da86beced"
+      "version": "1.4.3",
+      "source_hash": "985b2e10c734fc03"
     },
     "corporate": {
       "version": "1.2.1",
       "source_hash": "42eb71115dcd4610"
     },
     "revenue": {
-      "version": "1.14.12",
-      "source_hash": "d30bdafff4aafede"
+      "version": "1.14.14",
+      "source_hash": "c5557e8796457e70"
     },
     "map": {
       "version": "1.5.2",
       "source_hash": "dc26dd31a6b36799"
     },
     "weather": {
-      "version": "1.6.3",
-      "source_hash": "ce5b491355f50b4e"
+      "version": "1.7.0",
+      "source_hash": "25cb4f5d6a83de4e"
     },
     "zones": {
-      "version": "1.7.3",
-      "source_hash": "a8a7d2092b890cb6"
+      "version": "1.7.4",
+      "source_hash": "2e49efae89d751d8"
     },
     "desktop": {
       "version": "1.2.2",
@@ -2182,8 +2429,8 @@
       "source_hash": "396500678188b0f2"
     },
     "booking": {
-      "version": "1.2.4",
-      "source_hash": "97c91bc06b3b07cd"
+      "version": "1.2.6",
+      "source_hash": "8f4956730f58350c"
     }
   }
 }

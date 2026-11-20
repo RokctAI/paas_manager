@@ -36,4 +36,8 @@ const Map<String, String> kKitchenAfTranslations = {
   'hand_over': 'Oorhandig',
   'tap_a_dish_to_advance_double_tap_cancels':
       'Tik \'n gereg om aan te beweeg · dubbeltik kanselleer dit',
+
+  // Filled by scripts/trkeys-gaps (every key the SDK uses now has copy).
+  'no_orders': 'Geen bestellings nie',
+  'view_more': 'Sien meer',
 };

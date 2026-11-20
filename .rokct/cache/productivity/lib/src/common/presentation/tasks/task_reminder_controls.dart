@@ -33,6 +33,8 @@
 // seven days or more) awaits the owner's word and is deliberately NOT
 // derived here.
 
+import 'package:productivity_sdk/src/common/productivity_tr_keys.dart';
+import 'package:base_sdk/src/services/app_helpers.dart';
 import 'package:base_sdk/src/presentation/theme/app_style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -214,11 +216,11 @@ List<SnoozeOption> snoozeOptions(DateTime now) {
   final DateTime nextWeek = now.add(const Duration(days: 7));
   return <SnoozeOption>[
     SnoozeOption(
-      label: 'In an hour',
+      label: AppHelpers.getTranslation(ProductivityTrKeys.productivityInAnHour),
       remindAt: now.add(const Duration(hours: 1)),
     ),
-    SnoozeOption(label: 'Tomorrow morning', remindAt: morningOf(tomorrow)),
-    SnoozeOption(label: 'Next week', remindAt: morningOf(nextWeek)),
+    SnoozeOption(label: AppHelpers.getTranslation(ProductivityTrKeys.productivityTomorrowMorning), remindAt: morningOf(tomorrow)),
+    SnoozeOption(label: AppHelpers.getTranslation(ProductivityTrKeys.productivityNextWeek), remindAt: morningOf(nextWeek)),
   ];
 }
 
@@ -320,7 +322,7 @@ class _SnoozeSheetState extends State<_SnoozeSheet> {
                 }),
               ),
             _row(
-              label: 'Pick a time',
+              label: AppHelpers.getTranslation(ProductivityTrKeys.productivityPickATime),
               when: _picked,
               selected: _picked != null,
               onTap: _pick,

@@ -12,6 +12,8 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
+import 'package:base_sdk/src/services/tr_keys.dart';
+import 'package:base_sdk/src/services/app_helpers.dart';
 import 'dart:typed_data';
 
 import 'package:camera/camera.dart';
@@ -218,12 +220,12 @@ class _PermissionDeniedNotice extends StatelessWidget {
                   OutlinedButton(
                     key: const Key('camera-permission-retry'),
                     onPressed: onRetry,
-                    child: const Text('Try again'),
+                    child: Text(AppHelpers.getTranslation(TrKeys.tryAgain)),
                   ),
                 FilledButton(
                   key: const Key('camera-permission-open-settings'),
                   onPressed: onOpenSettings,
-                  child: const Text('Open settings'),
+                  child: Text(AppHelpers.getTranslation(TrKeys.openSettings)),
                 ),
               ],
             ),

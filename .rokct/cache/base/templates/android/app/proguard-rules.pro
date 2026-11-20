@@ -39,3 +39,5 @@
 # `object` and a @JvmStatic register.
 -keep,allowoptimization class **.DefaultHomeBridge { public *; }
 -keep,allowoptimization class **.AppChangesBridge { public *; }
+-keep,allowoptimization class **.LauncherVerseWidgetBridge { public *; }
+-keep,allowoptimization class **.SticksCallBridge { public *; }

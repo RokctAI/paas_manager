@@ -42,6 +42,8 @@
 // The page persists exactly as the workspace does: the local store first,
 // through the same repository, and the outbox push follows unawaited.
 
+import 'package:base_sdk/src/services/tr_keys.dart';
+import 'package:base_sdk/src/services/app_helpers.dart';
 import 'dart:async';
 import 'dart:math';
 
@@ -143,7 +145,7 @@ class _TaskRunPageState extends State<TaskRunPage> {
     if (next != null && next['reminder'] == true) {
       LocalNotifications.scheduleNotification(
         id: nextNotifId,
-        title: 'Task Reminder',
+        title: AppHelpers.getTranslation(TrKeys.productivityTaskReminder),
         body: done['title'],
         scheduledDate: DateTime.parse(next['deadline'] as String),
       );

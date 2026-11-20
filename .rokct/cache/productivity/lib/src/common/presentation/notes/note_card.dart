@@ -12,6 +12,8 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
+import 'package:productivity_sdk/src/common/productivity_tr_keys.dart';
+import 'package:base_sdk/src/services/app_helpers.dart';
 import 'package:base_sdk/src/presentation/theme/app_style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -123,7 +125,7 @@ class NoteCard extends StatelessWidget {
               if (onDelete != null)
                 IconButton(
                   onPressed: onDelete,
-                  tooltip: 'Delete note',
+                  tooltip: AppHelpers.getTranslation(ProductivityTrKeys.productivityDeleteNote),
                   iconSize: 18.r,
                   color: AppStyle.faintFor(Theme.of(context).brightness),
                   icon: const Icon(Remix.delete_bin_line),

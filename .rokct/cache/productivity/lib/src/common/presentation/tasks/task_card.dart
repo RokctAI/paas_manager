@@ -33,6 +33,8 @@
 // when the card is expanded on the fold — the 47k two-clock row with its
 // snooze control. Every one of them is derived from the task map.
 
+import 'package:productivity_sdk/src/common/productivity_tr_keys.dart';
+import 'package:base_sdk/src/services/app_helpers.dart';
 import 'package:base_sdk/src/presentation/theme/app_style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -349,7 +351,7 @@ class TaskCard extends StatelessWidget {
         _chip(
           context,
           icon: Remix.subtract_line,
-          label: 'Long term',
+          label: AppHelpers.getTranslation(ProductivityTrKeys.productivityLongTerm),
           tint: LongTermBandHeader.tint,
         ),
       );

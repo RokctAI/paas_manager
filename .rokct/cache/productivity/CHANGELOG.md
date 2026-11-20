@@ -1,3 +1,11 @@
+## 1.11.1
+
+- feat(i18n): Afrikaans copy for 11 translation keys this SDK uses and English copy for 11, so both languages are complete. No behaviour change in English except proper wording where a key was humanized.
+
+## 1.11.0
+
+- feat(i18n): hardcoded UI copy goes through trkeys (Ray, 2026-11-20): 14 new `productivity_*` tr_keys with bundled English and Afrikaans copy.
+
 ## 1.10.1
 
 - fix(tasks): the task list fades out above the + nav pill (base_sdk `FloatingNavFold`) and keeps 136 of bottom room, so a card's "Resume · Step N of M" button is no longer under the + (tour 1114b manager 34-productivity_tasks). The notes list gets the same bottom room.

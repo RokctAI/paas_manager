@@ -44,6 +44,8 @@
 // picker. What is typed is handed back through [TaskRunView.onChanged]
 // as it is typed, so a kill mid-entry loses nothing recorded.
 
+import 'package:base_sdk/src/services/tr_keys.dart';
+import 'package:base_sdk/src/services/app_helpers.dart';
 import 'dart:async';
 
 import 'package:base_sdk/base_sdk.dart';
@@ -1323,7 +1325,7 @@ class _StepCard extends StatelessWidget {
               ),
             ),
             child: Text(
-              'Back',
+              AppHelpers.getTranslation(TrKeys.back),
               style: AppStyle.interSemi(
                 size: 13,
                 color: onBack == null

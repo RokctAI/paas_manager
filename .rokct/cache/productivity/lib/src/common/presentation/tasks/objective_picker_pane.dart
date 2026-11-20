@@ -34,6 +34,9 @@
 // the 41a card, verbatim. The KPI count is DERIVED by counting the KPIs
 // that link to the objective; there is no count field to read.
 
+import 'package:productivity_sdk/src/common/productivity_tr_keys.dart';
+import 'package:base_sdk/src/services/tr_keys.dart';
+import 'package:base_sdk/src/services/app_helpers.dart';
 import 'package:base_sdk/src/presentation/theme/app_style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -231,7 +234,7 @@ class _ObjectivePickerPaneState extends State<ObjectivePickerPane> {
         children: <Widget>[
           _pillarTab(
             name: null,
-            label: 'All pillars',
+            label: AppHelpers.getTranslation(ProductivityTrKeys.productivityAllPillars),
             count: catalog.objectives.length,
             tint: AppStyle.primary,
           ),
@@ -329,7 +332,7 @@ class _ObjectivePickerPaneState extends State<ObjectivePickerPane> {
                 key: ObjectivePickerPane.retryKey,
                 onPressed: widget.onRetry,
                 child: Text(
-                  'Try again',
+                  AppHelpers.getTranslation(TrKeys.tryAgain),
                   style: AppStyle.interSemi(size: 12, color: AppStyle.primary),
                 ),
               ),

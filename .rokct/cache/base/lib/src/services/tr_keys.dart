@@ -194,6 +194,17 @@ class TrKeys {
   static const String openOrders = 'open_orders';
   static const String manager = 'manager';
   static const String paymentCancelled = 'payment_cancelled';
+  static const String ordersInsufficientWalletBalance = 'orders_insufficient_wallet_balance';
+  static const String ordersTopUpCreate = 'orders_top_up_create';
+  static const String ordersTrackOrder = 'orders_track_order';
+  static const String ordersCallDriver = 'orders_call_driver';
+  static const String ordersOrderPlaced = 'orders_order_placed';
+  static const String ordersPreparingYourOrder = 'orders_preparing_your_order';
+  static const String ordersArrivingNow = 'orders_arriving_now';
+  static const String ordersOnTheWay = 'orders_on_the_way';
+  static const String ordersRateOrder = 'orders_rate_order';
+  static const String ordersOrderCancelled = 'orders_order_cancelled';
+  static const String ordersGetHelp = 'orders_get_help';
   static const String loads = 'loads';
   static const String openLoads = 'open_loads';
   static const String closedLoads = 'closed_loads';
@@ -333,6 +344,8 @@ class TrKeys {
   static const String retired = 'retired';
   static const String searchDrivers = 'search_drivers';
   static const String theyCanNoLongerBeLoaded = 'they_can_no_longer_be_issued_a_load_from_this_shop';
+  static const String paymentsInstallWebview2Runtime = 'payments_install_webview2_runtime';
+  static const String paymentsRetry = 'payments_retry';
   static const String fromTemplate = 'from_template';
   static const String plantSetup = 'plant_setup';
   static const String softenerMaintenance = 'softener_maintenance';
@@ -344,6 +357,20 @@ class TrKeys {
   static const String describeThePlantFirst = 'describe_the_plant_before_it_can_be_serviced';
   static const String newTask = 'new_task';
   static const String newNote = 'new_note';
+  static const String productivityTaskReminder = 'productivity_task_reminder';
+  static const String productivityWriteItDown = 'productivity_write_it_down';
+  static const String productivityCalendarMode = 'productivity_calendar_mode';
+  static const String productivityTasks = 'productivity_tasks';
+  static const String productivitySearchTasksOrCategories = 'productivity_search_tasks_or_categories';
+  static const String productivityPersonalMastery = 'productivity_personal_mastery';
+  static const String productivityPlanOnAPage = 'productivity_plan_on_a_page';
+  static const String productivityAllPillars = 'productivity_all_pillars';
+  static const String productivityLongTerm = 'productivity_long_term';
+  static const String productivityInAnHour = 'productivity_in_an_hour';
+  static const String productivityTomorrowMorning = 'productivity_tomorrow_morning';
+  static const String productivityNextWeek = 'productivity_next_week';
+  static const String productivityPickATime = 'productivity_pick_a_time';
+  static const String productivityDeleteNote = 'productivity_delete_note';
   static const String addNewCategory = 'add_new_category';
   static const String addVariant = 'add_variant';
   static const String belowTheLowStockLine = 'below_the_low_stock_line';
@@ -431,6 +458,9 @@ class TrKeys {
   static const String profitabilityCouldNotBeLoaded = 'profitability_could_not_be_loaded';
   static const String retry = 'retry';
   static const String asOf = 'as.of';
+  static const String weatherUpdateRainFeedback = 'weather_update_rain_feedback';
+  static const String weatherDidItRainAfterYourPreviousNo = 'weather_did_it_rain_after_your_previous_no';
+  static const String weatherNo = 'weather_no';
   static const String drawing = 'drawing';
   static const String points = 'points';
   static const String pointsPlaced = 'points.placed';
@@ -1697,4 +1727,9 @@ class TrKeys {
   static const String schoolReportMarks = 'school_report_marks';
   static const String enterTheLatestMarksFromTheSchoolReport = 'enter_the_latest_marks_from_the_school_report';
   static const String admissionPointScore = 'admission_point_score';
+
+  // Hardcoded UI copy moved to trkeys (Ray, 2026-11-20).
+  static const String checkConnectionAndTryAgain = 'check_connection_and_try_again';
+  static const String continueOffline = 'continue_offline';
+  static const String skipGuide = 'skip_guide';
 }

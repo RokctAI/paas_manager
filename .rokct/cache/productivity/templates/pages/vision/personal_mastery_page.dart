@@ -34,6 +34,8 @@
 // productivity gate (approved 7e) and the full nav is folded.
 // VIEW-FIRST (flag (a)): no compose or edit chrome.
 
+import 'package:base_sdk/src/services/tr_keys.dart';
+import 'package:base_sdk/src/services/app_helpers.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:base_sdk/base_sdk.dart';
 import 'package:base_sdk/src/presentation/theme/app_style.dart';
@@ -151,7 +153,7 @@ class _PersonalMasteryPageState extends State<PersonalMasteryPage> {
             children: <Widget>[
               12.verticalSpace,
               PlanHeader(
-                title: 'Personal mastery',
+                title: AppHelpers.getTranslation(TrKeys.productivityPersonalMastery),
                 count: goals == null
                     ? null
                     : MasteryGoalList.countLabel(goals.length),

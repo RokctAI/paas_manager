@@ -159,7 +159,7 @@ void main() {
       final int end = page.indexOf('...notes ? _noteListRows()', bar);
       final String line = page.substring(bar, end);
       expect(line, contains('WorkspaceListSegment('));
-      expect(line, contains("tooltip: 'Calendar mode'"));
+      expect(line, contains("tooltip: AppHelpers.getTranslation(TrKeys.productivityCalendarMode)"));
       expect(line, contains('onTap: _exportData'));
       expect(line, contains('onTap: _importData'));
       // Calendar mode stays a tasks-only utility.
@@ -175,7 +175,7 @@ void main() {
       expect(
         page,
         contains(
-          "TaskListHeader(title: 'Tasks', count: displayedTodos.length)",
+          "TaskListHeader(title: AppHelpers.getTranslation(TrKeys.productivityTasks), count: displayedTodos.length)",
         ),
       );
     });

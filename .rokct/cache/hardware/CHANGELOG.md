@@ -1,3 +1,7 @@
+## 1.1.4
+
+- feat(i18n): the camera retry and settings buttons use the existing base trkeys (Ray, 2026-11-20).
+
 ## 1.1.3
 
 - fix(loading): page-level spinners replaced by the base_sdk shimmer `Loading()` (Ray, 2026-11-13: "Remove spinners where you can and use shimmers in the apps").

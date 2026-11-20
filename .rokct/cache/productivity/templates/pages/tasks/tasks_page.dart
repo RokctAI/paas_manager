@@ -12,6 +12,8 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
+import 'package:base_sdk/src/services/tr_keys.dart';
+import 'package:base_sdk/src/services/app_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:uuid/uuid.dart';
@@ -584,7 +586,7 @@ class _TasksWorkspaceState extends State<TasksWorkspace> {
                     color: AppStyle.inkFor(Theme.of(context).brightness),
                   ),
                   decoration: InputDecoration(
-                    hintText: 'Write it down…',
+                    hintText: AppHelpers.getTranslation(TrKeys.productivityWriteItDown),
                     hintStyle: AppStyle.interNormal(
                       size: 13,
                       color: AppStyle.faintFor(Theme.of(context).brightness),
@@ -801,7 +803,7 @@ class _TasksWorkspaceState extends State<TasksWorkspace> {
           if (_isReminderSet && _selectedDeadline != null) {
             LocalNotifications.scheduleNotification(
               id: notifId,
-              title: 'Task Reminder',
+              title: AppHelpers.getTranslation(TrKeys.productivityTaskReminder),
               body: title,
               scheduledDate: _selectedDeadline!,
             );
@@ -843,7 +845,7 @@ class _TasksWorkspaceState extends State<TasksWorkspace> {
         if (_isReminderSet && _selectedDeadline != null) {
           LocalNotifications.scheduleNotification(
             id: notifId,
-            title: 'Task Reminder',
+            title: AppHelpers.getTranslation(TrKeys.productivityTaskReminder),
             body: title,
             scheduledDate: _selectedDeadline!,
           );
@@ -990,7 +992,7 @@ class _TasksWorkspaceState extends State<TasksWorkspace> {
     if (next['reminder'] == true) {
       LocalNotifications.scheduleNotification(
         id: notifId,
-        title: 'Task Reminder',
+        title: AppHelpers.getTranslation(TrKeys.productivityTaskReminder),
         body: task['title'],
         scheduledDate: DateTime.parse(next['deadline'] as String),
       );
@@ -1017,7 +1019,7 @@ class _TasksWorkspaceState extends State<TasksWorkspace> {
           if (deadlineDate.isAfter(DateTime.now())) {
             LocalNotifications.scheduleNotification(
               id: notifId,
-              title: 'Task Reminder',
+              title: AppHelpers.getTranslation(TrKeys.productivityTaskReminder),
               body: _todos[index]['title'],
               scheduledDate: deadlineDate,
             );
@@ -1692,7 +1694,7 @@ class _TasksWorkspaceState extends State<TasksWorkspace> {
     LocalNotifications.cancelNotification(notifId);
     LocalNotifications.scheduleNotification(
       id: notifId,
-      title: 'Task Reminder',
+      title: AppHelpers.getTranslation(TrKeys.productivityTaskReminder),
       body: task.title,
       scheduledDate: remindAt,
     );
@@ -1773,7 +1775,7 @@ class _TasksWorkspaceState extends State<TasksWorkspace> {
                           icon: _showCalendar
                               ? Remix.list_unordered
                               : Remix.calendar_line,
-                          tooltip: 'Calendar mode',
+                          tooltip: AppHelpers.getTranslation(TrKeys.productivityCalendarMode),
                           onTap: () =>
                               setState(() => _showCalendar = !_showCalendar),
                         ),
@@ -1867,7 +1869,7 @@ class _TasksWorkspaceState extends State<TasksWorkspace> {
       // CANONICAL 700 — header and count pill. Its two utilities, 832
       // calendar mode and 835 Backup, moved up to the segment's line
       // (WorkspaceListBar in _listPlane), where notes reach them too.
-      TaskListHeader(title: 'Tasks', count: displayedTodos.length),
+      TaskListHeader(title: AppHelpers.getTranslation(TrKeys.productivityTasks), count: displayedTodos.length),
       10.verticalSpace,
       _searchField(),
       10.verticalSpace,
@@ -2077,7 +2079,7 @@ class _TasksWorkspaceState extends State<TasksWorkspace> {
         color: AppStyle.inkFor(Theme.of(context).brightness),
       ),
       decoration: InputDecoration(
-        hintText: 'Search tasks or categories...',
+        hintText: AppHelpers.getTranslation(TrKeys.productivitySearchTasksOrCategories),
         hintStyle: AppStyle.interNormal(
           size: 13,
           color: AppStyle.faintFor(Theme.of(context).brightness),

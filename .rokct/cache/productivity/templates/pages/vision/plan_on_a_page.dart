@@ -41,6 +41,8 @@
 // honestly until Strategic Objective carries is_90_day_priority +
 // status, and is not drawn.
 
+import 'package:base_sdk/src/services/tr_keys.dart';
+import 'package:base_sdk/src/services/app_helpers.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:base_sdk/base_sdk.dart';
 // The base barrel does not re-export the theme tokens, and section 41
@@ -190,7 +192,7 @@ class _PlanOnAPagePageState extends State<PlanOnAPagePage> {
             children: <Widget>[
               12.verticalSpace,
               PlanHeader(
-                title: 'Plan on a page',
+                title: AppHelpers.getTranslation(TrKeys.productivityPlanOnAPage),
                 count: board == null
                     ? null
                     : board.countLabel(withObjectives: span > 1),
