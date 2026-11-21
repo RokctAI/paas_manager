@@ -1,7 +1,7 @@
 {
   "packages": {
     "base_sdk": {
-      "version": "1.113.1",
+      "version": "1.113.4",
       "files": {
         "flutter_native_splash.yaml": "d469a133b5e1631d6ba811b048d290449224075edad2153189cfb2edc3f4d100",
         "android/app/src/main/res/font/montserrat_extrabolditalic.ttf": "d38bac61eda8d8c002b1a852f5368901a085fbe1d844b5e0a149b674e22e2cdd",
@@ -213,7 +213,7 @@
       }
     },
     "users_sdk": {
-      "version": "1.5.3",
+      "version": "1.5.4",
       "files": {
         "lib/application/profile/profile_state.dart": "df2ec681941504e54fe30bcf3bece48c914a29b9410552e054cf47a018f7fb62",
         "lib/application/profile/profile_provider.dart": "ae79e4577eb7e7733148596b79c2b8f3145de74d1bdb36bfab55db1d9c3fc0c4",
@@ -245,7 +245,7 @@
       ]
     },
     "merchants_sdk": {
-      "version": "1.38.7",
+      "version": "1.38.8",
       "files": {
         "assets/audio/notification.wav": "9d62af6f1c8df010941d1daa17162175d87293bd78371c787803b5a11f95cb9d",
         "assets/svgs/menu.svg": "9767d04ac4d157e423f972259a9c2c455a6a629c4098cc9c2fe8f9722451441b",
@@ -262,7 +262,7 @@
         "lib/presentation/components/restaurant/small_weekday_item.dart": "3e43135189e9cec0ee25a7b5f38600a0049e1ae04f1c192f0bab32ab22514ebf",
         "lib/presentation/routes/merchants_adapters.dart": "213d5b9b38f3fe77afed0a7b92f3e90e6fddc1cbd3adc8e529f190b2f9a5fc13",
         "lib/presentation/component/helper/horizontal_image_picker.dart": "3d3899881badec29e56a192b721aa6761568cf988cbefe42f4035d76175e9f21",
-        "lib/presentation/pages/sync_issues/sync_issues_page.dart": "46702327eb60705aa902a84334aeb8f50fdfe1de41c27ca00853f7ba5a4fec81",
+        "lib/presentation/pages/sync_issues/sync_issues_page.dart": "f32930cdf4038a4e70e95b3c820365c18ee27624e571efa3b75a348b3299a261",
         "lib/presentation/pages/billing/billing_page.dart": "a01cc2d621f3a89b76f2db7f245e1209ff48aaff3a57fbff59d801939efd7603",
         "lib/presentation/pages/billing/checkout_page.dart": "d071f9463612f37032ab0eb9089922f73521b9ad87a41661eb6d1a1e9b64806a",
         "lib/presentation/adapters/pos_orders_adapter.dart": "adaaaa7d29143a078bc0f7d49468aa254316b6fabf3ba32f486f8643187b7f82",
@@ -2337,8 +2337,8 @@
   },
   "sdk_cache": {
     "base": {
-      "version": "1.113.1",
-      "source_hash": "058bd9219a11f4bb"
+      "version": "1.113.4",
+      "source_hash": "92c795608e159ed7"
     },
     "comms": {
       "version": "1.23.5",
@@ -2349,12 +2349,12 @@
       "source_hash": "a7949a7114b023c6"
     },
     "users": {
-      "version": "1.5.3",
-      "source_hash": "cb3062dc3a29f9fd"
+      "version": "1.5.4",
+      "source_hash": "7a69d52d5946b5df"
     },
     "merchants": {
-      "version": "1.38.7",
-      "source_hash": "c00d5c8439904b93"
+      "version": "1.38.8",
+      "source_hash": "5e94cac13dcc5557"
     },
     "products": {
       "version": "1.13.5",
