@@ -85,6 +85,13 @@ import 'package:auth_sdk/src/common/presentation/pages/auth/login/login_screen.d
 import 'package:auth_sdk/src/common/presentation/pages/auth/login/login_page.dart';
 import 'package:comms_sdk/src/common/di/comms_di.dart';
 import 'package:users_sdk/src/common/di/users_di.dart';
+import 'package:booking_sdk/src/common/di/booking_di.dart';
+import 'package:booking_sdk/src/manager/di/manager_booking_di.dart';
+import 'package:merchants_sdk/src/common/di/merchants_di.dart';
+import 'package:merchants_sdk/src/manager/di/manager_merchants_di.dart';
+import 'package:orders_sdk/src/common/di/orders_di.dart';
+import 'package:orders_sdk/src/manager/di/manager_orders_di.dart';
+import 'package:products_sdk/src/common/di/products_di.dart';
 
 // Tour screens: one entry per guided-tour step that an SDK's render fragment
 // (templates/render/*.render.yaml) binds by name. Written by shared-workflows'
@@ -159,6 +166,21 @@ Future<void> registerDemoDependencies() async {
   AuthSdkDependencies.register(GetIt.I);
   UsersSdkDependencies.register(GetIt.I);
   CommsSdkDependencies.register(GetIt.I);
+}
+
+/// The SDKs the guided tour's manager screens resolve (order history, POS
+/// products, loads, drivers, reservations), mirroring main.dart's generated
+/// DI hooks. Registered only for generated tour screens, so the login
+/// sheet's own frames are unchanged. Without them each screen throws a GetIt
+/// "not registered" StateError and is skipped (paas_manager run 44811013166).
+void registerTourDependencies() {
+  MerchantsSdkDependencies.register(GetIt.I);
+  ProductsSdkDependencies.register(GetIt.I);
+  OrdersSdkDependencies.register(GetIt.I);
+  BookingSdkDependencies.register(GetIt.I);
+  ManagerOrdersDependencies.register(GetIt.I);
+  ManagerMerchantsDependencies.register(GetIt.I);
+  ManagerBookingDependencies.register(GetIt.I);
 }
 
 /// EXCEPTION: device history the demo mode cannot supply.
@@ -666,6 +688,7 @@ Future<void> renderVariant(
   // implementations; then any device history the demo mode cannot supply.
   registerExceptionStubs();
   await tester.runAsync(registerDemoDependencies);
+  if (screen != null) await tester.runAsync(() async => registerTourDependencies());
   await seedDeviceHistory(tester);
   registerScreen();
 
@@ -806,7 +829,35 @@ List<ElementSpec> _textChip(String key, String label, String text) =>
 
 final Map<String, List<ElementSpec> Function()> kTourScreenChips =
     <String, List<ElementSpec> Function()>{
-  // CHIPS
+  'order_history': () => <ElementSpec>[
+        ..._textChip('manager.history.tabs', 'Delivered and cancelled orders', 'Delivered'),
+      ],
+  'order_pos_products': () => <ElementSpec>[
+        ..._textChip('manager.walkin.search', 'Search products for a walk-in order', 'Search products'),
+        ..._textChip('manager.walkin.categories', 'Categories - popular, mains and more', 'Popular'),
+        ..._textChip('manager.walkin.product', 'Tap a product to add it to the order', 'Peri-peri chicken wrap'),
+      ],
+  'order_loads': () => <ElementSpec>[
+        ..._textChip('manager.loads.tabs', 'Open and closed loads', 'Open loads'),
+        ..._textChip('manager.loads.card', 'A load - driver, stock left of what was issued', 'Sipho Dlamini'),
+      ],
+  'order_issue_load': () => <ElementSpec>[
+        ..._textChip('manager.issue.driver', 'Choose the driver who takes the load', 'Choose a deliveryman'),
+        ..._textChip('manager.issue.product', 'Tap products to put them on the load', 'Peri-peri chicken wrap'),
+        ..._textChip('manager.issue.submit', 'Issue the load to the driver', 'Issue to driver'),
+      ],
+  'order_shop_drivers': () => <ElementSpec>[
+        ..._textChip('manager.drivers.card', 'Your shop drivers - remove one with the icon', 'Sipho Dlamini'),
+      ],
+  'quick_flow': () => <ElementSpec>[
+        ..._textChip('manager.quick.shop', 'The shop these switches apply to', 'Blue Tap'),
+        ..._textChip('manager.quick.accept', 'Auto-accept incoming orders', 'Auto-accept'),
+        ..._textChip('manager.quick.complete', 'Auto-complete at Ready', 'Auto-complete'),
+        ..._textChip('manager.quick.autodial', 'Keypad autodial presets', 'Keypad autodial'),
+      ],
+  'sync_issues': () => <ElementSpec>[
+        ..._textChip('manager.sync.filters', 'Filter parked changes by shop, product or order', 'Product'),
+      ],
 };
 
 void main() {
