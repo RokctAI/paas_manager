@@ -1,7 +1,7 @@
 {
   "packages": {
     "base_sdk": {
-      "version": "1.113.4",
+      "version": "1.113.8",
       "files": {
         "flutter_native_splash.yaml": "d469a133b5e1631d6ba811b048d290449224075edad2153189cfb2edc3f4d100",
         "android/app/src/main/res/font/montserrat_extrabolditalic.ttf": "d38bac61eda8d8c002b1a852f5368901a085fbe1d844b5e0a149b674e22e2cdd",
@@ -1762,7 +1762,7 @@
       "boot_hooks": []
     },
     "weather_sdk": {
-      "version": "1.7.0",
+      "version": "1.8.1",
       "files": {
         "lib/presentation/components/weather/weather_widget.dart": "6aae054f49933e8074156f5cf5ce581e64d8be3e903b56e4d53e70722e6ecf61"
       },
@@ -1815,7 +1815,26 @@
         "asOf": "as.of",
         "weatherUpdateRainFeedback": "weather_update_rain_feedback",
         "weatherDidItRainAfterYourPreviousNo": "weather_did_it_rain_after_your_previous_no",
-        "weatherNo": "weather_no"
+        "weatherNo": "weather_no",
+        "weatherClear": "weather_clear",
+        "weatherPartlyCloudy": "weather_partly_cloudy",
+        "weatherCloudy": "weather_cloudy",
+        "weatherFog": "weather_fog",
+        "weatherDrizzle": "weather_drizzle",
+        "weatherRain": "weather_rain",
+        "weatherShowers": "weather_showers",
+        "weatherThunder": "weather_thunder",
+        "weatherSnow": "weather_snow",
+        "weatherHighShort": "weather_high_short",
+        "weatherLowShort": "weather_low_short",
+        "weatherMon": "weather_mon",
+        "weatherTue": "weather_tue",
+        "weatherWed": "weather_wed",
+        "weatherThu": "weather_thu",
+        "weatherFri": "weather_fri",
+        "weatherSat": "weather_sat",
+        "weatherSun": "weather_sun",
+        "weatherSourceMetNorway": "weather_source_met_norway"
       }
     },
     "revenue_sdk": {
@@ -2011,7 +2030,7 @@
       ]
     },
     "auth_sdk": {
-      "version": "1.22.8",
+      "version": "1.22.9",
       "files": {
         "lib/presentation/routes/auth_route_pages.dart": "2ac2b6adab56b09a0eff1aa19478717f2c632e0415c46ac0c06f04549e77602c",
         "lib/presentation/routes/registration_step_pages.dart": "68aed195fc07db746a0919c7ba6d47ffa445ca86e7d9cf6ee50fbcb00e82d3c2",
@@ -2337,16 +2356,16 @@
   },
   "sdk_cache": {
     "base": {
-      "version": "1.113.4",
-      "source_hash": "92c795608e159ed7"
+      "version": "1.113.8",
+      "source_hash": "bd58e4e7cf754d7e"
     },
     "comms": {
       "version": "1.23.5",
       "source_hash": "70455c821e3ec891"
     },
     "auth": {
-      "version": "1.22.8",
-      "source_hash": "a7949a7114b023c6"
+      "version": "1.22.9",
+      "source_hash": "39c9150c774ed345"
     },
     "users": {
       "version": "1.5.4",
@@ -2409,8 +2428,8 @@
       "source_hash": "dc26dd31a6b36799"
     },
     "weather": {
-      "version": "1.7.0",
-      "source_hash": "25cb4f5d6a83de4e"
+      "version": "1.8.1",
+      "source_hash": "c8cf3af911c76c25"
     },
     "zones": {
       "version": "1.7.4",
