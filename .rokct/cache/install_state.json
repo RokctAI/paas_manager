@@ -1762,7 +1762,7 @@
       "boot_hooks": []
     },
     "weather_sdk": {
-      "version": "1.8.1",
+      "version": "1.9.1",
       "files": {
         "lib/presentation/components/weather/weather_widget.dart": "6aae054f49933e8074156f5cf5ce581e64d8be3e903b56e4d53e70722e6ecf61"
       },
@@ -2428,8 +2428,8 @@
       "source_hash": "dc26dd31a6b36799"
     },
     "weather": {
-      "version": "1.8.1",
-      "source_hash": "c8cf3af911c76c25"
+      "version": "1.9.1",
+      "source_hash": "20b271d17e1f45fb"
     },
     "zones": {
       "version": "1.7.4",
