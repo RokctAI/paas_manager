@@ -1762,7 +1762,7 @@
       "boot_hooks": []
     },
     "weather_sdk": {
-      "version": "1.9.1",
+      "version": "1.9.2",
       "files": {
         "lib/presentation/components/weather/weather_widget.dart": "6aae054f49933e8074156f5cf5ce581e64d8be3e903b56e4d53e70722e6ecf61"
       },
@@ -2179,7 +2179,7 @@
       ]
     },
     "desktop_sdk": {
-      "version": "1.2.2",
+      "version": "1.2.3",
       "files": {
         "windows/CMakeLists.txt": "f56eb803753a78cf5f2494822e2bb226e590ecc7ff05ae43115bda46919842d6",
         "windows/.gitignore": "96345475f1a3c66bd32d28178fba151ab1506b35b1f7857b8f7651863093ea11",
@@ -2428,16 +2428,16 @@
       "source_hash": "dc26dd31a6b36799"
     },
     "weather": {
-      "version": "1.9.1",
-      "source_hash": "20b271d17e1f45fb"
+      "version": "1.9.2",
+      "source_hash": "3a956ec0f608d469"
     },
     "zones": {
       "version": "1.7.4",
       "source_hash": "2e49efae89d751d8"
     },
     "desktop": {
-      "version": "1.2.2",
-      "source_hash": "a5f94e74405057ac"
+      "version": "1.2.3",
+      "source_hash": "db828c939a0806a6"
     },
     "hms": {
       "version": "1.1.1",
