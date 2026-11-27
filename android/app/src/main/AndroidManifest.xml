@@ -3,6 +3,7 @@
     <!-- @sdk-android-permissions-start -->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
     <uses-permission android:name="android.permission.VIBRATE"/>
+    <permission android:name="rokct.permission.SESSION_HANDOFF" android:protectionLevel="signature"/>
     <uses-permission android:name="rokct.permission.SESSION_HANDOFF"/>
     <!-- @sdk-android-permissions-end -->
     <!-- HMS wave (hms_sdk): huawei_hmsavailability 6.13.0+300 declares
