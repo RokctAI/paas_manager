@@ -1,7 +1,7 @@
 {
   "packages": {
     "base_sdk": {
-      "version": "1.113.8",
+      "version": "1.115.4",
       "files": {
         "flutter_native_splash.yaml": "d469a133b5e1631d6ba811b048d290449224075edad2153189cfb2edc3f4d100",
         "android/app/src/main/res/font/montserrat_extrabolditalic.ttf": "d38bac61eda8d8c002b1a852f5368901a085fbe1d844b5e0a149b674e22e2cdd",
@@ -245,7 +245,7 @@
       ]
     },
     "merchants_sdk": {
-      "version": "1.38.8",
+      "version": "1.38.10",
       "files": {
         "assets/audio/notification.wav": "9d62af6f1c8df010941d1daa17162175d87293bd78371c787803b5a11f95cb9d",
         "assets/svgs/menu.svg": "9767d04ac4d157e423f972259a9c2c455a6a629c4098cc9c2fe8f9722451441b",
@@ -546,7 +546,8 @@
       "constants": {
         "import": "package:base_sdk/src/presentation/components/floating_nav/floating_nav_mode.dart",
         "overrides": {
-          "tabletNavPlacement": "FloatingNavPlacement.railStart"
+          "tabletNavPlacement": "FloatingNavPlacement.railStart",
+          "webUrl": "const String.fromEnvironment('MANAGER_WEB_URL', defaultValue: String.fromEnvironment('WEB_URL'))"
         }
       },
       "integrations": [
@@ -1319,7 +1320,7 @@
       ]
     },
     "comms_sdk": {
-      "version": "1.23.5",
+      "version": "1.23.6",
       "files": {
         "lib/presentation/pages/notification/notification_list_page.dart": "b9d761a1e7e38f4eaa0e0e8a250274dd3c2f3aeafe96a992d945ceccefda1546",
         "lib/application/notification/notification_state.dart": "055c8ab42969bad5e418061cbe38699458bfc8b74ea7d4def4a03a18e261b184",
@@ -2030,7 +2031,7 @@
       ]
     },
     "auth_sdk": {
-      "version": "1.22.9",
+      "version": "1.24.0",
       "files": {
         "lib/presentation/routes/auth_route_pages.dart": "2ac2b6adab56b09a0eff1aa19478717f2c632e0415c46ac0c06f04549e77602c",
         "lib/presentation/routes/registration_step_pages.dart": "68aed195fc07db746a0919c7ba6d47ffa445ca86e7d9cf6ee50fbcb00e82d3c2",
@@ -2231,7 +2232,7 @@
       ]
     },
     "telemetry_sdk": {
-      "version": "1.1.1",
+      "version": "1.1.2",
       "files": {},
       "routes": [],
       "app_routes": [],
@@ -2356,100 +2357,100 @@
   },
   "sdk_cache": {
     "base": {
-      "version": "1.113.8",
-      "source_hash": "bd58e4e7cf754d7e"
+      "version": "1.115.4",
+      "source_hash": "0412e31c7b8cb8f6"
     },
     "comms": {
-      "version": "1.23.5",
-      "source_hash": "70455c821e3ec891"
+      "version": "1.23.6",
+      "source_hash": "f66cf6ffacf457b5"
     },
     "auth": {
-      "version": "1.22.9",
-      "source_hash": "39c9150c774ed345"
+      "version": "1.24.0",
+      "source_hash": "da294ab93de48911"
     },
     "users": {
       "version": "1.5.4",
-      "source_hash": "7a69d52d5946b5df"
+      "source_hash": "eafa0cfc641477bb"
     },
     "merchants": {
-      "version": "1.38.8",
-      "source_hash": "5e94cac13dcc5557"
+      "version": "1.38.10",
+      "source_hash": "b5139686e43d1aaf"
     },
     "products": {
       "version": "1.13.5",
-      "source_hash": "043ae91783ebb5ae"
+      "source_hash": "c7d860fc0731a0f3"
     },
     "orders": {
       "version": "1.32.3",
-      "source_hash": "a9cda1696b19878d"
+      "source_hash": "ba16edf507cd2340"
     },
     "kitchen": {
       "version": "1.5.7",
-      "source_hash": "45e0d214341f5a95"
+      "source_hash": "e64f8eef656c921b"
     },
     "promotions": {
       "version": "1.4.2",
-      "source_hash": "2c818e5384b18aab"
+      "source_hash": "7f8dd963d5347248"
     },
     "hardware": {
       "version": "1.1.4",
-      "source_hash": "2b7b9e3f7af352bf"
+      "source_hash": "3a9f79ad6c964660"
     },
     "payments": {
       "version": "1.4.1",
-      "source_hash": "fdc68979fa6b1350"
+      "source_hash": "1484f70028b05c7a"
     },
     "subscriptions": {
       "version": "1.8.1",
-      "source_hash": "9d46ccd5b9785295"
+      "source_hash": "575a4621f0715a1b"
     },
     "processing": {
       "version": "1.0.2",
-      "source_hash": "0f71149fa89119ec"
+      "source_hash": "1de5c2d23853daab"
     },
     "productivity": {
       "version": "1.11.1",
-      "source_hash": "39d00997a6a3f4b8"
+      "source_hash": "a82f38c889e1605e"
     },
     "calc": {
       "version": "1.4.3",
-      "source_hash": "985b2e10c734fc03"
+      "source_hash": "85a333215b834c23"
     },
     "corporate": {
       "version": "1.2.1",
-      "source_hash": "42eb71115dcd4610"
+      "source_hash": "5ce2baf08e959cbe"
     },
     "revenue": {
       "version": "1.14.14",
-      "source_hash": "c5557e8796457e70"
+      "source_hash": "9e9eac987f222743"
     },
     "map": {
       "version": "1.5.2",
-      "source_hash": "dc26dd31a6b36799"
+      "source_hash": "34418fcf1bfd7ba6"
     },
     "weather": {
       "version": "1.9.2",
-      "source_hash": "3a956ec0f608d469"
+      "source_hash": "c45f81627c667c32"
     },
     "zones": {
       "version": "1.7.4",
-      "source_hash": "2e49efae89d751d8"
+      "source_hash": "b71e3c21c14bafeb"
     },
     "desktop": {
       "version": "1.2.3",
-      "source_hash": "db828c939a0806a6"
+      "source_hash": "808a03076bc43bf3"
     },
     "hms": {
       "version": "1.1.1",
-      "source_hash": "9413501caf93bf5d"
+      "source_hash": "72d1aec656d62954"
     },
     "telemetry": {
-      "version": "1.1.1",
-      "source_hash": "396500678188b0f2"
+      "version": "1.1.2",
+      "source_hash": "c00e718e39b9e718"
     },
     "booking": {
       "version": "1.2.6",
-      "source_hash": "8f4956730f58350c"
+      "source_hash": "b70902d49ff4348f"
     }
   }
 }
