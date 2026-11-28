@@ -189,6 +189,15 @@ class TrKeys {
   static const String quickFlowStep3Body = 'Ready completes itself — staff serve the customer while the board clears behind them';
   static const String autodialArmedHint = 'Autodial is on — tap a digit to drop its preset straight on the ticket, and once an item is on the keys are money again';
   static const String keysAreMoneyAgain = 'Ticket has an item — the keys are money again';
+  static const String merchantsLoginKicker = 'merchants_login_kicker';
+  static const String merchantsLoginLead = 'merchants_login_lead';
+  static const String merchantsLoginAccent = 'merchants_login_accent';
+  static const String merchantsLoginSub = 'merchants_login_sub';
+  static const String merchantsLoginF1L = 'merchants_login_f1l';
+  static const String merchantsLoginF1V = 'merchants_login_f1v';
+  static const String merchantsLoginF2L = 'merchants_login_f2l';
+  static const String merchantsLoginF2V = 'merchants_login_f2v';
+  static const String merchantsLoginBtn = 'merchants_login_btn';
   static const String ordersToAccept = 'orders_to_accept';
   static const String waitingOnYou = 'waiting_on_you';
   static const String openOrders = 'open_orders';

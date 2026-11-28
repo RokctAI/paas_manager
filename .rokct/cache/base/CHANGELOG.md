@@ -1,3 +1,15 @@
+## 1.116.1
+
+- fix: release builds failed to compile (AssetBundle not imported in whats_new.dart).
+
+## 1.116.0
+
+- feat: SplashArt.builder lets a home SDK draw its approved splash in code (Ray, 28 Nov 2026). Unset, nothing changes.
+
+## 1.115.5
+
+- chore(android): register SticksLauncherBridge and LauncherStickBridge (Bible card flips to a Stick).
+
 ## 1.115.4
 
 - fix: long What's new notes scroll with no visible scrollbar (Ray, 2026-11-27).

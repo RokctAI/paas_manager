@@ -22,4 +22,13 @@ const Map<String, String> kMerchantsEnTranslations = {
   'default': 'Default',
   'needs_attention': 'Needs attention',
   'paid': 'Paid',
+  'merchants_login_kicker': "For shops",
+  'merchants_login_lead': "Your shop.",
+  'merchants_login_accent': "Your sales.",
+  'merchants_login_sub': "See today's orders, your stock and what you sold.",
+  'merchants_login_f1l': "Payouts",
+  'merchants_login_f1v': "Weekly to your bank",
+  'merchants_login_f2l': "Orders",
+  'merchants_login_f2v': "Live as they come in",
+  'merchants_login_btn': "Log in with phone",
 };

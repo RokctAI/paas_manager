@@ -33,6 +33,7 @@ import 'package:auth_sdk/src/common/application/auth/login/login_provider.dart';
 // [refork] embed via EmbeddedWidgets
 import 'package:auth_sdk/src/common/presentation/pages/auth/login/login_card_entry.dart';
 import 'package:auth_sdk/src/common/presentation/pages/auth/login/welcome_back_entry.dart';
+import 'package:auth_sdk/src/common/services/platform_support.dart';
 import 'package:base_sdk/src/services/remembered_account.dart';
 import 'package:auth_sdk/src/common/presentation/pages/auth/login/login_embedded_slots.dart';
 import 'package:auth_sdk/src/common/presentation/pages/auth/login/login_screen.dart';
@@ -287,6 +288,39 @@ class _LoginPageState extends ConsumerState<LoginPage> {
             },
             onSkip: _skip,
           ),
+        ),
+      );
+    }
+
+    // A home SDK that draws its whole login page (AuthEntryConfig
+    // .pageBuilder) gets the same actions the built-in layouts use.
+    final AuthEntryPageBuilder? ownPage = AuthEntryConfig.pageBuilder;
+    if (ownPage != null) {
+      return Directionality(
+        textDirection:
+            LocalStorage.getLangLtr() ? TextDirection.ltr : TextDirection.rtl,
+        child: Scaffold(
+          resizeToAvoidBottomInset: false,
+          body: _showIntro && _slots.introPage != null
+              ? _slots.introPage!
+              : Builder(
+                  builder: (inner) => ownPage(
+                    inner,
+                    AuthEntryActions(
+                      login: _openLoginSheet,
+                      skip: _skip,
+                      register: AuthEntryConfig.showsRegister
+                          ? _openRegisterSheet
+                          : null,
+                      socialSignIns: supportsSocialSignIn
+                          ? AuthEntryConfig.socialSignIns
+                              .where(socialSignInShown)
+                              .toList()
+                          : const [],
+                      socialSignIn: _socialSignIn,
+                    ),
+                  ),
+                ),
         ),
       );
     }

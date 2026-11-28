@@ -43,3 +43,5 @@
 -keep,allowoptimization class **.SticksCallBridge { public *; }
 -keep,allowoptimization class **.SticksNotifyBridge { public *; }
 -keep,allowoptimization class **.LauncherPhoneBridge { public *; }
+-keep,allowoptimization class **.SticksLauncherBridge { public *; }
+-keep,allowoptimization class **.LauncherStickBridge { public *; }

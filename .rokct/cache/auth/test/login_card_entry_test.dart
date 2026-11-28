@@ -87,4 +87,10 @@ void main() {
     await tester.pump();
     expect(find.textContaining(RegExp('Register', caseSensitive: false)), findsOneWidget);
   });
+
+  test('reset clears a home SDK\'s own login page', () {
+    AuthEntryConfig.pageBuilder = (context, actions) => const SizedBox();
+    AuthEntryConfig.reset();
+    expect(AuthEntryConfig.pageBuilder, isNull);
+  });
 }

@@ -119,8 +119,11 @@ class MainActivity: FlutterFragmentActivity() {
          * - LauncherPhoneBridge (launch_sdk): the launcher's own phone
          *   (dialer role, calls, call log, contacts) behind the
          *   `rokct.launch_sdk/phone` channels.
+         * - SticksLauncherBridge (agent_sdk) and LauncherStickBridge
+         *   (launch_sdk): a Stick's ask shown on the launcher's Bible card
+         *   and the owner's answer handed back to Sticks (same-key apps).
          */
-        private val OPTIONAL_BRIDGES = listOf("DefaultHomeBridge", "AppChangesBridge", "SticksCallBridge", "SticksNotifyBridge", "LauncherPhoneBridge")
+        private val OPTIONAL_BRIDGES = listOf("DefaultHomeBridge", "AppChangesBridge", "SticksCallBridge", "SticksNotifyBridge", "LauncherPhoneBridge", "SticksLauncherBridge", "LauncherStickBridge")
 
         /**
          * Bridges registered with `register(FlutterEngine, Activity)`.

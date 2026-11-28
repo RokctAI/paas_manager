@@ -23,4 +23,6 @@ class AuthTrKeys {
   static const String continueWithFacebook = 'auth_continue_with_facebook';
   static const String continueWithApple = 'auth_continue_with_apple';
   static const String or = 'auth_or';
+  static const String createAnAccount = 'auth_create_an_account';
+  static const String statementTerms = 'auth_continue_accepts_terms';
 }

@@ -39,6 +39,8 @@ const Map<String, String> kAuthEnTranslations = {
   'auth_continue_with_facebook': 'Continue with Facebook',
   'auth_continue_with_apple': 'Continue with Apple',
   'auth_continue_with_email': 'Continue with email',
+  'auth_create_an_account': 'Create an account',
+  'auth_continue_accepts_terms': 'By continuing you accept the Terms and Privacy Policy',
   'auth_continue_terms_lead': 'By continuing you accept the',
   'reset_password_text':
       'Enter the email address for your account and we will send you a '

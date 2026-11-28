@@ -1,3 +1,7 @@
+## 1.23.7
+
+- Notifications inbox: app-styled header instead of the default blue bar, placeholder rows instead of spinners, retry line translated.
+
 ## 1.23.6
 
 - chore: licence file carries the owner line.

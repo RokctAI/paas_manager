@@ -53,6 +53,7 @@ import 'package:orders_sdk/src/manager/application/order_products/order_products
 import 'package:orders_sdk/src/manager/infrastructure/models/models.dart';
 import 'package:orders_sdk/src/manager/presentation/loads/issue_load_body.dart';
 
+// planes: single one issue-load form; content keeps a readable width
 @RoutePage(name: 'ManagerIssueLoadRoute')
 class IssueLoadPage extends ConsumerStatefulWidget {
   const IssueLoadPage({super.key});
@@ -95,8 +96,20 @@ class _IssueLoadPageState extends ConsumerState<IssueLoadPage> {
         : categoriesState.categories[categoriesState.activeIndex - 2].id;
   }
 
+  /// Tablets: the page keeps a readable width in the middle rather than
+  /// stretching edge to edge; phones are unchanged.
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) => ColoredBox(
+        color: Theme.of(context).scaffoldBackgroundColor,
+        child: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 720),
+            child: Builder(builder: _buildPlane),
+          ),
+        ),
+      );
+
+  Widget _buildPlane(BuildContext context) {
     final bool isLtr = LocalStorage.getLangLtr();
     return Directionality(
       textDirection: isLtr ? TextDirection.ltr : TextDirection.rtl,

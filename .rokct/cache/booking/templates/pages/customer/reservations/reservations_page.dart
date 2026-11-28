@@ -23,10 +23,21 @@ import 'package:flutter/material.dart';
 
 import 'package:booking_sdk/src/customer/presentation/reservations/my_reservations_view.dart';
 
+// planes: single one customer page; content keeps a readable width on tablets
 @RoutePage(name: 'ReservationsRoute')
 class ReservationsPage extends StatelessWidget {
   const ReservationsPage({super.key});
 
   @override
-  Widget build(BuildContext context) => const MyReservationsView();
+  Widget build(BuildContext context) => ColoredBox(
+        color: Theme.of(context).scaffoldBackgroundColor,
+        child: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 720),
+            child: Builder(builder: _buildPlane),
+          ),
+        ),
+      );
+
+  Widget _buildPlane(BuildContext context) => const MyReservationsView();
 }

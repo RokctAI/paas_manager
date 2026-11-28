@@ -18,6 +18,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:base_sdk/src/presentation/components/lists/list_language.dart';
 import 'package:base_sdk/src/presentation/components/loading.dart';
+import 'package:base_sdk/src/presentation/adaptive/planes.dart';
 import 'package:base_sdk/src/presentation/theme/app_style.dart';
 import 'package:base_sdk/src/services/app_helpers.dart';
 import 'package:base_sdk/src/services/tr_keys.dart';
@@ -54,8 +55,9 @@ class _ShopReservationsViewState extends ConsumerState<ShopReservationsView> {
   }
 
   Future<void> _setStatus(ReservationData r, ReservationStatus status) async {
-    final error =
-        await ref.read(shopReservationsProvider.notifier).setStatus(r.id, status);
+    final error = await ref
+        .read(shopReservationsProvider.notifier)
+        .setStatus(r.id, status);
     if (!mounted || error == null) return;
     AppHelpers.showCheckTopSnackBar(context, error);
   }
@@ -65,6 +67,38 @@ class _ShopReservationsViewState extends ConsumerState<ShopReservationsView> {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final state = ref.watch(shopReservationsProvider);
     final notifier = ref.read(shopReservationsProvider.notifier);
+
+    Widget card(ReservationData r) {
+      final busy = state.updatingId == r.id;
+      return ReservationCard(
+        reservation: r,
+        isDark: isDark,
+        showUser: true,
+        actions: Wrap(
+          spacing: 8.w,
+          children: [
+            if (r.status != ReservationStatus.accepted)
+              _action(
+                BookingTrKeys.markAccepted,
+                AppStyle.green,
+                busy ? null : () => _setStatus(r, ReservationStatus.accepted),
+              ),
+            if (r.status != ReservationStatus.newStatus)
+              _action(
+                BookingTrKeys.markNew,
+                AppStyle.pendingDark,
+                busy ? null : () => _setStatus(r, ReservationStatus.newStatus),
+              ),
+            if (r.status != ReservationStatus.cancelled)
+              _action(
+                BookingTrKeys.markCancelled,
+                AppStyle.red,
+                busy ? null : () => _setStatus(r, ReservationStatus.cancelled),
+              ),
+          ],
+        ),
+      );
+    }
 
     Widget body;
     if (state.noShop) {
@@ -108,54 +142,40 @@ class _ShopReservationsViewState extends ConsumerState<ShopReservationsView> {
             child: visible.isEmpty
                 ? BookingMessage(
                     isDark: isDark,
-                    text: state.error ??
+                    text:
+                        state.error ??
                         AppHelpers.getTranslation(
-                            BookingTrKeys.noReservationsYet),
+                          BookingTrKeys.noReservationsYet,
+                        ),
                   )
                 : RefreshIndicator(
                     onRefresh: notifier.fetch,
-                    child: ListView.builder(
-                      padding: EdgeInsets.fromLTRB(16.w, 12.h, 16.w, 24.h),
-                      itemCount: visible.length,
-                      itemBuilder: (context, i) {
-                        final r = visible[i];
-                        final busy = state.updatingId == r.id;
-                        return ReservationCard(
-                          reservation: r,
-                          isDark: isDark,
-                          showUser: true,
-                          actions: Wrap(
-                            spacing: 8.w,
-                            children: [
-                              if (r.status != ReservationStatus.accepted)
-                                _action(
-                                  BookingTrKeys.markAccepted,
-                                  AppStyle.green,
-                                  busy
-                                      ? null
-                                      : () => _setStatus(
-                                          r, ReservationStatus.accepted),
-                                ),
-                              if (r.status != ReservationStatus.newStatus)
-                                _action(
-                                  BookingTrKeys.markNew,
-                                  AppStyle.pendingDark,
-                                  busy
-                                      ? null
-                                      : () => _setStatus(
-                                          r, ReservationStatus.newStatus),
-                                ),
-                              if (r.status != ReservationStatus.cancelled)
-                                _action(
-                                  BookingTrKeys.markCancelled,
-                                  AppStyle.red,
-                                  busy
-                                      ? null
-                                      : () => _setStatus(
-                                          r, ReservationStatus.cancelled),
-                                ),
-                            ],
-                          ),
+                    child: LayoutBuilder(
+                      builder: (context, box) {
+                        // Phones: one column. Tablets: full-width cards in 2-3
+                        // columns, so the page uses the whole screen.
+                        final cols = PlaneHost.planeCountFor(box.maxWidth);
+                        return ListView.builder(
+                          padding: EdgeInsets.fromLTRB(16.w, 12.h, 16.w, 24.h),
+                          itemCount: (visible.length + cols - 1) ~/ cols,
+                          itemBuilder: (context, row) {
+                            if (cols == 1) return card(visible[row]);
+                            return IntrinsicHeight(
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  for (var c = 0; c < cols; c++) ...[
+                                    if (c > 0) SizedBox(width: 12.w),
+                                    Expanded(
+                                      child: row * cols + c < visible.length
+                                          ? card(visible[row * cols + c])
+                                          : const SizedBox.shrink(),
+                                    ),
+                                  ],
+                                ],
+                              ),
+                            );
+                          },
                         );
                       },
                     ),
@@ -173,14 +193,14 @@ class _ShopReservationsViewState extends ConsumerState<ShopReservationsView> {
   }
 
   Widget _action(String key, Color color, VoidCallback? onTap) => TextButton(
-        onPressed: onTap,
-        style: TextButton.styleFrom(
-          padding: EdgeInsets.symmetric(horizontal: 10.w),
-          minimumSize: Size(0, 32.h),
-        ),
-        child: Text(
-          AppHelpers.getTranslation(key),
-          style: AppStyle.interSemi(size: 13, color: color),
-        ),
-      );
+    onPressed: onTap,
+    style: TextButton.styleFrom(
+      padding: EdgeInsets.symmetric(horizontal: 10.w),
+      minimumSize: Size(0, 32.h),
+    ),
+    child: Text(
+      AppHelpers.getTranslation(key),
+      style: AppStyle.interSemi(size: 13, color: color),
+    ),
+  );
 }

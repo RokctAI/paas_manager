@@ -1,3 +1,11 @@
+## 1.39.1
+
+- Tablets: manager and customer pages keep a readable width or are marked single plane.
+
+## 1.39.0
+
+- feat: the approved Juvo Manager login (Ray, APPROVED.md 27-28 Nov 2026) through auth_sdk 1.26.0's StatementEntry, light and dark. Needs auth_sdk >= 1.26.0 (Users#181).
+
 ## 1.38.10
 
 - Manager app reads its own web address, MANAGER_WEB_URL (Ray 2026-11-27: each paas app has its own key; the old marketplace keys are removed).

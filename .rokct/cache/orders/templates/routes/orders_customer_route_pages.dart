@@ -42,26 +42,49 @@ import 'package:orders_sdk/src/common/presentation/pages/parcel/parcel_page.dart
 import 'package:orders_sdk/src/common/presentation/pages/parcel/widgets/info_screen.dart';
 
 /// `/order` - the customer's active / history / refund order tabs.
+// planes: single one customer page; content keeps a readable width on tablets
 @RoutePage(name: 'OrdersListRoute')
 class OrdersListRouteView extends StatelessWidget {
   const OrdersListRouteView({super.key});
 
   @override
-  Widget build(BuildContext context) => const OrdersListPage();
+  Widget build(BuildContext context) => ColoredBox(
+        color: Theme.of(context).scaffoldBackgroundColor,
+        child: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 720),
+            child: Builder(builder: _buildPlane),
+          ),
+        ),
+      );
+
+  Widget _buildPlane(BuildContext context) => const OrdersListPage();
 }
 
 /// `/orderScreen` - the checkout (order type, address, payment, confirm).
+// planes: single one customer page; content keeps a readable width on tablets
 @RoutePage(name: 'OrderRoute')
 class OrderRouteView extends StatelessWidget {
   const OrderRouteView({super.key});
 
   @override
-  Widget build(BuildContext context) => const OrderPage();
+  Widget build(BuildContext context) => ColoredBox(
+        color: Theme.of(context).scaffoldBackgroundColor,
+        child: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 720),
+            child: Builder(builder: _buildPlane),
+          ),
+        ),
+      );
+
+  Widget _buildPlane(BuildContext context) => const OrderPage();
 }
 
 /// `/order_progress` - one order's live status. `orderId` also rides as a
 /// query parameter so a notification deep link (`/order_progress?orderId=`)
 /// resolves without a typed push.
+// planes: single one customer page; content keeps a readable width on tablets
 @RoutePage(name: 'OrderProgressRoute')
 class OrderProgressRouteView extends StatelessWidget {
   final String? orderId;
@@ -72,10 +95,21 @@ class OrderProgressRouteView extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) => OrderProgressPage(orderId: orderId);
+  Widget build(BuildContext context) => ColoredBox(
+        color: Theme.of(context).scaffoldBackgroundColor,
+        child: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 720),
+            child: Builder(builder: _buildPlane),
+          ),
+        ),
+      );
+
+  Widget _buildPlane(BuildContext context) => OrderProgressPage(orderId: orderId);
 }
 
 /// `/parcel_page` - the door-to-door parcel order form.
+// planes: single one customer page; content keeps a readable width on tablets
 @RoutePage(name: 'ParcelRoute')
 class ParcelRouteView extends StatelessWidget {
   final bool isBackButton;
@@ -83,11 +117,22 @@ class ParcelRouteView extends StatelessWidget {
   const ParcelRouteView({super.key, this.isBackButton = true});
 
   @override
-  Widget build(BuildContext context) => ParcelPage(isBackButton: isBackButton);
+  Widget build(BuildContext context) => ColoredBox(
+        color: Theme.of(context).scaffoldBackgroundColor,
+        child: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 720),
+            child: Builder(builder: _buildPlane),
+          ),
+        ),
+      );
+
+  Widget _buildPlane(BuildContext context) => ParcelPage(isBackButton: isBackButton);
 }
 
 /// `/info_screen` - the parcel onboarding info slides (`index` selects the
 /// slide; the page's own "next" replaces itself with `index + 1`).
+// planes: single one customer page; content keeps a readable width on tablets
 @RoutePage(name: 'InfoRoute')
 class InfoRouteView extends StatelessWidget {
   final int index;
@@ -95,19 +140,41 @@ class InfoRouteView extends StatelessWidget {
   const InfoRouteView({super.key, @QueryParam('index') this.index = 0});
 
   @override
-  Widget build(BuildContext context) => InfoPage(index: index);
+  Widget build(BuildContext context) => ColoredBox(
+        color: Theme.of(context).scaffoldBackgroundColor,
+        child: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 720),
+            child: Builder(builder: _buildPlane),
+          ),
+        ),
+      );
+
+  Widget _buildPlane(BuildContext context) => InfoPage(index: index);
 }
 
 /// `/parcel_list_page` - the customer's active / history parcel tabs.
+// planes: single one customer page; content keeps a readable width on tablets
 @RoutePage(name: 'ParcelListRoute')
 class ParcelListRouteView extends StatelessWidget {
   const ParcelListRouteView({super.key});
 
   @override
-  Widget build(BuildContext context) => const ParcelListPage();
+  Widget build(BuildContext context) => ColoredBox(
+        color: Theme.of(context).scaffoldBackgroundColor,
+        child: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 720),
+            child: Builder(builder: _buildPlane),
+          ),
+        ),
+      );
+
+  Widget _buildPlane(BuildContext context) => const ParcelListPage();
 }
 
 /// `/parcel_progress_page` - one parcel's live status.
+// planes: single one customer page; content keeps a readable width on tablets
 @RoutePage(name: 'ParcelProgressRoute')
 class ParcelProgressRouteView extends StatelessWidget {
   final String? parcelId;
@@ -118,5 +185,15 @@ class ParcelProgressRouteView extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) => ParcelProgressPage(parcelId: parcelId);
+  Widget build(BuildContext context) => ColoredBox(
+        color: Theme.of(context).scaffoldBackgroundColor,
+        child: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 720),
+            child: Builder(builder: _buildPlane),
+          ),
+        ),
+      );
+
+  Widget _buildPlane(BuildContext context) => ParcelProgressPage(parcelId: parcelId);
 }

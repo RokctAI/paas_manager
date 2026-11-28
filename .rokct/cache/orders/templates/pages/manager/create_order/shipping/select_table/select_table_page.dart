@@ -32,6 +32,7 @@ import 'package:base_sdk/src/services/tr_keys.dart';
 import 'package:orders_sdk/src/manager/application/order/shipping/table/table_provider.dart';
 
 
+// planes: single one picker step of the new-order flow; content keeps a readable width
 @RoutePage(name: 'ManagerSelectTableRoute')
 class SelectTablePage extends ConsumerStatefulWidget {
   final String? sectionId;
@@ -60,8 +61,20 @@ class _SelectTablePageState extends ConsumerState<SelectTablePage> {
     _refreshController.dispose();
   }
 
+  /// Tablets: the page keeps a readable width in the middle rather than
+  /// stretching edge to edge; phones are unchanged.
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) => ColoredBox(
+        color: Theme.of(context).scaffoldBackgroundColor,
+        child: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 720),
+            child: Builder(builder: _buildPlane),
+          ),
+        ),
+      );
+
+  Widget _buildPlane(BuildContext context) {
     return KeyboardDismisser(
       child: Scaffold(
         backgroundColor: AppStyle.bgGrey,

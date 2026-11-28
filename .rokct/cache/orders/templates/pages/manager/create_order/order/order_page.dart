@@ -30,6 +30,7 @@ import 'package:base_sdk/src/services/local_storage.dart';
 import 'package:base_sdk/src/services/tr_keys.dart';
 import 'package:orders_sdk/src/manager/application/order_cart/order_cart_provider.dart';
 
+// planes: single one step of the new-order flow; content keeps a readable width
 @RoutePage(name: 'ManagerOrderRoute')
 class OrderPage extends ConsumerStatefulWidget {
   const OrderPage({super.key});
@@ -46,8 +47,20 @@ class OrderPage extends ConsumerStatefulWidget {
 /// The shipped pop | Next pair is re-housed in the two-state language:
 /// Next at the START, the corner Back pill (347) at the END.
 class _OrderPageState extends ConsumerState<OrderPage> {
+  /// Tablets: the page keeps a readable width in the middle rather than
+  /// stretching edge to edge; phones are unchanged.
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) => ColoredBox(
+        color: Theme.of(context).scaffoldBackgroundColor,
+        child: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 720),
+            child: Builder(builder: _buildPlane),
+          ),
+        ),
+      );
+
+  Widget _buildPlane(BuildContext context) {
     return Scaffold(
       backgroundColor: AppStyle.surfaceFor(Theme.of(context).brightness),
       body: Stack(

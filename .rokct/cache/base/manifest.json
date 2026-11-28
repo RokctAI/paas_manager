@@ -1,6 +1,9 @@
 {
   "name": "base_sdk",
-  "version": "1.115.4",
+  "version": "1.116.1",
+  "_comment_version_1_116_1": "1.116.0 -> 1.116.1: fix the release build (whats_new.dart used AssetBundle without importing it; every app shell failed to compile on 27 Nov). No schema change.",
+  "_comment_version_1_116_0": "1.115.5 -> 1.116.0: SplashArt (exported). A home SDK sets SplashArt.builder to draw its approved splash in code; the phone splash shows it instead of splash.png and without the from ROKCT line (Ray, 28 Nov 2026). No cmd or route changed.",
+  "_comment_version_1_115_5": "1.115.4 -> 1.115.5: MainActivity OPTIONAL_BRIDGES lists SticksLauncherBridge (agent_sdk 1.68.0) and LauncherStickBridge (launch_sdk 1.34.0), with R8 keeps, for the launcher Bible card that flips to a Stick (Ray, 2026-11-27). A build without either SDK is unchanged.",
   "_comment_version_1_115_0": "1.114.1 -> 1.115.0 (Ray, 2026-11-27): in-app What's new. The release workflow packs assets/whats_new.json before it builds (shared-workflows), so each version carries its own note; the splash page opens WhatsNewSheet once after an update when it hands over to the main screen. A fresh install only records the version. Off in demo sessions. New tr_key whats_new_in (EN + AF bundled). Apps without the asset are unchanged.",
   "_comment_version_1_113_5": "1.113.4 -> 1.113.5 (Ray, 2026-11-21: offline-registered user has no profile and cannot edit it): the profile shows the saved user at once and skips the server for an offline:<id> account; edits on such an account are saved on the phone and auth_sdk sends the names when it syncs. getUser() returns null after setUser(null).",
   "_comment_version_1_113_4": "1.113.3 -> 1.113.4: MainActivity OPTIONAL_BRIDGES lists SticksNotifyBridge (agent_sdk 1.48.0, Sticks phone notifications with a private lock-screen version, Ray 2026-11-21), with its proguard keep rule. Apps without the bridge are unchanged.",

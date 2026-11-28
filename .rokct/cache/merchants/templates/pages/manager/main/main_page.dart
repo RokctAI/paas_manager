@@ -58,6 +58,7 @@ import 'package:base_sdk/src/presentation/theme/app_style.dart';
 import 'package:base_sdk/src/presentation/components/blur_wrap.dart';
 import 'package:base_sdk/src/presentation/components/keyboard_dismisser.dart';
 
+// planes: single the manager shell lays out its own rail and tabs from the window size
 @RoutePage(name: 'MainRoute')
 class MainPage extends StatefulWidget {
   const MainPage({super.key});

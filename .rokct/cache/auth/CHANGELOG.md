@@ -1,3 +1,11 @@
+## 1.26.0
+
+- feat: `StatementEntry`, the approved "statement" login (Ray, 2026-11-27/28) shared by Juvo Driver, Manager and Launcher: wordmark and Skip, glow, mono label, two-line headline, promise, two facts, main button, Create an account and terms. A home SDK fills a `StatementEntrySpec` (words as translation keys, dark and light colours) through `AuthEntryConfig.pageBuilder`. Skip hides when the app has no guest surface (`showsGuestSkip = false`). Scrolls on very short phones.
+
+## 1.25.0
+
+- feat: `AuthEntryConfig.pageBuilder` lets a home SDK draw its whole login page (Ray, 2026-11-27: each app gets its own login, not a recoloured template). The builder gets `AuthEntryActions` (login, skip, register when offered, and the social sign-ins this platform can use), so sign-in itself stays auth_sdk's. Pages must follow light and dark mode and always offer Skip.
+
 ## 1.24.0
 
 - feat: "Welcome back" sign-in (Ray, 2026-11-27, approved). When Log out kept the account on this device (base_sdk 1.114.0 `RememberedAccount`), the login page shows the account in one tap, with "Remove from this device", "Use another account" and Skip. The tap opens the usual login sheet with the email filled in; the password is still asked. Needs base_sdk 1.114.0 (core#1661).

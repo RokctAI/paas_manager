@@ -1,6 +1,6 @@
 {
   "name": "merchants_sdk",
-  "version": "1.38.10",
+  "version": "1.39.1",
   "_comment_version_1_38_0": "1.37.0 -> 1.38.0 (manager till): a scan the catalog does not know is no longer dropped. PosCartState.unknownBarcode holds it, the camera pauses, and the till asks \"We don't recognise this barcode\" with the code in the printer face, \"Add this product\" and \"Scan again\" (render approved by Ray 2026-10-30 19:22Z): a bottom sheet on a phone and at the two-plane fold, the Add Items pane's place in plane 2 at three planes. Scan again (or resuming the camera, or closing the sheet) clears it via PosCartNotifier.dismissUnknownBarcode, which also resets the 2s dedupe so the same code can be scanned again at once. Add this product calls BillingPage.onAddUnknownProduct; the installed main_page.dart passes products_sdk's CreateProductModal.open with the barcode prefilled (needs products_sdk >= 1.13.0). New tr_keys barcodeNotRecognised, barcodeNotInProductsYet, wouldYouLikeToAddThisProduct, addThisProduct, scanAgain.",
   "_comment_version_1_36_1": "1.36.0 -> 1.36.1: version for the coach-mark guide mounted on this SDK's primary page (GuideHost and GuideAnchor from base_sdk 1.92.0, off in demo sessions). The mount landed without a version change; see CHANGELOG.",
   "_comment_version_1_36_0": "1.35.0 -> 1.36.0 (manager mode): app_type.manager gains host_integration.android_application_xml, an exported activity-alias .RokctManagerEntry of MainActivity answering rokct.intent.action.MANAGER with CATEGORY_DEFAULT and no data - exactly what launch_sdk's DefaultHomeBridge.fleetManagerPackages queries - so a launcher on a device with the manager app installed turns manager mode on. Only the manager flavor gets it; customer and driver composes are unchanged. No Dart change.",
@@ -250,7 +250,16 @@
         "quickFlowStep3Title": "No per-order taps",
         "quickFlowStep3Body": "Ready completes itself — staff serve the customer while the board clears behind them",
         "autodialArmedHint": "Autodial is on — tap a digit to drop its preset straight on the ticket, and once an item is on the keys are money again",
-        "keysAreMoneyAgain": "Ticket has an item — the keys are money again"
+        "keysAreMoneyAgain": "Ticket has an item — the keys are money again",
+        "merchantsLoginKicker": "merchants_login_kicker",
+        "merchantsLoginLead": "merchants_login_lead",
+        "merchantsLoginAccent": "merchants_login_accent",
+        "merchantsLoginSub": "merchants_login_sub",
+        "merchantsLoginF1L": "merchants_login_f1l",
+        "merchantsLoginF1V": "merchants_login_f1v",
+        "merchantsLoginF2L": "merchants_login_f2l",
+        "merchantsLoginF2V": "merchants_login_f2v",
+        "merchantsLoginBtn": "merchants_login_btn"
       },
       "session_policy": {
         "allowed_roles": [
@@ -335,26 +344,26 @@
       ],
       "_comment_di_hooks": "Manager role DI moved out of paas_manager's tracked main.dart (M5, scratchpad/di-hooks-declarations.md; internally isRegistered-guarded). Order 12 instead of the doc's 10: orders_sdk already declares order 10 and the installer warns on cross-SDK order collisions - the intended sequence (role DIs before the order-20 facades) is preserved.",
       "boot_hooks": [
-    {
-      "id": "merchants-en-bundled-translations",
-      "order": 65,
-      "body": "BundledTranslations.register('en', kMerchantsEnTranslations);",
-      "imports": [
-        "import 'package:base_sdk/src/services/bundled_translations.dart';",
-        "import 'package:merchants_sdk/src/translations/merchants_en_translations.dart';"
-      ],
-      "_comment": "Registers this SDK's bundled English (en) map into base_sdk's BundledTranslations at boot. Backend-served rows still win."
-    },
-    {
-      "id": "merchants-af-bundled-translations",
-      "order": 64,
-      "body": "BundledTranslations.register('af', kMerchantsAfTranslations);",
-      "imports": [
-        "import 'package:base_sdk/src/services/bundled_translations.dart';",
-        "import 'package:merchants_sdk/src/translations/merchants_af_translations.dart';"
-      ],
-      "_comment": "Registers this SDK's bundled Afrikaans (af) map into base_sdk's BundledTranslations at boot. Backend-served rows still win."
-    },
+        {
+          "id": "merchants-en-bundled-translations",
+          "order": 65,
+          "body": "BundledTranslations.register('en', kMerchantsEnTranslations);",
+          "imports": [
+            "import 'package:base_sdk/src/services/bundled_translations.dart';",
+            "import 'package:merchants_sdk/src/translations/merchants_en_translations.dart';"
+          ],
+          "_comment": "Registers this SDK's bundled English (en) map into base_sdk's BundledTranslations at boot. Backend-served rows still win."
+        },
+        {
+          "id": "merchants-af-bundled-translations",
+          "order": 64,
+          "body": "BundledTranslations.register('af', kMerchantsAfTranslations);",
+          "imports": [
+            "import 'package:base_sdk/src/services/bundled_translations.dart';",
+            "import 'package:merchants_sdk/src/translations/merchants_af_translations.dart';"
+          ],
+          "_comment": "Registers this SDK's bundled Afrikaans (af) map into base_sdk's BundledTranslations at boot. Backend-served rows still win."
+        },
         {
           "id": "merchants-manager-splash-preserve",
           "order": 1,
@@ -362,6 +371,17 @@
           "imports": [
             "import 'package:flutter_native_splash/flutter_native_splash.dart';"
           ]
+        },
+        {
+          "id": "merchants-login-page",
+          "order": 66,
+          "body": "AuthEntryConfig.pageBuilder = (context, actions) => StatementEntry(spec: const StatementEntrySpec(appName: 'Juvo Manager', kickerKey: 'merchants_login_kicker', titleLeadKey: 'merchants_login_lead', titleAccentKey: 'merchants_login_accent', subtitleKey: 'merchants_login_sub', facts: [('merchants_login_f1l', 'merchants_login_f1v'), ('merchants_login_f2l', 'merchants_login_f2v')], primaryLabelKey: 'merchants_login_btn', dark: StatementEntryTone(background: Color(0xFF0D0B0A), glow: Color(0xFF3A1600), accent: Color(0xFFFF6600), onAccent: Color(0xFF0B0B0B), accentText: Color(0xFFFF6600)), light: StatementEntryTone(background: Color(0xFFFAF6F2), glow: Color(0xFFFFD9BD), accent: Color(0xFFFF6600), onAccent: Color(0xFF0B0B0B), accentText: Color(0xFFE05A00))), actions: actions);",
+          "imports": [
+            "import 'dart:ui';",
+            "import 'package:auth_sdk/src/common/services/entry_config.dart';",
+            "import 'package:auth_sdk/src/common/presentation/pages/auth/login/statement_entry.dart';"
+          ],
+          "_comment": "Ray approved the manager login render (login-per-app/approved/APPROVED.md, 27-28 Nov 2026). Draws auth_sdk 1.26.0's StatementEntry with this app's words and colours."
         }
       ],
       "_comment_boot_hooks": "Splash hold until base_sdk's SplashPage calls FlutterNativeSplash.remove() - the base main.dart template says the splash-holding app's HOME SDK declares this, and merchants_sdk is manager's home SDK. ensureInitialized() re-returns the existing binding, so calling it again inside the hook is safe. No flutter/material import entry: main.dart already imports it statically and a wiring duplicate would trip duplicate_import."

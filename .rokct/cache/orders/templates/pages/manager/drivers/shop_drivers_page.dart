@@ -36,6 +36,7 @@ import 'package:base_sdk/src/services/local_storage.dart';
 import 'package:base_sdk/src/services/tr_keys.dart';
 import 'package:orders_sdk/src/manager/presentation/drivers/shop_drivers_body.dart';
 
+// planes: single ShopDriversBody switches to its wide layout from the window size
 @RoutePage(name: 'ManagerShopDriversRoute')
 class ShopDriversPage extends StatelessWidget {
   const ShopDriversPage({super.key});

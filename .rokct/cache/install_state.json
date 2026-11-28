@@ -1,7 +1,7 @@
 {
   "packages": {
     "base_sdk": {
-      "version": "1.115.4",
+      "version": "1.116.1",
       "files": {
         "flutter_native_splash.yaml": "d469a133b5e1631d6ba811b048d290449224075edad2153189cfb2edc3f4d100",
         "android/app/src/main/res/font/montserrat_extrabolditalic.ttf": "d38bac61eda8d8c002b1a852f5368901a085fbe1d844b5e0a149b674e22e2cdd",
@@ -245,11 +245,11 @@
       ]
     },
     "merchants_sdk": {
-      "version": "1.38.10",
+      "version": "1.39.1",
       "files": {
         "assets/audio/notification.wav": "9d62af6f1c8df010941d1daa17162175d87293bd78371c787803b5a11f95cb9d",
         "assets/svgs/menu.svg": "9767d04ac4d157e423f972259a9c2c455a6a629c4098cc9c2fe8f9722451441b",
-        "lib/presentation/pages/main/main_page.dart": "0c0e0846d7f2df6e9e246d7a22895b5d9117f4487fef8f45a184c175d4fe56e1",
+        "lib/presentation/pages/main/main_page.dart": "06fc4d17a87a87ba490a4dc33b90610bd49226e3b385eb97a91de48d8b5d9888",
         "lib/presentation/pages/main/widgets/bottom_navigator_item.dart": "9086f84d83295ec9eedec3eff18595ef23af14346c339fb1d46b6aa36da23387",
         "lib/presentation/pages/main/widgets/buttons_bouncing_effect.dart": "861cc919c2b45ddfe407ea86abbea7cc9cced4052f2bab06850770111c26fa94",
         "lib/presentation/pages/restaurant/restaurant_page.dart": "73dc83d6c02550a8e171c11ea931dbfe9abf6c60936b509d4159ca22a672fe87",
@@ -473,7 +473,16 @@
         "quickFlowStep3Title": "No per-order taps",
         "quickFlowStep3Body": "Ready completes itself \u2014 staff serve the customer while the board clears behind them",
         "autodialArmedHint": "Autodial is on \u2014 tap a digit to drop its preset straight on the ticket, and once an item is on the keys are money again",
-        "keysAreMoneyAgain": "Ticket has an item \u2014 the keys are money again"
+        "keysAreMoneyAgain": "Ticket has an item \u2014 the keys are money again",
+        "merchantsLoginKicker": "merchants_login_kicker",
+        "merchantsLoginLead": "merchants_login_lead",
+        "merchantsLoginAccent": "merchants_login_accent",
+        "merchantsLoginSub": "merchants_login_sub",
+        "merchantsLoginF1L": "merchants_login_f1l",
+        "merchantsLoginF1V": "merchants_login_f1v",
+        "merchantsLoginF2L": "merchants_login_f2l",
+        "merchantsLoginF2V": "merchants_login_f2v",
+        "merchantsLoginBtn": "merchants_login_btn"
       },
       "app_assets": [
         "assets/demo/merchants/",
@@ -541,6 +550,17 @@
           "imports": [
             "import 'package:flutter_native_splash/flutter_native_splash.dart';"
           ]
+        },
+        {
+          "id": "merchants-login-page",
+          "order": 66,
+          "body": "AuthEntryConfig.pageBuilder = (context, actions) => StatementEntry(spec: const StatementEntrySpec(appName: 'Juvo Manager', kickerKey: 'merchants_login_kicker', titleLeadKey: 'merchants_login_lead', titleAccentKey: 'merchants_login_accent', subtitleKey: 'merchants_login_sub', facts: [('merchants_login_f1l', 'merchants_login_f1v'), ('merchants_login_f2l', 'merchants_login_f2v')], primaryLabelKey: 'merchants_login_btn', dark: StatementEntryTone(background: Color(0xFF0D0B0A), glow: Color(0xFF3A1600), accent: Color(0xFFFF6600), onAccent: Color(0xFF0B0B0B), accentText: Color(0xFFFF6600)), light: StatementEntryTone(background: Color(0xFFFAF6F2), glow: Color(0xFFFFD9BD), accent: Color(0xFFFF6600), onAccent: Color(0xFF0B0B0B), accentText: Color(0xFFE05A00))), actions: actions);",
+          "imports": [
+            "import 'dart:ui';",
+            "import 'package:auth_sdk/src/common/services/entry_config.dart';",
+            "import 'package:auth_sdk/src/common/presentation/pages/auth/login/statement_entry.dart';"
+          ],
+          "_comment": "Ray approved the manager login render (login-per-app/approved/APPROVED.md, 27-28 Nov 2026). Draws auth_sdk 1.26.0's StatementEntry with this app's words and colours."
         }
       ],
       "constants": {
@@ -742,7 +762,7 @@
       ]
     },
     "orders_sdk": {
-      "version": "1.32.3",
+      "version": "1.32.4",
       "files": {
         "lib/presentation/pages/orders/orders_home_page.dart": "a10b65eacf865064b211eab1fdfe079197f723a04d880242df0529df35b5bc6b",
         "lib/presentation/pages/orders/details/order_details_modal.dart": "66f5c681515ecf97ef9963274858ffaff00668230cc34a94b5a9b3d9bfd88bfb",
@@ -759,21 +779,21 @@
         "lib/presentation/pages/create_order/details/widgets/food_extras.dart": "8bc9b9a21f0faace4f3d61ef2bc9b793091aad94ef135555ae039a17d05480bd",
         "lib/presentation/pages/create_order/details/widgets/w_ingredient.dart": "9afa5920e99c5062c45d2b9cb03fdba1f980963c7c806ba988fb617755bf25fc",
         "lib/presentation/pages/create_order/details/widgets/ingredient_item.dart": "076ba5955d975313e6fb7cb35ec6f4a3960e9b4d1f8345ee7db006039d5f05b2",
-        "lib/presentation/pages/create_order/shipping/shipping_address_page.dart": "f6d27f5362ec4aa44713c79f5bb926291982f60cdc7d3b315392f384d614c49f",
-        "lib/presentation/pages/create_order/shipping/select_section/select_section_page.dart": "65dbf032e5e584a31e0cf00c9442b8cd8cf3183f9a0a08eb0a57e732a1c35c03",
+        "lib/presentation/pages/create_order/shipping/shipping_address_page.dart": "0f83ded467a32ebb97a2f74e6b11727f12c8ec19386cf5a2ed599ecc0687cab7",
+        "lib/presentation/pages/create_order/shipping/select_section/select_section_page.dart": "586542848b66c2067ddaf8f671305e053c3840f5f44d5444af5b59eb67302c1a",
         "lib/presentation/pages/create_order/shipping/select_section/widgets/section_item.dart": "792b0636aa3e708570c5b1532de1e7a2cf3073bc4fe62c26b632cc5dd5e9dcc5",
-        "lib/presentation/pages/create_order/shipping/details/delivery_time_page.dart": "fe58420ed88eb97a5ba9da1e409f2ecf70fef4a57e58fcfea31033dd40a53e1d",
+        "lib/presentation/pages/create_order/shipping/details/delivery_time_page.dart": "908aa6c4483fc5a3993951947093bef0d3506c63dd75ecb84b84de78eaa20f64",
         "lib/presentation/pages/create_order/shipping/details/widgets/payment_item.dart": "5c9e8a0956c4a5199b28f6e8c57a4bbe99704739c8e089ecdbdd430f8c53d39b",
-        "lib/presentation/pages/create_order/shipping/address/select_address_page.dart": "1402225ea5c3dadcbe18ee994c6a7ad4244052f4c46ec0c09a5bd9af2cc8d6c2",
+        "lib/presentation/pages/create_order/shipping/address/select_address_page.dart": "7f3c303e49b8ef0e7ad8ee59ec9fe2ac21f5a5f2f949ccf516b19d598c588323",
         "lib/presentation/pages/create_order/shipping/address/searched_location_item.dart": "36571b7a10ef96898e59a5df7ae89cb02555c7b494708ca07b8a8b2252790441",
-        "lib/presentation/pages/create_order/shipping/select_table/select_table_page.dart": "04270e30b1a6c634eb530e7d6a4473636eabd9ca609da283fad2a2063e7f9ec3",
+        "lib/presentation/pages/create_order/shipping/select_table/select_table_page.dart": "d9b2e1ea4d1f6cbd818f22f6a6adc3a6f1d87256b7ade44fc12a815f82250e46",
         "lib/presentation/pages/create_order/shipping/select_table/widgets/table_item.dart": "5880837491e4cb1577fba62af71e1829e241a7df121d9902e3299f3b58ea5ee5",
         "lib/presentation/pages/create_order/shipping/widgets/delivery_type_item.dart": "df4d3cb66ff28b059ce2aead031f5991252b5ea38488d815bf791c320472d367",
         "lib/presentation/pages/create_order/shipping/widgets/searched_user_item.dart": "21b40035f61bb41196d87716fe2cdd098b7aa032196b686d6a8b8cf8c1baaf0d",
-        "lib/presentation/pages/create_order/shipping/select_user/select_user_page.dart": "96e8c6e86a393665277250b116ace6f2c34308075bf3a7a67d5c997cfdc7a26c",
+        "lib/presentation/pages/create_order/shipping/select_user/select_user_page.dart": "cf427ab6b0b3956462c16543d0330efde7a9e327671ef76fdd9c61fca7c0e6ab",
         "lib/presentation/pages/create_order/shipping/select_user/widgets/create_user_modal.dart": "9385355e9691469350ecb010ac2ef4314f9c4caac1f666be4508e9a99dd0ac65",
         "lib/presentation/pages/create_order/shipping/select_user/widgets/user_item.dart": "b74264de9cb4d06d97935f437e3bdbf907e5d76d66fc089e52c08ce6847ab1d6",
-        "lib/presentation/pages/create_order/order/order_page.dart": "49ccef444129acb031e76442de28c5f6df91c79ac5df52bde8e0f36a373761d9",
+        "lib/presentation/pages/create_order/order/order_page.dart": "fda68a97a5eaa7f7f7593f13b85498f2db851a66f6865dc4129b6f6a999e5022",
         "lib/presentation/pages/create_order/order/widgets/title_price.dart": "85059609f752ab965f8df057c4970bad1292c5ac8d8a18646c401fe9dd034b65",
         "lib/presentation/pages/order_history/order_history.dart": "8aec3e1e582732b52cdb96d55d93e71c05f8cddb20737d784d7102c58b78fb00",
         "lib/presentation/components/orders/orders_item.dart": "69781a9e66291af2380c42cf796137ce97c3daa6df18a33b728681d0c76cf18d",
@@ -793,8 +813,8 @@
         "lib/presentation/pages/orders/widgets/board/board_order_column.dart": "96a4362463465c34c8c05cba54d5204b0ce4d3a5d6680cd5033724a034d0516d",
         "lib/presentation/pages/create_order/order/widgets/order_pane.dart": "9c7592ec05e4ea0e96ede7a7ef43a3292a87fda4cee1cb7d2303b9c57be34eaf",
         "lib/presentation/pages/loads/loads_page.dart": "50d1c1f857271084eec2d22bf216d9403fe5a043795ce8924a53909552125075",
-        "lib/presentation/pages/loads/issue_load_page.dart": "00dd5283e0cc93d579f4b2c89734dc9d8a6a2c45b32c2ef834da96c7e6c71028",
-        "lib/presentation/pages/drivers/shop_drivers_page.dart": "18f0f37f84ef54178bc4619d8f92097590a219c83d06e993cea74b06cf6499bf"
+        "lib/presentation/pages/loads/issue_load_page.dart": "ef9e9519dc09d55b1932ad55a452790a787bbd4533517ff6dc943c454efd287f",
+        "lib/presentation/pages/drivers/shop_drivers_page.dart": "08d937e1aa824ce025f8fa5f93ff4ae0455d383eb70ba0a77348eae3fcc33b72"
       },
       "routes": [
         {
@@ -1320,7 +1340,7 @@
       ]
     },
     "comms_sdk": {
-      "version": "1.23.6",
+      "version": "1.23.7",
       "files": {
         "lib/presentation/pages/notification/notification_list_page.dart": "b9d761a1e7e38f4eaa0e0e8a250274dd3c2f3aeafe96a992d945ceccefda1546",
         "lib/application/notification/notification_state.dart": "055c8ab42969bad5e418061cbe38699458bfc8b74ea7d4def4a03a18e261b184",
@@ -2031,7 +2051,7 @@
       ]
     },
     "auth_sdk": {
-      "version": "1.24.0",
+      "version": "1.25.0",
       "files": {
         "lib/presentation/routes/auth_route_pages.dart": "2ac2b6adab56b09a0eff1aa19478717f2c632e0415c46ac0c06f04549e77602c",
         "lib/presentation/routes/registration_step_pages.dart": "68aed195fc07db746a0919c7ba6d47ffa445ca86e7d9cf6ee50fbcb00e82d3c2",
@@ -2243,11 +2263,11 @@
       "boot_hooks": []
     },
     "booking_sdk": {
-      "version": "1.2.6",
+      "version": "1.2.7",
       "files": {
-        "lib/presentation/pages/reservations/shop_reservations_page.dart": "e81667095f2399cad563a7e1b20042d69d250bb9f62b81e789068c3490fbebb6",
-        "lib/presentation/pages/reservations/reservation_tables_page.dart": "32de44d0a192f06cd08a14f4e7afcfea0d25513ecbe5391ce2b8f3a4ac92dc48",
-        "lib/presentation/pages/reservations/reservation_schedule_page.dart": "9e0b69dc1284923f49a266c7aa617763857b66a98cb8ea233a1c2e295fd491bd"
+        "lib/presentation/pages/reservations/shop_reservations_page.dart": "16a227c8e7dc44e829fc29faf45d16ff5e5880324d6b4a3a7c7bcd047a14c6cb",
+        "lib/presentation/pages/reservations/reservation_tables_page.dart": "f451db7b866a1e2b94cf40c5fd95ee0d1bca0c606129e36ac919673b072a2ee4",
+        "lib/presentation/pages/reservations/reservation_schedule_page.dart": "6661656ac5f4984bc980b60931949603f41c237103d2bf753cdd88c89118f88d"
       },
       "routes": [
         {
@@ -2357,32 +2377,32 @@
   },
   "sdk_cache": {
     "base": {
-      "version": "1.115.4",
-      "source_hash": "0412e31c7b8cb8f6"
+      "version": "1.116.1",
+      "source_hash": "d003c10bdfcf4fc0"
     },
     "comms": {
-      "version": "1.23.6",
-      "source_hash": "f66cf6ffacf457b5"
+      "version": "1.23.7",
+      "source_hash": "67fd322dd7efbd71"
     },
     "auth": {
-      "version": "1.24.0",
-      "source_hash": "da294ab93de48911"
+      "version": "1.25.0",
+      "source_hash": "24dfffedcb11eb47"
     },
     "users": {
       "version": "1.5.4",
       "source_hash": "eafa0cfc641477bb"
     },
     "merchants": {
-      "version": "1.38.10",
-      "source_hash": "b5139686e43d1aaf"
+      "version": "1.39.1",
+      "source_hash": "e931fa02b6e3e2f6"
     },
     "products": {
       "version": "1.13.5",
       "source_hash": "c7d860fc0731a0f3"
     },
     "orders": {
-      "version": "1.32.3",
-      "source_hash": "ba16edf507cd2340"
+      "version": "1.32.4",
+      "source_hash": "20455fb189d053f7"
     },
     "kitchen": {
       "version": "1.5.7",
@@ -2449,8 +2469,8 @@
       "source_hash": "c00e718e39b9e718"
     },
     "booking": {
-      "version": "1.2.6",
-      "source_hash": "b70902d49ff4348f"
+      "version": "1.2.7",
+      "source_hash": "f225a785cd480b72"
     }
   }
 }

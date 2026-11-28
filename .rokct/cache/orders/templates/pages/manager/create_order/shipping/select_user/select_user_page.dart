@@ -14,6 +14,7 @@
 
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:base_sdk/src/presentation/adaptive/planes.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -32,6 +33,7 @@ import 'package:base_sdk/src/services/tr_keys.dart';
 import 'package:orders_sdk/src/manager/application/order/shipping/user/order_user_provider.dart';
 
 
+// planes: single one picker step of the new-order flow; its lists use 2-3 columns on tablets
 @RoutePage(name: 'ManagerSelectUserRoute')
 class SelectUserPage extends ConsumerStatefulWidget {
   const SelectUserPage({super.key});
@@ -102,25 +104,48 @@ class _SelectUserPageState extends ConsumerState<SelectUserPage> {
                           onLoading: () => event.fetchMoreUsers(
                             refreshController: _refreshController,
                           ),
-                          child: ListView.builder(
-                            physics: const BouncingScrollPhysics(),
-                            itemCount: state.users.length,
-                            shrinkWrap: true,
-                            padding: REdgeInsets.only(
-                              left: 16,
-                              right: 16,
-                              top: 20,
-                              bottom: 80,
-                            ),
-                            itemBuilder: (context, index) => UserItem(
-                              user: state.users[index],
-                              isSelected: index == state.selectedIndex,
-                              onTap: () {
-                                event.setSelectedUser(index);
-                                context.maybePop(state.users[index].phone);
-                              },
-                            ),
-                          ),
+                          child: LayoutBuilder(builder: (context, box) {
+                            // Phones: one column. Tablets: full-width rows in
+                            // 2-3 columns.
+                            final cols = PlaneHost.planeCountFor(box.maxWidth);
+                            Widget item(int index) => UserItem(
+                                  user: state.users[index],
+                                  isSelected: index == state.selectedIndex,
+                                  onTap: () {
+                                    event.setSelectedUser(index);
+                                    context.maybePop(state.users[index].phone);
+                                  },
+                                );
+                            return ListView.builder(
+                              physics: const BouncingScrollPhysics(),
+                              itemCount:
+                                  (state.users.length + cols - 1) ~/ cols,
+                              shrinkWrap: true,
+                              padding: REdgeInsets.only(
+                                left: 16,
+                                right: 16,
+                                top: 20,
+                                bottom: 80,
+                              ),
+                              itemBuilder: (context, row) => cols == 1
+                                  ? item(row)
+                                  : Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        for (var c = 0; c < cols; c++) ...[
+                                          if (c > 0) 12.horizontalSpace,
+                                          Expanded(
+                                            child: row * cols + c <
+                                                    state.users.length
+                                                ? item(row * cols + c)
+                                                : const SizedBox.shrink(),
+                                          ),
+                                        ],
+                                      ],
+                                    ),
+                            );
+                          }),
                         ),
                       ),
               ],

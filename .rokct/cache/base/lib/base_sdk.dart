@@ -185,6 +185,8 @@ export 'src/di/base_di.dart';
 export 'src/navigation/app_routes.dart';
 export 'src/navigation/route_presence.dart';
 export 'src/navigation/signed_out_entry.dart';
+export 'src/presentation/pages/initial/splash/splash_art.dart';
+export 'src/presentation/pages/initial/splash/approved_splashes.dart';
 export 'src/navigation/embedded_widgets.dart';
 export 'src/guide/guide_definition.dart';
 export 'src/guide/guide_progress.dart';

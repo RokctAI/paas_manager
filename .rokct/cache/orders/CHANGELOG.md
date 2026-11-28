@@ -1,3 +1,7 @@
+## 1.32.4
+
+- Tablets: manager and customer pages keep a readable width or are marked single plane.
+
 ## 1.32.3
 
 - feat(i18n): bundled Afrikaans (and missing English) copy for every translation key this SDK uses, so both languages are complete.

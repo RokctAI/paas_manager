@@ -86,6 +86,15 @@ class AuthEntryConfig {
   /// accounts are made elsewhere (Sticks: on the web) turns it off.
   static bool showsRegister = true;
 
+  /// The whole login page, drawn by the home SDK (Ray, 2026-11-27: each app
+  /// gets its own login, not a recoloured template). Wins over [layout].
+  /// The builder gets [AuthEntryActions]: the very same Login / Register /
+  /// Skip / social actions the built-in layouts use, so sign-in itself is
+  /// unchanged. The page must follow light and dark mode and always offer
+  /// Skip (Ray's login rules, 2026-11-27). Set from the home SDK's di_hook,
+  /// like [heroBuilder].
+  static AuthEntryPageBuilder? pageBuilder;
+
   /// Puts every field back to its default. Tests only.
   @visibleForTesting
   static void reset() {
@@ -100,7 +109,42 @@ class AuthEntryConfig {
     signInLineTrKey = null;
     loginLabelTrKey = null;
     socialSignIns = const [];
+    pageBuilder = null;
   }
+}
+
+/// Draws a home SDK's own login page; see [AuthEntryConfig.pageBuilder].
+typedef AuthEntryPageBuilder = Widget Function(
+    BuildContext context, AuthEntryActions actions);
+
+/// What a home SDK's own login page can do. Every action is auth_sdk's own,
+/// so a custom page never reimplements sign-in.
+@immutable
+class AuthEntryActions {
+  const AuthEntryActions({
+    required this.login,
+    required this.skip,
+    this.register,
+    this.socialSignIns = const [],
+    this.socialSignIn,
+  });
+
+  /// Opens the login sheet (email / phone and password).
+  final VoidCallback login;
+
+  /// Continues without an account. Every login offers it.
+  final VoidCallback skip;
+
+  /// Opens the register sheet. Null when the app makes accounts elsewhere
+  /// ([AuthEntryConfig.showsRegister] is false): draw no Register button.
+  final VoidCallback? register;
+
+  /// The social sign-ins this platform can actually use, already filtered
+  /// (no Google on iOS, no Apple on Android, untested ones hidden).
+  final List<AuthSocialSignIn> socialSignIns;
+
+  /// Runs one of [socialSignIns].
+  final void Function(AuthSocialSignIn method)? socialSignIn;
 }
 
 /// The login page's welcome layouts a home SDK can pick from.

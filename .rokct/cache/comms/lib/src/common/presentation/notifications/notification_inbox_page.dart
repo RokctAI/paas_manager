@@ -198,8 +198,24 @@ class _NotificationInboxPageState extends State<NotificationInboxPage> {
     final brightness = Theme.of(context).brightness;
     final unread = _unread;
     return Scaffold(
+      backgroundColor: AppStyle.surfaceFor(brightness),
+      // App-styled header, not the default Material bar: same surface as the
+      // page, ink title, no back arrow (the floating nav carries back, and on
+      // a tablet this page sits in a pane beside the profile).
       appBar: AppBar(
-        title: Text(AppHelpers.getTranslation(TrKeys.notifications)),
+        backgroundColor: AppStyle.surfaceFor(brightness),
+        foregroundColor: AppStyle.inkFor(brightness),
+        elevation: 0,
+        scrolledUnderElevation: 0,
+        automaticallyImplyLeading: false,
+        title: Text(
+          AppHelpers.getTranslation(TrKeys.notifications),
+          style: TextStyle(
+            color: AppStyle.inkFor(brightness),
+            fontSize: 22,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
         actions: [
           if (unread > 0)
             Padding(
@@ -224,7 +240,11 @@ class _NotificationInboxPageState extends State<NotificationInboxPage> {
 
   Widget _body(Brightness brightness) {
     if (_loading && _items.isEmpty) {
-      return const Center(child: CircularProgressIndicator());
+      // Placeholder rows while the first page loads, never a spinner.
+      return ListView(
+        physics: const NeverScrollableScrollPhysics(),
+        children: [for (var i = 0; i < 6; i++) _placeholderRow(brightness)],
+      );
     }
     if (_failed && _items.isEmpty) {
       return ListView(
@@ -264,9 +284,7 @@ class _NotificationInboxPageState extends State<NotificationInboxPage> {
                 padding: const EdgeInsets.all(16),
                 child: Center(
                   child: Text(
-                    AppHelpers.getTranslation(
-                        TrKeys.somethingWentWrongWithTheServer) +
-                        ' - Tap to retry',
+                    AppHelpers.getTranslation(TrKeys.tryAgain),
                     textAlign: TextAlign.center,
                   ),
                 ),
@@ -278,10 +296,7 @@ class _NotificationInboxPageState extends State<NotificationInboxPage> {
           WidgetsBinding.instance.addPostFrameCallback((_) {
             if (mounted) unawaited(_loadMore());
           });
-          return const Padding(
-            padding: EdgeInsets.all(16),
-            child: Center(child: CircularProgressIndicator()),
-          );
+          return _placeholderRow(brightness);
         }
         final item = _items[index];
         return NotificationRow(
@@ -289,6 +304,26 @@ class _NotificationInboxPageState extends State<NotificationInboxPage> {
           onTap: () => unawaited(_openRow(item)),
         );
       },
+    );
+  }
+
+  /// One grey row shaped like a notification, shown while loading.
+  Widget _placeholderRow(Brightness brightness) {
+    final fill = AppStyle.inkFor(brightness).withValues(alpha: 0.08);
+    Widget bar(double width, double height) => Container(
+          width: width,
+          height: height,
+          decoration: BoxDecoration(
+            color: fill,
+            borderRadius: BorderRadius.circular(6),
+          ),
+        );
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [bar(180, 14), const SizedBox(height: 8), bar(260, 12)],
+      ),
     );
   }
 }

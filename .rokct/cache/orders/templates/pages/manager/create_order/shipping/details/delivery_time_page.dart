@@ -57,6 +57,7 @@ import 'package:orders_sdk/src/manager/application/orders/new/new_orders_provide
 // pill; on the pushed phone route Place order sits at the START and the
 // corner pill (347) at the END. popUntilRoot leaves the walk-in route
 // under either width, so the flow ends the same way it always did.
+// planes: single one step of the new-order flow; content keeps a readable width
 @RoutePage(name: 'ManagerDeliveryTimeRoute')
 class DeliveryTimePage extends ConsumerStatefulWidget {
   const DeliveryTimePage({super.key});
@@ -82,8 +83,20 @@ class _DeliveryTimePageState extends ConsumerState<DeliveryTimePage> {
     );
   }
 
+  /// Tablets: the page keeps a readable width in the middle rather than
+  /// stretching edge to edge; phones are unchanged.
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) => ColoredBox(
+        color: Theme.of(context).scaffoldBackgroundColor,
+        child: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 720),
+            child: Builder(builder: _buildPlane),
+          ),
+        ),
+      );
+
+  Widget _buildPlane(BuildContext context) {
     // Hosted in the walk-in planes (37e's step at plane widths)? Then the
     // host owns the corner pill and Place order docks under the cards.
     final Planes? planes = Planes.maybeOf(context);

@@ -51,6 +51,7 @@ import 'package:orders_sdk/src/manager/application/order/shipping/user/order_use
 // START and the corner Back pill (347) at the END. The dine-in branch's
 // section + table pickers and the customer picker stay pushed routes
 // (list-picker family, group J — not framed here).
+// planes: single one step of the new-order flow; content keeps a readable width
 @RoutePage(name: 'ManagerShippingAddressRoute')
 class ShippingAddressPage extends StatefulWidget {
   /// Hosted in planes: what Next does. Null pushes ManagerDeliveryTimeRoute.
@@ -120,8 +121,20 @@ class _ShippingAddressPageState extends State<ShippingAddressPage> {
         onPressed: () => _next(context, ref),
       );
 
+  /// Tablets: the page keeps a readable width in the middle rather than
+  /// stretching edge to edge; phones are unchanged.
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) => ColoredBox(
+        color: Theme.of(context).scaffoldBackgroundColor,
+        child: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 720),
+            child: Builder(builder: _buildPlane),
+          ),
+        ),
+      );
+
+  Widget _buildPlane(BuildContext context) {
     // Hosted in the walk-in planes (37b)? Then the host owns the back
     // pill (bottom-END) and Next docks at the foot of the pane.
     final Planes? planes = Planes.maybeOf(context);

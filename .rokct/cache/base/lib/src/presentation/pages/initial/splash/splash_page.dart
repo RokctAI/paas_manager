@@ -33,6 +33,7 @@ import 'package:base_sdk/src/navigation/signed_out_entry.dart';
 import 'package:base_sdk/src/presentation/adaptive/breakpoints.dart';
 import 'package:base_sdk/src/presentation/adaptive/tour_system_ui.dart';
 import 'package:base_sdk/src/presentation/pages/initial/splash/folding_brand_name.dart';
+import 'package:base_sdk/src/presentation/pages/initial/splash/splash_art.dart';
 import 'package:base_sdk/src/presentation/theme/app_style.dart';
 import 'package:base_sdk/src/services/app_connectivity.dart';
 import 'package:base_sdk/src/services/app_helpers.dart';
@@ -524,6 +525,14 @@ class _SplashPageState extends ConsumerState<SplashPage> {
             _poweredByFooter(),
           ],
         ),
+      );
+    }
+    // An app's own approved splash scene, drawn in code (SplashArt).
+    final art = SplashArt.builder;
+    if (art != null) {
+      return Scaffold(
+        backgroundColor: AppStyle.surfaceFor(Theme.of(context).brightness),
+        body: SizedBox.expand(child: art(context)),
       );
     }
     return Scaffold(

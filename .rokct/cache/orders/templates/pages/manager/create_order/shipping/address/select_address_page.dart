@@ -48,6 +48,7 @@ import 'package:orders_sdk/src/manager/application/order/shipping/address/select
 // On the pushed phone route (null, 37d's push chain) Confirm sits at the
 // START and the corner Back pill (347) at the END, and Confirm pops the
 // route as shipped.
+// planes: single the map fills the screen; the address card already keeps a 420 width
 @RoutePage(name: 'ManagerSelectAddressRoute')
 class SelectAddressPage extends StatefulWidget {
   /// Hosted in planes: pops this step. Null on the pushed phone route.

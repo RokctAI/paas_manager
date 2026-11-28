@@ -1,6 +1,6 @@
 {
   "name": "auth_sdk",
-  "version": "1.24.0",
+  "version": "1.25.0",
   "_comment_version_1_23_0": "1.22.9 -> 1.23.0: each home SDK declares its own login page (Ray, 2026-11-27). AuthEntryConfig gains layout (AuthEntryLayout.photo, the splash picture and the default, or AuthEntryLayout.card, a centred welcome on the app's own light or dark surface), heroAsset, heroBuilder (a drawn mark, set from the home SDK's di_hook), titleTrKey, subtitleTrKey and showsRegister, socialSignIns (Google/Facebook/Apple buttons on the card, running the existing loginWith* calls), set through the existing // @auth-entry-config integration. An app whose home SDK declares nothing is unchanged. The card's Login and Register buttons open the same sheets and keep the auth.login.button guide anchor; its legal line is translated (auth_continue_terms_lead, English and Afrikaans). No cmd or payload changed.",
   "_comment_version_1_22_9": "1.22.8 -> 1.22.9 (Ray, 2026-11-21: offline-registered user has no profile and cannot edit it): registerOffline and loginOffline save the profile (names, email, phone) for the signed-in local account, and syncOne sends names edited on the profile page while the account was local. Needs base_sdk 1.113.5 for the profile page and edit side.",
   "_comment_version_1_22_1": "1.22.0 -> 1.22.1: version for the coach-mark guide mounted on this SDK's primary page (GuideHost and GuideAnchor from base_sdk 1.92.0, off in demo sessions). The mount landed without a version change; see CHANGELOG.",

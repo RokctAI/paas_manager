@@ -22,4 +22,13 @@ const Map<String, String> kMerchantsAfTranslations = {
   'default': 'Verstek',
   'needs_attention': 'Het aandag nodig',
   'paid': 'Betaal',
+  'merchants_login_kicker': "Vir winkels",
+  'merchants_login_lead': "Jou winkel.",
+  'merchants_login_accent': "Jou verkope.",
+  'merchants_login_sub': "Sien vandag se bestellings, jou voorraad en wat jy verkoop het.",
+  'merchants_login_f1l': "Uitbetalings",
+  'merchants_login_f1v': "Weekliks na jou bank",
+  'merchants_login_f2l': "Bestellings",
+  'merchants_login_f2v': "Regstreeks soos hulle inkom",
+  'merchants_login_btn': "Meld aan met foon",
 };

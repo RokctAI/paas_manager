@@ -43,6 +43,7 @@ import 'package:merchants_sdk/src/common/presentation/pages/shop/shop_page.dart'
 /// `/shop` - a shop's storefront. `shopId` / `productId` / `cartId` also
 /// ride as query parameters so the pre-fork `/shop?shopId=<id>` deep links
 /// and push payloads still resolve without a typed push.
+// planes: single one customer page; content keeps a readable width on tablets
 @RoutePage(name: 'ShopRoute')
 class ShopRouteView extends StatelessWidget {
   final String shopId;
@@ -61,7 +62,17 @@ class ShopRouteView extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) => ShopPage(
+  Widget build(BuildContext context) => ColoredBox(
+        color: Theme.of(context).scaffoldBackgroundColor,
+        child: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 720),
+            child: Builder(builder: _buildPlane),
+          ),
+        ),
+      );
+
+  Widget _buildPlane(BuildContext context) => ShopPage(
         shopId: shopId,
         productId: productId,
         cartId: cartId,
@@ -71,6 +82,7 @@ class ShopRouteView extends StatelessWidget {
 }
 
 /// `/shops_detail` - the shop's about sheet (address, hours, contacts).
+// planes: single one customer page; content keeps a readable width on tablets
 @RoutePage(name: 'ShopDetailRoute')
 class ShopDetailRouteView extends StatelessWidget {
   final ShopData shop;
@@ -83,6 +95,16 @@ class ShopDetailRouteView extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) =>
+  Widget build(BuildContext context) => ColoredBox(
+        color: Theme.of(context).scaffoldBackgroundColor,
+        child: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 720),
+            child: Builder(builder: _buildPlane),
+          ),
+        ),
+      );
+
+  Widget _buildPlane(BuildContext context) =>
       ShopDetailPage(shop: shop, workTime: workTime);
 }

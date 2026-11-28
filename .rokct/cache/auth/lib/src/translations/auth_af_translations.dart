@@ -23,6 +23,8 @@ const Map<String, String> kAuthAfTranslations = {
   'auth_continue_with_facebook': 'Gaan voort met Facebook',
   'auth_continue_with_apple': 'Gaan voort met Apple',
   'auth_continue_with_email': 'Gaan voort met e-pos',
+  'auth_create_an_account': 'Skep \'n rekening',
+  'auth_continue_accepts_terms': 'Deur voort te gaan aanvaar jy die Bepalings en Privaatheidsbeleid',
   'auth_continue_terms_lead': 'Deur voort te gaan aanvaar jy die',
   'reset_password_either_text': 'Tik die e-posadres of foonnommer van jou rekening in, en ons stuur vir jou \'n skakel of kode om jou wagwoord terug te stel.',
   'reset_password_phone_text': 'Tik die foonnommer van jou rekening in, en ons stuur vir jou \'n kode om jou wagwoord terug te stel.',

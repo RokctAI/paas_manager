@@ -20,10 +20,23 @@ import 'package:flutter/material.dart';
 
 import 'package:booking_sdk/src/manager/presentation/reservation_schedule_view.dart';
 
+// planes: single one schedule; content keeps a readable width
 @RoutePage(name: 'ManagerReservationScheduleRoute')
 class ReservationSchedulePage extends StatelessWidget {
   const ReservationSchedulePage({super.key});
 
+  /// Tablets: the page keeps a readable width in the middle rather than
+  /// stretching edge to edge; phones are unchanged.
   @override
-  Widget build(BuildContext context) => const ReservationScheduleView();
+  Widget build(BuildContext context) => ColoredBox(
+        color: Theme.of(context).scaffoldBackgroundColor,
+        child: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 720),
+            child: Builder(builder: _buildPlane),
+          ),
+        ),
+      );
+
+  Widget _buildPlane(BuildContext context) => const ReservationScheduleView();
 }

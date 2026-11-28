@@ -21,6 +21,7 @@ import 'package:flutter/material.dart';
 
 import 'package:booking_sdk/src/manager/presentation/shop_reservations_view.dart';
 
+// planes: single one reservations list; its lists use 2-3 columns on tablets
 @RoutePage(name: 'ManagerReservationsRoute')
 class ShopReservationsPage extends StatelessWidget {
   const ShopReservationsPage({super.key});

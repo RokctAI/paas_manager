@@ -94,6 +94,8 @@ void main() {
         'auth_continue_with_facebook': 'continueWithFacebook',
         'auth_continue_with_apple': 'continueWithApple',
         'auth_or': 'or',
+        'auth_create_an_account': 'createAnAccount',
+        'auth_continue_accepts_terms': 'statementTerms',
       };
       for (final key in kAuthEnTranslations.keys) {
         final constant = constantsByKey[key];
