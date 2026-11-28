@@ -688,7 +688,8 @@ Future<void> renderVariant(
   // implementations; then any device history the demo mode cannot supply.
   registerExceptionStubs();
   await tester.runAsync(registerDemoDependencies);
-  if (screen != null) await tester.runAsync(() async => registerTourDependencies());
+  if (screen != null)
+    await tester.runAsync(() async => registerTourDependencies());
   await seedDeviceHistory(tester);
   registerScreen();
 
@@ -701,7 +702,9 @@ Future<void> renderVariant(
 
   final boundaryKey = GlobalKey();
   await tester.pumpWidget(
-    RepaintBoundary(key: boundaryKey, child: buildScreen(dark: dark, screen: screen?.call())),
+    RepaintBoundary(
+        key: boundaryKey,
+        child: buildScreen(dark: dark, screen: screen?.call())),
   );
   await _drain(tester);
   final generated = screen != null;
@@ -723,12 +726,13 @@ Future<void> renderVariant(
   var measured = generated
       ? (screenChips == null ? <_Measured>[] : _measure(tester, screenChips()))
       : _measure(tester, elementSpecs());
-  if (!generated) expect(
-    measured,
-    isNotEmpty,
-    reason: 'no elements matched - check elementSpecs() and the gates in '
-        'registerScreen()',
-  );
+  if (!generated)
+    expect(
+      measured,
+      isNotEmpty,
+      reason: 'no elements matched - check elementSpecs() and the gates in '
+          'registerScreen()',
+    );
 
   var targetHeight = generated
       ? kGeneratedHeight
@@ -741,8 +745,10 @@ Future<void> renderVariant(
     await tester.pump(const Duration(milliseconds: 50));
     await _drain(tester, rounds: 4);
     measured = generated
-      ? (screenChips == null ? <_Measured>[] : _measure(tester, screenChips()))
-      : _measure(tester, elementSpecs());
+        ? (screenChips == null
+            ? <_Measured>[]
+            : _measure(tester, screenChips()))
+        : _measure(tester, elementSpecs());
   }
   // ignore: dead_code
   if (kShrinkToContent && !generated) {
@@ -824,39 +830,56 @@ Future<void> _loadRealFontsOnce() async {
 List<ElementSpec> _textChip(String key, String label, String text) =>
     <ElementSpec>[
       ElementSpec(
-          key: key, label: label, finder: find.textContaining(text, findRichText: true).first),
+          key: key,
+          label: label,
+          finder: find.textContaining(text, findRichText: true).first),
     ];
 
 final Map<String, List<ElementSpec> Function()> kTourScreenChips =
     <String, List<ElementSpec> Function()>{
   'order_history': () => <ElementSpec>[
-        ..._textChip('manager.history.tabs', 'Delivered and cancelled orders', 'Delivered'),
+        ..._textChip('manager.history.tabs', 'Delivered and cancelled orders',
+            'Delivered'),
       ],
   'order_pos_products': () => <ElementSpec>[
-        ..._textChip('manager.walkin.search', 'Search products for a walk-in order', 'Search products'),
-        ..._textChip('manager.walkin.categories', 'Categories - popular, mains and more', 'Popular'),
-        ..._textChip('manager.walkin.product', 'Tap a product to add it to the order', 'Peri-peri chicken wrap'),
+        ..._textChip('manager.walkin.search',
+            'Search products for a walk-in order', 'Search products'),
+        ..._textChip('manager.walkin.categories',
+            'Categories - popular, mains and more', 'Popular'),
+        ..._textChip('manager.walkin.product',
+            'Tap a product to add it to the order', 'Peri-peri chicken wrap'),
       ],
   'order_loads': () => <ElementSpec>[
-        ..._textChip('manager.loads.tabs', 'Open and closed loads', 'Open loads'),
-        ..._textChip('manager.loads.card', 'A load - driver, stock left of what was issued', 'Sipho Dlamini'),
+        ..._textChip(
+            'manager.loads.tabs', 'Open and closed loads', 'Open loads'),
+        ..._textChip('manager.loads.card',
+            'A load - driver, stock left of what was issued', 'Sipho Dlamini'),
       ],
   'order_issue_load': () => <ElementSpec>[
-        ..._textChip('manager.issue.driver', 'Choose the driver who takes the load', 'Choose a deliveryman'),
-        ..._textChip('manager.issue.product', 'Tap products to put them on the load', 'Peri-peri chicken wrap'),
-        ..._textChip('manager.issue.submit', 'Issue the load to the driver', 'Issue to driver'),
+        ..._textChip('manager.issue.driver',
+            'Choose the driver who takes the load', 'Choose a deliveryman'),
+        ..._textChip('manager.issue.product',
+            'Tap products to put them on the load', 'Peri-peri chicken wrap'),
+        ..._textChip('manager.issue.submit', 'Issue the load to the driver',
+            'Issue to driver'),
       ],
   'order_shop_drivers': () => <ElementSpec>[
-        ..._textChip('manager.drivers.card', 'Your shop drivers - remove one with the icon', 'Sipho Dlamini'),
+        ..._textChip('manager.drivers.card',
+            'Your shop drivers - remove one with the icon', 'Sipho Dlamini'),
       ],
   'quick_flow': () => <ElementSpec>[
-        ..._textChip('manager.quick.shop', 'The shop these switches apply to', 'Blue Tap'),
-        ..._textChip('manager.quick.accept', 'Auto-accept incoming orders', 'Auto-accept'),
-        ..._textChip('manager.quick.complete', 'Auto-complete at Ready', 'Auto-complete'),
-        ..._textChip('manager.quick.autodial', 'Keypad autodial presets', 'Keypad autodial'),
+        ..._textChip('manager.quick.shop', 'The shop these switches apply to',
+            'Blue Tap'),
+        ..._textChip('manager.quick.accept', 'Auto-accept incoming orders',
+            'Auto-accept'),
+        ..._textChip('manager.quick.complete', 'Auto-complete at Ready',
+            'Auto-complete'),
+        ..._textChip('manager.quick.autodial', 'Keypad autodial presets',
+            'Keypad autodial'),
       ],
   'sync_issues': () => <ElementSpec>[
-        ..._textChip('manager.sync.filters', 'Filter parked changes by shop, product or order', 'Product'),
+        ..._textChip('manager.sync.filters',
+            'Filter parked changes by shop, product or order', 'Product'),
       ],
 };
 
@@ -972,12 +995,12 @@ void main() {
           Directory(outDir).createSync(recursive: true);
           File('$outDir/skipped.jsonl').writeAsStringSync(
             '${jsonEncode(<String, String>{
-              'key': entry.key,
-              'mode': mode,
-              'reason': reason.length > 200
-                  ? '${reason.substring(0, 197)}...'
-                  : reason,
-            })}\n',
+                  'key': entry.key,
+                  'mode': mode,
+                  'reason': reason.length > 200
+                      ? '${reason.substring(0, 197)}...'
+                      : reason,
+                })}\n',
             mode: FileMode.append,
           );
         }
